@@ -19,9 +19,9 @@
         GeoArmy
       </a>
       <div class="nav-links">
-        <a href="#evento">Evento</a>
+        <a href="#evento">Evento OW</a>
         <a href="#horario">Horario</a>
-        <a href="#comandos">Comandos</a>
+        <a href="#ruletas">Ruletas</a>
         <a href="#sub">Sub</a>
         <a href="#links">Links</a>
       </div>
@@ -40,6 +40,7 @@
         <div class="hero-logo-wrap">
           <img src="logo-banner.png" alt="Geo Army" class="hero-logo-img"/>
         </div>
+        <h1 class="hero-subtitle">Bienvenidos al Cuartel General de la <span class="accent">Geo Army</span></h1>
         <p>Streams de Fortnite y Overwatch. Eventos, boss raids y puntos para la comunidad.</p>
         <div class="hero-actions">
           <a href="https://twitch.tv/geovannyrk" target="_blank" class="btn-primary">Seguir en Twitch</a>
@@ -63,48 +64,25 @@
     </div>
   </section>
 
-  <!-- EVENTO OVERWATCH / BOSS -->
+  <!-- EVENTO OW -->
   <section class="section" id="evento">
     <div class="section-inner">
       <div class="section-header">
         <div class="section-tag">Evento Overwatch</div>
-        <h2>Deten a Ramattra</h2>
-        <p>Usa tus Channel Points para atacar al boss. <span class="event-dates">15 — 19 de junio</span></p>
+        <h2>Null Sector ha llegado</h2>
+        <p>Un evento especial está por comenzar en el stream de Geo Army.</p>
       </div>
-      <div class="boss-card">
-        <div class="boss-top">
-          <div class="boss-info">
-            <div class="boss-name">Ramattra</div>
-            <div class="boss-phase" id="boss-phase">Fase 1</div>
-          </div>
-          <div class="boss-hp-nums">
-            <span id="boss-hp-current">500,000</span>
-            <span class="hp-sep">/</span>
-            <span>500,000</span>
-          </div>
-        </div>
-        <div class="boss-bar-wrap">
-          <div class="boss-bar-bg">
-            <div class="boss-bar-fill" id="boss-bar" style="width:100%"></div>
-          </div>
-          <div class="boss-percent" id="boss-percent">100%</div>
-        </div>
-        <div class="boss-attacks">
-          <div class="attack-label">Ataques disponibles (Channel Points)</div>
-          <div class="attacks-grid">
-            <div class="attack-item"><span class="hero-name">Mercy</span><span class="hero-dmg">1,000 dmg</span></div>
-            <div class="attack-item"><span class="hero-name">Kiriko</span><span class="hero-dmg">2,500 dmg</span></div>
-            <div class="attack-item"><span class="hero-name">Ana</span><span class="hero-dmg">5,000 dmg</span></div>
-            <div class="attack-item"><span class="hero-name">Soldier 76</span><span class="hero-dmg">10,000 dmg</span></div>
-            <div class="attack-item"><span class="hero-name">Tracer</span><span class="hero-dmg">20,000 dmg</span></div>
-            <div class="attack-item"><span class="hero-name">Pharah</span><span class="hero-dmg">35,000 dmg</span></div>
-            <div class="attack-item"><span class="hero-name">Genji</span><span class="hero-dmg">60,000 dmg</span></div>
-            <div class="attack-item"><span class="hero-name">Hanzo</span><span class="hero-dmg">100,000 dmg</span></div>
-            <div class="attack-item"><span class="hero-name">D.Va</span><span class="hero-dmg">150,000 dmg</span></div>
-            <div class="attack-item featured"><span class="hero-name">Reinhardt</span><span class="hero-dmg">200,000 dmg</span></div>
+      <div class="evento-card">
+        <img src="null-sector.png" alt="Null Sector — Evento Overwatch" class="evento-img"/>
+        <div class="evento-overlay">
+          <div class="evento-coming">
+            <div class="evento-tag-alert">⚠️ Transmisión Intervenida</div>
+            <div class="evento-title">Evento Overwatch</div>
+            <div class="evento-dates">15 — 19 de junio</div>
+            <div class="evento-desc">Únete al stream para participar y detener a Ramattra con tus Channel Points.</div>
+            <a href="https://twitch.tv/geovannyrk" target="_blank" class="btn-primary">Estar ahí →</a>
           </div>
         </div>
-        <div class="boss-offline-msg" id="boss-offline">El boss bar está activo solo durante el stream en vivo.</div>
       </div>
     </div>
   </section>
@@ -117,8 +95,6 @@
         <h2>Cuándo streamea Geo</h2>
         <p>En vivo todos los días. Horarios por país abajo.</p>
       </div>
-
-      <!-- Tabla de zonas horarias -->
       <div class="timezone-card">
         <div class="tz-header">
           <span>🕖</span>
@@ -137,86 +113,78 @@
           <div class="tz-row"><span class="tz-country">🇪🇸 España</span><span class="tz-time">1:00 AM – 3:00 AM</span></div>
         </div>
       </div>
-
-      <!-- Días de la semana -->
       <div class="schedule-grid">
         <div class="schedule-card">
           <div class="day-label">Lunes</div>
           <div class="day-time">7:00 PM</div>
-          <div class="day-game ow">Overwatch 2</div>
+          <div class="day-games"><span class="day-game ow">Overwatch 2</span><span class="day-game fn">Fortnite</span></div>
         </div>
         <div class="schedule-card">
           <div class="day-label">Martes</div>
           <div class="day-time">7:00 PM</div>
-          <div class="day-game fn">Fortnite</div>
+          <div class="day-games"><span class="day-game ow">Overwatch 2</span><span class="day-game fn">Fortnite</span></div>
         </div>
         <div class="schedule-card">
           <div class="day-label">Miércoles</div>
           <div class="day-time">7:00 PM</div>
-          <div class="day-game ow">Overwatch 2</div>
+          <div class="day-games"><span class="day-game ow">Overwatch 2</span><span class="day-game fn">Fortnite</span></div>
         </div>
         <div class="schedule-card">
           <div class="day-label">Jueves</div>
           <div class="day-time">7:00 PM</div>
-          <div class="day-game fn">Fortnite</div>
+          <div class="day-games"><span class="day-game ow">Overwatch 2</span><span class="day-game fn">Fortnite</span></div>
         </div>
         <div class="schedule-card">
           <div class="day-label">Viernes</div>
           <div class="day-time">7:00 PM</div>
-          <div class="day-game ow">Overwatch 2</div>
+          <div class="day-games"><span class="day-game ow">Overwatch 2</span><span class="day-game fn">Fortnite</span></div>
         </div>
         <div class="schedule-card">
           <div class="day-label">Sábado</div>
           <div class="day-time">6:00 PM</div>
-          <div class="day-game fn">Fortnite</div>
+          <div class="day-games"><span class="day-game ow">Overwatch 2</span><span class="day-game fn">Fortnite</span></div>
         </div>
         <div class="schedule-card">
           <div class="day-label">Domingo</div>
           <div class="day-time">6:00 PM</div>
-          <div class="day-game ow">Overwatch 2</div>
+          <div class="day-games"><span class="day-game ow">Overwatch 2</span><span class="day-game fn">Fortnite</span></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- COMANDOS -->
-  <section class="section" id="comandos">
+  <!-- RULETAS -->
+  <section class="section" id="ruletas">
     <div class="section-inner">
       <div class="section-header">
-        <div class="section-tag">Comandos</div>
-        <h2>Comandos del chat</h2>
-        <p>Úsalos en el chat del stream en vivo.</p>
+        <div class="section-tag">Ruletas</div>
+        <h2>Juega en el stream</h2>
+        <p>Usa tus Geo Points para participar en las ruletas durante el stream en vivo.</p>
       </div>
-      <div class="commands-grid">
-        <div class="command-card">
-          <div class="cmd-name">!ids</div>
-          <div class="cmd-desc">IDs de Geo en todos los juegos</div>
+      <div class="ruletas-grid">
+        <div class="ruleta-card">
+          <div class="ruleta-icon">🎰</div>
+          <div class="ruleta-name">Ruleta</div>
+          <div class="ruleta-desc">Prueba tu suerte con los Geo Points. Tres símbolos iguales y ganas el premio.</div>
+          <div class="ruleta-cmd">Activa en stream con Channel Points</div>
         </div>
-        <div class="command-card">
-          <div class="cmd-name">!codigo</div>
-          <div class="cmd-desc">Código creador SORTEOSRK en Fortnite</div>
+        <div class="ruleta-card">
+          <div class="ruleta-icon">⚔️</div>
+          <div class="ruleta-name">Duelo</div>
+          <div class="ruleta-desc">Reta a otro viewer a un duelo de Geo Points. El ganador se lleva todo.</div>
+          <div class="ruleta-cmd">!duel @usuario cantidad</div>
         </div>
-        <div class="command-card">
-          <div class="cmd-name">!points</div>
-          <div class="cmd-desc">Ver tus Geo Points acumulados</div>
-        </div>
-        <div class="command-card">
-          <div class="cmd-name">!redes</div>
-          <div class="cmd-desc">Links a todas las redes de Geo</div>
-        </div>
-        <div class="command-card">
-          <div class="cmd-name">!discord</div>
-          <div class="cmd-desc">Link al servidor de Discord</div>
-        </div>
-        <div class="command-card">
-          <div class="cmd-name">!uptime</div>
-          <div class="cmd-desc">Tiempo en vivo del stream actual</div>
+        <div class="ruleta-card highlight">
+          <div class="ruleta-icon">💀</div>
+          <div class="ruleta-name">Boss Raid</div>
+          <div class="ruleta-desc">Ataca al boss con tus Channel Points. Cada héroe hace daño distinto. ¡Derrótalo antes de que acabe el stream!</div>
+          <div class="ruleta-cmd">Canjea recompensas en Twitch</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- BENEFICIOS SUB -->
+  <!-- SUB -->
   <section class="section alt" id="sub">
     <div class="section-inner">
       <div class="section-header">
@@ -226,41 +194,11 @@
       </div>
       <div class="sub-layout">
         <div class="sub-benefits">
-          <div class="benefit-item">
-            <span class="benefit-icon">⭐</span>
-            <div>
-              <div class="benefit-title">Sin anuncios</div>
-              <div class="benefit-desc">Disfruta el stream sin interrupciones</div>
-            </div>
-          </div>
-          <div class="benefit-item">
-            <span class="benefit-icon">💬</span>
-            <div>
-              <div class="benefit-title">Emotes exclusivos</div>
-              <div class="benefit-desc">Emotes únicos de GeoArmy en todo Twitch</div>
-            </div>
-          </div>
-          <div class="benefit-item">
-            <span class="benefit-icon">👑</span>
-            <div>
-              <div class="benefit-title">Badge de sub</div>
-              <div class="benefit-desc">Insignia especial en el chat del canal</div>
-            </div>
-          </div>
-          <div class="benefit-item">
-            <span class="benefit-icon">🎯</span>
-            <div>
-              <div class="benefit-title">Geo Points extra</div>
-              <div class="benefit-desc">Acumula puntos más rápido durante streams</div>
-            </div>
-          </div>
-          <div class="benefit-item">
-            <span class="benefit-icon">🎁</span>
-            <div>
-              <div class="benefit-title">Acceso a sorteos</div>
-              <div class="benefit-desc">Participa en giveaways exclusivos para subs</div>
-            </div>
-          </div>
+          <div class="benefit-item"><span class="benefit-icon">⭐</span><div><div class="benefit-title">Sin anuncios</div><div class="benefit-desc">Disfruta el stream sin interrupciones</div></div></div>
+          <div class="benefit-item"><span class="benefit-icon">💬</span><div><div class="benefit-title">Emotes exclusivos</div><div class="benefit-desc">Emotes únicos de GeoArmy en todo Twitch</div></div></div>
+          <div class="benefit-item"><span class="benefit-icon">👑</span><div><div class="benefit-title">Badge de sub</div><div class="benefit-desc">Insignia especial en el chat del canal</div></div></div>
+          <div class="benefit-item"><span class="benefit-icon">🎯</span><div><div class="benefit-title">Geo Points extra</div><div class="benefit-desc">Acumula puntos más rápido durante streams</div></div></div>
+          <div class="benefit-item"><span class="benefit-icon">🎁</span><div><div class="benefit-title">Acceso a sorteos</div><div class="benefit-desc">Participa en giveaways exclusivos para subs</div></div></div>
         </div>
         <div class="sub-cta-card">
           <div class="sub-price-label">Desde</div>
@@ -270,9 +208,7 @@
             <div class="tier-row"><span>Tier 2</span><span>$9.99</span></div>
             <div class="tier-row"><span>Tier 3</span><span>$24.99</span></div>
           </div>
-          <a href="https://www.twitch.tv/geovannyrk/subscribe" target="_blank" class="btn-sub">
-            Suscribirse ahora →
-          </a>
+          <a href="https://www.twitch.tv/geovannyrk/subscribe" target="_blank" class="btn-sub">Suscribirse ahora →</a>
           <div class="sub-note">También puedes regalar subs a la comunidad 🎁</div>
         </div>
       </div>
@@ -288,31 +224,18 @@
       </div>
       <div class="links-grid">
         <a href="https://twitch.tv/geovannyrk" target="_blank" class="link-card twitch">
-          <div class="link-icon">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg>
-          </div>
-          <div class="link-info">
-            <div class="link-name">Twitch</div>
-            <div class="link-handle">twitch.tv/geovannyrk</div>
-          </div>
+          <div class="link-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg></div>
+          <div class="link-info"><div class="link-name">Twitch</div><div class="link-handle">twitch.tv/geovannyrk</div></div>
           <div class="link-arrow">→</div>
         </a>
         <a href="https://x.com/darlingeoR" target="_blank" class="link-card twitter">
-          <div class="link-icon">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          </div>
-          <div class="link-info">
-            <div class="link-name">X / Twitter</div>
-            <div class="link-handle">@darlingeoR</div>
-          </div>
+          <div class="link-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div>
+          <div class="link-info"><div class="link-name">X / Twitter</div><div class="link-handle">@darlingeoR</div></div>
           <div class="link-arrow">→</div>
         </a>
         <div class="link-card code" onclick="copyCode()">
           <div class="link-icon">🎮</div>
-          <div class="link-info">
-            <div class="link-name">Código Fortnite</div>
-            <div class="link-handle">SORTEOSRK — click para copiar</div>
-          </div>
+          <div class="link-info"><div class="link-name">Código Fortnite</div><div class="link-handle">SORTEOSRK — click para copiar</div></div>
           <div class="link-arrow" id="copy-arrow">→</div>
         </div>
       </div>

@@ -312,3 +312,29 @@ h2 {
   .tz-grid { grid-template-columns: 1fr; }
   .hero-logo-img { max-width: 280px; }
 }
+
+/* HERO SUBTITLE */
+.hero-subtitle { font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 500; margin-bottom: 1rem; line-height: 1.3; }
+
+/* EVENTO */
+.evento-card { position: relative; border-radius: var(--radius); overflow: hidden; max-width: 800px; margin: 0 auto; border: 1px solid var(--border); }
+.evento-img { width: 100%; display: block; max-height: 520px; object-fit: cover; }
+.evento-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.97) 0%, rgba(0,0,0,0.7) 60%, transparent 100%); padding: 2.5rem 2rem 2rem; }
+.evento-coming { display: flex; flex-direction: column; gap: 10px; }
+.evento-tag-alert { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #ff4444; background: rgba(255,68,68,0.12); border: 1px solid rgba(255,68,68,0.3); padding: 4px 12px; border-radius: 100px; width: fit-content; }
+.evento-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; color: var(--text); }
+.evento-dates { font-size: 15px; color: var(--accent); font-weight: 600; }
+.evento-desc { font-size: 14px; color: var(--text2); max-width: 400px; }
+
+/* DAYS GAMES */
+.day-games { display: flex; flex-direction: column; gap: 4px; align-items: center; }
+
+/* RULETAS */
+.ruletas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.ruleta-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem 1.5rem; transition: border-color 0.2s; }
+.ruleta-card:hover { border-color: var(--border2); }
+.ruleta-card.highlight { border-color: rgba(145,71,255,0.35); background: rgba(145,71,255,0.06); }
+.ruleta-icon { font-size: 32px; margin-bottom: 12px; }
+.ruleta-name { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.ruleta-desc { font-size: 14px; color: var(--text2); line-height: 1.6; margin-bottom: 12px; }
+.ruleta-cmd { font-size: 12px; font-family: monospace; color: var(--accent); background: rgba(145,71,255,0.1); padding: 5px 10px; border-radius: var(--radius-sm); display: inline-block; }
