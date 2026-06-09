@@ -15,18 +15,17 @@
   <nav class="nav">
     <div class="nav-inner">
       <a href="#" class="nav-logo">
-        <span class="logo-mark">G</span>
+        <img src="logo.png" alt="GeoArmy" class="nav-logo-img"/>
         GeoArmy
       </a>
       <div class="nav-links">
-        <a href="#boss">Boss</a>
+        <a href="#evento">Evento</a>
         <a href="#horario">Horario</a>
         <a href="#comandos">Comandos</a>
+        <a href="#sub">Sub</a>
         <a href="#links">Links</a>
       </div>
-      <a href="https://twitch.tv/geovannyrk" target="_blank" class="btn-nav">
-        Ver stream →
-      </a>
+      <a href="https://twitch.tv/geovannyrk" target="_blank" class="btn-nav">Ver stream →</a>
     </div>
   </nav>
 
@@ -38,14 +37,16 @@
           <span class="live-dot"></span>
           <span id="live-label">Cargando...</span>
         </div>
-        <h1>Cuartel general de<br><span class="accent">Geo Army</span></h1>
+        <div class="hero-logo-wrap">
+          <img src="logo-banner.png" alt="Geo Army" class="hero-logo-img"/>
+        </div>
         <p>Streams de Fortnite y Overwatch. Eventos, boss raids y puntos para la comunidad.</p>
         <div class="hero-actions">
           <a href="https://twitch.tv/geovannyrk" target="_blank" class="btn-primary">Seguir en Twitch</a>
           <button class="btn-secondary" onclick="copyCode()">Código: SORTEOSRK</button>
         </div>
       </div>
-      <div class="hero-card" id="stream-card">
+      <div class="hero-card">
         <div class="stream-card-label">Estado del canal</div>
         <div class="stream-status-row">
           <div class="status-indicator" id="status-dot"></div>
@@ -62,13 +63,13 @@
     </div>
   </section>
 
-  <!-- BOSS BAR -->
-  <section class="section" id="boss">
+  <!-- EVENTO OVERWATCH / BOSS -->
+  <section class="section" id="evento">
     <div class="section-inner">
       <div class="section-header">
-        <div class="section-tag">Boss activo</div>
-        <h2>Ramattra</h2>
-        <p>Usa Channel Points para atacar al boss durante el stream.</p>
+        <div class="section-tag">Evento Overwatch</div>
+        <h2>Deten a Ramattra</h2>
+        <p>Usa tus Channel Points para atacar al boss. <span class="event-dates">15 — 19 de junio</span></p>
       </div>
       <div class="boss-card">
         <div class="boss-top">
@@ -103,7 +104,7 @@
             <div class="attack-item featured"><span class="hero-name">Reinhardt</span><span class="hero-dmg">200,000 dmg</span></div>
           </div>
         </div>
-        <div class="boss-offline-msg" id="boss-offline">Conéctate al stream para atacar al boss en vivo.</div>
+        <div class="boss-offline-msg" id="boss-offline">El boss bar está activo solo durante el stream en vivo.</div>
       </div>
     </div>
   </section>
@@ -114,8 +115,30 @@
       <div class="section-header">
         <div class="section-tag">Horario</div>
         <h2>Cuándo streamea Geo</h2>
-        <p>Streams en vivo todos los días desde las 7:00 PM.</p>
+        <p>En vivo todos los días. Horarios por país abajo.</p>
       </div>
+
+      <!-- Tabla de zonas horarias -->
+      <div class="timezone-card">
+        <div class="tz-header">
+          <span>🕖</span>
+          <span>Horarios por país — todos los días</span>
+        </div>
+        <div class="tz-grid">
+          <div class="tz-row"><span class="tz-country">🇺🇸 USA Costa Este</span><span class="tz-time">7:00 PM – 9:00 PM</span></div>
+          <div class="tz-row"><span class="tz-country">🇲🇽 México (Centro)</span><span class="tz-time">5:00 PM – 7:00 PM</span></div>
+          <div class="tz-row"><span class="tz-country">🇨🇴 Colombia</span><span class="tz-time">7:00 PM – 9:00 PM</span></div>
+          <div class="tz-row"><span class="tz-country">🇵🇪 Perú</span><span class="tz-time">7:00 PM – 9:00 PM</span></div>
+          <div class="tz-row"><span class="tz-country">🇻🇪 Venezuela</span><span class="tz-time">7:00 PM – 9:00 PM</span></div>
+          <div class="tz-row"><span class="tz-country">🇧🇴 Bolivia</span><span class="tz-time">8:00 PM – 10:00 PM</span></div>
+          <div class="tz-row"><span class="tz-country">🇦🇷 Argentina</span><span class="tz-time">8:00 PM – 10:00 PM</span></div>
+          <div class="tz-row"><span class="tz-country">🇨🇱 Chile</span><span class="tz-time">8:00 PM – 10:00 PM</span></div>
+          <div class="tz-row"><span class="tz-country">🇸🇻 Centro América</span><span class="tz-time">5:00 PM – 7:00 PM</span></div>
+          <div class="tz-row"><span class="tz-country">🇪🇸 España</span><span class="tz-time">1:00 AM – 3:00 AM</span></div>
+        </div>
+      </div>
+
+      <!-- Días de la semana -->
       <div class="schedule-grid">
         <div class="schedule-card">
           <div class="day-label">Lunes</div>
@@ -193,8 +216,71 @@
     </div>
   </section>
 
+  <!-- BENEFICIOS SUB -->
+  <section class="section alt" id="sub">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-tag">Suscripción</div>
+        <h2>Únete a la Geo Army</h2>
+        <p>Suscríbete y apoya el canal. Desde $5.99 USD.</p>
+      </div>
+      <div class="sub-layout">
+        <div class="sub-benefits">
+          <div class="benefit-item">
+            <span class="benefit-icon">⭐</span>
+            <div>
+              <div class="benefit-title">Sin anuncios</div>
+              <div class="benefit-desc">Disfruta el stream sin interrupciones</div>
+            </div>
+          </div>
+          <div class="benefit-item">
+            <span class="benefit-icon">💬</span>
+            <div>
+              <div class="benefit-title">Emotes exclusivos</div>
+              <div class="benefit-desc">Emotes únicos de GeoArmy en todo Twitch</div>
+            </div>
+          </div>
+          <div class="benefit-item">
+            <span class="benefit-icon">👑</span>
+            <div>
+              <div class="benefit-title">Badge de sub</div>
+              <div class="benefit-desc">Insignia especial en el chat del canal</div>
+            </div>
+          </div>
+          <div class="benefit-item">
+            <span class="benefit-icon">🎯</span>
+            <div>
+              <div class="benefit-title">Geo Points extra</div>
+              <div class="benefit-desc">Acumula puntos más rápido durante streams</div>
+            </div>
+          </div>
+          <div class="benefit-item">
+            <span class="benefit-icon">🎁</span>
+            <div>
+              <div class="benefit-title">Acceso a sorteos</div>
+              <div class="benefit-desc">Participa en giveaways exclusivos para subs</div>
+            </div>
+          </div>
+        </div>
+        <div class="sub-cta-card">
+          <div class="sub-price-label">Desde</div>
+          <div class="sub-price">$5.99 <span>USD/mes</span></div>
+          <div class="sub-tiers">
+            <div class="tier-row"><span>Tier 1</span><span>$5.99</span></div>
+            <div class="tier-row"><span>Tier 2</span><span>$9.99</span></div>
+            <div class="tier-row"><span>Tier 3</span><span>$24.99</span></div>
+          </div>
+          <a href="https://www.twitch.tv/geovannyrk/subscribe" target="_blank" class="btn-sub">
+            Suscribirse ahora →
+          </a>
+          <div class="sub-note">También puedes regalar subs a la comunidad 🎁</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- LINKS -->
-  <section class="section alt" id="links">
+  <section class="section" id="links">
     <div class="section-inner">
       <div class="section-header">
         <div class="section-tag">Links</div>
@@ -237,16 +323,15 @@
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-logo">
-        <span class="logo-mark">G</span>
+        <img src="logo.png" alt="GeoArmy" class="footer-logo-img"/>
         GeoArmy
       </div>
       <div class="footer-text">Comunidad de Geovannyrk · Twitch Affiliate</div>
-      <div class="footer-code">geoarmy.org</div>
+      <div class="footer-code">geovannyrk.github.io</div>
     </div>
   </footer>
 
   <div class="toast" id="toast">¡Código copiado!</div>
-
   <script src="js/main.js"></script>
 </body>
 </html>
