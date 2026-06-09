@@ -313,7 +313,15 @@ h2 {
   .hero-logo-img { max-width: 280px; }
 }
 
-/* HERO SUBTITLE */
+/* X TIMELINE */
+.x-timeline-wrap {
+  display: flex;
+  justify-content: center;
+}
+.x-timeline-wrap iframe {
+  border-radius: var(--radius) !important;
+  border: 1px solid var(--border) !important;
+}
 .hero-subtitle { font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 500; margin-bottom: 1rem; line-height: 1.3; }
 
 /* EVENTO */
