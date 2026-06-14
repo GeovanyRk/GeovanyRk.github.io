@@ -75,23 +75,98 @@
 
   <!-- EVENTO OW -->
   <section class="section" id="evento">
+    <style>
+      #evento .evt-wrap{max-width:980px;margin:0 auto;}
+      #evento .evt-banner{position:relative;border-radius:18px;overflow:hidden;border:1px solid rgba(169,112,255,.35);box-shadow:0 0 40px rgba(169,112,255,.15);}
+      #evento .evt-banner img{width:100%;display:block;object-fit:cover;max-height:340px;}
+      #evento .evt-banner::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,8,20,.1) 0%,rgba(10,8,20,.88) 100%);}
+      #evento .evt-banner-content{position:absolute;left:0;right:0;bottom:0;padding:26px 28px;z-index:2;}
+      #evento .evt-live{display:inline-flex;align-items:center;gap:7px;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#ff3b6b;background:rgba(255,59,107,.12);border:1px solid rgba(255,59,107,.4);padding:5px 11px;border-radius:99px;margin-bottom:12px;}
+      #evento .evt-live .dot{width:7px;height:7px;border-radius:50%;background:#ff3b6b;box-shadow:0 0 8px #ff3b6b;animation:evtpulse 1.4s infinite;}
+      @keyframes evtpulse{0%,100%{opacity:1}50%{opacity:.3}}
+      #evento .evt-title{font-family:'Space Grotesk',sans-serif;font-size:2.1rem;font-weight:700;color:#fff;line-height:1.05;margin:0 0 6px;}
+      #evento .evt-dates{color:#a970ff;font-weight:600;font-size:.95rem;}
+      #evento .evt-hp{margin:22px 0;}
+      #evento .evt-hp-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:7px;}
+      #evento .evt-hp-name{font-family:'Space Grotesk',sans-serif;font-weight:700;color:#fff;letter-spacing:.04em;font-size:1.05rem;}
+      #evento .evt-hp-val{color:#ff3b6b;font-weight:700;font-variant-numeric:tabular-nums;}
+      #evento .evt-hp-track{height:20px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,59,107,.3);overflow:hidden;}
+      #evento .evt-hp-fill{height:100%;width:100%;background:linear-gradient(90deg,#ff3b6b,#a970ff);box-shadow:0 0 18px rgba(255,59,107,.5);}
+      #evento .evt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:22px 0;}
+      #evento .evt-step{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:18px;}
+      #evento .evt-step-num{font-family:'Space Grotesk',sans-serif;color:#a970ff;font-weight:700;font-size:1.3rem;margin-bottom:6px;}
+      #evento .evt-step-t{color:#fff;font-weight:600;margin-bottom:4px;}
+      #evento .evt-step-d{color:rgba(255,255,255,.6);font-size:.88rem;line-height:1.4;}
+      #evento .evt-reward{display:flex;align-items:center;gap:16px;background:linear-gradient(90deg,rgba(169,112,255,.15),rgba(255,59,107,.08));border:1px solid rgba(169,112,255,.4);border-radius:14px;padding:18px 22px;margin:22px 0;}
+      #evento .evt-reward-ico{font-size:2rem;flex-shrink:0;}
+      #evento .evt-reward-t{color:#fff;font-weight:700;font-size:1.05rem;}
+      #evento .evt-reward-d{color:rgba(255,255,255,.65);font-size:.9rem;}
+      #evento .evt-cta{display:flex;gap:12px;flex-wrap:wrap;}
+      #evento .evt-btn{flex:1;min-width:200px;text-align:center;padding:14px 20px;border-radius:12px;font-weight:700;text-decoration:none;transition:transform .15s,box-shadow .15s;}
+      #evento .evt-btn.tw{background:#9146ff;color:#fff;}
+      #evento .evt-btn.dc{background:rgba(88,101,242,.15);border:1px solid #5865f2;color:#fff;}
+      #evento .evt-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3);}
+      #evento .evt-note{text-align:center;color:rgba(255,255,255,.45);font-size:.82rem;margin-top:14px;}
+      @media(max-width:720px){
+        #evento .evt-grid{grid-template-columns:1fr;}
+        #evento .evt-title{font-size:1.6rem;}
+      }
+    </style>
     <div class="section-inner">
       <div class="section-header">
         <div class="section-tag">Evento Overwatch</div>
-        <h2>Null Sector ha llegado</h2>
-        <p>Un evento especial está por comenzar en el stream de Geo Army.</p>
+        <h2>Derrota a Ramattra</h2>
+        <p>La Geo Army contra el jefe de Null Sector. Tu daño cuenta.</p>
       </div>
-      <div class="evento-card">
-        <img src="null-sector.png" alt="Null Sector — Evento Overwatch" class="evento-img"/>
-        <div class="evento-overlay">
-          <div class="evento-coming">
-            <div class="evento-tag-alert">⚠️ Transmisión Intervenida</div>
-            <div class="evento-title">Evento Overwatch</div>
-            <div class="evento-dates">15 — 19 de junio</div>
-            <div class="evento-desc">Únete al stream para participar y detener a Ramattra con tus Channel Points.</div>
-            <a href="https://twitch.tv/geovannyrk" target="_blank" class="btn-primary">Estar ahí →</a>
+      <div class="evt-wrap">
+        <div class="evt-banner">
+          <img src="null-sector.png" alt="Ramattra — Evento Null Sector"/>
+          <div class="evt-banner-content">
+            <div class="evt-live"><span class="dot"></span>Evento activo</div>
+            <div class="evt-title">RAMATTRA HA DESPERTADO</div>
+            <div class="evt-dates">15 — 19 de junio · en cada stream</div>
           </div>
         </div>
+
+        <div class="evt-hp">
+          <div class="evt-hp-top">
+            <span class="evt-hp-name">🟣 RAMATTRA</span>
+            <span class="evt-hp-val">500,000 HP</span>
+          </div>
+          <div class="evt-hp-track"><div class="evt-hp-fill"></div></div>
+        </div>
+
+        <div class="evt-grid">
+          <div class="evt-step">
+            <div class="evt-step-num">01</div>
+            <div class="evt-step-t">Junta Geo Points</div>
+            <div class="evt-step-d">Acumula puntos viendo el stream de Geovannyrk.</div>
+          </div>
+          <div class="evt-step">
+            <div class="evt-step-num">02</div>
+            <div class="evt-step-t">Elige tu héroe</div>
+            <div class="evt-step-d">Canjéalos por ataques: desde Mercy hasta la Definitiva de Reinhardt.</div>
+          </div>
+          <div class="evt-step">
+            <div class="evt-step-num">03</div>
+            <div class="evt-step-t">Haz daño</div>
+            <div class="evt-step-d">Cada canje le baja vida al boss en tiempo real.</div>
+          </div>
+        </div>
+
+        <div class="evt-reward">
+          <div class="evt-reward-ico">🪙</div>
+          <div>
+            <div class="evt-reward-t">Si la Geo Army lo derrota: 10,000 OW Coins</div>
+            <div class="evt-reward-d">Recompensa repartida para la comunidad cuando Ramattra caiga.</div>
+          </div>
+        </div>
+
+        <div class="evt-cta">
+          <a href="https://twitch.tv/geovannyrk" target="_blank" class="evt-btn tw">Atacar en el stream →</a>
+          <a href="https://discord.gg/UNtCZKBSvB" target="_blank" class="evt-btn dc">Ver progreso en Discord →</a>
+        </div>
+        <div class="evt-note">La vida del boss se actualiza en vivo en el canal #estado-del-boss del Discord.</div>
       </div>
     </div>
   </section>
