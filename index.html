@@ -30,6 +30,7 @@
         <a href="#evento">Evento OW</a>
         <a href="#horario">Horario</a>
         <a href="#ruletas">Ruletas</a>
+        <a href="#ganadores">Ganadores</a>
         <a href="#sorteos">Sorteos</a>
         <a href="#sub">Sub</a>
         <a href="#links">Links</a>
@@ -290,6 +291,146 @@
       </div>
       <div class="ruleta-disclaimer">⚠️ Las ruletas son una mecánica de suerte. No siempre ganarás — es parte del juego. Participa solo con los puntos que estés dispuesto a apostar.</div>
     </div>
+  </section>
+
+  <!-- GANADORES -->
+  <section class="section alt" id="ganadores">
+    <style>
+      #ganadores .gn-wrap{max-width:920px;margin:0 auto;}
+      #ganadores .gn-stats{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 22px;}
+      #ganadores .gn-chip{flex:1;min-width:120px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px 18px;}
+      #ganadores .gn-chip b{font-family:'Space Grotesk',sans-serif;font-size:1.9rem;line-height:1;display:block;}
+      #ganadores .gn-chip span{font-size:.7rem;text-transform:uppercase;letter-spacing:.13em;color:rgba(255,255,255,.5);}
+      #ganadores .gn-chip.gold b{color:#ffd23f;}
+      #ganadores .gn-chip.pend b{color:#ffb13f;}
+      #ganadores .gn-chip.done b{color:#46e0a8;}
+      #ganadores .gn-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
+      #ganadores .gn-search{flex:1;min-width:200px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:#fff;padding:12px 16px;border-radius:12px;font-size:.95rem;font-family:inherit;}
+      #ganadores .gn-search::placeholder{color:rgba(255,255,255,.4);}
+      #ganadores .gn-search:focus{outline:2px solid #a970ff;outline-offset:1px;}
+      #ganadores .gn-filters{display:flex;gap:5px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);padding:5px;border-radius:12px;}
+      #ganadores .gn-filters button{font-family:'Space Grotesk',sans-serif;font-size:.78rem;background:transparent;border:0;color:rgba(255,255,255,.55);padding:8px 14px;border-radius:8px;cursor:pointer;}
+      #ganadores .gn-filters button[aria-pressed="true"]{background:#a970ff;color:#0a0814;}
+      #ganadores .gn-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:18px;overflow:hidden;}
+      #ganadores table{width:100%;border-collapse:collapse;}
+      #ganadores thead th{font-family:'Space Grotesk',sans-serif;font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;text-align:left;color:rgba(255,255,255,.45);padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.08);}
+      #ganadores tbody td{padding:15px 18px;border-bottom:1px solid rgba(255,255,255,.05);font-size:.93rem;vertical-align:middle;color:#fff;}
+      #ganadores tbody tr:last-child td{border-bottom:0;}
+      #ganadores tbody tr:hover{background:rgba(169,112,255,.07);}
+      #ganadores .gn-id{font-family:'Space Grotesk',sans-serif;color:#a970ff;font-size:.82rem;}
+      #ganadores .gn-user{font-weight:600;}
+      #ganadores .gn-prize{color:#ffd23f;}
+      #ganadores .gn-ev{color:rgba(255,255,255,.55);font-size:.85rem;}
+      #ganadores .gn-badge{display:inline-flex;align-items:center;gap:6px;font-size:.73rem;font-weight:600;padding:5px 11px;border-radius:99px;white-space:nowrap;}
+      #ganadores .gn-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;}
+      #ganadores .gn-badge.pend{color:#ffb13f;background:rgba(255,177,63,.13);}
+      #ganadores .gn-badge.done{color:#46e0a8;background:rgba(70,224,168,.12);}
+      #ganadores .gn-empty{padding:44px 20px;text-align:center;color:rgba(255,255,255,.5);}
+      #ganadores .gn-empty b{display:block;color:#fff;font-family:'Space Grotesk',sans-serif;margin-bottom:6px;font-size:1.05rem;}
+      #ganadores .gn-foot{margin-top:16px;color:rgba(255,255,255,.4);font-size:.78rem;text-align:right;}
+      @media(max-width:620px){
+        #ganadores thead{display:none;}
+        #ganadores tbody tr{display:block;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.08);}
+        #ganadores tbody td{display:flex;justify-content:space-between;gap:12px;border:0;padding:8px 16px;}
+        #ganadores tbody td::before{content:attr(data-label);font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.45);}
+        #ganadores tbody td.gn-user-cell::before{content:"";}
+      }
+    </style>
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-tag">Salón de la Fama</div>
+        <h2>Ganadores de la Geo Army</h2>
+        <p>Cada victoria en la ruleta, el boss y los sorteos queda registrada aquí. Transparencia total para la comunidad.</p>
+      </div>
+      <div class="gn-wrap">
+        <div class="gn-stats">
+          <div class="gn-chip gold"><b id="gnTotal">0</b><span>Ganadores</span></div>
+          <div class="gn-chip pend"><b id="gnPend">0</b><span>Por entregar</span></div>
+          <div class="gn-chip done"><b id="gnDone">0</b><span>Entregados</span></div>
+        </div>
+        <div class="gn-controls">
+          <input id="gnSearch" class="gn-search" type="search" placeholder="Buscar por usuario o premio…" aria-label="Buscar ganadores">
+          <div class="gn-filters" role="group" aria-label="Filtrar por estado">
+            <button data-f="todos" aria-pressed="true">Todos</button>
+            <button data-f="pendientes" aria-pressed="false">Pendientes</button>
+            <button data-f="entregados" aria-pressed="false">Entregados</button>
+          </div>
+        </div>
+        <div class="gn-card">
+          <table>
+            <thead>
+              <tr><th>#</th><th>Usuario</th><th>Premio</th><th>Evento</th><th>Fecha</th><th>Estado</th></tr>
+            </thead>
+            <tbody id="gnBody"></tbody>
+          </table>
+        </div>
+        <div class="gn-foot" id="gnUpdated">Cargando…</div>
+      </div>
+    </div>
+    <script>
+    (function(){
+      var SAMPLE = { ganadores: [
+        {id:3, usuario:"Andrea_GG", premio:"800 V-Bucks", evento:"Ruleta Fortnite", fecha:"17/06/2026", entregado:false},
+        {id:2, usuario:"Kratos_OW", premio:"10.000 OW Coins", evento:"Boss Nemesis", fecha:"15/06/2026", entregado:true},
+        {id:1, usuario:"LunaStream", premio:"500 V-Bucks", evento:"Ruleta Fortnite", fecha:"12/06/2026", entregado:true}
+      ]};
+      var DATA = [], filtro = 'todos';
+      function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+      function render(){
+        var q = document.getElementById('gnSearch').value.trim().toLowerCase();
+        var rows = DATA.slice().sort(function(a,b){return b.id-a.id;});
+        if(filtro==='pendientes') rows = rows.filter(function(g){return !g.entregado;});
+        if(filtro==='entregados') rows = rows.filter(function(g){return g.entregado;});
+        if(q) rows = rows.filter(function(g){return (g.usuario+' '+g.premio+' '+(g.evento||'')).toLowerCase().indexOf(q)>-1;});
+        var tb = document.getElementById('gnBody');
+        if(!rows.length){
+          tb.innerHTML = '<tr><td colspan="6" class="gn-empty"><b>Sin resultados</b>Aún no hay ganadores que coincidan.</td></tr>';
+        } else {
+          tb.innerHTML = rows.map(function(g){
+            return '<tr>'+
+              '<td data-label="#" class="gn-id">#'+g.id+'</td>'+
+              '<td data-label="Usuario" class="gn-user-cell"><span class="gn-user">'+esc(g.usuario)+'</span></td>'+
+              '<td data-label="Premio" class="gn-prize">'+esc(g.premio)+'</td>'+
+              '<td data-label="Evento" class="gn-ev">'+esc(g.evento||'General')+'</td>'+
+              '<td data-label="Fecha" class="gn-ev">'+esc(g.fecha||'')+'</td>'+
+              '<td data-label="Estado">'+(g.entregado
+                ? '<span class="gn-badge done">Entregado</span>'
+                : '<span class="gn-badge pend">Pendiente</span>')+'</td>'+
+            '</tr>';
+          }).join('');
+        }
+        document.getElementById('gnTotal').textContent = DATA.length;
+        document.getElementById('gnPend').textContent  = DATA.filter(function(g){return !g.entregado;}).length;
+        document.getElementById('gnDone').textContent  = DATA.filter(function(g){return g.entregado;}).length;
+      }
+      function load(){
+        fetch('ganadores.json?t='+Date.now(),{cache:'no-store'})
+          .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+          .then(function(j){
+            DATA = j.ganadores || [];
+            document.getElementById('gnUpdated').textContent =
+              'Actualizado ' + new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+            render();
+          })
+          .catch(function(){
+            DATA = SAMPLE.ganadores;
+            document.getElementById('gnUpdated').textContent = 'Vista previa (sin ganadores.json todavía)';
+            render();
+          });
+      }
+      document.getElementById('gnSearch').addEventListener('input', render);
+      var btns = document.querySelectorAll('#ganadores .gn-filters button');
+      btns.forEach(function(b){
+        b.addEventListener('click', function(){
+          btns.forEach(function(x){x.setAttribute('aria-pressed','false');});
+          b.setAttribute('aria-pressed','true');
+          filtro = b.getAttribute('data-f'); render();
+        });
+      });
+      load();
+      setInterval(load, 30000);
+    })();
+    </script>
   </section>
 
   <!-- SUB -->
