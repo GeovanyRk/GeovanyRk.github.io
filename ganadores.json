@@ -15,6 +15,14 @@
       "evento": "prueba",
       "fecha": "17/6/2026",
       "entregado": false
+    },
+    {
+      "id": 3,
+      "usuario": "Vasos",
+      "premio": "500 monedad de ow",
+      "evento": "Ruleta de ow",
+      "fecha": "18/6/2026",
+      "entregado": false
     }
   ]
 }
