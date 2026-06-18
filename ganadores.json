@@ -1,3 +1,20 @@
 {
-  "ganadores": []
+  "ganadores": [
+    {
+      "id": 1,
+      "usuario": "prueba",
+      "premio": "tes",
+      "evento": "prueba",
+      "fecha": "17/6/2026",
+      "entregado": false
+    },
+    {
+      "id": 2,
+      "usuario": "prueba",
+      "premio": "prueba",
+      "evento": "prueba",
+      "fecha": "17/6/2026",
+      "entregado": false
+    }
+  ]
 }
