@@ -31,6 +31,14 @@
       "evento": "Ruleta de Fortnite",
       "fecha": "19/6/2026",
       "entregado": false
+    },
+    {
+      "id": 5,
+      "usuario": "fredi",
+      "premio": "1500 pavos",
+      "evento": "Pity",
+      "fecha": "19/6/2026",
+      "entregado": false
     }
   ]
 }
