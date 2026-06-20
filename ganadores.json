@@ -39,6 +39,14 @@
       "evento": "Pity",
       "fecha": "19/6/2026",
       "entregado": false
+    },
+    {
+      "id": 6,
+      "usuario": "Forsa",
+      "premio": "500 pavos",
+      "evento": "Ruleta de Sub",
+      "fecha": "19/6/2026",
+      "entregado": false
     }
   ]
 }
