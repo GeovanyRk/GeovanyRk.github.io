@@ -55,6 +55,14 @@
       "evento": "Ruleta de fortnite",
       "fecha": "20/6/2026",
       "entregado": false
+    },
+    {
+      "id": 8,
+      "usuario": "Mango",
+      "premio": "1500 fortnite",
+      "evento": "Pity",
+      "fecha": "21/6/2026",
+      "entregado": false
     }
   ]
 }
