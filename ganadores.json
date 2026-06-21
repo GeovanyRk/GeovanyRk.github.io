@@ -63,6 +63,14 @@
       "evento": "Pity",
       "fecha": "21/6/2026",
       "entregado": false
+    },
+    {
+      "id": 9,
+      "usuario": "Joshi",
+      "premio": "800 pavos",
+      "evento": "Pity",
+      "fecha": "21/6/2026",
+      "entregado": false
     }
   ]
 }
