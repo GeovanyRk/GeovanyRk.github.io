@@ -47,6 +47,14 @@
       "evento": "Ruleta de Sub",
       "fecha": "19/6/2026",
       "entregado": false
+    },
+    {
+      "id": 7,
+      "usuario": "Kitty",
+      "premio": "500",
+      "evento": "Ruleta de fortnite",
+      "fecha": "20/6/2026",
+      "entregado": false
     }
   ]
 }
