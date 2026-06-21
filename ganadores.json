@@ -71,6 +71,14 @@
       "evento": "Pity",
       "fecha": "21/6/2026",
       "entregado": false
+    },
+    {
+      "id": 10,
+      "usuario": "Matid",
+      "premio": "500 monedas de Fn",
+      "evento": "Ruleta de Fn",
+      "fecha": "21/6/2026",
+      "entregado": false
     }
   ]
 }
