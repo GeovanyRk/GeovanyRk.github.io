@@ -79,6 +79,14 @@
       "evento": "Ruleta de Fn",
       "fecha": "21/6/2026",
       "entregado": false
+    },
+    {
+      "id": 11,
+      "usuario": "Michael",
+      "premio": "500 pavos",
+      "evento": "Ruleta de Fn",
+      "fecha": "22/6/2026",
+      "entregado": false
     }
   ]
 }
