@@ -87,6 +87,14 @@
       "evento": "Ruleta de Fn",
       "fecha": "22/6/2026",
       "entregado": false
+    },
+    {
+      "id": 12,
+      "usuario": "lis",
+      "premio": "500",
+      "evento": "Ruleta Sub",
+      "fecha": "22/6/2026",
+      "entregado": false
     }
   ]
 }
