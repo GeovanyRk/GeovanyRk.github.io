@@ -95,6 +95,14 @@
       "evento": "Ruleta Sub",
       "fecha": "22/6/2026",
       "entregado": false
+    },
+    {
+      "id": 13,
+      "usuario": "Kitty",
+      "premio": "1000 Ow Coin",
+      "evento": "Cumpleaños",
+      "fecha": "22/6/2026",
+      "entregado": false
     }
   ]
 }
