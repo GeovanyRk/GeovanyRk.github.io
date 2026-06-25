@@ -103,6 +103,14 @@
       "evento": "Cumpleaños",
       "fecha": "22/6/2026",
       "entregado": false
+    },
+    {
+      "id": 14,
+      "usuario": "Mashu",
+      "premio": "1500 ow coin",
+      "evento": "Pity",
+      "fecha": "24/6/2026",
+      "entregado": false
     }
   ]
 }
