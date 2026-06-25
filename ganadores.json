@@ -127,6 +127,14 @@
       "evento": "Ruleta de sub",
       "fecha": "24/6/2026",
       "entregado": false
+    },
+    {
+      "id": 17,
+      "usuario": "Jose",
+      "premio": "500 pavos",
+      "evento": "Ruleta de fn",
+      "fecha": "25/6/2026",
+      "entregado": false
     }
   ]
 }
