@@ -143,6 +143,14 @@
       "evento": "Pity",
       "fecha": "25/6/2026",
       "entregado": false
+    },
+    {
+      "id": 19,
+      "usuario": "Kiro",
+      "premio": "500 de pavos",
+      "evento": "Ruleta de sub",
+      "fecha": "26/6/2026",
+      "entregado": false
     }
   ]
 }
