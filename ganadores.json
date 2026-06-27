@@ -151,6 +151,14 @@
       "evento": "Ruleta de sub",
       "fecha": "26/6/2026",
       "entregado": false
+    },
+    {
+      "id": 20,
+      "usuario": "uriel",
+      "premio": "5$",
+      "evento": "ruleta de sub",
+      "fecha": "26/6/2026",
+      "entregado": false
     }
   ]
 }
