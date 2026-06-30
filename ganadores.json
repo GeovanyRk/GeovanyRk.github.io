@@ -183,6 +183,14 @@
       "evento": "Ruleta de Fn",
       "fecha": "29/6/2026",
       "entregado": false
+    },
+    {
+      "id": 24,
+      "usuario": "Diego",
+      "premio": "800",
+      "evento": "Ruleta de Fn",
+      "fecha": "29/6/2026",
+      "entregado": false
     }
   ]
 }
