@@ -32,7 +32,13 @@
       font-size: clamp(1.8rem, 4vw, 2.6rem);
       font-weight: 700; letter-spacing: -0.02em; margin-bottom: .75rem;
     }
-    .ti-title .accent { color: var(--accent); }
+    .ti-title .accent {
+      color: #ffd23f; /* respaldo por si el navegador no soporta el degradado */
+      background: linear-gradient(135deg, #8a5a00 0%, #ffd23f 22%, #fff6cf 50%, #d89b1c 72%, #8a5a00 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
     .ti-sub { color: var(--text2); font-size: 16px; max-width: 520px; margin: 0 auto; }
 
     .ti-login-btn {
@@ -63,23 +69,40 @@
       display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.25rem;
     }
     .ti-card {
+      position: relative; overflow: hidden; isolation: isolate;
       background: var(--bg2); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 1.4rem;
-      display: flex; flex-direction: column; gap: 10px;
-      transition: border-color .2s, transform .15s;
+      border-radius: var(--radius); padding: 1.6rem 1.5rem 1.5rem;
+      display: flex; flex-direction: column; gap: 12px;
+      transition: border-color .3s ease, transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s ease;
     }
-    .ti-card:hover { border-color: var(--border2); transform: translateY(-2px); }
-    .ti-icono { font-size: 2.1rem; }
+    .ti-card::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, #8a5a00, #ffd23f, #fff6cf, #ffd23f, #8a5a00);
+      opacity: 0; transition: opacity .3s ease;
+    }
+    .ti-card:hover { border-color: rgba(255,210,63,.35); transform: translateY(-4px); box-shadow: 0 18px 38px rgba(255,210,63,.1); }
+    .ti-card:hover::before { opacity: 1; }
+    .ti-icono {
+      width: 52px; height: 52px; display: flex; align-items: center; justify-content: center;
+      font-size: 1.7rem; border-radius: 14px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,210,63,.22), rgba(255,210,63,.06));
+      border: 1px solid rgba(255,210,63,.25);
+    }
     .ti-coin-icon { height: 1em; width: 1em; vertical-align: -0.15em; }
     .ti-item-nombre { font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; }
     .ti-item-desc { color: var(--text2); font-size: .9rem; flex-grow: 1; }
-    .ti-item-costo { color: #ffd23f; font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
+    .ti-item-costo {
+      display: inline-flex; align-items: center; gap: 6px; width: fit-content;
+      color: #ffd23f; font-weight: 700; font-family: 'Space Grotesk', sans-serif;
+      background: rgba(255,210,63,.1); border: 1px solid rgba(255,210,63,.25);
+      padding: 5px 12px; border-radius: 100px; font-size: .92rem;
+    }
 
     .ti-canjear-btn {
-      font-family: 'Space Grotesk', sans-serif; font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700; letter-spacing: .01em;
       border: none; border-radius: var(--radius-sm);
-      padding: 10px 18px; cursor: pointer; color: #fff;
-      background: var(--accent); transition: background .2s, opacity .2s;
+      padding: 11px 18px; cursor: pointer; color: #fff;
+      background: var(--accent); transition: background .2s, opacity .2s, transform .3s, box-shadow .3s;
     }
     .ti-canjear-btn:hover:not(:disabled) { background: var(--accent2); }
     .ti-canjear-btn:disabled { opacity: .4; cursor: not-allowed; background: var(--bg3); }
@@ -90,6 +113,8 @@
 </head>
 <body>
 
+  <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
+
   <!-- NAV -->
   <nav class="nav">
     <div class="nav-inner">
@@ -98,13 +123,14 @@
         GeoArmy
       </a>
       <div class="nav-links">
-        <a href="index.html#evento">Evento OW</a>
+        <a href="index.html#inicio">Geo Army</a>
+        <a href="index.html#evento">Evento Fortnite</a>
+        <a href="tienda.html" style="color:var(--text);">Tienda</a>
         <a href="index.html#horario">Horario</a>
         <a href="index.html#ruletas">Ruletas</a>
         <a href="index.html#ganadores">Ganadores</a>
         <a href="index.html#sorteos">Sorteos</a>
         <a href="index.html#sub">Sub</a>
-        <a href="tienda.html" style="color:var(--text);">Tienda</a>
         <a href="index.html#links">Links</a>
       </div>
       <a href="https://twitch.tv/geovannyrk" target="_blank" class="btn-nav">Ver stream →</a>
@@ -113,7 +139,7 @@
 
   <!-- HERO TIENDA -->
   <section class="ti-hero">
-    <div class="ti-hero-inner">
+    <div class="ti-hero-inner" data-reveal>
       <div class="ti-eyebrow"><img src="gcoin-icon.png" class="ti-coin-icon" alt="G-coin"/> Tienda de la Geo Army</div>
       <h1 class="ti-title">Cambia tus <span class="accent">G-coins</span> por recompensas</h1>
       <p class="ti-sub">Consigue G-coins canjeando la recompensa de canal points en el stream de Geovannyrk, y cámbialas aquí por recompensas — disponible las 24 horas, no solo en vivo.</p>
@@ -273,5 +299,6 @@
     init();
   })();
   </script>
+  <script src="js/premium.js"></script>
 </body>
 </html>

@@ -19,37 +19,43 @@
 </head>
 <body>
 
+  <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
+
   <!-- NAV -->
   <nav class="nav">
     <div class="nav-inner">
-      <a href="#" class="nav-logo">
+      <a href="#inicio" class="nav-logo">
         <img src="logo.png" alt="GeoArmy" class="nav-logo-img"/>
         GeoArmy
       </a>
       <div class="nav-links">
-        <a href="#evento">Evento OW</a>
+        <a href="#inicio">Geo Army</a>
+        <a href="#evento">Evento Fortnite</a>
+        <a href="tienda.html">Tienda</a>
         <a href="#horario">Horario</a>
         <a href="#ruletas">Ruletas</a>
         <a href="#ganadores">Ganadores</a>
         <a href="#sorteos">Sorteos</a>
         <a href="#sub">Sub</a>
-        <a href="tienda.html">Tienda</a>
         <a href="#links">Links</a>
       </div>
       <a href="https://twitch.tv/geovannyrk" target="_blank" class="btn-nav">Ver stream →</a>
     </div>
   </nav>
 
-  <!-- HERO -->
-  <section class="hero">
+  <!-- Tabs de navegación para móvil (donde el nav de arriba se oculta) -->
+  <div class="panel-tabs" id="panelTabs" aria-label="Secciones"></div>
+
+  <!-- HERO / GEO ARMY (inicio) -->
+  <section class="hero panel" id="inicio">
     <div class="hero-inner">
-      <div class="hero-text">
+      <div class="hero-text" data-reveal>
         <div class="hero-eyebrow" id="live-badge">
           <span class="live-dot"></span>
           <span id="live-label">Cargando...</span>
         </div>
         <div class="hero-logo-wrap">
-          <img src="logo-banner.png" alt="Geo Army" class="hero-logo-img"/>
+          <img src="logo-banner-transparent.png" alt="Geo Army" class="hero-logo-img"/>
         </div>
         <h1 class="hero-subtitle">Bienvenidos al Cuartel General de la <span class="accent">Geo Army</span></h1>
         <p>Streams de Fortnite y Overwatch. Eventos, boss raids y puntos para la comunidad.</p>
@@ -58,7 +64,7 @@
           <button class="btn-secondary" onclick="copyCode()">Código: SORTEOSRK</button>
         </div>
       </div>
-      <div class="hero-card">
+      <div class="hero-card" data-reveal>
         <div class="stream-card-label">Estado del canal</div>
         <div class="stream-status-row">
           <div class="status-indicator" id="status-dot"></div>
@@ -73,115 +79,132 @@
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- EVENTO OW -->
-  <section class="section" id="evento">
-    <style>
-      #evento .evt-wrap{max-width:980px;margin:0 auto;}
-      #evento .evt-banner{position:relative;border-radius:18px;overflow:hidden;border:1px solid rgba(169,112,255,.35);box-shadow:0 0 40px rgba(169,112,255,.15);}
-      #evento .evt-banner img{width:100%;display:block;object-fit:cover;max-height:340px;}
-      #evento .evt-banner::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,8,20,.1) 0%,rgba(10,8,20,.88) 100%);}
-      #evento .evt-banner-content{position:absolute;left:0;right:0;bottom:0;padding:26px 28px;z-index:2;}
-      #evento .evt-live{display:inline-flex;align-items:center;gap:7px;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#ff3b6b;background:rgba(255,59,107,.12);border:1px solid rgba(255,59,107,.4);padding:5px 11px;border-radius:99px;margin-bottom:12px;}
-      #evento .evt-live .dot{width:7px;height:7px;border-radius:50%;background:#ff3b6b;box-shadow:0 0 8px #ff3b6b;animation:evtpulse 1.4s infinite;}
-      @keyframes evtpulse{0%,100%{opacity:1}50%{opacity:.3}}
-      #evento .evt-title{font-family:'Space Grotesk',sans-serif;font-size:2.1rem;font-weight:700;color:#fff;line-height:1.05;margin:0 0 6px;}
-      #evento .evt-dates{color:#a970ff;font-weight:600;font-size:.95rem;}
-      #evento .evt-hp{margin:22px 0;}
-      #evento .evt-hp-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:7px;}
-      #evento .evt-hp-name{font-family:'Space Grotesk',sans-serif;font-weight:700;color:#fff;letter-spacing:.04em;font-size:1.05rem;}
-      #evento .evt-hp-val{color:#ff3b6b;font-weight:700;font-variant-numeric:tabular-nums;}
-      #evento .evt-hp-track{height:20px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,59,107,.3);overflow:hidden;}
-      #evento .evt-hp-fill{height:100%;width:100%;background:linear-gradient(90deg,#ff3b6b,#a970ff);box-shadow:0 0 18px rgba(255,59,107,.5);}
-      #evento .evt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:22px 0;}
-      #evento .evt-step{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:18px;}
-      #evento .evt-step-num{font-family:'Space Grotesk',sans-serif;color:#a970ff;font-weight:700;font-size:1.3rem;margin-bottom:6px;}
-      #evento .evt-step-t{color:#fff;font-weight:600;margin-bottom:4px;}
-      #evento .evt-step-d{color:rgba(255,255,255,.6);font-size:.88rem;line-height:1.4;}
-      #evento .evt-reward{display:flex;align-items:center;gap:16px;background:linear-gradient(90deg,rgba(169,112,255,.15),rgba(255,59,107,.08));border:1px solid rgba(169,112,255,.4);border-radius:14px;padding:18px 22px;margin:22px 0;}
-      #evento .evt-reward-ico{font-size:2rem;flex-shrink:0;}
-      #evento .evt-reward-t{color:#fff;font-weight:700;font-size:1.05rem;}
-      #evento .evt-reward-d{color:rgba(255,255,255,.65);font-size:.9rem;}
-      #evento .evt-cta{display:flex;gap:12px;flex-wrap:wrap;}
-      #evento .evt-btn{flex:1;min-width:200px;text-align:center;padding:14px 20px;border-radius:12px;font-weight:700;text-decoration:none;transition:transform .15s,box-shadow .15s;}
-      #evento .evt-btn.tw{background:#9146ff;color:#fff;}
-      #evento .evt-btn.dc{background:rgba(88,101,242,.15);border:1px solid #5865f2;color:#fff;}
-      #evento .evt-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3);}
-      #evento .evt-note{text-align:center;color:rgba(255,255,255,.45);font-size:.82rem;margin-top:14px;}
-      @media(max-width:720px){
-        #evento .evt-grid{grid-template-columns:1fr;}
-        #evento .evt-title{font-size:1.6rem;}
-      }
-    </style>
-    <div class="section-inner">
-      <div class="section-header">
-        <div class="section-tag">Evento Overwatch</div>
-        <h2>Derrota a Ramattra</h2>
-        <p>La Geo Army contra el jefe de Null Sector. Tu daño cuenta.</p>
-      </div>
-      <div class="evt-wrap">
-        <div class="evt-banner">
-          <img src="null-sector.png" alt="Ramattra — Evento Null Sector"/>
-          <div class="evt-banner-content">
-            <div class="evt-live"><span class="dot"></span>Evento activo</div>
-            <div class="evt-title">RAMATTRA HA DESPERTADO</div>
-            <div class="evt-dates">15 — 19 de junio · en cada stream</div>
-          </div>
-        </div>
-
-        <div class="evt-hp">
-          <div class="evt-hp-top">
-            <span class="evt-hp-name">🟣 RAMATTRA</span>
-            <span class="evt-hp-val">500,000 HP</span>
-          </div>
-          <div class="evt-hp-track"><div class="evt-hp-fill"></div></div>
-        </div>
-
-        <div class="evt-grid">
-          <div class="evt-step">
-            <div class="evt-step-num">01</div>
-            <div class="evt-step-t">Junta Geo Points</div>
-            <div class="evt-step-d">Acumula puntos viendo el stream de Geovannyrk.</div>
-          </div>
-          <div class="evt-step">
-            <div class="evt-step-num">02</div>
-            <div class="evt-step-t">Elige tu héroe</div>
-            <div class="evt-step-d">Canjéalos por ataques: desde Mercy hasta la Definitiva de Reinhardt.</div>
-          </div>
-          <div class="evt-step">
-            <div class="evt-step-num">03</div>
-            <div class="evt-step-t">Haz daño</div>
-            <div class="evt-step-d">Cada canje le baja vida al boss en tiempo real.</div>
-          </div>
-        </div>
-
-        <div class="evt-reward">
-          <div class="evt-reward-ico">🪙</div>
-          <div>
-            <div class="evt-reward-t">Si la Geo Army lo derrota: 10,000 OW Coins</div>
-            <div class="evt-reward-d">Recompensa repartida para la comunidad cuando Ramattra caiga.</div>
-          </div>
-        </div>
-
-        <div class="evt-cta">
-          <a href="https://twitch.tv/geovannyrk" target="_blank" class="evt-btn tw">Atacar en el stream →</a>
-          <a href="https://discord.gg/UNtCZKBSvB" target="_blank" class="evt-btn dc">Ver progreso en Discord →</a>
-        </div>
-        <div class="evt-note">La vida del boss se actualiza en vivo en el canal #estado-del-boss del Discord.</div>
+    <div class="hero-bio-wrap" data-reveal>
+      <div class="hero-bio">
+        <div class="hero-bio-tag">Sobre Geo</div>
+        <p>Soy Geo, streamer salvadoreño y creador de la Geo Army, una comunidad donde disfrutamos Fortnite, Overwatch, eventos, retos, sorteos y muchas buenas experiencias juntos. Empecé este proyecto con la idea de construir algo más grande que un canal: un espacio donde todos puedan participar, divertirse y sentirse parte de una verdadera comunidad. Si quieres apoyar este sueño y ayudarme a seguir creciendo, puedes suscribirte al canal o usar mi código de creador <strong>SORTEOSRK</strong> en Fortnite. Cada apoyo, por pequeño que parezca, significa muchísimo para mí y para el futuro de la Geo Army.</p>
       </div>
     </div>
   </section>
 
+  <!-- EVENTO FORTNITE — TORMENTA -->
+  <section class="section panel" id="evento">
+    <style>
+      #evento .evt-wrap{max-width:980px;margin:0 auto;}
+
+      /* Visual de tormenta — imagen real con Ken Burns sutil + viñeta para legibilidad */
+      #evento .evt-storm{position:relative;height:320px;border-radius:18px;overflow:hidden;border:1px solid rgba(0,212,255,.3);box-shadow:0 0 50px rgba(0,212,255,.12);isolation:isolate;}
+      #evento .evt-storm-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:evtAmbientZoom 26s ease-in-out infinite;}
+      @keyframes evtAmbientZoom{0%,100%{transform:scale(1.04);}50%{transform:scale(1.11);}}
+      #evento .evt-storm::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,8,20,.05) 0%,rgba(10,8,20,.3) 55%,rgba(10,8,20,.92) 100%);}
+      #evento .evt-storm-content{position:absolute;left:0;right:0;bottom:0;padding:26px 28px;z-index:2;}
+
+      #evento .evt-live{display:inline-flex;align-items:center;gap:7px;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#00d4ff;background:rgba(0,212,255,.12);border:1px solid rgba(0,212,255,.4);padding:5px 11px;border-radius:99px;margin-bottom:12px;}
+      #evento .evt-live .dot{width:7px;height:7px;border-radius:50%;background:#00d4ff;box-shadow:0 0 8px #00d4ff;animation:evtpulse 1.6s infinite;}
+      @keyframes evtpulse{0%,100%{opacity:1}50%{opacity:.35}}
+      #evento .evt-title{font-family:'Space Grotesk',sans-serif;font-size:2.1rem;font-weight:700;color:#fff;line-height:1.05;margin:0 0 6px;}
+      #evento .evt-dates{color:#5fd8ff;font-weight:600;font-size:.95rem;}
+
+      #evento .evt-reward{display:flex;align-items:center;gap:16px;background:linear-gradient(90deg,rgba(0,212,255,.14),rgba(145,71,255,.1));border:1px solid rgba(0,212,255,.35);border-radius:14px;padding:18px 22px;margin:22px 0;}
+      #evento .evt-reward-ico{font-size:2rem;flex-shrink:0;}
+      #evento .evt-reward-t{color:#fff;font-weight:700;font-size:1.05rem;}
+      #evento .evt-reward-d{color:rgba(255,255,255,.65);font-size:.9rem;}
+
+      #evento .evt-cta{display:flex;gap:12px;flex-wrap:wrap;}
+      #evento .evt-btn{flex:1;min-width:200px;text-align:center;padding:14px 20px;border-radius:12px;font-weight:700;text-decoration:none;transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s cubic-bezier(.16,1,.3,1);}
+      #evento .evt-btn.tw{background:#9146ff;color:#fff;}
+      #evento .evt-btn:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(0,0,0,.35);}
+
+      /* reveal on scroll — sutil, no bloquea contenido si JS falla */
+      #evento [data-reveal]{opacity:1;transform:none;transition:opacity .7s ease, transform .7s cubic-bezier(.16,1,.3,1);}
+      #evento.js-ready [data-reveal]{opacity:0;transform:translateY(24px);}
+      #evento.js-ready [data-reveal].is-revealed{opacity:1;transform:none;}
+
+      @media(max-width:720px){
+        #evento .evt-title{font-size:1.6rem;}
+        #evento .evt-storm{height:260px;}
+      }
+    </style>
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-tag">Evento Fortnite</div>
+        <h2>¿Sobrevivirás a la tormenta?</h2>
+        <p>La Geo Army contra el círculo. Cada partida cuenta.</p>
+      </div>
+      <div class="evt-wrap">
+        <div class="evt-storm" data-reveal>
+          <img src="storm-evento.png" alt="Tormenta — Evento Fortnite" class="evt-storm-img"/>
+          <div class="evt-storm-content">
+            <div class="evt-live"><span class="dot"></span><span id="evtCountdown">Empieza el 6 de julio</span></div>
+            <div class="evt-title">¿SOBREVIVIRÁS A LA TORMENTA?</div>
+            <div class="evt-dates">6 de julio · en cada stream</div>
+          </div>
+        </div>
+
+        <div class="evt-reward" data-reveal>
+          <div class="evt-reward-ico">🏆</div>
+          <div>
+            <div class="evt-reward-t">Premio: 20,000 V-Bucks</div>
+            <div class="evt-reward-d">Un solo ganador se lleva el premio completo.</div>
+          </div>
+        </div>
+
+        <div class="evt-cta" data-reveal>
+          <a href="https://twitch.tv/geovannyrk" target="_blank" class="evt-btn tw">Jugar en el stream →</a>
+        </div>
+      </div>
+    </div>
+    <script>
+    (function(){
+      // Countdown — no toca main.js, no depende de servidores externos
+      function safe(fn,name){ try{ fn(); } catch(e){ console.warn('['+name+']', e); } }
+
+      safe(function initEvtCountdown(){
+        var el = document.getElementById('evtCountdown');
+        if(!el) return;
+        var target = new Date(2026, 6, 6); // 6 de julio 2026
+        var now = new Date();
+        var diffDays = Math.ceil((target - now) / 86400000);
+        if(diffDays > 1) el.textContent = 'Faltan ' + diffDays + ' días';
+        else if(diffDays === 1) el.textContent = '¡Empieza mañana!';
+        else if(diffDays === 0) el.textContent = '¡Empieza hoy!';
+        else el.textContent = 'Evento en curso';
+      }, 'initEvtCountdown');
+
+      safe(function initEvtReveal(){
+        var section = document.getElementById('evento');
+        if(!section) return;
+        section.classList.add('js-ready');
+        var els = section.querySelectorAll('[data-reveal]');
+        var io = new IntersectionObserver(function(entries){
+          entries.forEach(function(e){
+            if(e.isIntersecting){ e.target.classList.add('is-revealed'); io.unobserve(e.target); }
+          });
+        }, { threshold: 0.01, rootMargin: '0px 0px -2% 0px' });
+        els.forEach(function(el){ io.observe(el); });
+        // red de seguridad: a los 6s revela lo que siga oculto
+        setTimeout(function(){
+          els.forEach(function(el){
+            if(!el.classList.contains('is-revealed') && el.getBoundingClientRect().top < window.innerHeight){
+              el.classList.add('is-revealed');
+            }
+          });
+        }, 6000);
+      }, 'initEvtReveal');
+    })();
+    </script>
+  </section>
+
   <!-- HORARIO -->
-  <section class="section alt" id="horario">
+  <section class="section alt panel" id="horario">
     <div class="section-inner">
       <div class="section-header">
         <div class="section-tag">Horario</div>
         <h2>Cuándo streamea Geo</h2>
         <p>En vivo todos los días. Horarios por país abajo.</p>
       </div>
-      <div class="timezone-card">
+      <div class="timezone-card" data-reveal>
         <div class="tz-header">
           <span>🕖</span>
           <span>Horarios por país — todos los días</span>
@@ -199,7 +222,7 @@
           <div class="tz-row"><span class="tz-country">🇪🇸 España</span><span class="tz-time">1:00 AM – 3:00 AM</span></div>
         </div>
       </div>
-      <div class="schedule-grid">
+      <div class="schedule-grid" data-reveal>
         <div class="schedule-card">
           <div class="day-label">Lunes</div>
           <div class="day-time">7:00 PM</div>
@@ -240,14 +263,14 @@
   </section>
 
   <!-- RULETAS -->
-  <section class="section" id="ruletas">
+  <section class="section panel" id="ruletas">
     <div class="section-inner">
       <div class="section-header">
         <div class="section-tag">Ruletas</div>
         <h2>Juega en el stream</h2>
         <p>Acumula puntos en el canal de Geovannyrk y canjéalos en las ruletas. <strong>Ganar no está garantizado</strong> — es una apuesta, así que juega con cabeza.</p>
       </div>
-      <div class="ruletas-grid">
+      <div class="ruletas-grid" data-reveal>
 
         <!-- RULETA FORTNITE -->
         <div class="ruleta-card fn-card">
@@ -295,7 +318,7 @@
   </section>
 
   <!-- GANADORES -->
-  <section class="section alt" id="ganadores">
+  <section class="section alt panel" id="ganadores">
     <style>
       #ganadores .gn-wrap{max-width:920px;margin:0 auto;}
       #ganadores .gn-stats{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 22px;}
@@ -343,7 +366,7 @@
         <h2>Ganadores de la Geo Army</h2>
         <p>Cada victoria en la ruleta, el boss y los sorteos queda registrada aquí. Transparencia total para la comunidad.</p>
       </div>
-      <div class="gn-wrap">
+      <div class="gn-wrap" data-reveal>
         <div class="gn-stats">
           <div class="gn-chip gold"><b id="gnTotal">0</b><span>Ganadores</span></div>
           <div class="gn-chip pend"><b id="gnPend">0</b><span>Por entregar</span></div>
@@ -435,14 +458,14 @@
   </section>
 
   <!-- SUB -->
-  <section class="section alt" id="sub">
+  <section class="section alt panel" id="sub">
     <div class="section-inner">
       <div class="section-header">
         <div class="section-tag">Suscripción</div>
         <h2>Únete a la Geo Army</h2>
         <p>Suscríbete y apoya el canal. Desde $5.99 USD.</p>
       </div>
-      <div class="sub-layout">
+      <div class="sub-layout" data-reveal>
         <div class="sub-benefits">
           <div class="benefit-item"><span class="benefit-icon">⭐</span><div><div class="benefit-title">Sin anuncios</div><div class="benefit-desc">Disfruta el stream sin interrupciones</div></div></div>
           <div class="benefit-item"><span class="benefit-icon">💬</span><div><div class="benefit-title">Emotes exclusivos</div><div class="benefit-desc">Emotes únicos de GeoArmy en todo Twitch</div></div></div>
@@ -466,14 +489,14 @@
   </section>
 
   <!-- X TIMELINE -->
-  <section class="section" id="sorteos">
+  <section class="section panel" id="sorteos">
     <div class="section-inner">
       <div class="section-header">
         <div class="section-tag">Sorteos & Noticias</div>
         <h2>Últimas publicaciones</h2>
         <p>Sorteos activos, anuncios y novedades directo desde X.</p>
       </div>
-      <div class="x-timeline-wrap">
+      <div class="x-timeline-wrap" data-reveal>
         <a class="twitter-timeline"
            href="https://x.com/darlingeoR"
            data-theme="dark"
@@ -489,13 +512,13 @@
   </section>
 
   <!-- LINKS -->
-  <section class="section" id="links">
+  <section class="section panel" id="links">
     <div class="section-inner">
       <div class="section-header">
         <div class="section-tag">Links</div>
         <h2>Encuentra a Geo</h2>
       </div>
-      <div class="links-grid">
+      <div class="links-grid" data-reveal>
         <a href="https://twitch.tv/geovannyrk" target="_blank" class="link-card twitch">
           <div class="link-icon"><svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg></div>
           <div class="link-info"><div class="link-name">Twitch</div><div class="link-handle">twitch.tv/geovannyrk</div></div>
@@ -529,5 +552,6 @@
 
   <div class="toast" id="toast">¡Código copiado!</div>
   <script src="js/main.js"></script>
+  <script src="js/premium.js"></script>
 </body>
 </html>
