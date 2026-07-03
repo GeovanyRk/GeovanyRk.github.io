@@ -191,6 +191,14 @@
       "evento": "Ruleta de Fn",
       "fecha": "29/6/2026",
       "entregado": false
+    },
+    {
+      "id": 25,
+      "usuario": "michael",
+      "premio": "1200  pavos",
+      "evento": "Pity",
+      "fecha": "3/7/2026",
+      "entregado": false
     }
   ]
 }
