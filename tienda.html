@@ -88,6 +88,7 @@
       background: radial-gradient(circle at 30% 30%, rgba(255,210,63,.22), rgba(255,210,63,.06));
       border: 1px solid rgba(255,210,63,.25);
     }
+    .ti-icono-img { width: 40px; height: 40px; object-fit: contain; }
     .ti-coin-icon { height: 1em; width: 1em; vertical-align: -0.15em; }
     .ti-item-nombre { font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; }
     .ti-item-desc { color: var(--text2); font-size: .9rem; flex-grow: 1; }
@@ -242,7 +243,7 @@
         const card = document.createElement('div');
         card.className = 'ti-card';
         card.innerHTML = `
-          <div class="ti-icono">${item.icono || '🎁'}</div>
+          <div class="ti-icono">${/\.(svg|png|jpg|jpeg|webp)$/i.test(item.icono || '') ? `<img src="${item.icono}" class="ti-icono-img" alt="">` : (item.icono || '🎁')}</div>
           <p class="ti-item-nombre">${item.nombre}</p>
           <p class="ti-item-desc">${item.descripcion || ''}</p>
           <div class="ti-item-costo"><img src="gcoin-icon.png" class="ti-coin-icon" alt="G-coin"/> ${item.costo}</div>
