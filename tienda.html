@@ -192,6 +192,11 @@
 
     let usuario = null; // { login, display_name }
     let saldo = 0;
+    let twitchAccessToken = null;
+
+    function authHeaders() {
+      return { Authorization: `Bearer ${twitchAccessToken}` };
+    }
 
     function pedirLogin() {
       const params = new URLSearchParams({
@@ -215,7 +220,7 @@
     }
 
     async function cargarSaldo() {
-      const res = await fetch(`${API_BASE}/api/saldo/${usuario.login}`);
+      const res = await fetch(`${API_BASE}/api/saldo`, { headers: authHeaders() });
       const data = await res.json();
       saldo = data.oro;
       $('tiSaldoValor').textContent = saldo;
@@ -256,8 +261,8 @@
       try {
         const res = await fetch(`${API_BASE}/api/canjear`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ login: usuario.login, itemId: item.id }),
+          headers: { 'Content-Type': 'application/json', ...authHeaders() },
+          body: JSON.stringify({ itemId: item.id }),
         });
         const data = await res.json();
         if (!res.ok) {
@@ -283,6 +288,7 @@
 
       if (accessToken) {
         history.replaceState(null, '', window.location.pathname);
+        twitchAccessToken = accessToken;
         const u = await obtenerUsuarioTwitch(accessToken);
         if (u) {
           usuario = { login: u.login, display_name: u.display_name };
