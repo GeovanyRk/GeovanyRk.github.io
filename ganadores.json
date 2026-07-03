@@ -199,6 +199,14 @@
       "evento": "Pity",
       "fecha": "3/7/2026",
       "entregado": false
+    },
+    {
+      "id": 26,
+      "usuario": "Jose",
+      "premio": "1500",
+      "evento": "pity",
+      "fecha": "3/7/2026",
+      "entregado": false
     }
   ]
 }
