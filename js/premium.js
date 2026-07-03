@@ -67,15 +67,19 @@
   safe(function initPanelNav() {
     var panels = document.querySelectorAll('.panel');
     if (!panels.length) return;
+    var allNavLinks = document.querySelectorAll('.nav-links a');
     var navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
     var tabsWrap = document.getElementById('panelTabs');
     var allLinkGroups = [navLinks];
     document.documentElement.classList.add('panels-ready');
 
-    // Clonamos los links del nav en una tira de tabs para móvil, donde
-    // .nav-links está oculto (ver CSS @media max-width:768px).
+    // Clonamos TODOS los links del nav (paneles internos + externos como
+    // "Tienda") en una tira de tabs para móvil, donde .nav-links está oculto
+    // (ver CSS @media max-width:768px). Los links externos conservan su href
+    // normal (tienda.html) y navegan tal cual; solo los de #ancla entran al
+    // sistema de paneles.
     if (tabsWrap) {
-      navLinks.forEach(function (a) {
+      allNavLinks.forEach(function (a) {
         var clone = a.cloneNode(true);
         tabsWrap.appendChild(clone);
       });
