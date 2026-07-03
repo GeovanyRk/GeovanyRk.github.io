@@ -1,7 +1,6 @@
 // ===== CONFIG =====
 const TWITCH_CLIENT_ID = '3spb0xbi38qc8ng1zwcoz5081lp524';
 const BROADCASTER_LOGIN = 'geovannyrk';
-const BOSS_SERVER = 'http://localhost:3000'; // Tu servidor Ramattra local
 
 // ===== TWITCH STATUS =====
 async function fetchTwitchStatus() {
@@ -60,75 +59,6 @@ async function fetchTwitchStatus() {
   }
 }
 
-// ===== BOSS HP =====
-async function fetchBossHP() {
-  try {
-    const res = await fetch(BOSS_SERVER + '/');
-    // El servidor ramattra responde HTML en /, necesitamos un endpoint /status
-    // Intentar WebSocket como fallback visual
-    connectBossWebSocket();
-  } catch (err) {
-    // Servidor local no disponible (página vista desde fuera del PC)
-    updateBossDisplay(500000, 500000);
-    document.getElementById('boss-offline').textContent =
-      'El boss bar está activo solo durante el stream en vivo.';
-  }
-}
-
-function connectBossWebSocket() {
-  try {
-    const ws = new WebSocket('ws://localhost:3000');
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data.type === 'hp_update' || data.type === 'damage' || data.type === 'heal' || data.type === 'reset') {
-        updateBossDisplay(data.hp, data.maxHp);
-      }
-      if (data.type === 'boss_dead') {
-        updateBossDisplay(0, 500000);
-        document.getElementById('boss-phase').textContent = '💀 DERROTADO';
-        document.getElementById('boss-phase').style.color = '#ff4444';
-      }
-    };
-    ws.onopen = () => {
-      document.getElementById('boss-offline').textContent = '✅ Boss conectado en tiempo real.';
-    };
-    ws.onerror = () => {
-      document.getElementById('boss-offline').textContent =
-        'El boss bar está activo solo durante el stream en vivo.';
-    };
-  } catch (e) {
-    document.getElementById('boss-offline').textContent =
-      'El boss bar está activo solo durante el stream en vivo.';
-  }
-}
-
-function updateBossDisplay(hp, maxHp) {
-  const pct = Math.max(0, Math.min(100, (hp / maxHp) * 100));
-  document.getElementById('boss-bar').style.width = pct + '%';
-  document.getElementById('boss-hp-current').textContent = hp.toLocaleString();
-  document.getElementById('boss-percent').textContent = Math.round(pct) + '%';
-
-  // Cambiar color según HP
-  const bar = document.getElementById('boss-bar');
-  if (pct > 50) {
-    bar.style.background = 'linear-gradient(90deg, #ff4444, #ff8c00)';
-  } else if (pct > 25) {
-    bar.style.background = 'linear-gradient(90deg, #ff4444, #ff6600)';
-  } else {
-    bar.style.background = 'linear-gradient(90deg, #cc0000, #ff4444)';
-    document.getElementById('boss-phase').textContent = 'Fase 2 — ¡HP crítico!';
-  }
-
-  // Fase
-  if (hp <= 0) {
-    document.getElementById('boss-phase').textContent = '💀 DERROTADO';
-  } else if (pct <= 50) {
-    document.getElementById('boss-phase').textContent = 'Fase 2';
-  } else {
-    document.getElementById('boss-phase').textContent = 'Fase 1';
-  }
-}
-
 // ===== COPY CODE =====
 function copyCode() {
   navigator.clipboard.writeText('SORTEOSRK').then(() => {
@@ -147,7 +77,6 @@ function showToast() {
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', () => {
   fetchTwitchStatus();
-  fetchBossHP();
   // Actualizar estado de Twitch cada 2 minutos
   setInterval(fetchTwitchStatus, 120000);
 });
