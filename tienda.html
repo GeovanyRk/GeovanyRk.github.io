@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Tienda de Oro — GeoArmy</title>
-  <meta name="description" content="Canjea tu Oro de la Geo Army por recompensas del canal."/>
+  <title>Tienda de G-coins — GeoArmy</title>
+  <meta name="description" content="Canjea tus G-coins de la Geo Army por recompensas del canal."/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css"/>
@@ -70,6 +70,7 @@
     }
     .ti-card:hover { border-color: var(--border2); transform: translateY(-2px); }
     .ti-icono { font-size: 2.1rem; }
+    .ti-coin-icon { height: 1em; width: 1em; vertical-align: -0.15em; }
     .ti-item-nombre { font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; }
     .ti-item-desc { color: var(--text2); font-size: .9rem; flex-grow: 1; }
     .ti-item-costo { color: #ffd23f; font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
@@ -113,9 +114,9 @@
   <!-- HERO TIENDA -->
   <section class="ti-hero">
     <div class="ti-hero-inner">
-      <div class="ti-eyebrow">🪙 Tienda de la Geo Army</div>
-      <h1 class="ti-title">Cambia tu <span class="accent">Oro</span> por recompensas</h1>
-      <p class="ti-sub">Consigue Oro canjeando la recompensa de canal points en el stream de Geovannyrk, y cámbialo aquí por recompensas — disponible las 24 horas, no solo en vivo.</p>
+      <div class="ti-eyebrow"><img src="gcoin-icon.png" class="ti-coin-icon" alt="G-coin"/> Tienda de la Geo Army</div>
+      <h1 class="ti-title">Cambia tus <span class="accent">G-coins</span> por recompensas</h1>
+      <p class="ti-sub">Consigue G-coins canjeando la recompensa de canal points en el stream de Geovannyrk, y cámbialas aquí por recompensas — disponible las 24 horas, no solo en vivo.</p>
       <button id="tiLoginBtn" class="ti-login-btn">Iniciar sesión con Twitch</button>
     </div>
   </section>
@@ -126,8 +127,8 @@
       <div id="tiUsuarioNombre" class="ti-usuario-nombre"></div>
     </div>
     <div>
-      <div class="ti-saldo-label">Tu Oro</div>
-      <div class="ti-saldo-valor">🪙 <span id="tiSaldoValor">0</span></div>
+      <div class="ti-saldo-label">Tus G-coins</div>
+      <div class="ti-saldo-valor"><img src="gcoin-icon.png" class="ti-coin-icon" alt="G-coin"/> <span id="tiSaldoValor">0</span></div>
     </div>
   </div>
 
@@ -213,7 +214,7 @@
           <div class="ti-icono">${item.icono || '🎁'}</div>
           <p class="ti-item-nombre">${item.nombre}</p>
           <p class="ti-item-desc">${item.descripcion || ''}</p>
-          <div class="ti-item-costo">🪙 ${item.costo}</div>
+          <div class="ti-item-costo"><img src="gcoin-icon.png" class="ti-coin-icon" alt="G-coin"/> ${item.costo}</div>
           <button class="ti-canjear-btn" ${puedeCanjear ? '' : 'disabled'}>
             ${!usuario ? 'Inicia sesión' : (item.stock === 0 ? 'Sin stock' : 'Canjear')}
           </button>
@@ -224,7 +225,7 @@
     }
 
     async function canjear(item) {
-      if (!confirm(`¿Canjear "${item.nombre}" por ${item.costo} de Oro?`)) return;
+      if (!confirm(`¿Canjear "${item.nombre}" por ${item.costo} G-coins?`)) return;
       msg.textContent = 'Procesando...';
       try {
         const res = await fetch(`${API_BASE}/api/canjear`, {
