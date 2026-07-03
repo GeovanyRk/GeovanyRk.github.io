@@ -191,6 +191,14 @@
       "evento": "Ruleta de Fn",
       "fecha": "29/6/2026",
       "entregado": false
+    },
+    {
+      "id": 25,
+      "usuario": "prueba",
+      "premio": "1",
+      "evento": "1",
+      "fecha": "2/7/2026",
+      "entregado": false
     }
   ]
 }
