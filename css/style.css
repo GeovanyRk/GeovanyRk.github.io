@@ -363,3 +363,83 @@ h2 {
 .ruleta-cta { display: block; text-align: center; background: var(--accent); color: white; font-size: 14px; font-weight: 500; padding: 10px; border-radius: var(--radius-sm); transition: background 0.2s; margin-top: auto; }
 .ruleta-cta:hover { background: var(--accent2); }
 .ruleta-disclaimer { text-align: center; font-size: 13px; color: var(--text3); margin-top: 2rem; max-width: 600px; margin-left: auto; margin-right: auto; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); }
+
+/* ===== PREMIUM POLISH — utilidades globales (no reemplaza nada existente, solo suma) ===== */
+
+/* Reveal on scroll: visible por defecto; solo se oculta si el JS confirma que corre */
+[data-reveal] { opacity: 1; transform: none; transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
+html.reveal-ready [data-reveal] { opacity: 0; transform: translateY(28px); }
+html.reveal-ready [data-reveal].is-revealed { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { [data-reveal] { transition: none; } }
+
+/* Barra de progreso de scroll */
+.scroll-progress { position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 150; pointer-events: none; }
+.scroll-progress span { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--fn)); transform-origin: 0 0; transform: scaleX(0); }
+
+/* Nav con más profundidad al hacer scroll */
+.nav.is-scrolled { box-shadow: 0 8px 30px rgba(0,0,0,.35); }
+
+/* Nav: subrayado animado en los links, más marcado */
+.nav-links a { position: relative; transition: color .2s, transform .3s cubic-bezier(.16,1,.3,1); }
+.nav-links a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, var(--accent), var(--fn)); transform: scaleX(0); transform-origin: right; transition: transform .35s cubic-bezier(.16,1,.3,1); }
+.nav-links a:hover { transform: translateY(-1px); }
+.nav-links a:hover::after { transform: scaleX(1); transform-origin: left; }
+
+/* Nav: botón "Ver stream" con pulso constante tipo señal en vivo */
+@keyframes navCtaPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(145,71,255,.55); }
+  50% { box-shadow: 0 0 0 9px rgba(145,71,255,0); }
+}
+.btn-nav { animation: navCtaPulse 2.6s ease-in-out infinite; }
+.btn-nav:hover { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .btn-nav { animation: none; } }
+
+/* Botones: lift + sombra premium en hover, se suma a los estilos ya existentes */
+.btn-primary:hover, .btn-secondary:hover, .btn-nav:hover, .btn-sub:hover, .ruleta-cta:hover,
+.ti-login-btn:hover, .ti-canjear-btn:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(0,0,0,.35);
+}
+
+/* Cards: lift sutil en hover */
+.schedule-card, .benefit-item, .sub-cta-card, .ti-card {
+  transition: transform .35s cubic-bezier(.16,1,.3,1), border-color .3s ease, box-shadow .35s ease;
+}
+.schedule-card:hover, .benefit-item:hover { transform: translateY(-3px); border-color: var(--border2); }
+.sub-cta-card:hover { box-shadow: 0 16px 34px rgba(145,71,255,.14); }
+.ti-card:hover { box-shadow: 0 16px 34px rgba(145,71,255,.12); }
+.ruleta-card:hover { transform: translateY(-3px); }
+.gn-card { transition: box-shadow .35s ease; }
+.gn-card:hover { box-shadow: 0 16px 34px rgba(0,0,0,.25); }
+
+/* Navegación por paneles: solo se activa si el JS confirma que corre.
+   Sin JS, todas las secciones quedan visibles como antes (scroll normal). */
+html.panels-ready .panel { display: none; }
+html.panels-ready .panel.is-active { display: block; }
+.nav-links a.is-active-link { color: var(--text); }
+.nav-links a.is-active-link::after { transform: scaleX(1); transform-origin: left; }
+
+/* Tabs de navegación para móvil: los .nav-links de arriba se ocultan en <768px,
+   así que en móvil usamos esta tira horizontal para poder llegar a cada panel. */
+.panel-tabs { display: none; }
+@media (max-width: 768px) {
+  html.panels-ready .panel-tabs {
+    display: flex; gap: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    padding: 10px 1.25rem; background: var(--bg2); border-bottom: 1px solid var(--border);
+  }
+  html.panels-ready .panel-tabs::-webkit-scrollbar { display: none; }
+  .panel-tabs a {
+    flex: 0 0 auto; font-size: 13px; font-weight: 500; color: var(--text2);
+    background: var(--bg3); border: 1px solid var(--border);
+    padding: 7px 14px; border-radius: 100px; white-space: nowrap;
+  }
+  .panel-tabs a.is-active-link { color: #fff; background: var(--accent); border-color: var(--accent); }
+}
+
+/* Bio de Geo en el panel de inicio */
+.hero-bio-wrap { max-width: 1100px; margin: 3rem auto 0; padding: 0 1.5rem; }
+.hero-bio { max-width: 760px; margin: 0 auto; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem 2.25rem; text-align: center; }
+.hero-bio-tag { display: inline-block; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); background: rgba(145,71,255,0.12); padding: 4px 12px; border-radius: 100px; margin-bottom: 1rem; }
+.hero-bio p { color: var(--text2); font-size: 15.5px; line-height: 1.75; }
+.hero-bio strong { color: var(--accent); font-weight: 600; }
+@media (max-width: 768px) { .hero-bio { padding: 1.5rem 1.5rem; } }
