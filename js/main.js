@@ -3,30 +3,13 @@ const TWITCH_CLIENT_ID = '3spb0xbi38qc8ng1zwcoz5081lp524';
 const BROADCASTER_LOGIN = 'geovannyrk';
 
 // ===== TWITCH STATUS =====
+const STREAM_STATUS_API = 'https://geoarmy.duckdns.org/api/stream-status';
+
 async function fetchTwitchStatus() {
   try {
-    // Obtener app token
-    const tokenRes = await fetch('https://id.twitch.tv/oauth2/token', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        client_id: TWITCH_CLIENT_ID,
-        client_secret: '557parr27ogbsx4coajz40nnslrhi7',
-        grant_type: 'client_credentials'
-      })
-    });
-    const tokenData = await tokenRes.json();
-    const token = tokenData.access_token;
-
-    // Obtener stream info
-    const streamRes = await fetch(`https://api.twitch.tv/helix/streams?user_login=${BROADCASTER_LOGIN}`, {
-      headers: {
-        'Client-ID': TWITCH_CLIENT_ID,
-        'Authorization': 'Bearer ' + token
-      }
-    });
-    const streamData = await streamRes.json();
-    const stream = streamData.data[0];
+    // El backend consulta a Twitch por nosotros (sin exponer el client secret aquí)
+    const streamRes = await fetch(STREAM_STATUS_API);
+    const stream = await streamRes.json();
 
     const dot = document.querySelector('.live-dot');
     const statusDot = document.getElementById('status-dot');
@@ -35,7 +18,7 @@ async function fetchTwitchStatus() {
     const gameEl = document.getElementById('stream-game');
     const viewersEl = document.getElementById('stream-viewers');
 
-    if (stream) {
+    if (stream && stream.live) {
       // EN VIVO
       dot.classList.add('live');
       statusDot.classList.add('live');
