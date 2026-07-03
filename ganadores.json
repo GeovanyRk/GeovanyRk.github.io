@@ -207,6 +207,14 @@
       "evento": "pity",
       "fecha": "3/7/2026",
       "entregado": false
+    },
+    {
+      "id": 27,
+      "usuario": "matid",
+      "premio": "500",
+      "evento": "oe ruleta",
+      "fecha": "3/7/2026",
+      "entregado": false
     }
   ]
 }
