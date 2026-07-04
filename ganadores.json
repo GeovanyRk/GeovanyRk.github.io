@@ -215,6 +215,14 @@
       "evento": "oe ruleta",
       "fecha": "3/7/2026",
       "entregado": false
+    },
+    {
+      "id": 28,
+      "usuario": "Michael",
+      "premio": "3400 pavos",
+      "evento": "ruleta de fn",
+      "fecha": "3/7/2026",
+      "entregado": false
     }
   ]
 }
