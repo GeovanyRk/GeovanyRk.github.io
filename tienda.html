@@ -237,6 +237,7 @@
 
     async function renderCatalogo() {
       if (!catalogoCache.length) catalogoCache = await cargarCatalogo();
+      catalogoCache = [...catalogoCache].sort((a, b) => a.costo - b.costo);
       grid.innerHTML = '';
       catalogoCache.forEach((item) => {
         const puedeCanjear = usuario && saldo >= item.costo && (item.stock === null || item.stock > 0);
