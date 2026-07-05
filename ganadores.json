@@ -239,6 +239,14 @@
       "evento": "ruleta de ow",
       "fecha": "4/7/2026",
       "entregado": false
+    },
+    {
+      "id": 31,
+      "usuario": "Diego",
+      "premio": "800 pavos",
+      "evento": "ruleta de fortnite",
+      "fecha": "4/7/2026",
+      "entregado": false
     }
   ]
 }
