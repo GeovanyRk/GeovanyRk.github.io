@@ -231,6 +231,14 @@
       "evento": "ruleta de fn",
       "fecha": "4/7/2026",
       "entregado": false
+    },
+    {
+      "id": 30,
+      "usuario": "cristina",
+      "premio": "500 ow",
+      "evento": "ruleta de ow",
+      "fecha": "4/7/2026",
+      "entregado": false
     }
   ]
 }
