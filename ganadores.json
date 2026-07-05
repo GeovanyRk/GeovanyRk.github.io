@@ -223,6 +223,14 @@
       "evento": "ruleta de fn",
       "fecha": "3/7/2026",
       "entregado": false
+    },
+    {
+      "id": 29,
+      "usuario": "warner",
+      "premio": "500 pavos",
+      "evento": "ruleta de fn",
+      "fecha": "4/7/2026",
+      "entregado": false
     }
   ]
 }
