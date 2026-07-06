@@ -247,6 +247,14 @@
       "evento": "ruleta de fortnite",
       "fecha": "4/7/2026",
       "entregado": false
+    },
+    {
+      "id": 32,
+      "usuario": "kiro",
+      "premio": "500 Pavos",
+      "evento": "Ruleta de Fn",
+      "fecha": "5/7/2026",
+      "entregado": false
     }
   ]
 }
