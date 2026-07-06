@@ -255,6 +255,14 @@
       "evento": "Ruleta de Fn",
       "fecha": "5/7/2026",
       "entregado": false
+    },
+    {
+      "id": 33,
+      "usuario": "Toxic",
+      "premio": "500 ow",
+      "evento": "ruleta de Bienvenido",
+      "fecha": "6/7/2026",
+      "entregado": false
     }
   ]
 }
