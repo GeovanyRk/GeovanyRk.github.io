@@ -263,6 +263,14 @@
       "evento": "ruleta de Bienvenido",
       "fecha": "6/7/2026",
       "entregado": false
+    },
+    {
+      "id": 34,
+      "usuario": "Warner",
+      "premio": "500 pavos",
+      "evento": "ruleta de Fn",
+      "fecha": "7/7/2026",
+      "entregado": false
     }
   ]
 }
