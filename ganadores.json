@@ -271,6 +271,14 @@
       "evento": "ruleta de Fn",
       "fecha": "7/7/2026",
       "entregado": false
+    },
+    {
+      "id": 35,
+      "usuario": "matid",
+      "premio": "500 pavos",
+      "evento": "ruleta de fn",
+      "fecha": "8/7/2026",
+      "entregado": false
     }
   ]
 }
