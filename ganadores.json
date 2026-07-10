@@ -295,6 +295,14 @@
       "evento": "Ruleta de fn",
       "fecha": "9/7/2026",
       "entregado": false
+    },
+    {
+      "id": 38,
+      "usuario": "krager",
+      "premio": "1500 ow",
+      "evento": "pity",
+      "fecha": "9/7/2026",
+      "entregado": false
     }
   ]
 }
