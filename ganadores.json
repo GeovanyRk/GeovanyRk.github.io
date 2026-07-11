@@ -311,6 +311,14 @@
       "evento": "ruleta de fn",
       "fecha": "10/7/2026",
       "entregado": false
+    },
+    {
+      "id": 40,
+      "usuario": "hunter",
+      "premio": "500 pavos",
+      "evento": "Ruleta de fn",
+      "fecha": "10/7/2026",
+      "entregado": false
     }
   ]
 }
