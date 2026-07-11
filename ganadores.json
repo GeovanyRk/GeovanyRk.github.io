@@ -303,6 +303,14 @@
       "evento": "pity",
       "fecha": "9/7/2026",
       "entregado": false
+    },
+    {
+      "id": 39,
+      "usuario": "forsa",
+      "premio": "500 pavos",
+      "evento": "ruleta de fn",
+      "fecha": "10/7/2026",
+      "entregado": false
     }
   ]
 }
