@@ -367,6 +367,14 @@
       "evento": "Ruleta de ow",
       "fecha": "10/7/2026",
       "entregado": false
+    },
+    {
+      "id": 47,
+      "usuario": "Warner q",
+      "premio": "1500 pavos",
+      "evento": "Ruleta de Fortnite",
+      "fecha": "10/7/2026",
+      "entregado": false
     }
   ]
 }
