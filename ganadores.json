@@ -214,7 +214,7 @@
       "premio": "500",
       "evento": "oe ruleta",
       "fecha": "3/7/2026",
-      "entregado": false
+      "entregado": true
     },
     {
       "id": 28,
