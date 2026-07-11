@@ -1,25 +1,11 @@
 {
   "ganadores": [
     {
-      "id": 1,
-      "usuario": "prueba",
-      "premio": "tes",
-      "evento": "prueba",
-      "fecha": "17/6/2026",
-      "entregado": true
-    },
-    {
-      "id": 2,
-      "usuario": "prueba",
-      "premio": "prueba",
-      "evento": "prueba",
-      "fecha": "17/6/2026",
-      "entregado": true
-    },
-    {
       "id": 3,
       "usuario": "Vasos",
-      "premio": "500 monedad de ow",
+      "premio": "500 OW Coins",
+      "cantidad": 500,
+      "moneda": "owcoins",
       "evento": "Ruleta de ow",
       "fecha": "18/6/2026",
       "entregado": true
@@ -27,7 +13,9 @@
     {
       "id": 4,
       "usuario": "Maton",
-      "premio": "800 pavos",
+      "premio": "800 Pavos",
+      "cantidad": 800,
+      "moneda": "pavos",
       "evento": "Ruleta de Fortnite",
       "fecha": "19/6/2026",
       "entregado": true
@@ -35,71 +23,89 @@
     {
       "id": 5,
       "usuario": "fredi",
-      "premio": "1500 pavos",
+      "premio": "1,500 Pavos",
+      "cantidad": 1500,
+      "moneda": "pavos",
       "evento": "Pity",
       "fecha": "19/6/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 6,
       "usuario": "Forsa",
-      "premio": "500 pavos",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
       "evento": "Ruleta de Sub",
       "fecha": "19/6/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 7,
       "usuario": "Kitty",
-      "premio": "500",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
       "evento": "Ruleta de fortnite",
       "fecha": "20/6/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 8,
       "usuario": "Mango",
-      "premio": "1500 fortnite",
+      "premio": "1,500 Pavos",
+      "cantidad": 1500,
+      "moneda": "pavos",
       "evento": "Pity",
       "fecha": "21/6/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 9,
       "usuario": "Joshi",
-      "premio": "800 pavos",
+      "premio": "800 Pavos",
+      "cantidad": 800,
+      "moneda": "pavos",
       "evento": "Pity",
       "fecha": "21/6/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 10,
       "usuario": "Matid",
-      "premio": "500 monedas de Fn",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
       "evento": "Ruleta de Fn",
       "fecha": "21/6/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 11,
       "usuario": "Michael",
-      "premio": "500 pavos",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
       "evento": "Ruleta de Fn",
       "fecha": "22/6/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 12,
-      "usuario": "lis",
-      "premio": "500",
-      "evento": "Ruleta Sub",
+      "usuario": "Lis",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
+      "evento": "ruleta de fn",
       "fecha": "22/6/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 13,
       "usuario": "Kitty",
-      "premio": "1000 Ow Coin",
+      "premio": "1,000 OW Coins",
+      "cantidad": 1000,
+      "moneda": "owcoins",
       "evento": "Cumpleaños",
       "fecha": "22/6/2026",
       "entregado": true
@@ -107,7 +113,9 @@
     {
       "id": 14,
       "usuario": "Mashu",
-      "premio": "1500 ow coin",
+      "premio": "1,500 OW Coins",
+      "cantidad": 1500,
+      "moneda": "owcoins",
       "evento": "Pity",
       "fecha": "24/6/2026",
       "entregado": true
@@ -115,15 +123,19 @@
     {
       "id": 15,
       "usuario": "fredi",
-      "premio": "500 pavos",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
       "evento": "Ruleta de fortnite",
       "fecha": "24/6/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 16,
       "usuario": "alberto",
-      "premio": "500 ow coin",
+      "premio": "500 OW Coins",
+      "cantidad": 500,
+      "moneda": "owcoins",
       "evento": "Ruleta de sub",
       "fecha": "24/6/2026",
       "entregado": true
@@ -131,23 +143,29 @@
     {
       "id": 17,
       "usuario": "Jose",
-      "premio": "500 pavos",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
       "evento": "Ruleta de fn",
       "fecha": "25/6/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 18,
       "usuario": "Forsa",
       "premio": "1500",
+      "cantidad": 1500,
+      "moneda": null,
       "evento": "Pity",
       "fecha": "25/6/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 19,
       "usuario": "Kiro",
-      "premio": "500 de pavos",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
       "evento": "Ruleta de sub",
       "fecha": "26/6/2026",
       "entregado": true
@@ -155,7 +173,9 @@
     {
       "id": 20,
       "usuario": "uriel",
-      "premio": "5$",
+      "premio": "$5",
+      "cantidad": 5,
+      "moneda": "usd",
       "evento": "ruleta de sub",
       "fecha": "26/6/2026",
       "entregado": false
@@ -163,218 +183,43 @@
     {
       "id": 21,
       "usuario": "Warner",
-      "premio": "500 pavos",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
       "evento": "Ruleta de fn",
       "fecha": "29/6/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 22,
       "usuario": "Kiro",
-      "premio": "500 pavos",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
       "evento": "Ruleta de Fn",
       "fecha": "29/6/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 23,
       "usuario": "Kid",
-      "premio": "800 pavos",
+      "premio": "800 Pavos",
+      "cantidad": 800,
+      "moneda": "pavos",
       "evento": "Ruleta de Fn",
       "fecha": "29/6/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 24,
       "usuario": "Diego",
-      "premio": "800",
+      "premio": "800 Pavos",
+      "cantidad": 800,
+      "moneda": "pavos",
       "evento": "Ruleta de Fn",
       "fecha": "29/6/2026",
-      "entregado": true
-    },
-    {
-      "id": 25,
-      "usuario": "michael",
-      "premio": "1200  pavos",
-      "evento": "Pity",
-      "fecha": "3/7/2026",
-      "entregado": true
-    },
-    {
-      "id": 26,
-      "usuario": "Jose",
-      "premio": "1500",
-      "evento": "pity",
-      "fecha": "3/7/2026",
-      "entregado": true
-    },
-    {
-      "id": 27,
-      "usuario": "matid",
-      "premio": "500",
-      "evento": "oe ruleta",
-      "fecha": "3/7/2026",
-      "entregado": true
-    },
-    {
-      "id": 28,
-      "usuario": "Michael",
-      "premio": "3400 pavos",
-      "evento": "ruleta de fn",
-      "fecha": "3/7/2026",
-      "entregado": true
-    },
-    {
-      "id": 29,
-      "usuario": "warner",
-      "premio": "500 pavos",
-      "evento": "ruleta de fn",
-      "fecha": "4/7/2026",
-      "entregado": true
-    },
-    {
-      "id": 30,
-      "usuario": "cristina",
-      "premio": "500 ow",
-      "evento": "ruleta de ow",
-      "fecha": "4/7/2026",
-      "entregado": true
-    },
-    {
-      "id": 31,
-      "usuario": "Diego",
-      "premio": "800 pavos",
-      "evento": "ruleta de fortnite",
-      "fecha": "4/7/2026",
-      "entregado": false
-    },
-    {
-      "id": 32,
-      "usuario": "kiro",
-      "premio": "500 Pavos",
-      "evento": "Ruleta de Fn",
-      "fecha": "5/7/2026",
-      "entregado": true
-    },
-    {
-      "id": 33,
-      "usuario": "Toxic",
-      "premio": "500 ow",
-      "evento": "ruleta de Bienvenido",
-      "fecha": "6/7/2026",
-      "entregado": true
-    },
-    {
-      "id": 34,
-      "usuario": "Warner",
-      "premio": "500 pavos",
-      "evento": "ruleta de Fn",
-      "fecha": "7/7/2026",
-      "entregado": true
-    },
-    {
-      "id": 35,
-      "usuario": "matid",
-      "premio": "500 pavos",
-      "evento": "ruleta de fn",
-      "fecha": "8/7/2026",
-      "entregado": true
-    },
-    {
-      "id": 36,
-      "usuario": "kiro",
-      "premio": "500 pavos",
-      "evento": "ruleta de fn",
-      "fecha": "8/7/2026",
-      "entregado": true
-    },
-    {
-      "id": 37,
-      "usuario": "matid",
-      "premio": "500 pavos",
-      "evento": "Ruleta de fn",
-      "fecha": "9/7/2026",
-      "entregado": true
-    },
-    {
-      "id": 38,
-      "usuario": "krager",
-      "premio": "1500 ow",
-      "evento": "pity",
-      "fecha": "9/7/2026",
-      "entregado": true
-    },
-    {
-      "id": 39,
-      "usuario": "forsa",
-      "premio": "500 pavos",
-      "evento": "ruleta de fn",
-      "fecha": "10/7/2026",
-      "entregado": true
-    },
-    {
-      "id": 40,
-      "usuario": "hunter",
-      "premio": "500 pavos",
-      "evento": "Ruleta de fn",
-      "fecha": "10/7/2026",
-      "entregado": false
-    },
-    {
-      "id": 41,
-      "usuario": "fredi",
-      "premio": "2000 pavos",
-      "evento": "Ruleta de fn",
-      "fecha": "10/7/2026",
-      "entregado": false
-    },
-    {
-      "id": 42,
-      "usuario": "forsa",
-      "premio": "2500 pavos",
-      "evento": "Ruleta de Fn",
-      "fecha": "10/7/2026",
-      "entregado": false
-    },
-    {
-      "id": 43,
-      "usuario": "Kitty",
-      "premio": "500 pavos",
-      "evento": "Ruleta de Fn",
-      "fecha": "10/7/2026",
-      "entregado": false
-    },
-    {
-      "id": 44,
-      "usuario": "Matid",
-      "premio": "1500 pavos y 500 ow",
-      "evento": "Ruletas",
-      "fecha": "10/7/2026",
-      "entregado": true
-    },
-    {
-      "id": 45,
-      "usuario": "Kiro",
-      "premio": "1500 pavos",
-      "evento": "Ruleta de Fn",
-      "fecha": "10/7/2026",
-      "entregado": true
-    },
-    {
-      "id": 46,
-      "usuario": "Cristian",
-      "premio": "1000 ow",
-      "evento": "Ruleta de ow",
-      "fecha": "10/7/2026",
-      "entregado": false
-    },
-    {
-      "id": 47,
-      "usuario": "Warner q",
-      "premio": "1500 pavos",
-      "evento": "Ruleta de Fortnite",
-      "fecha": "10/7/2026",
       "entregado": false
     }
-  ]
+  ],
+  "gastos": []
 }
