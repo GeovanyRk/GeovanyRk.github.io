@@ -335,6 +335,14 @@
       "evento": "Ruleta de Fn",
       "fecha": "10/7/2026",
       "entregado": false
+    },
+    {
+      "id": 43,
+      "usuario": "Kitty",
+      "premio": "500 pavos",
+      "evento": "Ruleta de Fn",
+      "fecha": "10/7/2026",
+      "entregado": false
     }
   ]
 }
