@@ -219,6 +219,16 @@
       "evento": "Ruleta de Fn",
       "fecha": "29/6/2026",
       "entregado": false
+    },
+    {
+      "id": 25,
+      "usuario": "geo",
+      "premio": "1 Pavos",
+      "cantidad": 1,
+      "moneda": "pavos",
+      "evento": "PRUEba",
+      "fecha": "11/7/2026",
+      "entregado": false
     }
   ],
   "gastos": []
