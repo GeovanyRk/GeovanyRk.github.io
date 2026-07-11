@@ -359,6 +359,14 @@
       "evento": "Ruleta de Fn",
       "fecha": "10/7/2026",
       "entregado": false
+    },
+    {
+      "id": 46,
+      "usuario": "Cristian",
+      "premio": "1000 ow",
+      "evento": "Ruleta de ow",
+      "fecha": "10/7/2026",
+      "entregado": false
     }
   ]
 }
