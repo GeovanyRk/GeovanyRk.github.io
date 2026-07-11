@@ -351,6 +351,14 @@
       "evento": "Ruletas",
       "fecha": "10/7/2026",
       "entregado": false
+    },
+    {
+      "id": 45,
+      "usuario": "Kiro",
+      "premio": "1500 pavos",
+      "evento": "Ruleta de Fn",
+      "fecha": "10/7/2026",
+      "entregado": false
     }
   ]
 }
