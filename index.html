@@ -35,6 +35,7 @@
         <a href="#horario">Horario</a>
         <a href="#ruletas">Ruletas</a>
         <a href="#ganadores">Ganadores</a>
+        <a href="#solicitudes">Solicitudes</a>
         <a href="#sorteos">Sorteos</a>
         <a href="#sub">Sub</a>
         <a href="#links">Links</a>
@@ -444,6 +445,128 @@
       }
       document.getElementById('gnSearch').addEventListener('input', render);
       var btns = document.querySelectorAll('#ganadores .gn-filters button');
+      btns.forEach(function(b){
+        b.addEventListener('click', function(){
+          btns.forEach(function(x){x.setAttribute('aria-pressed','false');});
+          b.setAttribute('aria-pressed','true');
+          filtro = b.getAttribute('data-f'); render();
+        });
+      });
+      load();
+      setInterval(load, 30000);
+    })();
+    </script>
+  </section>
+
+  <!-- SOLICITUDES -->
+  <section class="section panel" id="solicitudes">
+    <style>
+      #solicitudes .sc-wrap{max-width:960px;margin:0 auto;}
+      #solicitudes .sc-stats{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 22px;}
+      #solicitudes .sc-chip{flex:1;min-width:120px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px 18px;}
+      #solicitudes .sc-chip b{font-family:'Space Grotesk',sans-serif;font-size:1.9rem;line-height:1;display:block;}
+      #solicitudes .sc-chip span{font-size:.7rem;text-transform:uppercase;letter-spacing:.13em;color:rgba(255,255,255,.5);}
+      #solicitudes .sc-chip.gold b{color:#ec4899;}
+      #solicitudes .sc-chip.pend b{color:#ffb13f;}
+      #solicitudes .sc-chip.done b{color:#46e0a8;}
+      #solicitudes .sc-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
+      #solicitudes .sc-search{flex:1;min-width:200px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:#fff;padding:12px 16px;border-radius:12px;font-size:.95rem;font-family:inherit;}
+      #solicitudes .sc-search::placeholder{color:rgba(255,255,255,.4);}
+      #solicitudes .sc-search:focus{outline:2px solid #ec4899;outline-offset:1px;}
+      #solicitudes .sc-filters{display:flex;gap:5px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);padding:5px;border-radius:12px;}
+      #solicitudes .sc-filters button{font-family:'Space Grotesk',sans-serif;font-size:.78rem;background:transparent;border:0;color:rgba(255,255,255,.55);padding:8px 14px;border-radius:8px;cursor:pointer;}
+      #solicitudes .sc-filters button[aria-pressed="true"]{background:#ec4899;color:#fff;}
+      #solicitudes .sc-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:18px;overflow:hidden;}
+      #solicitudes .sc-row{display:flex;gap:14px;align-items:center;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.06);}
+      #solicitudes .sc-row:last-child{border-bottom:0;}
+      #solicitudes .sc-thumb{width:56px;height:56px;border-radius:10px;object-fit:cover;flex-shrink:0;background:rgba(0,0,0,.3);}
+      #solicitudes .sc-info{flex:1;min-width:0;}
+      #solicitudes .sc-item{color:#fff;font-weight:600;font-size:.95rem;}
+      #solicitudes .sc-meta{color:rgba(255,255,255,.55);font-size:.82rem;margin-top:2px;}
+      #solicitudes .sc-badge{display:inline-flex;align-items:center;gap:6px;font-size:.73rem;font-weight:600;padding:5px 11px;border-radius:99px;white-space:nowrap;flex-shrink:0;}
+      #solicitudes .sc-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;}
+      #solicitudes .sc-badge.pend{color:#ffb13f;background:rgba(255,177,63,.13);}
+      #solicitudes .sc-badge.done{color:#46e0a8;background:rgba(70,224,168,.12);}
+      #solicitudes .sc-empty{padding:44px 20px;text-align:center;color:rgba(255,255,255,.5);}
+      #solicitudes .sc-empty b{display:block;color:#fff;font-family:'Space Grotesk',sans-serif;margin-bottom:6px;font-size:1.05rem;}
+      #solicitudes .sc-foot{margin-top:16px;color:rgba(255,255,255,.4);font-size:.78rem;text-align:right;}
+      @media(max-width:560px){
+        #solicitudes .sc-row{flex-wrap:wrap;}
+        #solicitudes .sc-badge{margin-left:70px;}
+      }
+    </style>
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-tag">Canjes de la Geo Army</div>
+        <h2>Solicitudes de canje</h2>
+        <p>Lo que cada ganador pidió a cambio de su premio de la ruleta, con imagen del item. Se piden con <strong>/reclamar</strong> en Discord.</p>
+      </div>
+      <div class="sc-wrap" data-reveal>
+        <div class="sc-stats">
+          <div class="sc-chip gold"><b id="scTotal">0</b><span>Solicitudes</span></div>
+          <div class="sc-chip pend"><b id="scPend">0</b><span>Por entregar</span></div>
+          <div class="sc-chip done"><b id="scDone">0</b><span>Entregadas</span></div>
+        </div>
+        <div class="sc-controls">
+          <input id="scSearch" class="sc-search" type="search" placeholder="Buscar por usuario o item…" aria-label="Buscar solicitudes">
+          <div class="sc-filters" role="group" aria-label="Filtrar por estado">
+            <button data-f="todos" aria-pressed="true">Todos</button>
+            <button data-f="pendientes" aria-pressed="false">Pendientes</button>
+            <button data-f="entregados" aria-pressed="false">Entregadas</button>
+          </div>
+        </div>
+        <div class="sc-card" id="scCard"></div>
+        <div class="sc-foot" id="scUpdated">Cargando…</div>
+      </div>
+    </div>
+    <script>
+    (function(){
+      var DATA = [], filtro = 'todos';
+      function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+      function render(){
+        var q = document.getElementById('scSearch').value.trim().toLowerCase();
+        var rows = DATA.slice().sort(function(a,b){return b.id-a.id;});
+        if(filtro==='pendientes') rows = rows.filter(function(s){return !s.entregado;});
+        if(filtro==='entregados') rows = rows.filter(function(s){return s.entregado;});
+        if(q) rows = rows.filter(function(s){return (s.nombreFortnite+' '+s.item+' '+(s.ganadorPremio||'')).toLowerCase().indexOf(q)>-1;});
+        var card = document.getElementById('scCard');
+        if(!rows.length){
+          card.innerHTML = '<div class="sc-empty"><b>Sin resultados</b>Aún no hay solicitudes que coincidan.</div>';
+        } else {
+          card.innerHTML = rows.map(function(s){
+            return '<div class="sc-row">'+
+              '<img class="sc-thumb" src="'+esc(s.imagenUrl||'')+'" alt="" onerror="this.style.visibility=\'hidden\'"/>'+
+              '<div class="sc-info">'+
+                '<div class="sc-item">'+esc(s.item)+'</div>'+
+                '<div class="sc-meta">'+esc(s.nombreFortnite)+' · ganó '+esc(s.ganadorPremio||'')+'</div>'+
+              '</div>'+
+              (s.entregado
+                ? '<span class="sc-badge done">Entregado</span>'
+                : '<span class="sc-badge pend">Pendiente</span>')+
+            '</div>';
+          }).join('');
+        }
+        document.getElementById('scTotal').textContent = DATA.length;
+        document.getElementById('scPend').textContent  = DATA.filter(function(s){return !s.entregado;}).length;
+        document.getElementById('scDone').textContent  = DATA.filter(function(s){return s.entregado;}).length;
+      }
+      function load(){
+        fetch('solicitudes.json?t='+Date.now(),{cache:'no-store'})
+          .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+          .then(function(j){
+            DATA = j.solicitudes || [];
+            document.getElementById('scUpdated').textContent =
+              'Actualizado ' + new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+            render();
+          })
+          .catch(function(){
+            DATA = [];
+            document.getElementById('scUpdated').textContent = 'Aún no hay solicitudes.json (todavía no se ha usado /reclamar).';
+            render();
+          });
+      }
+      document.getElementById('scSearch').addEventListener('input', render);
+      var btns = document.querySelectorAll('#solicitudes .sc-filters button');
       btns.forEach(function(b){
         b.addEventListener('click', function(){
           btns.forEach(function(x){x.setAttribute('aria-pressed','false');});
