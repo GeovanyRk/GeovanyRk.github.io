@@ -469,6 +469,16 @@
       "evento": "ruleta pity",
       "fecha": "11/7/2026",
       "entregado": false
+    },
+    {
+      "id": 48,
+      "usuario": "xiaokiis",
+      "premio": "500 OW Coins",
+      "cantidad": 500,
+      "moneda": "owcoins",
+      "evento": "Ruleta de ow",
+      "fecha": "12/7/2026",
+      "entregado": false
     }
   ],
   "gastos": []
