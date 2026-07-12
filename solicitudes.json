@@ -1,0 +1,17 @@
+{
+  "solicitudes": [
+    {
+      "id": 1,
+      "ganadorId": 18,
+      "ganadorUsuario": "uriel",
+      "ganadorPremio": "$5",
+      "item": "skin",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1783815830781.jpg",
+      "nombreFortnite": "toji",
+      "discordId": "336195610984054785",
+      "discordUsuario": "geovany5331",
+      "fecha": "11/7/2026",
+      "entregado": false
+    }
+  ]
+}
