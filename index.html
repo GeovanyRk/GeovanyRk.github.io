@@ -30,7 +30,6 @@
       </a>
       <div class="nav-links">
         <a href="#inicio">Geo Army</a>
-        <a href="#evento">Evento Fortnite</a>
         <a href="tienda.html">Tienda</a>
         <a href="#horario">Horario</a>
         <a href="#ruletas">Ruletas</a>
@@ -87,114 +86,6 @@
         <p>Soy Geo, streamer salvadoreño y creador de la Geo Army, una comunidad donde disfrutamos Fortnite, Overwatch, eventos, retos, sorteos y muchas buenas experiencias juntos. Empecé este proyecto con la idea de construir algo más grande que un canal: un espacio donde todos puedan participar, divertirse y sentirse parte de una verdadera comunidad. Si quieres apoyar este sueño y ayudarme a seguir creciendo, puedes suscribirte al canal o usar mi código de creador <strong>SORTEOSRK</strong> en Fortnite. Cada apoyo, por pequeño que parezca, significa muchísimo para mí y para el futuro de la Geo Army.</p>
       </div>
     </div>
-  </section>
-
-  <!-- EVENTO FORTNITE — TORMENTA -->
-  <section class="section panel" id="evento">
-    <style>
-      #evento .evt-wrap{max-width:980px;margin:0 auto;}
-
-      /* Visual de tormenta — imagen real con Ken Burns sutil + viñeta para legibilidad */
-      #evento .evt-storm{position:relative;height:320px;border-radius:18px;overflow:hidden;border:1px solid rgba(0,212,255,.3);box-shadow:0 0 50px rgba(0,212,255,.12);isolation:isolate;}
-      #evento .evt-storm-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:evtAmbientZoom 26s ease-in-out infinite;}
-      @keyframes evtAmbientZoom{0%,100%{transform:scale(1.04);}50%{transform:scale(1.11);}}
-      #evento .evt-storm::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,8,20,.05) 0%,rgba(10,8,20,.3) 55%,rgba(10,8,20,.92) 100%);}
-      #evento .evt-storm-content{position:absolute;left:0;right:0;bottom:0;padding:26px 28px;z-index:2;}
-
-      #evento .evt-live{display:inline-flex;align-items:center;gap:7px;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:#00d4ff;background:rgba(0,212,255,.12);border:1px solid rgba(0,212,255,.4);padding:5px 11px;border-radius:99px;margin-bottom:12px;}
-      #evento .evt-live .dot{width:7px;height:7px;border-radius:50%;background:#00d4ff;box-shadow:0 0 8px #00d4ff;animation:evtpulse 1.6s infinite;}
-      @keyframes evtpulse{0%,100%{opacity:1}50%{opacity:.35}}
-      #evento .evt-title{font-family:'Space Grotesk',sans-serif;font-size:2.1rem;font-weight:700;color:#fff;line-height:1.05;margin:0 0 6px;}
-      #evento .evt-dates{color:#5fd8ff;font-weight:600;font-size:.95rem;}
-
-      #evento .evt-reward{display:flex;align-items:center;gap:16px;background:linear-gradient(90deg,rgba(0,212,255,.14),rgba(145,71,255,.1));border:1px solid rgba(0,212,255,.35);border-radius:14px;padding:18px 22px;margin:22px 0;}
-      #evento .evt-reward-ico{font-size:2rem;flex-shrink:0;}
-      #evento .evt-reward-t{color:#fff;font-weight:700;font-size:1.05rem;}
-      #evento .evt-reward-d{color:rgba(255,255,255,.65);font-size:.9rem;}
-
-      #evento .evt-cta{display:flex;gap:12px;flex-wrap:wrap;}
-      #evento .evt-btn{flex:1;min-width:200px;text-align:center;padding:14px 20px;border-radius:12px;font-weight:700;text-decoration:none;transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s cubic-bezier(.16,1,.3,1);}
-      #evento .evt-btn.tw{background:#9146ff;color:#fff;}
-      #evento .evt-btn:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(0,0,0,.35);}
-
-      /* reveal on scroll — sutil, no bloquea contenido si JS falla */
-      #evento [data-reveal]{opacity:1;transform:none;transition:opacity .7s ease, transform .7s cubic-bezier(.16,1,.3,1);}
-      #evento.js-ready [data-reveal]{opacity:0;transform:translateY(24px);}
-      #evento.js-ready [data-reveal].is-revealed{opacity:1;transform:none;}
-
-      @media(max-width:720px){
-        #evento .evt-title{font-size:1.6rem;}
-        #evento .evt-storm{height:260px;}
-      }
-    </style>
-    <div class="section-inner">
-      <div class="section-header">
-        <div class="section-tag">Evento Fortnite</div>
-        <h2>¿Sobrevivirás a la tormenta?</h2>
-        <p>La Geo Army contra el círculo. Cada partida cuenta.</p>
-      </div>
-      <div class="evt-wrap">
-        <div class="evt-storm" data-reveal>
-          <img src="storm-evento.png" alt="Tormenta — Evento Fortnite" class="evt-storm-img"/>
-          <div class="evt-storm-content">
-            <div class="evt-live"><span class="dot"></span><span id="evtCountdown">Empieza el 6 de julio</span></div>
-            <div class="evt-title">¿SOBREVIVIRÁS A LA TORMENTA?</div>
-            <div class="evt-dates">6 de julio · en cada stream</div>
-          </div>
-        </div>
-
-        <div class="evt-reward" data-reveal>
-          <div class="evt-reward-ico">🏆</div>
-          <div>
-            <div class="evt-reward-t">Premio: 20,000 V-Bucks</div>
-            <div class="evt-reward-d">Un solo ganador se lleva el premio completo.</div>
-          </div>
-        </div>
-
-        <div class="evt-cta" data-reveal>
-          <a href="https://twitch.tv/geovannyrk" target="_blank" class="evt-btn tw">Jugar en el stream →</a>
-        </div>
-      </div>
-    </div>
-    <script>
-    (function(){
-      // Countdown — no toca main.js, no depende de servidores externos
-      function safe(fn,name){ try{ fn(); } catch(e){ console.warn('['+name+']', e); } }
-
-      safe(function initEvtCountdown(){
-        var el = document.getElementById('evtCountdown');
-        if(!el) return;
-        var target = new Date(2026, 6, 6); // 6 de julio 2026
-        var now = new Date();
-        var diffDays = Math.ceil((target - now) / 86400000);
-        if(diffDays > 1) el.textContent = 'Faltan ' + diffDays + ' días';
-        else if(diffDays === 1) el.textContent = '¡Empieza mañana!';
-        else if(diffDays === 0) el.textContent = '¡Empieza hoy!';
-        else el.textContent = 'Evento en curso';
-      }, 'initEvtCountdown');
-
-      safe(function initEvtReveal(){
-        var section = document.getElementById('evento');
-        if(!section) return;
-        section.classList.add('js-ready');
-        var els = section.querySelectorAll('[data-reveal]');
-        var io = new IntersectionObserver(function(entries){
-          entries.forEach(function(e){
-            if(e.isIntersecting){ e.target.classList.add('is-revealed'); io.unobserve(e.target); }
-          });
-        }, { threshold: 0.01, rootMargin: '0px 0px -2% 0px' });
-        els.forEach(function(el){ io.observe(el); });
-        // red de seguridad: a los 6s revela lo que siga oculto
-        setTimeout(function(){
-          els.forEach(function(el){
-            if(!el.classList.contains('is-revealed') && el.getBoundingClientRect().top < window.innerHeight){
-              el.classList.add('is-revealed');
-            }
-          });
-        }, 6000);
-      }, 'initEvtReveal');
-    })();
-    </script>
   </section>
 
   <!-- HORARIO -->
