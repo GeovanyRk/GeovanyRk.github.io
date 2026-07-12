@@ -12,6 +12,19 @@
       "discordUsuario": "geovany5331",
       "fecha": "11/7/2026",
       "entregado": false
+    },
+    {
+      "id": 2,
+      "ganadorId": 47,
+      "ganadorUsuario": "xiaokiis",
+      "ganadorPremio": "1,500 OW Coins",
+      "item": "monedas",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1783818292527.png",
+      "nombreFortnite": "REVVU#1526",
+      "discordId": "1343744319697322117",
+      "discordUsuario": "portamentz",
+      "fecha": "11/7/2026",
+      "entregado": false
     }
   ]
 }
