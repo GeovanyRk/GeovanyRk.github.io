@@ -459,6 +459,16 @@
       "evento": "Ruleta de Fortnite",
       "fecha": "10/7/2026",
       "entregado": false
+    },
+    {
+      "id": 47,
+      "usuario": "xiaokiis",
+      "premio": "1,500 OW Coins",
+      "cantidad": 1500,
+      "moneda": "owcoins",
+      "evento": "ruleta pity",
+      "fecha": "11/7/2026",
+      "entregado": false
     }
   ],
   "gastos": []
