@@ -549,6 +549,16 @@
       "evento": "cumple",
       "fecha": "15/7/2026",
       "entregado": false
+    },
+    {
+      "id": 56,
+      "usuario": "joshi",
+      "premio": "1,000 Pavos",
+      "cantidad": 1000,
+      "moneda": "pavos",
+      "evento": "fue su cumple",
+      "fecha": "15/7/2026",
+      "entregado": false
     }
   ],
   "gastos": []
