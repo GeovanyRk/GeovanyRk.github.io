@@ -529,6 +529,16 @@
       "evento": "cumple",
       "fecha": "15/7/2026",
       "entregado": false
+    },
+    {
+      "id": 54,
+      "usuario": "Kiro",
+      "premio": "300 Pavos",
+      "cantidad": 300,
+      "moneda": "pavos",
+      "evento": "sobraron",
+      "fecha": "15/7/2026",
+      "entregado": false
     }
   ],
   "gastos": []
