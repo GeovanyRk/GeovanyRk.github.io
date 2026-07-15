@@ -559,6 +559,16 @@
       "evento": "fue su cumple",
       "fecha": "15/7/2026",
       "entregado": false
+    },
+    {
+      "id": 57,
+      "usuario": "xwonny",
+      "premio": "400 Pavos",
+      "cantidad": 400,
+      "moneda": "pavos",
+      "evento": "cumple",
+      "fecha": "15/7/2026",
+      "entregado": false
     }
   ],
   "gastos": []
