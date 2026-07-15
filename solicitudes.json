@@ -38,6 +38,19 @@
       "discordUsuario": "portamentz",
       "fecha": "12/7/2026",
       "entregado": false
+    },
+    {
+      "id": 4,
+      "ganadorId": 46,
+      "ganadorUsuario": "Warner q",
+      "ganadorPremio": "1,500 Pavos",
+      "item": "Todos los lotes que salgan de Batman vacaciones",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1784158282083.jpg",
+      "nombreFortnite": "Warnerr8",
+      "discordId": "231468237257179137",
+      "discordUsuario": "warnerr8",
+      "fecha": "15/7/2026",
+      "entregado": false
     }
   ]
 }
