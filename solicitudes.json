@@ -51,6 +51,19 @@
       "discordUsuario": "warnerr8",
       "fecha": "15/7/2026",
       "entregado": false
+    },
+    {
+      "id": 5,
+      "ganadorId": 40,
+      "ganadorUsuario": "forsa",
+      "ganadorPremio": "2,500 Pavos",
+      "item": "lote de batman",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1784206006642.png",
+      "nombreFortnite": "forsaken458",
+      "discordId": "1495451555950760009",
+      "discordUsuario": "forsaken458_",
+      "fecha": "16/7/2026",
+      "entregado": false
     }
   ]
 }
