@@ -77,6 +77,19 @@
       "discordUsuario": "chumpi20",
       "fecha": "17/7/2026",
       "entregado": false
+    },
+    {
+      "id": 7,
+      "ganadorId": 56,
+      "ganadorUsuario": "joshi",
+      "ganadorPremio": "1,000 Pavos",
+      "item": "Hiedra veraniega mochila",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1784322645190.jpg",
+      "nombreFortnite": "JoshiRexGG o joshiXD1833",
+      "discordId": "725688448568262667",
+      "discordUsuario": "joshirexgg",
+      "fecha": "17/7/2026",
+      "entregado": false
     }
   ]
 }
