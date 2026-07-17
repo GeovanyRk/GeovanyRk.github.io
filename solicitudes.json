@@ -64,6 +64,19 @@
       "discordUsuario": "forsaken458_",
       "fecha": "16/7/2026",
       "entregado": false
+    },
+    {
+      "id": 6,
+      "ganadorId": 39,
+      "ganadorUsuario": "fredi",
+      "ganadorPremio": "2,000 Pavos",
+      "item": "Harley Quinn",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1784317323191.jpg",
+      "nombreFortnite": "FedriChumpi13",
+      "discordId": "713245537272463381",
+      "discordUsuario": "chumpi20",
+      "fecha": "17/7/2026",
+      "entregado": false
     }
   ]
 }
