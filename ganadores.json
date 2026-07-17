@@ -579,6 +579,16 @@
       "evento": "ruleta de fn",
       "fecha": "16/7/2026",
       "entregado": false
+    },
+    {
+      "id": 59,
+      "usuario": "alberto",
+      "premio": "500 OW Coins",
+      "cantidad": 500,
+      "moneda": "owcoins",
+      "evento": "ruleta de ow",
+      "fecha": "16/7/2026",
+      "entregado": false
     }
   ],
   "gastos": []
