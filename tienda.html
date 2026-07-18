@@ -224,6 +224,7 @@
       const data = await res.json();
       saldo = data.oro;
       $('tiSaldoValor').textContent = saldo;
+      await cargarCanjesMes();
       renderCatalogo();
     }
 
@@ -233,13 +234,26 @@
     }
 
     let catalogoCache = [];
+    let canjesMesCache = {}; // { itemId: cantidad canjeada este mes por el usuario actual }
+
+    async function cargarCanjesMes() {
+      if (!usuario) { canjesMesCache = {}; return; }
+      try {
+        const res = await fetch(`${API_BASE}/api/canjes-mes`, { headers: authHeaders() });
+        canjesMesCache = res.ok ? await res.json() : {};
+      } catch {
+        canjesMesCache = {};
+      }
+    }
 
     async function renderCatalogo() {
       if (!catalogoCache.length) catalogoCache = await cargarCatalogo();
       catalogoCache = [...catalogoCache].sort((a, b) => a.costo - b.costo);
       grid.innerHTML = '';
       catalogoCache.forEach((item) => {
-        const puedeCanjear = usuario && saldo >= item.costo && (item.stock === null || item.stock > 0);
+        const canjeadoEsteMes = canjesMesCache[item.id] || 0;
+        const agotadoEsteMes = item.limiteMensual != null && canjeadoEsteMes >= item.limiteMensual;
+        const puedeCanjear = usuario && saldo >= item.costo && (item.stock === null || item.stock > 0) && !agotadoEsteMes;
         const card = document.createElement('div');
         card.className = 'ti-card';
         card.innerHTML = `
@@ -248,7 +262,7 @@
           <p class="ti-item-desc">${item.descripcion || ''}</p>
           <div class="ti-item-costo"><img src="gcoin-icon.png" class="ti-coin-icon" alt="G-coin"/> ${item.costo}</div>
           <button class="ti-canjear-btn" ${puedeCanjear ? '' : 'disabled'}>
-            ${!usuario ? 'Inicia sesión' : (item.stock === 0 ? 'Sin stock' : 'Canjear')}
+            ${!usuario ? 'Inicia sesión' : (item.stock === 0 ? 'Sin stock' : (agotadoEsteMes ? 'Agotado' : 'Canjear'))}
           </button>
         `;
         card.querySelector('button').addEventListener('click', () => canjear(item));
@@ -274,6 +288,7 @@
         $('tiSaldoValor').textContent = saldo;
         msg.textContent = `¡Listo! Canjeaste "${item.nombre}". Geo te lo entregará pronto.`;
         catalogoCache = [];
+        await cargarCanjesMes();
         renderCatalogo();
       } catch (e) {
         msg.textContent = 'Error de conexión con la tienda. Intenta de nuevo.';
