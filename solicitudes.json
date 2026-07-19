@@ -116,6 +116,19 @@
       "discordUsuario": "diego3221",
       "fecha": "18/7/2026",
       "entregado": false
+    },
+    {
+      "id": 10,
+      "ganadorId": 59,
+      "ganadorUsuario": "alberto",
+      "ganadorPremio": "500 OW Coins",
+      "item": "monedas",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1784429136885.jpg",
+      "nombreFortnite": "BETO#13289",
+      "discordId": "541750772530937857",
+      "discordUsuario": "alberto9134",
+      "fecha": "18/7/2026",
+      "entregado": false
     }
   ]
 }
