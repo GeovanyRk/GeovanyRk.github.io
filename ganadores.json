@@ -383,10 +383,10 @@
     {
       "id": 39,
       "usuario": "fredi",
-      "premio": "2,000 Pavos",
-      "cantidad": 2000,
+      "premio": "500 Pavos",
+      "cantidad": 500,
       "moneda": "pavos",
-      "evento": "Ruleta de fn",
+      "evento": "ruleta de fn",
       "fecha": "10/7/2026",
       "entregado": false
     },
