@@ -468,7 +468,7 @@
       "moneda": "owcoins",
       "evento": "ruleta pity",
       "fecha": "11/7/2026",
-      "entregado": false
+      "entregado": true
     },
     {
       "id": 48,
