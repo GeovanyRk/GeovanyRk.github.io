@@ -538,7 +538,7 @@
       "moneda": "pavos",
       "evento": "sobraron",
       "fecha": "15/7/2026",
-      "entregado": false
+      "entregado": true
     },
     {
       "id": 55,
