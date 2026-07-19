@@ -502,11 +502,11 @@
     },
     {
       "id": 51,
-      "usuario": "Kiro",
-      "premio": "500 Pavos",
-      "cantidad": 500,
+      "usuario": "kiro",
+      "premio": "800 Pavos",
+      "cantidad": 800,
       "moneda": "pavos",
-      "evento": "Ruleta de fn",
+      "evento": "ruleta de fn",
       "fecha": "15/7/2026",
       "entregado": false
     },
