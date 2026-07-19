@@ -103,6 +103,19 @@
       "discordUsuario": "diego3221",
       "fecha": "17/7/2026",
       "entregado": false
+    },
+    {
+      "id": 9,
+      "ganadorId": 58,
+      "ganadorUsuario": "diego",
+      "ganadorPremio": "500 Pavos",
+      "item": "FLOTARLEQUIN DE HARLEY DE 300 PAVOS",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1784423297834.jpg",
+      "nombreFortnite": "KGB_Diegui",
+      "discordId": "762102608432726047",
+      "discordUsuario": "diego3221",
+      "fecha": "18/7/2026",
+      "entregado": false
     }
   ]
 }
