@@ -178,7 +178,7 @@
       "moneda": "usd",
       "evento": "ruleta de sub",
       "fecha": "26/6/2026",
-      "entregado": false
+      "entregado": true
     },
     {
       "id": 19,
