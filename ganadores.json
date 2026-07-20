@@ -629,6 +629,16 @@
       "evento": "ruleta de fn",
       "fecha": "20/7/2026",
       "entregado": false
+    },
+    {
+      "id": 64,
+      "usuario": "Maton",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
+      "evento": "ruleta de fn",
+      "fecha": "20/7/2026",
+      "entregado": false
     }
   ],
   "gastos": []
