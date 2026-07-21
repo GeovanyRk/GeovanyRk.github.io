@@ -129,6 +129,19 @@
       "discordUsuario": "alberto9134",
       "fecha": "18/7/2026",
       "entregado": false
+    },
+    {
+      "id": 11,
+      "ganadorId": 52,
+      "ganadorUsuario": "maton",
+      "ganadorPremio": "900 Pavos",
+      "item": "skin",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1784603048756.png",
+      "nombreFortnite": "Agamenon",
+      "discordId": "1024771078691766302",
+      "discordUsuario": "matonzizimokid",
+      "fecha": "20/7/2026",
+      "entregado": false
     }
   ]
 }
