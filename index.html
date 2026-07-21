@@ -244,6 +244,20 @@
       #ganadores .gn-empty{padding:44px 20px;text-align:center;color:rgba(255,255,255,.5);}
       #ganadores .gn-empty b{display:block;color:#fff;font-family:'Space Grotesk',sans-serif;margin-bottom:6px;font-size:1.05rem;}
       #ganadores .gn-foot{margin-top:16px;color:rgba(255,255,255,.4);font-size:.78rem;text-align:right;}
+      #ganadores .gn-rank-card{background:rgba(255,210,63,.06);border:1px solid rgba(255,210,63,.25);border-radius:18px;padding:18px 20px;margin-bottom:18px;}
+      #ganadores .gn-rank-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;flex-wrap:wrap;gap:6px;}
+      #ganadores .gn-rank-title{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:600;color:#ffd23f;}
+      #ganadores .gn-rank-sub{font-size:.78rem;color:rgba(255,255,255,.5);text-transform:capitalize;}
+      #ganadores .gn-rank-row{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+      #ganadores .gn-rank-row:last-child{border-bottom:0;}
+      #ganadores .gn-rank-pos{width:28px;flex-shrink:0;font-size:1.1rem;text-align:center;}
+      #ganadores .gn-rank-name{flex:1;font-weight:600;color:#fff;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+      #ganadores .gn-rank-total{color:#ffd23f;font-family:'Space Grotesk',sans-serif;font-size:.88rem;white-space:nowrap;}
+      #ganadores .gn-rank-count{color:rgba(255,255,255,.45);font-size:.76rem;min-width:74px;text-align:right;white-space:nowrap;}
+      #ganadores .gn-rank-empty{padding:14px 4px;color:rgba(255,255,255,.5);font-size:.9rem;text-align:center;}
+      @media(max-width:560px){
+        #ganadores .gn-rank-count{min-width:0;}
+      }
       @media(max-width:620px){
         #ganadores thead{display:none;}
         #ganadores tbody tr{display:block;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.08);}
@@ -263,6 +277,13 @@
           <div class="gn-chip gold"><b id="gnTotal">0</b><span>Ganadores</span></div>
           <div class="gn-chip pend"><b id="gnPend">0</b><span>Por entregar</span></div>
           <div class="gn-chip done"><b id="gnDone">0</b><span>Entregados</span></div>
+        </div>
+        <div class="gn-rank-card">
+          <div class="gn-rank-head">
+            <span class="gn-rank-title">🏆 Ranking de Pavos</span>
+            <span class="gn-rank-sub" id="gnRankMes">—</span>
+          </div>
+          <div id="gnRankBody"></div>
         </div>
         <div class="gn-controls">
           <input id="gnSearch" class="gn-search" type="search" placeholder="Buscar por usuario o premio…" aria-label="Buscar ganadores">
@@ -290,8 +311,51 @@
         {id:2, usuario:"Kratos_OW", premio:"10.000 OW Coins", evento:"Boss Nemesis", fecha:"15/06/2026", entregado:true},
         {id:1, usuario:"LunaStream", premio:"500 V-Bucks", evento:"Ruleta Fortnite", fecha:"12/06/2026", entregado:true}
       ]};
-      var DATA = [], filtro = 'todos';
+      var DATA = [], filtro = 'todos', RANKING_DESDE_ID = 0;
+      var MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
       function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+      function parseFechaGn(f){
+        if(!f) return null;
+        var partes = String(f).split('/');
+        if(partes.length!==3) return null;
+        var d=parseInt(partes[0],10), m=parseInt(partes[1],10), y=parseInt(partes[2],10);
+        if(!d||!m||!y) return null;
+        return new Date(y, m-1, d);
+      }
+      function renderRanking(){
+        var ahora = new Date();
+        var anoM = ahora.getFullYear(), mesM = ahora.getMonth();
+        var mapa = {};
+        DATA.forEach(function(g){
+          if(g.moneda!=='pavos') return;
+          if(!(g.id > RANKING_DESDE_ID)) return;
+          var f = parseFechaGn(g.fecha);
+          if(!f || f.getFullYear()!==anoM || f.getMonth()!==mesM) return;
+          var key = (g.usuario||'').toLowerCase().trim();
+          if(!mapa[key]) mapa[key] = {nombre:g.usuario, total:0, premios:0};
+          mapa[key].total += (g.cantidad||0);
+          mapa[key].premios += 1;
+          mapa[key].nombre = g.usuario;
+        });
+        var lista = Object.keys(mapa).map(function(k){return mapa[k];}).sort(function(a,b){return b.total-a.total;});
+        var box = document.getElementById('gnRankBody');
+        var sub = document.getElementById('gnRankMes');
+        sub.textContent = MESES[mesM] + ' ' + anoM;
+        if(!lista.length){
+          box.innerHTML = '<div class="gn-rank-empty">Todavía nadie ha ganado pavos este mes. ¡Sé el primero! 🟣</div>';
+          return;
+        }
+        var medallas = ['🥇','🥈','🥉'];
+        box.innerHTML = lista.slice(0,10).map(function(r,i){
+          var medalla = medallas[i] || ((i+1)+'.');
+          return '<div class="gn-rank-row">'+
+            '<span class="gn-rank-pos">'+medalla+'</span>'+
+            '<span class="gn-rank-name">'+esc(r.nombre)+'</span>'+
+            '<span class="gn-rank-total">'+r.total.toLocaleString()+' 🟣</span>'+
+            '<span class="gn-rank-count">'+r.premios+' premio'+(r.premios===1?'':'s')+'</span>'+
+          '</div>';
+        }).join('');
+      }
       function render(){
         var q = document.getElementById('gnSearch').value.trim().toLowerCase();
         var rows = DATA.slice().sort(function(a,b){return b.id-a.id;});
@@ -324,14 +388,18 @@
           .then(function(r){ if(!r.ok) throw 0; return r.json(); })
           .then(function(j){
             DATA = j.ganadores || [];
+            RANKING_DESDE_ID = typeof j.rankingDesdeId === 'number' ? j.rankingDesdeId : 0;
             document.getElementById('gnUpdated').textContent =
               'Actualizado ' + new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
             render();
+            renderRanking();
           })
           .catch(function(){
             DATA = SAMPLE.ganadores;
+            RANKING_DESDE_ID = 0;
             document.getElementById('gnUpdated').textContent = 'Vista previa (sin ganadores.json todavía)';
             render();
+            renderRanking();
           });
       }
       document.getElementById('gnSearch').addEventListener('input', render);
