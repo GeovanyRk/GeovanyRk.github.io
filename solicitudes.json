@@ -142,6 +142,19 @@
       "discordUsuario": "matonzizimokid",
       "fecha": "20/7/2026",
       "entregado": false
+    },
+    {
+      "id": 12,
+      "ganadorId": 64,
+      "ganadorUsuario": "Maton",
+      "ganadorPremio": "500 Pavos",
+      "item": "agamenon",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1784609964440.png",
+      "nombreFortnite": "Matonzizimo",
+      "discordId": "1024771078691766302",
+      "discordUsuario": "matonzizimokid",
+      "fecha": "21/7/2026",
+      "entregado": false
     }
   ]
 }
