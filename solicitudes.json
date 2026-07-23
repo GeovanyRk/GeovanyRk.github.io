@@ -155,6 +155,19 @@
       "discordUsuario": "matonzizimokid",
       "fecha": "21/7/2026",
       "entregado": false
+    },
+    {
+      "id": 13,
+      "ganadorId": 51,
+      "ganadorUsuario": "kiro",
+      "ganadorPremio": "800 Pavos",
+      "item": "Pico de the flash",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1784770154585.png",
+      "nombreFortnite": "KDA_KiroHyer",
+      "discordId": "435588520719941642",
+      "discordUsuario": "kirohyer",
+      "fecha": "22/7/2026",
+      "entregado": false
     }
   ]
 }
