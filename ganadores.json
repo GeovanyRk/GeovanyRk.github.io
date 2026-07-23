@@ -679,6 +679,16 @@
       "evento": "ruleta de ow",
       "fecha": "23/7/2026",
       "entregado": false
+    },
+    {
+      "id": 69,
+      "usuario": "warner",
+      "premio": "800 Pavos",
+      "cantidad": 800,
+      "moneda": "pavos",
+      "evento": "ruleta de fn",
+      "fecha": "23/7/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
