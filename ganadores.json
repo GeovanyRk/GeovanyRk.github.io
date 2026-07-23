@@ -669,6 +669,16 @@
       "evento": "ruleta de fn",
       "fecha": "22/7/2026",
       "entregado": false
+    },
+    {
+      "id": 68,
+      "usuario": "Masa Hostil",
+      "premio": "500 OW Coins",
+      "cantidad": 500,
+      "moneda": "owcoins",
+      "evento": "ruleta de ow",
+      "fecha": "23/7/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
