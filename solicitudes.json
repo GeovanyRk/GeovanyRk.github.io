@@ -168,6 +168,19 @@
       "discordUsuario": "kirohyer",
       "fecha": "22/7/2026",
       "entregado": false
+    },
+    {
+      "id": 14,
+      "ganadorId": 53,
+      "ganadorUsuario": "shadow",
+      "ganadorPremio": "500 Pavos",
+      "item": "Emote BIBBIDIBA - 500 VBucks",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1784854500351.png",
+      "nombreFortnite": "Shadowcasreal",
+      "discordId": "775884502462627871",
+      "discordUsuario": "shadowcasreal.",
+      "fecha": "23/7/2026",
+      "entregado": false
     }
   ]
 }
