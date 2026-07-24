@@ -181,6 +181,19 @@
       "discordUsuario": "shadowcasreal.",
       "fecha": "23/7/2026",
       "entregado": false
+    },
+    {
+      "id": 15,
+      "ganadorId": 45,
+      "ganadorUsuario": "Cristian",
+      "ganadorPremio": "1,000 OW Coins",
+      "item": "1000 ow coins",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1784874955885.jpg",
+      "nombreFortnite": "cristhian",
+      "discordId": "736044838398722171",
+      "discordUsuario": "cristhian_dan89",
+      "fecha": "24/7/2026",
+      "entregado": false
     }
   ]
 }
