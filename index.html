@@ -91,7 +91,7 @@
   <!-- HORARIO -->
   <section class="section alt panel" id="horario">
     <div class="section-inner">
-      <div class="section-header">
+      <div class="section-header" data-decor="HORARIO">
         <div class="section-tag">Horario</div>
         <h2>Cuándo streamea Geo</h2>
         <p>En vivo todos los días. Horarios por país abajo.</p>
@@ -157,7 +157,7 @@
   <!-- RULETAS -->
   <section class="section panel" id="ruletas">
     <div class="section-inner">
-      <div class="section-header">
+      <div class="section-header" data-decor="RULETAS">
         <div class="section-tag">Ruletas</div>
         <h2>Juega en el stream</h2>
         <p>Acumula puntos en el canal de Geovannyrk y canjéalos en las ruletas. <strong>Ganar no está garantizado</strong> — es una apuesta, así que juega con cabeza.</p>
@@ -212,10 +212,11 @@
   <!-- GANADORES -->
   <section class="section alt panel" id="ganadores">
     <style>
-      #ganadores .gn-wrap{max-width:920px;margin:0 auto;}
+      #ganadores .gn-wrap{max-width:940px;margin:0 auto;}
       #ganadores .gn-stats{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 22px;}
-      #ganadores .gn-chip{flex:1;min-width:120px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px 18px;}
-      #ganadores .gn-chip b{font-family:'Space Grotesk',sans-serif;font-size:1.9rem;line-height:1;display:block;}
+      #ganadores .gn-chip{flex:1;min-width:120px;background:var(--card-bg);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:18px 20px;box-shadow:var(--card-shadow);transition:transform .35s var(--ease),border-color .35s var(--ease);}
+      #ganadores .gn-chip:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.18);}
+      #ganadores .gn-chip b{font-family:'Space Grotesk',sans-serif;font-size:2rem;line-height:1;display:block;}
       #ganadores .gn-chip span{font-size:.7rem;text-transform:uppercase;letter-spacing:.13em;color:rgba(255,255,255,.5);}
       #ganadores .gn-chip.gold b{color:#ffd23f;}
       #ganadores .gn-chip.pend b{color:#ffb13f;}
@@ -223,11 +224,11 @@
       #ganadores .gn-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
       #ganadores .gn-search{flex:1;min-width:200px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:#fff;padding:12px 16px;border-radius:12px;font-size:.95rem;font-family:inherit;}
       #ganadores .gn-search::placeholder{color:rgba(255,255,255,.4);}
-      #ganadores .gn-search:focus{outline:2px solid #a970ff;outline-offset:1px;}
-      #ganadores .gn-filters{display:flex;gap:5px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);padding:5px;border-radius:12px;}
-      #ganadores .gn-filters button{font-family:'Space Grotesk',sans-serif;font-size:.78rem;background:transparent;border:0;color:rgba(255,255,255,.55);padding:8px 14px;border-radius:8px;cursor:pointer;}
-      #ganadores .gn-filters button[aria-pressed="true"]{background:#a970ff;color:#0a0814;}
-      #ganadores .gn-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:18px;overflow:hidden;}
+      #ganadores .gn-search:focus{outline:2px solid var(--accent-light);outline-offset:1px;}
+      #ganadores .gn-filters{display:flex;gap:5px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);padding:5px;border-radius:100px;}
+      #ganadores .gn-filters button{font-family:'Space Grotesk',sans-serif;font-size:.78rem;background:transparent;border:0;color:rgba(255,255,255,.55);padding:8px 14px;border-radius:100px;cursor:pointer;transition:background .25s var(--ease),color .25s var(--ease);}
+      #ganadores .gn-filters button[aria-pressed="true"]{background:linear-gradient(135deg,var(--accent-light),var(--accent));color:#0a0814;}
+      #ganadores .gn-card{background:var(--card-bg);border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;box-shadow:var(--card-shadow);}
       #ganadores table{width:100%;border-collapse:collapse;}
       #ganadores thead th{font-family:'Space Grotesk',sans-serif;font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;text-align:left;color:rgba(255,255,255,.45);padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.08);}
       #ganadores tbody td{padding:15px 18px;border-bottom:1px solid rgba(255,255,255,.05);font-size:.93rem;vertical-align:middle;color:#fff;}
@@ -244,7 +245,7 @@
       #ganadores .gn-empty{padding:44px 20px;text-align:center;color:rgba(255,255,255,.5);}
       #ganadores .gn-empty b{display:block;color:#fff;font-family:'Space Grotesk',sans-serif;margin-bottom:6px;font-size:1.05rem;}
       #ganadores .gn-foot{margin-top:16px;color:rgba(255,255,255,.4);font-size:.78rem;text-align:right;}
-      #ganadores .gn-rank-card{background:rgba(255,210,63,.06);border:1px solid rgba(255,210,63,.25);border-radius:18px;padding:18px 20px;margin-bottom:18px;}
+      #ganadores .gn-rank-card{background:linear-gradient(180deg, rgba(255,210,63,.09), rgba(255,210,63,.03)), var(--bg2);border:1px solid rgba(255,210,63,.25);border-radius:20px;padding:20px 22px;margin-bottom:20px;box-shadow:var(--card-shadow);}
       #ganadores .gn-rank-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;flex-wrap:wrap;gap:6px;}
       #ganadores .gn-rank-title{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:600;color:#ffd23f;}
       #ganadores .gn-rank-sub{font-size:.78rem;color:rgba(255,255,255,.5);text-transform:capitalize;}
@@ -267,7 +268,7 @@
       }
     </style>
     <div class="section-inner">
-      <div class="section-header">
+      <div class="section-header" data-decor="GANADORES">
         <div class="section-tag">Salón de la Fama</div>
         <h2>Ganadores de la Geo Army</h2>
         <p>Cada victoria en la ruleta, el boss y los sorteos queda registrada aquí. Transparencia total para la comunidad.</p>
@@ -422,8 +423,9 @@
     <style>
       #solicitudes .sc-wrap{max-width:960px;margin:0 auto;}
       #solicitudes .sc-stats{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 22px;}
-      #solicitudes .sc-chip{flex:1;min-width:120px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px 18px;}
-      #solicitudes .sc-chip b{font-family:'Space Grotesk',sans-serif;font-size:1.9rem;line-height:1;display:block;}
+      #solicitudes .sc-chip{flex:1;min-width:120px;background:var(--card-bg);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:18px 20px;box-shadow:var(--card-shadow);transition:transform .35s var(--ease),border-color .35s var(--ease);}
+      #solicitudes .sc-chip:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.18);}
+      #solicitudes .sc-chip b{font-family:'Space Grotesk',sans-serif;font-size:2rem;line-height:1;display:block;}
       #solicitudes .sc-chip span{font-size:.7rem;text-transform:uppercase;letter-spacing:.13em;color:rgba(255,255,255,.5);}
       #solicitudes .sc-chip.gold b{color:#ec4899;}
       #solicitudes .sc-chip.pend b{color:#ffb13f;}
@@ -431,14 +433,15 @@
       #solicitudes .sc-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
       #solicitudes .sc-search{flex:1;min-width:200px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:#fff;padding:12px 16px;border-radius:12px;font-size:.95rem;font-family:inherit;}
       #solicitudes .sc-search::placeholder{color:rgba(255,255,255,.4);}
-      #solicitudes .sc-search:focus{outline:2px solid #ec4899;outline-offset:1px;}
-      #solicitudes .sc-filters{display:flex;gap:5px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);padding:5px;border-radius:12px;}
-      #solicitudes .sc-filters button{font-family:'Space Grotesk',sans-serif;font-size:.78rem;background:transparent;border:0;color:rgba(255,255,255,.55);padding:8px 14px;border-radius:8px;cursor:pointer;}
-      #solicitudes .sc-filters button[aria-pressed="true"]{background:#ec4899;color:#fff;}
-      #solicitudes .sc-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:18px;overflow:hidden;}
-      #solicitudes .sc-row{display:flex;gap:14px;align-items:center;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.06);}
+      #solicitudes .sc-search:focus{outline:2px solid var(--pink);outline-offset:1px;}
+      #solicitudes .sc-filters{display:flex;gap:5px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);padding:5px;border-radius:100px;}
+      #solicitudes .sc-filters button{font-family:'Space Grotesk',sans-serif;font-size:.78rem;background:transparent;border:0;color:rgba(255,255,255,.55);padding:8px 14px;border-radius:100px;cursor:pointer;transition:background .25s var(--ease),color .25s var(--ease);}
+      #solicitudes .sc-filters button[aria-pressed="true"]{background:linear-gradient(135deg,#f472b6,var(--pink));color:#fff;}
+      #solicitudes .sc-card{background:var(--card-bg);border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;box-shadow:var(--card-shadow);}
+      #solicitudes .sc-row{display:flex;gap:14px;align-items:center;padding:15px 18px;border-bottom:1px solid rgba(255,255,255,.06);transition:background .25s var(--ease);}
+      #solicitudes .sc-row:hover{background:rgba(236,72,153,.05);}
       #solicitudes .sc-row:last-child{border-bottom:0;}
-      #solicitudes .sc-thumb{width:56px;height:56px;border-radius:10px;object-fit:cover;flex-shrink:0;background:rgba(0,0,0,.3);}
+      #solicitudes .sc-thumb{width:56px;height:56px;border-radius:12px;object-fit:cover;flex-shrink:0;background:rgba(0,0,0,.3);}
       #solicitudes .sc-info{flex:1;min-width:0;}
       #solicitudes .sc-item{color:#fff;font-weight:600;font-size:.95rem;}
       #solicitudes .sc-meta{color:rgba(255,255,255,.55);font-size:.82rem;margin-top:2px;}
@@ -455,7 +458,7 @@
       }
     </style>
     <div class="section-inner">
-      <div class="section-header">
+      <div class="section-header" data-decor="CANJES">
         <div class="section-tag">Canjes de la Geo Army</div>
         <h2>Solicitudes de canje</h2>
         <p>Lo que cada ganador pidió a cambio de su premio de la ruleta, con imagen del item. Se piden con <strong>/reclamar</strong> en Discord.</p>
@@ -542,7 +545,7 @@
   <!-- SUB -->
   <section class="section alt panel" id="sub">
     <div class="section-inner">
-      <div class="section-header">
+      <div class="section-header" data-decor="SUB">
         <div class="section-tag">Suscripción</div>
         <h2>Únete a la Geo Army</h2>
         <p>Suscríbete y apoya el canal. Desde $5.99 USD.</p>
@@ -573,7 +576,7 @@
   <!-- X TIMELINE -->
   <section class="section panel" id="sorteos">
     <div class="section-inner">
-      <div class="section-header">
+      <div class="section-header" data-decor="SORTEOS">
         <div class="section-tag">Sorteos & Noticias</div>
         <h2>Últimas publicaciones</h2>
         <p>Sorteos activos, anuncios y novedades directo desde X.</p>
@@ -596,7 +599,7 @@
   <!-- LINKS -->
   <section class="section panel" id="links">
     <div class="section-inner">
-      <div class="section-header">
+      <div class="section-header" data-decor="LINKS">
         <div class="section-tag">Links</div>
         <h2>Encuentra a Geo</h2>
       </div>
