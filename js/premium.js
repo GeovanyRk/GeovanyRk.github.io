@@ -141,4 +141,44 @@
     }
   }, 'panelNav');
 
+  // Punto de luz que sigue al cursor — solo desktop, puramente cosmético.
+  // Crea su propio elemento (no depende de nada del HTML existente).
+  safe(function initCursorGlow() {
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+    var glow = document.createElement('div');
+    glow.className = 'cursor-glow';
+    document.body.appendChild(glow);
+    var raf = null, mx = 0, my = 0;
+    function update() {
+      glow.style.transform = 'translate3d(' + mx + 'px,' + my + 'px,0) translate3d(-50%,-50%,0)';
+      raf = null;
+    }
+    window.addEventListener('mousemove', function (e) {
+      mx = e.clientX; my = e.clientY;
+      glow.classList.add('is-active');
+      if (!raf) raf = requestAnimationFrame(update);
+    }, { passive: true });
+    document.addEventListener('mouseleave', function () { glow.classList.remove('is-active'); });
+  }, 'cursorGlow');
+
+  // Tilt 3D sutil en tarjetas al pasar el mouse — solo desktop, puramente cosmético.
+  // Si no corre, las tarjetas quedan exactamente como antes (sin este JS no tienen transform inline).
+  safe(function initCardTilt() {
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+    var sel = '.hero-card, .ruleta-card, .ti-card, .schedule-card, .timezone-card, .sub-cta-card, .link-card, .benefit-item, .gn-chip, .gn-rank-card';
+    var cards = document.querySelectorAll(sel);
+    cards.forEach(function (card) {
+      card.classList.add('tilt-card');
+      card.addEventListener('mousemove', function (e) {
+        var r = card.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width - 0.5;
+        var py = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform = 'perspective(800px) translateY(-6px) rotateX(' + (-py * 6).toFixed(2) + 'deg) rotateY(' + (px * 6).toFixed(2) + 'deg)';
+      });
+      card.addEventListener('mouseleave', function () {
+        card.style.transform = '';
+      });
+    });
+  }, 'cardTilt');
+
 })();
