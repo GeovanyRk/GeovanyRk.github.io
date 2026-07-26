@@ -448,7 +448,7 @@
       "moneda": "owcoins",
       "evento": "Ruleta de ow",
       "fecha": "10/7/2026",
-      "entregado": false
+      "entregado": true
     },
     {
       "id": 46,
@@ -717,16 +717,6 @@
       "cantidad": 800,
       "moneda": "pavos",
       "evento": "ruleta fn",
-      "fecha": "25/7/2026",
-      "entregado": false
-    },
-    {
-      "id": 73,
-      "usuario": "ermichael94",
-      "premio": "500 V-Bucks",
-      "cantidad": 500,
-      "moneda": "pavos",
-      "evento": "Piñata Fortnite",
       "fecha": "25/7/2026",
       "entregado": false
     }
