@@ -518,7 +518,7 @@
       "moneda": "pavos",
       "evento": "cumplea'",
       "fecha": "15/7/2026",
-      "entregado": false
+      "entregado": true
     },
     {
       "id": 53,
