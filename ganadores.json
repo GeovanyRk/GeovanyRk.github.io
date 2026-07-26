@@ -588,7 +588,7 @@
       "moneda": "owcoins",
       "evento": "ruleta de ow",
       "fecha": "16/7/2026",
-      "entregado": false
+      "entregado": true
     },
     {
       "id": 60,
