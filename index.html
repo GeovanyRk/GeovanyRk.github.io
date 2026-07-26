@@ -329,6 +329,7 @@
         var anoM = ahora.getFullYear(), mesM = ahora.getMonth();
         var mapa = {};
         DATA.forEach(function(g){
+          if(g.rankeable===false) return;
           if(g.moneda!=='pavos') return;
           if(!(g.id > RANKING_DESDE_ID)) return;
           var f = parseFechaGn(g.fecha);
