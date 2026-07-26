@@ -628,7 +628,7 @@
       "moneda": "pavos",
       "evento": "ruleta de fn",
       "fecha": "20/7/2026",
-      "entregado": false
+      "entregado": true
     },
     {
       "id": 64,
