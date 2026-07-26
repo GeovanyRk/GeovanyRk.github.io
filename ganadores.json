@@ -2,10 +2,10 @@
   "ganadores": [
     {
       "id": 1,
-      "usuario": "Vasos",
-      "premio": "500 OW Coins",
-      "cantidad": 500,
-      "moneda": "owcoins",
+      "usuario": "f",
+      "premio": "22 Pavos",
+      "cantidad": 22,
+      "moneda": "pavos",
       "evento": "Ruleta de ow",
       "fecha": "18/6/2026",
       "entregado": true
@@ -178,7 +178,7 @@
       "moneda": "usd",
       "evento": "ruleta de sub",
       "fecha": "26/6/2026",
-      "entregado": false
+      "entregado": true
     },
     {
       "id": 19,
@@ -288,7 +288,7 @@
       "moneda": "pavos",
       "evento": "ruleta de fortnite",
       "fecha": "4/7/2026",
-      "entregado": false
+      "entregado": true
     },
     {
       "id": 30,
@@ -383,12 +383,12 @@
     {
       "id": 39,
       "usuario": "fredi",
-      "premio": "2,000 Pavos",
-      "cantidad": 2000,
+      "premio": "500 Pavos",
+      "cantidad": 500,
       "moneda": "pavos",
-      "evento": "Ruleta de fn",
+      "evento": "ruleta de fn",
       "fecha": "10/7/2026",
-      "entregado": false
+      "entregado": true
     },
     {
       "id": 40,
@@ -398,7 +398,7 @@
       "moneda": "pavos",
       "evento": "Ruleta de Fn",
       "fecha": "10/7/2026",
-      "entregado": false
+      "entregado": true
     },
     {
       "id": 41,
@@ -458,8 +458,249 @@
       "moneda": "pavos",
       "evento": "Ruleta de Fortnite",
       "fecha": "10/7/2026",
+      "entregado": true
+    },
+    {
+      "id": 47,
+      "usuario": "xiaokiis",
+      "premio": "1,500 OW Coins",
+      "cantidad": 1500,
+      "moneda": "owcoins",
+      "evento": "ruleta pity",
+      "fecha": "11/7/2026",
+      "entregado": true
+    },
+    {
+      "id": 48,
+      "usuario": "xiaokiis",
+      "premio": "500 OW Coins",
+      "cantidad": 500,
+      "moneda": "owcoins",
+      "evento": "Ruleta de ow",
+      "fecha": "12/7/2026",
+      "entregado": true
+    },
+    {
+      "id": 49,
+      "usuario": "warner",
+      "premio": "3,000 Pavos",
+      "cantidad": 3000,
+      "moneda": "pavos",
+      "evento": "ruleta de fn",
+      "fecha": "12/7/2026",
+      "entregado": true
+    },
+    {
+      "id": 50,
+      "usuario": "toji",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
+      "evento": "ruleta de fn",
+      "fecha": "12/7/2026",
+      "entregado": false
+    },
+    {
+      "id": 51,
+      "usuario": "kiro",
+      "premio": "800 Pavos",
+      "cantidad": 800,
+      "moneda": "pavos",
+      "evento": "ruleta de fn",
+      "fecha": "15/7/2026",
+      "entregado": false
+    },
+    {
+      "id": 52,
+      "usuario": "maton",
+      "premio": "900 Pavos",
+      "cantidad": 900,
+      "moneda": "pavos",
+      "evento": "cumplea'",
+      "fecha": "15/7/2026",
+      "entregado": false
+    },
+    {
+      "id": 53,
+      "usuario": "shadow",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
+      "evento": "cumple",
+      "fecha": "15/7/2026",
+      "entregado": false
+    },
+    {
+      "id": 54,
+      "usuario": "Kiro",
+      "premio": "300 Pavos",
+      "cantidad": 300,
+      "moneda": "pavos",
+      "evento": "sobraron",
+      "fecha": "15/7/2026",
+      "entregado": true
+    },
+    {
+      "id": 55,
+      "usuario": "forsa",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
+      "evento": "cumple",
+      "fecha": "15/7/2026",
+      "entregado": true
+    },
+    {
+      "id": 56,
+      "usuario": "joshi",
+      "premio": "1,000 Pavos",
+      "cantidad": 1000,
+      "moneda": "pavos",
+      "evento": "fue su cumple",
+      "fecha": "15/7/2026",
+      "entregado": true
+    },
+    {
+      "id": 57,
+      "usuario": "xwonny",
+      "premio": "2,400 Pavos",
+      "cantidad": 2400,
+      "moneda": "pavos",
+      "evento": "ruleta de fn",
+      "fecha": "15/7/2026",
+      "entregado": false
+    },
+    {
+      "id": 58,
+      "usuario": "diego",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
+      "evento": "ruleta de fn",
+      "fecha": "16/7/2026",
+      "entregado": true
+    },
+    {
+      "id": 59,
+      "usuario": "alberto",
+      "premio": "500 OW Coins",
+      "cantidad": 500,
+      "moneda": "owcoins",
+      "evento": "ruleta de ow",
+      "fecha": "16/7/2026",
+      "entregado": false
+    },
+    {
+      "id": 60,
+      "usuario": "michael",
+      "premio": "1,300 Pavos",
+      "cantidad": 1300,
+      "moneda": "pavos",
+      "evento": "ruleta de fn",
+      "fecha": "16/7/2026",
+      "entregado": false
+    },
+    {
+      "id": 61,
+      "usuario": "michael",
+      "premio": "800 Pavos",
+      "cantidad": 800,
+      "moneda": "pavos",
+      "evento": "ruleta de fn",
+      "fecha": "17/7/2026",
+      "entregado": true
+    },
+    {
+      "id": 62,
+      "usuario": "diego",
+      "premio": "200 Pavos",
+      "cantidad": 200,
+      "moneda": "pavos",
+      "evento": "ruleta de fn",
+      "fecha": "18/7/2026",
+      "entregado": false
+    },
+    {
+      "id": 63,
+      "usuario": "toji",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
+      "evento": "ruleta de fn",
+      "fecha": "20/7/2026",
+      "entregado": false
+    },
+    {
+      "id": 64,
+      "usuario": "Maton",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
+      "evento": "ruleta de fn",
+      "fecha": "20/7/2026",
+      "entregado": false
+    },
+    {
+      "id": 65,
+      "usuario": "maton",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
+      "evento": "ruleta de fn",
+      "fecha": "21/7/2026",
+      "entregado": false
+    },
+    {
+      "id": 66,
+      "usuario": "Kiro",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
+      "evento": "ruleta de fn",
+      "fecha": "22/7/2026",
+      "entregado": false
+    },
+    {
+      "id": 67,
+      "usuario": "Mufasa",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
+      "evento": "ruleta de fn",
+      "fecha": "22/7/2026",
+      "entregado": false
+    },
+    {
+      "id": 68,
+      "usuario": "Masa Hostil",
+      "premio": "500 OW Coins",
+      "cantidad": 500,
+      "moneda": "owcoins",
+      "evento": "ruleta de ow",
+      "fecha": "23/7/2026",
+      "entregado": false
+    },
+    {
+      "id": 69,
+      "usuario": "warner",
+      "premio": "800 Pavos",
+      "cantidad": 800,
+      "moneda": "pavos",
+      "evento": "ruleta de fn",
+      "fecha": "23/7/2026",
+      "entregado": false
+    },
+    {
+      "id": 70,
+      "usuario": "JoseM",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
+      "evento": "Ruleta de Fn",
+      "fecha": "23/7/2026",
       "entregado": false
     }
   ],
-  "gastos": []
+  "gastos": [],
+  "rankingDesdeId": 64
 }
