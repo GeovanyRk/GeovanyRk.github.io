@@ -18,7 +18,6 @@
   </script>
 
   <style>
-    /* ===== Pase de Batalla — estilos con prefijo pb- para no chocar con style.css ===== */
     .pb-hero { position: relative; padding: 4.5rem 1.5rem 1.5rem; text-align: center; overflow: hidden; isolation: isolate; }
     .pb-hero::before {
       content: ""; position: absolute; inset: -20% -10% auto -10%; height: 130%; z-index: -1;
@@ -59,9 +58,7 @@
 
     .pb-oculto { display: none !important; }
 
-    .pb-nivel-box {
-      max-width: 720px; margin: 2.5rem auto 0; padding: 0 1.5rem;
-    }
+    .pb-nivel-box { max-width: 720px; margin: 2.5rem auto 0; padding: 0 1.5rem; }
     .pb-nivel-card {
       background: var(--bg2); border: 1px solid var(--border);
       border-radius: var(--radius); padding: 1.75rem; text-align: center;
@@ -163,10 +160,11 @@
 
   <script>
   (function () {
-    // Mismos 20 niveles que maneja el server.js del pase (los numeros
-    // internos 1-20 tienen que coincidir con el server). En pantalla se
-    // muestran corridos +1 (todos empiezan en "Nivel 1" con 0 XP, en vez
-    // de "Nivel 0").
+    // 20 recompensas, numeradas 1-20 (coincide exacto con server.js).
+    // La UNICA diferencia visual: si todavia nadie desbloqueo nada
+    // (nivelActual = 0), el numero grande de arriba muestra "1" en vez
+    // de "0" (mas amigable), pero la lista de abajo sigue siendo 1-20
+    // tal cual, sin correr numeros.
     const NIVELES = [
       { nivel: 1, xpRequerido: 50, recompensa: 'Insignia "Recluta" en Discord' },
       { nivel: 2, xpRequerido: 65, recompensa: '+40 pavos + 40 owcoins' },
@@ -243,8 +241,9 @@
       const progreso = calcularProgreso(nivelActual, xpTotal);
       msg.textContent = '';
       resultado.classList.remove('pb-oculto');
-      // +1 solo para mostrar en pantalla: todos arrancan en "Nivel 1" con 0 XP.
-      $('pbNivelActual').textContent = nivelActual + 1;
+      // Solo el numero grande se "redondea" a 1 como piso amigable;
+      // la lista de abajo usa el numero real de nivel (1-20) sin correr.
+      $('pbNivelActual').textContent = Math.max(nivelActual, 1);
 
       if (progreso.maximo) {
         $('pbBarraFill').style.width = '100%';
@@ -270,7 +269,7 @@
         const fila = document.createElement('div');
         fila.className = 'pb-fila' + (completado ? ' completado' : '') + (esActual ? ' actual' : '');
         fila.innerHTML =
-          '<div class="num">' + (u.nivel + 1) + '</div>' +
+          '<div class="num">' + u.nivel + '</div>' +
           '<div class="recompensa">' + u.recompensa + '</div>' +
           (completado ? '<div class="check">&#10003;</div>' : '');
         lista.appendChild(fila);
