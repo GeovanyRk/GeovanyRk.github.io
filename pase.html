@@ -129,7 +129,7 @@
     <div class="pb-hero-inner" data-reveal>
       <div class="pb-eyebrow">🏅 Pase de Batalla — Geo Army</div>
       <h1 class="pb-title">Sube de <span class="accent">nivel</span> jugando</h1>
-      <p class="pb-sub">Ganás XP canjeando la recompensa "Experiencia" en el chat del stream. Subís 1 nivel por día como máximo, hasta el 20.</p>
+      <p class="pb-sub">Ganás XP canjeando la recompensa "Experiencia" en el chat del stream. Subís 1 nivel por día como máximo.</p>
       <button id="pbLoginBtn" class="pb-login-btn">Iniciar sesión con Twitch</button>
     </div>
   </section>
@@ -140,7 +140,7 @@
     <div class="pb-nivel-box">
       <div class="pb-nivel-card">
         <div class="pb-nivel-label">Nivel actual</div>
-        <div class="pb-nivel-numero" id="pbNivelActual">0</div>
+        <div class="pb-nivel-numero" id="pbNivelActual">1</div>
         <div class="pb-barra-bg"><div class="pb-barra-fill" id="pbBarraFill" style="width:0%"></div></div>
         <div class="pb-barra-texto" id="pbBarraTexto">0 / 0 XP</div>
         <div class="pb-recompensa-actual" id="pbRecompensaActual"></div>
@@ -163,7 +163,10 @@
 
   <script>
   (function () {
-    // Mismos 20 niveles que maneja el server.js del pase (tienen que coincidir).
+    // Mismos 20 niveles que maneja el server.js del pase (los numeros
+    // internos 1-20 tienen que coincidir con el server). En pantalla se
+    // muestran corridos +1 (todos empiezan en "Nivel 1" con 0 XP, en vez
+    // de "Nivel 0").
     const NIVELES = [
       { nivel: 1, xpRequerido: 50, recompensa: 'Insignia "Recluta" en Discord' },
       { nivel: 2, xpRequerido: 65, recompensa: '+40 pavos + 40 owcoins' },
@@ -240,7 +243,8 @@
       const progreso = calcularProgreso(nivelActual, xpTotal);
       msg.textContent = '';
       resultado.classList.remove('pb-oculto');
-      $('pbNivelActual').textContent = nivelActual;
+      // +1 solo para mostrar en pantalla: todos arrancan en "Nivel 1" con 0 XP.
+      $('pbNivelActual').textContent = nivelActual + 1;
 
       if (progreso.maximo) {
         $('pbBarraFill').style.width = '100%';
@@ -256,7 +260,7 @@
       const nivelInfo = UMBRALES.find((u) => u.nivel === nivelActual);
       $('pbRecompensaActual').textContent = nivelInfo
         ? 'Recompensa desbloqueada: ' + nivelInfo.recompensa
-        : 'Todavia no desbloqueaste ningun nivel. Canjea Experiencia en el stream para empezar.';
+        : 'Todavia no desbloqueaste ninguna recompensa. Canjea Experiencia en el stream para empezar.';
 
       const lista = $('pbLista');
       lista.innerHTML = '';
@@ -266,7 +270,7 @@
         const fila = document.createElement('div');
         fila.className = 'pb-fila' + (completado ? ' completado' : '') + (esActual ? ' actual' : '');
         fila.innerHTML =
-          '<div class="num">' + u.nivel + '</div>' +
+          '<div class="num">' + (u.nivel + 1) + '</div>' +
           '<div class="recompensa">' + u.recompensa + '</div>' +
           (completado ? '<div class="check">&#10003;</div>' : '');
         lista.appendChild(fila);
@@ -289,11 +293,12 @@
             const res = await fetch('./pase.json?t=' + Date.now());
             const data = await res.json();
             const registro = data[u.login.toLowerCase()];
+            const xpTotal = registro ? (registro.xp || 0) : 0;
+            const nivelActual = registro ? (registro.nivel || 0) : 0;
+            mostrarNivel(nivelActual, xpTotal);
             if (!registro) {
-              msg.textContent = 'Todavia no tenes XP registrada, ' + u.display_name + '. Canjea "Experiencia" en el chat del stream para empezar.';
-              return;
+              msg.textContent = '¡Bienvenid@ al Pase de Batalla, ' + u.display_name + '! Canjea "Experiencia" en el chat del stream para empezar a sumar XP.';
             }
-            mostrarNivel(registro.nivel || 0, registro.xp || 0);
           } catch (e) {
             msg.textContent = 'No se pudo cargar el pase de batalla. Intenta de nuevo en un rato.';
           }
