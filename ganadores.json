@@ -719,6 +719,16 @@
       "evento": "ruleta fn",
       "fecha": "25/7/2026",
       "entregado": false
+    },
+    {
+      "id": 73,
+      "usuario": "shadow",
+      "premio": "1,300 Pavos",
+      "cantidad": 1300,
+      "moneda": "pavos",
+      "evento": "ruleta y piñata",
+      "fecha": "26/7/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
