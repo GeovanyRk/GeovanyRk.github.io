@@ -726,9 +726,10 @@
       "premio": "1,300 Pavos",
       "cantidad": 1300,
       "moneda": "pavos",
-      "evento": "ruleta y piñata",
+      "evento": "ruleta y  piñata",
       "fecha": "26/7/2026",
-      "entregado": false
+      "entregado": false,
+      "rankeable": false
     },
     {
       "id": 74,
