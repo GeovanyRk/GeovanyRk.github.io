@@ -761,6 +761,16 @@
       "evento": "Ruleta de bienvenido",
       "fecha": "26/7/2026",
       "entregado": false
+    },
+    {
+      "id": 77,
+      "usuario": "matidk_0",
+      "premio": "500 V-Bucks",
+      "cantidad": 500,
+      "moneda": "pavos",
+      "evento": "Piñata Fortnite",
+      "fecha": "26/7/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
