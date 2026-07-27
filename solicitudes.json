@@ -207,6 +207,19 @@
       "discordUsuario": "hunter_chi",
       "fecha": "26/7/2026",
       "entregado": false
+    },
+    {
+      "id": 17,
+      "ganadorId": 57,
+      "ganadorUsuario": "xwonny",
+      "ganadorPremio": "2,400 Pavos",
+      "item": "Cangremóvil y Potenciador desfile de medusas",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1785124769837.png",
+      "nombreFortnite": "xWonnyB",
+      "discordId": "754867796181123083",
+      "discordUsuario": "iwonny",
+      "fecha": "26/7/2026",
+      "entregado": false
     }
   ]
 }
