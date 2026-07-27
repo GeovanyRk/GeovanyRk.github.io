@@ -194,6 +194,19 @@
       "discordUsuario": "cristhian_dan89",
       "fecha": "24/7/2026",
       "entregado": true
+    },
+    {
+      "id": 16,
+      "ganadorId": 38,
+      "ganadorUsuario": "hunter",
+      "ganadorPremio": "500 Pavos",
+      "item": "emote big guy",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1785119589764.jpg",
+      "nombreFortnite": "tiktokhunter_chi",
+      "discordId": "971269944283111484",
+      "discordUsuario": "hunter_chi",
+      "fecha": "26/7/2026",
+      "entregado": false
     }
   ]
 }
