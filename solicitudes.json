@@ -220,6 +220,19 @@
       "discordUsuario": "iwonny",
       "fecha": "26/7/2026",
       "entregado": false
+    },
+    {
+      "id": 18,
+      "ganadorId": 76,
+      "ganadorUsuario": "Angel",
+      "ganadorPremio": "500 Pavos",
+      "item": "500 pavos",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1785134438350.jpg",
+      "nombreFortnite": "<@392061497976684554>",
+      "discordId": "392061497976684554",
+      "discordUsuario": "angel_fucking_dust",
+      "fecha": "27/7/2026",
+      "entregado": false
     }
   ]
 }
