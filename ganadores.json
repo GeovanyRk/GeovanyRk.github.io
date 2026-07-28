@@ -791,6 +791,16 @@
       "evento": "Piñata Overwatch",
       "fecha": "27/7/2026",
       "entregado": false
+    },
+    {
+      "id": 80,
+      "usuario": "elkid_rd36",
+      "premio": "500 V-Bucks",
+      "cantidad": 500,
+      "moneda": "pavos",
+      "evento": "Piñata Fortnite",
+      "fecha": "28/7/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
