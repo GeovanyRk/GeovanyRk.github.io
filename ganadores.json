@@ -781,6 +781,16 @@
       "evento": "ruleta de fn",
       "fecha": "27/7/2026",
       "entregado": false
+    },
+    {
+      "id": 79,
+      "usuario": "AxisModer",
+      "premio": "Recompensa Rara",
+      "cantidad": null,
+      "moneda": "owcoins",
+      "evento": "Piñata Overwatch",
+      "fecha": "27/7/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
