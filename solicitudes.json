@@ -259,6 +259,19 @@
       "discordUsuario": "josem05a",
       "fecha": "29/7/2026",
       "entregado": false
+    },
+    {
+      "id": 21,
+      "ganadorId": 41,
+      "ganadorUsuario": "Kitty",
+      "ganadorPremio": "500 Pavos",
+      "item": "Gesto",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1785374156243.png",
+      "nombreFortnite": "Whiplash",
+      "discordId": "722967308804292679",
+      "discordUsuario": "purrfect.meow",
+      "fecha": "29/7/2026",
+      "entregado": false
     }
   ]
 }
