@@ -285,6 +285,19 @@
       "discordUsuario": "purrfect.meow",
       "fecha": "29/7/2026",
       "entregado": false
+    },
+    {
+      "id": 23,
+      "ganadorId": 78,
+      "ganadorUsuario": "maton",
+      "ganadorPremio": "500 Pavos",
+      "item": "algo del lote de pinisher con los 900 que me quedan para poder completarlo",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1785438766170.jpg",
+      "nombreFortnite": "Matonzizimo",
+      "discordId": "1024771078691766302",
+      "discordUsuario": "matonzizimokid",
+      "fecha": "30/7/2026",
+      "entregado": false
     }
   ]
 }
