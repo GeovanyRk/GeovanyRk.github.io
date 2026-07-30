@@ -246,6 +246,19 @@
       "discordUsuario": "warnerr8",
       "fecha": "27/7/2026",
       "entregado": false
+    },
+    {
+      "id": 20,
+      "ganadorId": 77,
+      "ganadorUsuario": "JoseM",
+      "ganadorPremio": "800 Pavos",
+      "item": "Pase de Batalla",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1785371912962.png",
+      "nombreFortnite": "JoseM05A",
+      "discordId": "632773733857099788",
+      "discordUsuario": "josem05a",
+      "fecha": "29/7/2026",
+      "entregado": false
     }
   ]
 }
