@@ -831,6 +831,16 @@
       "evento": "ruleta de fn",
       "fecha": "30/7/2026",
       "entregado": false
+    },
+    {
+      "id": 84,
+      "usuario": "marianxec",
+      "premio": "800 V-Bucks",
+      "cantidad": 800,
+      "moneda": "pavos",
+      "evento": "Piñata Fortnite",
+      "fecha": "30/7/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
