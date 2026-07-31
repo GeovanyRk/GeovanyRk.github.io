@@ -298,6 +298,19 @@
       "discordUsuario": "matonzizimokid",
       "fecha": "30/7/2026",
       "entregado": false
+    },
+    {
+      "id": 24,
+      "ganadorId": 60,
+      "ganadorUsuario": "michael",
+      "ganadorPremio": "1,300 Pavos",
+      "item": "Skin de Punisher y emote Sentido Aracnido (junto a los 500 que había ganado antes)",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1785460682238.jpg",
+      "nombreFortnite": "ErMichael94",
+      "discordId": "689912377055117429",
+      "discordUsuario": "jojoto2526",
+      "fecha": "30/7/2026",
+      "entregado": false
     }
   ]
 }
