@@ -843,6 +843,16 @@
       "evento": "esto queda despues del lote de spiderman",
       "fecha": "1/8/2026",
       "entregado": false
+    },
+    {
+      "id": 85,
+      "usuario": "Sky",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
+      "evento": "Ruleta de fn",
+      "fecha": "1/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
