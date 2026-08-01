@@ -563,12 +563,13 @@
     {
       "id": 57,
       "usuario": "xwonny",
-      "premio": "2,400 Pavos",
-      "cantidad": 2400,
+      "premio": "400 Pavos",
+      "cantidad": 400,
       "moneda": "pavos",
-      "evento": "ruleta de fn",
+      "evento": "ruleta d fn",
       "fecha": "15/7/2026",
-      "entregado": false
+      "entregado": false,
+      "rankeable": false
     },
     {
       "id": 58,
