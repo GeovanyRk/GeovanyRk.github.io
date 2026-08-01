@@ -863,6 +863,16 @@
       "evento": "ruleta de fn",
       "fecha": "1/8/2026",
       "entregado": false
+    },
+    {
+      "id": 87,
+      "usuario": "elkid_rd36",
+      "premio": "1200 V-Bucks",
+      "cantidad": 1200,
+      "moneda": "pavos",
+      "evento": "Piñata Fortnite",
+      "fecha": "1/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
