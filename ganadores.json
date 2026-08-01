@@ -826,12 +826,13 @@
     {
       "id": 83,
       "usuario": "mufasa",
-      "premio": "1,500 Pavos",
-      "cantidad": 1500,
+      "premio": "1,000 Pavos",
+      "cantidad": 1000,
       "moneda": "pavos",
-      "evento": "ruleta de fn",
+      "evento": "ajustes de premio",
       "fecha": "30/7/2026",
-      "entregado": false
+      "entregado": false,
+      "rankeable": false
     },
     {
       "id": 84,
