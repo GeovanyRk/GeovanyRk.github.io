@@ -832,6 +832,16 @@
       "evento": "ruleta de fn",
       "fecha": "30/7/2026",
       "entregado": false
+    },
+    {
+      "id": 84,
+      "usuario": "warner",
+      "premio": "700 Pavos",
+      "cantidad": 700,
+      "moneda": "pavos",
+      "evento": "esto queda despues del lote de spiderman",
+      "fecha": "1/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
