@@ -853,6 +853,16 @@
       "evento": "Ruleta de fn",
       "fecha": "1/8/2026",
       "entregado": false
+    },
+    {
+      "id": 86,
+      "usuario": "xwonny",
+      "premio": "400 Pavos",
+      "cantidad": 400,
+      "moneda": "pavos",
+      "evento": "ruleta de fn",
+      "fecha": "1/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
