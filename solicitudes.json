@@ -311,6 +311,19 @@
       "discordUsuario": "jojoto2526",
       "fecha": "30/7/2026",
       "entregado": false
+    },
+    {
+      "id": 25,
+      "ganadorId": 82,
+      "ganadorUsuario": "elkid_rd36",
+      "ganadorPremio": "500 V-Bucks",
+      "item": "Skin de Afrodita Campeona con los 2 premios de 500 que gane anteriormente",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1785630064305.jpg",
+      "nombreFortnite": "elkid_RD36",
+      "discordId": "1072372475360448522",
+      "discordUsuario": "elkid_rd36",
+      "fecha": "1/8/2026",
+      "entregado": false
     }
   ]
 }
