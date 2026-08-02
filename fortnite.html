@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fortnite — GeoArmy</title>
+  <meta name="description" content="Todo lo de Fortnite en la Geo Army: la tienda del juego actualizada al día y el checklist de Sprites de la comunidad."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css"/>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VT78CC8X2V"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VT78CC8X2V');
+  </script>
+
+  <style>
+    /* ===== Página Fortnite (Tienda + Sprites) — prefijos fs- / sp- / fx- ===== */
+    .fx-hero { position: relative; padding: 4.5rem 1.5rem 1.5rem; text-align: center; overflow: hidden; isolation: isolate; }
+    .fx-hero::before {
+      content: ""; position: absolute; inset: -20% -10% auto -10%; height: 130%; z-index: -1;
+      background:
+        radial-gradient(36% 45% at 50% 10%, rgba(0,212,255,.16), transparent 65%),
+        radial-gradient(30% 35% at 85% 40%, rgba(145,71,255,.14), transparent 65%);
+      filter: blur(10px);
+    }
+    .fx-hero-inner { max-width: 720px; margin: 0 auto; }
+    .fx-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em;
+      color: var(--fn); background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,.25);
+      padding: 5px 14px; border-radius: 100px; margin-bottom: 1.4rem;
+    }
+    .fx-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.1rem, 5vw, 3.3rem);
+      font-weight: 700; letter-spacing: -0.03em; margin-bottom: .9rem; text-wrap: balance; line-height: 1.08;
+    }
+    .fx-title .accent {
+      color: var(--fn);
+      background: linear-gradient(135deg, #007a99 0%, #00d4ff 30%, #baf3ff 55%, #00d4ff 75%, #007a99 100%);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .fx-sub { color: var(--text2); font-size: 16.5px; max-width: 560px; margin: 0 auto; line-height: 1.7; }
+    .fx-disclaimer { color: var(--text3); font-size: 12.5px; max-width: 560px; margin: .9rem auto 0; line-height: 1.6; }
+
+    /* Tabs internas: Tienda de hoy / Sprites */
+    .fx-tabs {
+      max-width: 720px; margin: 2rem auto 0; padding: 0 1.5rem;
+      display: flex; justify-content: center;
+    }
+    .fx-tabs-inner {
+      display: inline-flex; gap: 5px; background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.1); padding: 5px; border-radius: 100px;
+    }
+    .fx-tab-btn {
+      font-family: 'Space Grotesk', sans-serif; font-size: .85rem; font-weight: 600;
+      background: transparent; border: 0; color: rgba(255,255,255,.55);
+      padding: 10px 20px; border-radius: 100px; cursor: pointer;
+      transition: background .25s var(--ease), color .25s var(--ease);
+    }
+    .fx-tab-btn[aria-selected="true"] { background: linear-gradient(135deg, var(--fn), var(--accent)); color: #0a0814; }
+    .fx-view { display: none; }
+    .fx-view.is-active { display: block; }
+
+    /* ---- Tienda de hoy (fs-) ---- */
+    .fs-countdown-wrap { display: flex; justify-content: center; margin: 1.6rem auto 0; padding: 0 1.5rem; }
+    .fs-countdown {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #1b1b20; border: 1px solid var(--border2);
+      padding: 8px 18px; border-radius: 100px;
+      font-family: 'Space Grotesk', sans-serif; font-size: .85rem; font-weight: 700; color: #fff;
+      box-shadow: var(--card-shadow);
+    }
+    .fs-countdown-label { color: var(--text2); font-weight: 600; }
+    .fs-countdown-time { color: #fff; font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+    .fs-updated { margin: 1rem auto 0; max-width: 720px; padding: 0 1.5rem; text-align: center; color: var(--text3); font-size: 13px; }
+    .fs-updated b { color: var(--text2); }
+    .fs-section-title {
+      max-width: 1140px; margin: 2rem auto 1rem; padding: 0 1.5rem;
+      font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; font-weight: 600; color: var(--text);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .fs-section-title::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+    .fs-grid {
+      max-width: 1140px; margin: 0 auto; padding: 0 1.5rem 1.5rem;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1.2rem;
+    }
+    .fs-card {
+      position: relative; overflow: hidden; isolation: isolate;
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 0;
+      display: flex; flex-direction: column;
+      box-shadow: var(--card-shadow);
+      transition: border-color .3s ease, transform .4s var(--ease);
+    }
+    .fs-card:hover { transform: translateY(-4px); border-color: var(--fs-rarity-color, var(--fn)); }
+    .fs-card-img-wrap {
+      position: relative; width: 100%; aspect-ratio: 1 / 1;
+      background: radial-gradient(circle at 50% 30%, var(--fs-rarity-color, var(--fn)) 0%, transparent 70%), var(--bg2);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+    .fs-card-img-wrap::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,.35); }
+    .fs-card-img { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; }
+    .fs-card-body { padding: 1rem 1.1rem 1.2rem; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+    .fs-card-rarity {
+      font-family: 'Space Grotesk', sans-serif; font-size: .66rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+      color: var(--fs-rarity-color, var(--fn));
+    }
+    .fs-card-name { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; line-height: 1.3; }
+    .fs-card-type { color: var(--text3); font-size: .78rem; flex-grow: 1; }
+    .fs-card-price {
+      display: inline-flex; align-items: center; gap: 6px; width: fit-content;
+      color: var(--gold); font-weight: 700; font-family: 'Space Grotesk', sans-serif;
+      background: rgba(255,210,63,.1); border: 1px solid rgba(255,210,63,.25);
+      padding: 5px 12px; border-radius: 100px; font-size: .9rem;
+    }
+    .fs-vbucks-icon { width: 16px; height: 16px; }
+    .fs-msg { max-width: 900px; margin: 3rem auto; text-align: center; color: var(--text2); font-size: .95rem; padding: 0 1.5rem; }
+
+    /* ---- Sprites (sp-) ---- */
+    .sp-stats-box { max-width: 720px; margin: 2rem auto 0; padding: 0 1.5rem; }
+    .sp-progress-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 1.4rem 1.75rem; box-shadow: var(--card-shadow);
+    }
+    .sp-progress-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 6px; }
+    .sp-progress-label { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--text3); }
+    .sp-progress-num { font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; color: var(--fn); }
+    .sp-progress-bar-bg { background: var(--bg3); border-radius: 999px; height: 12px; overflow: hidden; }
+    .sp-progress-bar-fill { background: linear-gradient(90deg, var(--accent), var(--fn)); height: 100%; border-radius: 999px; transition: width .5s ease; width: 0%; }
+
+    .sp-controls {
+      max-width: 1140px; margin: 1.5rem auto 0; padding: 0 1.5rem;
+      display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: center;
+    }
+    .sp-filters { display: flex; gap: 5px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); padding: 5px; border-radius: 100px; flex-wrap: wrap; justify-content: center; }
+    .sp-filters button {
+      font-family: 'Space Grotesk', sans-serif; font-size: .78rem; background: transparent; border: 0;
+      color: rgba(255,255,255,.55); padding: 8px 16px; border-radius: 100px; cursor: pointer;
+      transition: background .25s var(--ease), color .25s var(--ease);
+    }
+    .sp-filters button[aria-pressed="true"] { background: linear-gradient(135deg, var(--fn), var(--accent)); color: #0a0814; }
+    .sp-reset-btn {
+      font-family: 'Space Grotesk', sans-serif; font-size: .78rem; font-weight: 600;
+      background: rgba(255,68,68,.1); border: 1px solid rgba(255,68,68,.3); color: var(--red);
+      padding: 9px 16px; border-radius: 100px; cursor: pointer; transition: background .25s var(--ease);
+    }
+    .sp-reset-btn:hover { background: rgba(255,68,68,.18); }
+
+    .sp-grid {
+      max-width: 1140px; margin: 2rem auto 0; padding: 0 1.5rem 4.5rem;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 1.3rem;
+    }
+    .sp-card {
+      position: relative; overflow: hidden; isolation: isolate;
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 1.5rem 1.4rem 1.4rem;
+      display: flex; flex-direction: column; gap: 10px;
+      box-shadow: var(--card-shadow);
+      transition: border-color .3s ease, transform .4s var(--ease);
+    }
+    .sp-card::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--sp-rarity-color, var(--fn));
+    }
+    .sp-card:hover { transform: translateY(-4px); }
+    .sp-card.sp-complete { border-color: var(--sp-rarity-color, var(--fn)); }
+    .sp-icon-wrap {
+      position: relative; width: 64px; height: 64px; border-radius: 16px; overflow: hidden;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      background: radial-gradient(circle at 30% 30%, var(--sp-rarity-color, var(--fn)) 0%, transparent 75%), var(--bg2);
+      border: 1px solid var(--border);
+    }
+    .sp-icon-fallback { font-size: 1.6rem; opacity: .85; }
+    .sp-icon-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 6px; }
+    .sp-card-top { display: flex; align-items: flex-start; gap: 12px; }
+    .sp-card-top-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+    .sp-card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .sp-badge {
+      font-family: 'Space Grotesk', sans-serif; font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+      padding: 4px 10px; border-radius: 100px; color: #0a0814; background: var(--sp-rarity-color, var(--fn));
+    }
+    .sp-season { font-size: .68rem; color: var(--text3); }
+    .sp-name { font-family: 'Space Grotesk', sans-serif; font-size: 1.12rem; }
+    .sp-ability { color: var(--text2); font-size: .87rem; line-height: 1.55; flex-grow: 1; }
+
+    .sp-variants { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+    .sp-variant {
+      display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;
+      font-size: .76rem; color: var(--text2); background: rgba(255,255,255,.03);
+      border: 1px solid var(--border); padding: 6px 10px; border-radius: 100px;
+      transition: background .2s ease, border-color .2s ease, color .2s ease;
+    }
+    .sp-variant input { accent-color: var(--sp-rarity-color, var(--fn)); }
+    .sp-variant.checked { color: var(--text); background: rgba(255,255,255,.07); border-color: var(--sp-rarity-color, var(--fn)); }
+    .sp-empty { text-align: center; color: var(--text3); padding: 3rem 1rem; grid-column: 1 / -1; }
+  </style>
+</head>
+<body>
+
+  <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="logo.png" alt="GeoArmy" class="nav-logo-img"/>
+        GeoArmy
+      </a>
+      <div class="nav-links">
+        <a href="index.html#inicio">Geo Army</a>
+        <a href="pase.html">Pase de Batalla</a>
+        <a href="tienda.html">Tienda</a>
+        <a href="fortnite.html" style="color:var(--text);">Fortnite</a>
+        <a href="index.html#horario">Horario</a>
+        <a href="index.html#ganadores">Ganadores</a>
+      </div>
+      <a href="https://twitch.tv/geovannyrk" target="_blank" class="btn-nav">Ver stream →</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="fx-hero">
+    <div class="fx-hero-inner" data-reveal>
+      <div class="fx-eyebrow">🎮 Fortnite en la Geo Army</div>
+      <h1 class="fx-title">Todo <span class="accent">Fortnite</span> en un solo lugar</h1>
+      <p class="fx-sub">La tienda de artículos del juego, actualizada al día, y el checklist de Sprites de la comunidad. No usa tus G-coins ni tu pase — es solo información del juego.</p>
+      <p class="fx-disclaimer">Página informativa hecha por la comunidad Geo Army, sin afiliación con Epic Games. Los datos pueden cambiar según parches del juego.</p>
+    </div>
+  </section>
+
+  <div class="fx-tabs" data-reveal>
+    <div class="fx-tabs-inner" role="tablist" aria-label="Secciones de Fortnite">
+      <button class="fx-tab-btn" data-view="tienda" role="tab" aria-selected="true">🛒 Tienda de hoy</button>
+      <button class="fx-tab-btn" data-view="sprites" role="tab" aria-selected="false">🧿 Sprites</button>
+    </div>
+  </div>
+
+  <!-- VISTA: TIENDA DE HOY -->
+  <div class="fx-view is-active" id="fxViewTienda">
+    <div class="fs-countdown-wrap">
+      <div class="fs-countdown">
+        <span class="fs-countdown-label">Nuevos artículos en</span>
+        <span class="fs-countdown-time" id="fsCountdownTime">--:--:--</span>
+      </div>
+    </div>
+    <div class="fs-updated" id="fsUpdated">Cargando tienda del día…</div>
+    <div id="fsContent"></div>
+  </div>
+
+  <!-- VISTA: SPRITES -->
+  <div class="fx-view" id="fxViewSprites">
+    <div class="sp-stats-box">
+      <div class="sp-progress-card">
+        <div class="sp-progress-top">
+          <span class="sp-progress-label">Progreso de colección</span>
+          <span class="sp-progress-num" id="spProgressNum">0 / 0</span>
+        </div>
+        <div class="sp-progress-bar-bg"><div class="sp-progress-bar-fill" id="spProgressFill"></div></div>
+      </div>
+    </div>
+
+    <div class="sp-controls">
+      <div class="sp-filters" role="group" aria-label="Filtrar por rareza">
+        <button data-f="todos" aria-pressed="true">Todos</button>
+        <button data-f="Rare">Rare</button>
+        <button data-f="Epic">Epic</button>
+        <button data-f="Legendary">Legendary</button>
+        <button data-f="Mythic">Mythic</button>
+      </div>
+      <button class="sp-reset-btn" id="spResetBtn">Reiniciar progreso</button>
+    </div>
+
+    <div id="spGrid" class="sp-grid"></div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <img src="logo.png" alt="GeoArmy" class="footer-logo-img"/>
+        GeoArmy
+      </div>
+      <div class="footer-text">Comunidad de Geovannyrk · Twitch Affiliate</div>
+      <div class="footer-code">geovanyrk.github.io</div>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    'use strict';
+
+    // ====== Tabs internas ======
+    var tabBtns = document.querySelectorAll('.fx-tab-btn');
+    var views = { tienda: document.getElementById('fxViewTienda'), sprites: document.getElementById('fxViewSprites') };
+    tabBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var view = btn.getAttribute('data-view');
+        tabBtns.forEach(function (b) { b.setAttribute('aria-selected', b === btn ? 'true' : 'false'); });
+        Object.keys(views).forEach(function (k) { views[k].classList.toggle('is-active', k === view); });
+        history.replaceState(null, '', '#' + view);
+      });
+    });
+    if (window.location.hash === '#sprites') {
+      var spBtn = document.querySelector('.fx-tab-btn[data-view="sprites"]');
+      if (spBtn) spBtn.click();
+    }
+
+    // ====== Tienda de Fortnite de hoy (vía fortnite-api.com, informativo) ======
+    // No usa gcoin ni pases — es un espejo de la tienda oficial del juego,
+    // separado del sistema de canjes/pase de la Geo Army.
+    var SHOP_API = 'https://fortnite-api.com/v2/shop?language=es';
+    var REFRESH_MS = 10 * 60 * 1000;
+
+    var RAREZA_COLOR_SHOP = {
+      common: '#909090', uncommon: '#5db85d', rare: '#4fc3f7', epic: '#b455f2',
+      legendary: '#ff9830', mythic: '#ffe066', exotic: '#4be3ac', icon: '#5ec6d9',
+      marvel: '#c23b3b', dc: '#3b5bc2', gaminglegends: '#4b4bd6', starwars: '#2f2f2f',
+      lava: '#ff6a3d', frozen: '#7fdfff', shadow: '#3f3f46', slurp: '#38e0c4'
+    };
+    function colorDeRarezaShop(v) { return RAREZA_COLOR_SHOP[(v || '').toLowerCase()] || '#00d4ff'; }
+    function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+    function primerCosmetico(entry) {
+      return (entry.brItems && entry.brItems[0]) ||
+        (entry.tracks && entry.tracks[0]) ||
+        (entry.instruments && entry.instruments[0]) ||
+        (entry.cars && entry.cars[0]) ||
+        (entry.legoKits && entry.legoKits[0]) ||
+        (entry.legoBrItems && entry.legoBrItems[0]) ||
+        null;
+    }
+    function imagenDe(entry, item) {
+      try {
+        var mats = entry.newDisplayAsset && entry.newDisplayAsset.materialInstances;
+        if (mats && mats[0] && mats[0].images) {
+          var img = mats[0].images.OfferImage || mats[0].images.Background || mats[0].images.Icon;
+          if (img) return img;
+        }
+      } catch (e) {}
+      if (item) {
+        if (item.images) return item.images.icon || item.images.large || item.images.small || item.images.wrap || '';
+        if (item.albumArt) return item.albumArt;
+      }
+      return '';
+    }
+    function nombreDe(entry, item) {
+      if (entry.bundle && entry.bundle.name) return entry.bundle.name;
+      if (item) return item.name || item.title || 'Artículo';
+      return 'Artículo';
+    }
+    function tipoDe(entry, item) {
+      if (entry.bundle && entry.bundle.name) return 'Lote';
+      if (item && item.type && item.type.displayValue) return item.type.displayValue;
+      if (item && item.title) return 'Pista de audio';
+      return 'Objeto';
+    }
+    function rarezaValorDe(entry, item) { return (item && item.rarity && item.rarity.value) || 'rare'; }
+    function rarezaEtiquetaDe(entry, item) {
+      if (item && item.rarity && item.rarity.displayValue) return item.rarity.displayValue;
+      return entry.bundle ? 'Lote' : 'Objeto';
+    }
+
+    function tarjetaHTML(entry) {
+      var item = primerCosmetico(entry);
+      var nombre = nombreDe(entry, item);
+      var tipo = tipoDe(entry, item);
+      var img = imagenDe(entry, item);
+      var color = colorDeRarezaShop(rarezaValorDe(entry, item));
+      var precio = (typeof entry.finalPrice === 'number') ? entry.finalPrice : (entry.regularPrice || 0);
+      return (
+        '<div class="fs-card" style="--fs-rarity-color:' + color + '">' +
+          '<div class="fs-card-img-wrap">' +
+            (img ? '<img class="fs-card-img" src="' + esc(img) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'"/>' : '') +
+          '</div>' +
+          '<div class="fs-card-body">' +
+            '<span class="fs-card-rarity">' + esc(rarezaEtiquetaDe(entry, item)) + '</span>' +
+            '<span class="fs-card-name">' + esc(nombre) + '</span>' +
+            '<span class="fs-card-type">' + esc(tipo) + '</span>' +
+            '<span class="fs-card-price"><img class="fs-vbucks-icon" src="icons/icon-vbucks.svg" alt="V-Bucks"/>' + precio.toLocaleString('es-ES') + '</span>' +
+          '</div>' +
+        '</div>'
+      );
+    }
+
+    function agruparPorSeccion(entries) {
+      var grupos = {}, orden = [];
+      entries.forEach(function (e) {
+        var nombre = (e.layout && e.layout.name) || (e.section && e.section.name) || 'Tienda';
+        if (!grupos[nombre]) { grupos[nombre] = []; orden.push(nombre); }
+        grupos[nombre].push(e);
+      });
+      return orden.map(function (nombre) { return { nombre: nombre, entries: grupos[nombre] }; });
+    }
+
+    function renderTienda(data) {
+      var content = document.getElementById('fsContent');
+      var entries = (data && data.entries) || [];
+      if (!entries.length) {
+        content.innerHTML = '<p class="fs-msg">No se pudo leer la tienda de hoy. Intenta recargar la página en unos minutos.</p>';
+        return;
+      }
+      var grupos = agruparPorSeccion(entries);
+      content.innerHTML = grupos.map(function (g) {
+        return (
+          '<h2 class="fs-section-title">' + esc(g.nombre) + '</h2>' +
+          '<div class="fs-grid">' + g.entries.map(tarjetaHTML).join('') + '</div>'
+        );
+      }).join('');
+    }
+
+    function actualizarSelloTienda(data) {
+      var el = document.getElementById('fsUpdated');
+      var fechaTienda = data && data.date ? new Date(data.date) : null;
+      var partes = [];
+      if (fechaTienda && !isNaN(fechaTienda)) {
+        partes.push('Tienda del <b>' + fechaTienda.toLocaleDateString('es-ES', { day: '2-digit', month: 'long' }) + '</b>');
+      }
+      partes.push('Revisado ' + new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }));
+      el.innerHTML = partes.join(' · ');
+    }
+
+    var ultimaFechaTienda = null;
+
+    function procesarTienda(json) {
+      var data = json && json.data;
+      if (!data) throw new Error('Respuesta vacía');
+      if (data.date !== ultimaFechaTienda) {
+        ultimaFechaTienda = data.date;
+        renderTienda(data);
+      }
+      actualizarSelloTienda(data);
+    }
+
+    function cargarTienda() {
+      fetch(SHOP_API, { cache: 'no-store' })
+        .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+        .then(procesarTienda)
+        .catch(function () {
+          // Algunos navegadores bloquean la llamada directa (CORS). Reintentamos
+          // pasando por un proxy público antes de rendirnos.
+          var proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(SHOP_API);
+          fetch(proxyUrl, { cache: 'no-store' })
+            .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+            .then(procesarTienda)
+            .catch(function () {
+              var el = document.getElementById('fsUpdated');
+              if (window.location.protocol === 'file:') {
+                el.textContent = 'Esta vista previa está abierta como archivo local — sube la página a tu hosting (http/https) para que la tienda pueda cargar.';
+              } else {
+                el.textContent = 'No se pudo conectar con la tienda de Fortnite ahora mismo. Reintentando…';
+              }
+            });
+        });
+    }
+    cargarTienda();
+    setInterval(cargarTienda, REFRESH_MS);
+
+    // ====== Contador para el próximo reinicio de la tienda (00:00 UTC) ======
+    function proximoReinicioUTC() {
+      var ahora = new Date();
+      var siguiente = new Date(Date.UTC(ahora.getUTCFullYear(), ahora.getUTCMonth(), ahora.getUTCDate() + 1, 0, 0, 0));
+      return siguiente;
+    }
+    function pad2(n) { return String(n).padStart(2, '0'); }
+    function actualizarCountdown() {
+      var el = document.getElementById('fsCountdownTime');
+      if (!el) return;
+      var restanteMs = proximoReinicioUTC().getTime() - Date.now();
+      if (restanteMs < 0) restanteMs = 0;
+      var totalSeg = Math.floor(restanteMs / 1000);
+      var h = Math.floor(totalSeg / 3600);
+      var m = Math.floor((totalSeg % 3600) / 60);
+      var s = totalSeg % 60;
+      el.textContent = h + ':' + pad2(m) + ':' + pad2(s);
+      // Cuando llega a cero, la tienda ya rotó: forzamos una recarga de datos.
+      if (restanteMs === 0) cargarTienda();
+    }
+    actualizarCountdown();
+    setInterval(actualizarCountdown, 1000);
+
+    // ====== Checklist de Sprites ======
+    var SPRITES = [
+      { id: 'earth', nombre: 'Earth Sprite', rareza: 'Rare', temporada: 'Inicio de temporada', habilidad: 'Más probabilidad de encontrar objetos raros extra al abrir cofres.' },
+      { id: 'fire', nombre: 'Fire Sprite', rareza: 'Rare', temporada: 'Inicio de temporada', habilidad: 'Crea una explosión de fuego cuando haces suficiente daño a un enemigo.' },
+      { id: 'water', nombre: 'Water Sprite', rareza: 'Rare', temporada: 'Inicio de temporada', habilidad: 'Restaura escudo mientras estás en el agua, para ti y tu escuadra cercana.' },
+      { id: 'duck', nombre: 'Duck Sprite', rareza: 'Epic', temporada: 'Inicio de temporada', habilidad: 'Emotear o tocar un instrumento restaura escudo.' },
+      { id: 'ghost', nombre: 'Ghost Sprite', rareza: 'Epic', temporada: 'Inicio de temporada', habilidad: 'Otorga sigilo (camuflaje) por un tiempo al recargar.' },
+      { id: 'demon', nombre: 'Demon Sprite', rareza: 'Epic', temporada: 'Inicio de temporada', habilidad: 'Absorbe algo de vida y escudo al eliminar a un rival.' },
+      { id: 'king', nombre: 'King Sprite', rareza: 'Epic', temporada: 'Inicio de temporada', habilidad: 'Tu pico hace más daño.' },
+      { id: 'dream', nombre: 'Dream Sprite', rareza: 'Legendary', temporada: 'Inicio de temporada', habilidad: 'Otorga un objeto aleatorio en cada nivel; explota con botín legendario al nivel máximo.' },
+      { id: 'punk', nombre: 'Punk Sprite', rareza: 'Legendary', temporada: 'Inicio de temporada', habilidad: 'A veces otorga munición ilimitada por un tiempo.' },
+      { id: 'burntpeanut', nombre: 'TheBurntPeanut Sprite', rareza: 'Mythic', temporada: 'Inicio de temporada', habilidad: 'Pequeña probabilidad de botín extra al eliminar rivales.' },
+      { id: 'zeropoint', nombre: 'Zero Point Sprite', rareza: 'Mythic', temporada: 'Inicio de temporada', habilidad: 'Genera una mini burbuja de escudo al usar un objeto de curación en ti mismo.' },
+      { id: 'fishy', nombre: 'Fishy Sprite', rareza: 'Rare', temporada: '25 jun. 2026', habilidad: 'Más velocidad al nadar, con un impulso extra de velocidad al recibir daño.' },
+      { id: 'aura', nombre: 'Aura Sprite', rareza: 'Epic', temporada: '25 jun. 2026', habilidad: 'Carga una Roca de Choque al hacer suficiente daño.' },
+      { id: 'striker', nombre: 'Striker Sprite', rareza: 'Epic', temporada: '25 jun. 2026', habilidad: 'Ganas Overdrive al trepar (Mantle) o saltar obstáculos (Hurdle).' },
+      { id: 'boss', nombre: 'Boss Sprite', rareza: 'Legendary', temporada: '25 jun. 2026', habilidad: 'Aumenta tu vida y escudo máximos.' },
+      { id: 'grim', nombre: 'Grim Sprite', rareza: 'Mythic', temporada: '25 jun. 2026', habilidad: 'Marca a quien te ataca, castigando a quien te presiona en combate.' },
+      { id: 'air', nombre: 'Air Sprite', rareza: 'Rare', temporada: '16 jul. 2026 — Hot Bat Summer', habilidad: 'Más velocidad al correr y saltar, y anula el daño por caída.' },
+      { id: 'seven', nombre: 'Seven Sprite', rareza: 'Legendary', temporada: '16 jul. 2026 — Hot Bat Summer', habilidad: 'Ves las huellas de jugadores rivales en el mapa, junto a tu escuadra.' },
+      { id: 'batman', nombre: 'Batman Sprite', rareza: 'Mythic', temporada: '16 jul. 2026 — Hot Bat Summer', habilidad: 'Despliega la Capa de Batman en el aire; más objetos raros en cofres.' },
+      { id: 'pollo', nombre: 'Pollo Sprite', rareza: 'Mythic', temporada: '16 jul. 2026 — Hot Bat Summer', habilidad: 'Restaura escudo poco a poco a ti y tu escuadra tras eliminar a un rival.' },
+      { id: 'vinijr', nombre: 'Vini Jr. Sprite', rareza: 'Mythic', temporada: '16 jul. 2026 — Hot Bat Summer', habilidad: 'Correr un rato vuelve tu deslizada destructiva y aumenta cadencia de disparo y recarga al golpear con ella.' }
+    ];
+    var VARIANTES = [
+      { key: 'base', label: 'Base' }, { key: 'oro', label: 'Oro' },
+      { key: 'gominola', label: 'Gominola' }, { key: 'galaxia', label: 'Galaxia' }, { key: 'holofoil', label: 'Holofoil' }
+    ];
+    var RAREZA_COLOR_SP = { Rare: '#4fc3f7', Epic: '#b455f2', Legendary: '#ff9830', Mythic: '#ffe066' };
+    var STORAGE_KEY = 'geoarmy_sprites_progress_v1';
+    var progreso = {};
+    try { progreso = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') || {}; } catch (e) { progreso = {}; }
+    var filtroSp = 'todos';
+    var spGrid = document.getElementById('spGrid');
+
+    function guardarSp() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progreso)); } catch (e) {} }
+    function claveDe(spriteId, variante) { return spriteId + ':' + variante; }
+
+    function actualizarProgresoSp() {
+      var total = SPRITES.length * VARIANTES.length;
+      var logrados = 0;
+      SPRITES.forEach(function (s) { VARIANTES.forEach(function (v) { if (progreso[claveDe(s.id, v.key)]) logrados++; }); });
+      document.getElementById('spProgressNum').textContent = logrados + ' / ' + total;
+      document.getElementById('spProgressFill').style.width = (total ? (logrados / total * 100) : 0) + '%';
+    }
+
+    function renderSprites() {
+      var lista = filtroSp === 'todos' ? SPRITES : SPRITES.filter(function (s) { return s.rareza === filtroSp; });
+      if (!lista.length) { spGrid.innerHTML = '<div class="sp-empty">No hay Sprites en este filtro.</div>'; return; }
+      spGrid.innerHTML = '';
+      lista.forEach(function (s) {
+        var color = RAREZA_COLOR_SP[s.rareza] || '#00d4ff';
+        var completos = VARIANTES.filter(function (v) { return progreso[claveDe(s.id, v.key)]; }).length;
+        var card = document.createElement('div');
+        card.className = 'sp-card' + (completos === VARIANTES.length ? ' sp-complete' : '');
+        card.style.setProperty('--sp-rarity-color', color);
+        card.innerHTML =
+          '<div class="sp-card-top">' +
+            '<div class="sp-icon-wrap">' +
+              '<span class="sp-icon-fallback">🧿</span>' +
+              '<img class="sp-icon-img" src="icons/sprites/' + s.id + '.png" alt="" loading="lazy" onerror="this.style.display=\'none\'"/>' +
+            '</div>' +
+            '<div class="sp-card-top-info">' +
+              '<div class="sp-card-head"><span class="sp-badge">' + s.rareza + '</span><span class="sp-season">' + s.temporada + '</span></div>' +
+              '<div class="sp-name">' + s.nombre + '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="sp-ability">' + s.habilidad + '</div>' +
+          '<div class="sp-variants">' + VARIANTES.map(function (v) {
+            var checked = !!progreso[claveDe(s.id, v.key)];
+            return '<label class="sp-variant' + (checked ? ' checked' : '') + '" data-sprite="' + s.id + '" data-variant="' + v.key + '"><input type="checkbox" ' + (checked ? 'checked' : '') + '/>' + v.label + '</label>';
+          }).join('') + '</div>';
+        spGrid.appendChild(card);
+      });
+      spGrid.querySelectorAll('.sp-variant').forEach(function (label) {
+        label.addEventListener('click', function (e) {
+          e.preventDefault();
+          var key = claveDe(label.getAttribute('data-sprite'), label.getAttribute('data-variant'));
+          progreso[key] = !progreso[key];
+          guardarSp();
+          renderSprites();
+          actualizarProgresoSp();
+        });
+      });
+    }
+
+    var spBtns = document.querySelectorAll('.sp-filters button');
+    spBtns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        spBtns.forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+        b.setAttribute('aria-pressed', 'true');
+        filtroSp = b.getAttribute('data-f');
+        renderSprites();
+      });
+    });
+    document.getElementById('spResetBtn').addEventListener('click', function () {
+      if (!confirm('¿Reiniciar todo tu progreso de Sprites en este navegador?')) return;
+      progreso = {};
+      guardarSp();
+      renderSprites();
+      actualizarProgresoSp();
+    });
+
+    renderSprites();
+    actualizarProgresoSp();
+  })();
+  </script>
+  <script src="js/premium.js"></script>
+</body>
+</html>
