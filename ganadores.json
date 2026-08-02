@@ -875,26 +875,6 @@
       "entregado": false
     },
     {
-      "id": 88,
-      "usuario": "elkid_rd36",
-      "premio": "800 V-Bucks",
-      "cantidad": 800,
-      "moneda": "pavos",
-      "evento": "Piñata Fortnite",
-      "fecha": "25/7/2026",
-      "entregado": false
-    },
-    {
-      "id": 89,
-      "usuario": "ShadowcasReal1",
-      "premio": "800 V-Bucks",
-      "cantidad": 800,
-      "moneda": "pavos",
-      "evento": "Piñata Fortnite",
-      "fecha": "25/7/2026",
-      "entregado": false
-    },
-    {
       "id": 90,
       "usuario": "marianxec",
       "premio": "800 V-Bucks",
@@ -903,26 +883,6 @@
       "evento": "Piñata Fortnite",
       "fecha": "30/7/2026",
       "entregado": false
-    },
-    {
-      "id": 91,
-      "usuario": "elkid_rd36",
-      "premio": "1200 V-Bucks",
-      "cantidad": 1200,
-      "moneda": "pavos",
-      "evento": "Piñata Fortnite",
-      "fecha": "1/8/2026",
-      "entregado": false
-    },
-    {
-      "id": 92,
-      "usuario": "Geovannyrk",
-      "premio": "500 V-Bucks",
-      "cantidad": 500,
-      "moneda": "pavos",
-      "evento": "Piñata Fortnite",
-      "fecha": "25/7/2026",
-      "entregado": true
     }
   ],
   "gastos": [],
