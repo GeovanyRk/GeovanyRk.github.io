@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Fortnite — GeoArmy</title>
-  <meta name="description" content="Todo lo de Fortnite en la Geo Army: la tienda del juego actualizada al día y el checklist de Sprites de la comunidad."/>
+  <meta name="description" content="Todo lo de Fortnite en la Geo Army: la tienda del juego actualizada al día, y próximamente los espíritus propios de la comunidad."/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css"/>
@@ -79,16 +79,40 @@
     .fs-countdown-time { color: #fff; font-variant-numeric: tabular-nums; letter-spacing: .02em; }
     .fs-updated { margin: 1rem auto 0; max-width: 720px; padding: 0 1.5rem; text-align: center; color: var(--text3); font-size: 13px; }
     .fs-updated b { color: var(--text2); }
+    .fs-section-block {
+      max-width: 1140px; margin: 0 auto; padding: 2.2rem 1.5rem 2.4rem;
+      border-top: 1px solid var(--border);
+    }
+    .fs-section-block:first-child { border-top: 0; padding-top: 1.5rem; }
     .fs-section-title {
-      max-width: 1140px; margin: 2rem auto 1rem; padding: 0 1.5rem;
-      font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; font-weight: 600; color: var(--text);
-      display: flex; align-items: center; gap: 10px;
+      margin: 0 0 1.3rem; padding: 0;
+      font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--text);
+      display: flex; align-items: center; gap: 12px;
     }
     .fs-section-title::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+    .fs-section-count {
+      font-family: 'Inter', sans-serif; font-size: .72rem; font-weight: 600; color: var(--text3);
+      background: rgba(255,255,255,.06); border: 1px solid var(--border);
+      padding: 3px 10px; border-radius: 100px;
+    }
     .fs-grid {
-      max-width: 1140px; margin: 0 auto; padding: 0 1.5rem 1.5rem;
       display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1.2rem;
     }
+    .fs-grid-wrap { position: relative; }
+    .fs-grid-wrap.is-collapsed { max-height: 640px; overflow: hidden; }
+    .fs-grid-wrap.is-collapsed::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 110px;
+      background: linear-gradient(to bottom, transparent, var(--bg));
+      pointer-events: none;
+    }
+    .fs-expand-btn {
+      display: block; margin: -18px auto 0; position: relative; z-index: 1;
+      font-family: 'Space Grotesk', sans-serif; font-size: .85rem; font-weight: 600;
+      background: var(--bg2); border: 1px solid var(--border2); color: var(--text);
+      padding: 10px 22px; border-radius: 100px; cursor: pointer;
+      transition: background .2s ease, transform .3s var(--ease);
+    }
+    .fs-expand-btn:hover { background: var(--bg3); transform: translateY(-2px); }
     .fs-card {
       position: relative; overflow: hidden; isolation: isolate;
       background: var(--card-bg); border: 1px solid var(--border);
@@ -98,14 +122,20 @@
       transition: border-color .3s ease, transform .4s var(--ease);
     }
     .fs-card:hover { transform: translateY(-4px); border-color: var(--fs-rarity-color, var(--fn)); }
+    .fs-card.fs-bundle { grid-column: span 2; }
+    @media (max-width: 620px) { .fs-card.fs-bundle { grid-column: span 1; } }
     .fs-card-img-wrap {
       position: relative; width: 100%; aspect-ratio: 1 / 1;
       background: radial-gradient(circle at 50% 30%, var(--fs-rarity-color, var(--fn)) 0%, transparent 70%), var(--bg2);
       display: flex; align-items: center; justify-content: center; overflow: hidden;
     }
+    .fs-card-img-wrap.fs-wide { aspect-ratio: 2.4 / 1; }
     .fs-card-img-wrap::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,.35); }
     .fs-card-img { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; }
     .fs-card-body { padding: 1rem 1.1rem 1.2rem; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+    .fs-bundle-list { list-style: none; margin: -4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 3px; }
+    .fs-bundle-list li { font-size: .8rem; color: var(--text2); padding-left: 14px; position: relative; }
+    .fs-bundle-list li::before { content: "•"; position: absolute; left: 0; color: var(--fs-rarity-color, var(--fn)); }
     .fs-card-rarity {
       font-family: 'Space Grotesk', sans-serif; font-size: .66rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
       color: var(--fs-rarity-color, var(--fn));
@@ -121,83 +151,17 @@
     .fs-vbucks-icon { width: 16px; height: 16px; }
     .fs-msg { max-width: 900px; margin: 3rem auto; text-align: center; color: var(--text2); font-size: .95rem; padding: 0 1.5rem; }
 
-    /* ---- Sprites (sp-) ---- */
-    .sp-stats-box { max-width: 720px; margin: 2rem auto 0; padding: 0 1.5rem; }
-    .sp-progress-card {
+    /* ---- Sprites (en construcción) ---- */
+    .sp-construccion {
+      max-width: 640px; margin: 3rem auto 6rem; padding: 0 1.5rem; text-align: center;
+    }
+    .sp-construccion-card {
       background: var(--card-bg); border: 1px solid var(--border);
-      border-radius: var(--radius-lg); padding: 1.4rem 1.75rem; box-shadow: var(--card-shadow);
+      border-radius: var(--radius-lg); padding: 3rem 2rem; box-shadow: var(--card-shadow);
     }
-    .sp-progress-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 6px; }
-    .sp-progress-label { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--text3); }
-    .sp-progress-num { font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; color: var(--fn); }
-    .sp-progress-bar-bg { background: var(--bg3); border-radius: 999px; height: 12px; overflow: hidden; }
-    .sp-progress-bar-fill { background: linear-gradient(90deg, var(--accent), var(--fn)); height: 100%; border-radius: 999px; transition: width .5s ease; width: 0%; }
-
-    .sp-controls {
-      max-width: 1140px; margin: 1.5rem auto 0; padding: 0 1.5rem;
-      display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: center;
-    }
-    .sp-filters { display: flex; gap: 5px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1); padding: 5px; border-radius: 100px; flex-wrap: wrap; justify-content: center; }
-    .sp-filters button {
-      font-family: 'Space Grotesk', sans-serif; font-size: .78rem; background: transparent; border: 0;
-      color: rgba(255,255,255,.55); padding: 8px 16px; border-radius: 100px; cursor: pointer;
-      transition: background .25s var(--ease), color .25s var(--ease);
-    }
-    .sp-filters button[aria-pressed="true"] { background: linear-gradient(135deg, var(--fn), var(--accent)); color: #0a0814; }
-    .sp-reset-btn {
-      font-family: 'Space Grotesk', sans-serif; font-size: .78rem; font-weight: 600;
-      background: rgba(255,68,68,.1); border: 1px solid rgba(255,68,68,.3); color: var(--red);
-      padding: 9px 16px; border-radius: 100px; cursor: pointer; transition: background .25s var(--ease);
-    }
-    .sp-reset-btn:hover { background: rgba(255,68,68,.18); }
-
-    .sp-grid {
-      max-width: 1140px; margin: 2rem auto 0; padding: 0 1.5rem 4.5rem;
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 1.3rem;
-    }
-    .sp-card {
-      position: relative; overflow: hidden; isolation: isolate;
-      background: var(--card-bg); border: 1px solid var(--border);
-      border-radius: var(--radius-lg); padding: 1.5rem 1.4rem 1.4rem;
-      display: flex; flex-direction: column; gap: 10px;
-      box-shadow: var(--card-shadow);
-      transition: border-color .3s ease, transform .4s var(--ease);
-    }
-    .sp-card::before {
-      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-      background: var(--sp-rarity-color, var(--fn));
-    }
-    .sp-card:hover { transform: translateY(-4px); }
-    .sp-card.sp-complete { border-color: var(--sp-rarity-color, var(--fn)); }
-    .sp-icon-wrap {
-      position: relative; width: 64px; height: 64px; border-radius: 16px; overflow: hidden;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-      background: radial-gradient(circle at 30% 30%, var(--sp-rarity-color, var(--fn)) 0%, transparent 75%), var(--bg2);
-      border: 1px solid var(--border);
-    }
-    .sp-icon-fallback { font-size: 1.6rem; opacity: .85; }
-    .sp-icon-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 6px; }
-    .sp-card-top { display: flex; align-items: flex-start; gap: 12px; }
-    .sp-card-top-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
-    .sp-card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-    .sp-badge {
-      font-family: 'Space Grotesk', sans-serif; font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
-      padding: 4px 10px; border-radius: 100px; color: #0a0814; background: var(--sp-rarity-color, var(--fn));
-    }
-    .sp-season { font-size: .68rem; color: var(--text3); }
-    .sp-name { font-family: 'Space Grotesk', sans-serif; font-size: 1.12rem; }
-    .sp-ability { color: var(--text2); font-size: .87rem; line-height: 1.55; flex-grow: 1; }
-
-    .sp-variants { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
-    .sp-variant {
-      display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;
-      font-size: .76rem; color: var(--text2); background: rgba(255,255,255,.03);
-      border: 1px solid var(--border); padding: 6px 10px; border-radius: 100px;
-      transition: background .2s ease, border-color .2s ease, color .2s ease;
-    }
-    .sp-variant input { accent-color: var(--sp-rarity-color, var(--fn)); }
-    .sp-variant.checked { color: var(--text); background: rgba(255,255,255,.07); border-color: var(--sp-rarity-color, var(--fn)); }
-    .sp-empty { text-align: center; color: var(--text3); padding: 3rem 1rem; grid-column: 1 / -1; }
+    .sp-construccion-icon { font-size: 2.6rem; margin-bottom: 1rem; }
+    .sp-construccion-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; font-weight: 700; margin-bottom: .6rem; }
+    .sp-construccion-text { color: var(--text2); font-size: .95rem; line-height: 1.7; }
   </style>
 </head>
 <body>
@@ -228,7 +192,7 @@
     <div class="fx-hero-inner" data-reveal>
       <div class="fx-eyebrow">🎮 Fortnite en la Geo Army</div>
       <h1 class="fx-title">Todo <span class="accent">Fortnite</span> en un solo lugar</h1>
-      <p class="fx-sub">La tienda de artículos del juego, actualizada al día, y el checklist de Sprites de la comunidad. No usa tus G-coins ni tu pase — es solo información del juego.</p>
+      <p class="fx-sub">La tienda de artículos del juego, actualizada al día. No usa tus G-coins ni tu pase — es solo información del juego.</p>
       <p class="fx-disclaimer">Página informativa hecha por la comunidad Geo Army, sin afiliación con Epic Games. Los datos pueden cambiar según parches del juego.</p>
     </div>
   </section>
@@ -254,28 +218,13 @@
 
   <!-- VISTA: SPRITES -->
   <div class="fx-view" id="fxViewSprites">
-    <div class="sp-stats-box">
-      <div class="sp-progress-card">
-        <div class="sp-progress-top">
-          <span class="sp-progress-label">Progreso de colección</span>
-          <span class="sp-progress-num" id="spProgressNum">0 / 0</span>
-        </div>
-        <div class="sp-progress-bar-bg"><div class="sp-progress-bar-fill" id="spProgressFill"></div></div>
+    <div class="sp-construccion">
+      <div class="sp-construccion-card">
+        <div class="sp-construccion-icon">🚧</div>
+        <div class="sp-construccion-title">Estamos en construcción</div>
+        <p class="sp-construccion-text">Estamos preparando algo propio de la Geo Army para esta sección — vuelve pronto.</p>
       </div>
     </div>
-
-    <div class="sp-controls">
-      <div class="sp-filters" role="group" aria-label="Filtrar por rareza">
-        <button data-f="todos" aria-pressed="true">Todos</button>
-        <button data-f="Rare">Rare</button>
-        <button data-f="Epic">Epic</button>
-        <button data-f="Legendary">Legendary</button>
-        <button data-f="Mythic">Mythic</button>
-      </div>
-      <button class="sp-reset-btn" id="spResetBtn">Reiniciar progreso</button>
-    </div>
-
-    <div id="spGrid" class="sp-grid"></div>
   </div>
 
   <!-- FOOTER -->
@@ -325,16 +274,44 @@
     function colorDeRarezaShop(v) { return RAREZA_COLOR_SHOP[(v || '').toLowerCase()] || '#00d4ff'; }
     function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
-    function primerCosmetico(entry) {
-      return (entry.brItems && entry.brItems[0]) ||
-        (entry.tracks && entry.tracks[0]) ||
-        (entry.instruments && entry.instruments[0]) ||
-        (entry.cars && entry.cars[0]) ||
-        (entry.legoKits && entry.legoKits[0]) ||
-        (entry.legoBrItems && entry.legoBrItems[0]) ||
-        null;
+    // Icono de "pavos" (V-Bucks) — usamos el oficial que manda la propia API
+    // cada día (data.vbuckIcon); si no llega, caemos al svg local como respaldo.
+    var VBUCKS_ICON_URL = 'icons/icon-vbucks.svg';
+
+    var ORDEN_RAREZA = ['common', 'uncommon', 'rare', 'epic', 'legendary', 'mythic', 'exotic', 'icon', 'marvel', 'dc', 'gaminglegends', 'starwars'];
+
+    function todosLosItems(entry) {
+      // Algunas entradas repiten el mismo artículo con IDs distintos (variantes
+      // de color, versión LEGO, distintas piezas del mismo instrumento, etc.)
+      // pero el mismo nombre visible. Para el usuario eso se ve como el mismo
+      // artículo repetido, así que deduplicamos por NOMBRE, no por id.
+      var arr = [], vistos = {};
+      ['brItems', 'tracks', 'instruments', 'cars', 'legoKits', 'legoBrItems'].forEach(function (key) {
+        if (!Array.isArray(entry[key])) return;
+        entry[key].forEach(function (it) {
+          if (!it) return;
+          var clave = ((it.name || it.title || it.id || '') + '').toLowerCase().trim();
+          if (clave && vistos[clave]) return;
+          if (clave) vistos[clave] = true;
+          arr.push(it);
+        });
+      });
+      return arr;
     }
-    function imagenDe(entry, item) {
+
+    function esEntryLote(entry) {
+      return !!entry.bundle || todosLosItems(entry).length > 1;
+    }
+
+    function tipoDeItem(it) {
+      if (!it) return 'Objeto';
+      if (it.type && it.type.displayValue) return it.type.displayValue;
+      if (it.title) return 'Pista de audio';
+      return 'Objeto';
+    }
+
+    function imagenPrincipalDe(entry, items) {
+      try { if (entry.bundle && entry.bundle.image) return entry.bundle.image; } catch (e) {}
       try {
         var mats = entry.newDisplayAsset && entry.newDisplayAsset.materialInstances;
         if (mats && mats[0] && mats[0].images) {
@@ -342,49 +319,76 @@
           if (img) return img;
         }
       } catch (e) {}
-      if (item) {
-        if (item.images) return item.images.icon || item.images.large || item.images.small || item.images.wrap || '';
-        if (item.albumArt) return item.albumArt;
+      var first = items[0];
+      if (first) {
+        if (first.images) return first.images.icon || first.images.large || first.images.small || first.images.wrap || '';
+        if (first.albumArt) return first.albumArt;
       }
       return '';
     }
-    function nombreDe(entry, item) {
+
+    function nombrePrincipalDe(entry, items) {
       if (entry.bundle && entry.bundle.name) return entry.bundle.name;
-      if (item) return item.name || item.title || 'Artículo';
+      var first = items[0];
+      if (first) return first.name || first.title || 'Artículo';
       return 'Artículo';
     }
-    function tipoDe(entry, item) {
-      if (entry.bundle && entry.bundle.name) return 'Lote';
-      if (item && item.type && item.type.displayValue) return item.type.displayValue;
-      if (item && item.title) return 'Pista de audio';
-      return 'Objeto';
-    }
-    function rarezaValorDe(entry, item) { return (item && item.rarity && item.rarity.value) || 'rare'; }
-    function rarezaEtiquetaDe(entry, item) {
-      if (item && item.rarity && item.rarity.displayValue) return item.rarity.displayValue;
-      return entry.bundle ? 'Lote' : 'Objeto';
+
+    // Cuando hay varios artículos, coloreamos la tarjeta según el de mayor rareza
+    function rarezaPrincipalDe(items) {
+      var mejor = null, mejorIdx = -1;
+      items.forEach(function (it) {
+        var v = ((it.rarity && it.rarity.value) || '').toLowerCase();
+        var idx = ORDEN_RAREZA.indexOf(v);
+        if (idx > mejorIdx) { mejorIdx = idx; mejor = it.rarity; }
+      });
+      return mejor;
     }
 
     function tarjetaHTML(entry) {
-      var item = primerCosmetico(entry);
-      var nombre = nombreDe(entry, item);
-      var tipo = tipoDe(entry, item);
-      var img = imagenDe(entry, item);
-      var color = colorDeRarezaShop(rarezaValorDe(entry, item));
+      var items = todosLosItems(entry);
+      var esLote = !!entry.bundle || items.length > 1;
+      var nombre = nombrePrincipalDe(entry, items);
+      var img = imagenPrincipalDe(entry, items);
+      var rarezaObj = rarezaPrincipalDe(items);
+      var color = colorDeRarezaShop(rarezaObj ? rarezaObj.value : 'rare');
       var precio = (typeof entry.finalPrice === 'number') ? entry.finalPrice : (entry.regularPrice || 0);
+      var etiqueta = esLote ? 'LOTE' : esc(rarezaObj ? rarezaObj.displayValue : 'Objeto');
+
+      var LISTA_MAX = 6; // por arriba de esto, la lista se ve demasiado larga en la tarjeta
+      var cuerpoExtra;
+      if (esLote && items.length) {
+        if (items.length <= LISTA_MAX) {
+          cuerpoExtra = '<span class="fs-card-type">Incluye ' + items.length + ' artículo' + (items.length === 1 ? '' : 's') + ':</span>' +
+            '<ul class="fs-bundle-list">' + items.map(function (it) {
+              return '<li>' + esc(it.name || it.title || 'Artículo') + '</li>';
+            }).join('') + '</ul>';
+        } else {
+          cuerpoExtra = '<span class="fs-card-type">Incluye ' + items.length + ' artículos</span>';
+        }
+      } else {
+        cuerpoExtra = '<span class="fs-card-type">' + esc(tipoDeItem(items[0])) + '</span>';
+      }
+
       return (
-        '<div class="fs-card" style="--fs-rarity-color:' + color + '">' +
-          '<div class="fs-card-img-wrap">' +
+        '<div class="fs-card' + (esLote ? ' fs-bundle' : '') + '" style="--fs-rarity-color:' + color + '">' +
+          '<div class="fs-card-img-wrap' + (esLote ? ' fs-wide' : '') + '">' +
             (img ? '<img class="fs-card-img" src="' + esc(img) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'"/>' : '') +
           '</div>' +
           '<div class="fs-card-body">' +
-            '<span class="fs-card-rarity">' + esc(rarezaEtiquetaDe(entry, item)) + '</span>' +
+            '<span class="fs-card-rarity">' + etiqueta + '</span>' +
             '<span class="fs-card-name">' + esc(nombre) + '</span>' +
-            '<span class="fs-card-type">' + esc(tipo) + '</span>' +
-            '<span class="fs-card-price"><img class="fs-vbucks-icon" src="icons/icon-vbucks.svg" alt="V-Bucks"/>' + precio.toLocaleString('es-ES') + '</span>' +
+            cuerpoExtra +
+            '<span class="fs-card-price"><img class="fs-vbucks-icon" src="' + esc(VBUCKS_ICON_URL) + '" alt="Pavos"/>' + precio.toLocaleString('es-ES') + '</span>' +
           '</div>' +
         '</div>'
       );
+    }
+
+    function esSeccionMusica(nombre) {
+      var n = (nombre || '').toLowerCase();
+      return n.indexOf('música') > -1 || n.indexOf('musica') > -1 || n.indexOf('music') > -1 ||
+        n.indexOf('festival') > -1 || n.indexOf('jam') > -1 || n.indexOf('pista') > -1;
     }
 
     function agruparPorSeccion(entries) {
@@ -394,8 +398,19 @@
         if (!grupos[nombre]) { grupos[nombre] = []; orden.push(nombre); }
         grupos[nombre].push(e);
       });
-      return orden.map(function (nombre) { return { nombre: nombre, entries: grupos[nombre] }; });
+      var lista = orden.map(function (nombre) {
+        // Los lotes van primero dentro de cada sección; el resto conserva su orden.
+        var items = grupos[nombre].slice();
+        items.sort(function (a, b) { return (esEntryLote(b) ? 1 : 0) - (esEntryLote(a) ? 1 : 0); });
+        return { nombre: nombre, entries: items };
+      });
+      // Secciones de música (suelen tener decenas de pistas) van siempre al final,
+      // después de todas las demás — orden estable entre el resto.
+      lista.sort(function (a, b) { return (esSeccionMusica(a.nombre) ? 1 : 0) - (esSeccionMusica(b.nombre) ? 1 : 0); });
+      return lista;
     }
+
+    var COMPRIMIR_DESDE = 24; // secciones con más artículos que esto arrancan colapsadas
 
     function renderTienda(data) {
       var content = document.getElementById('fsContent');
@@ -405,12 +420,25 @@
         return;
       }
       var grupos = agruparPorSeccion(entries);
-      content.innerHTML = grupos.map(function (g) {
+      content.innerHTML = grupos.map(function (g, idx) {
+        var esGrande = g.entries.length > COMPRIMIR_DESDE;
         return (
-          '<h2 class="fs-section-title">' + esc(g.nombre) + '</h2>' +
-          '<div class="fs-grid">' + g.entries.map(tarjetaHTML).join('') + '</div>'
+          '<div class="fs-section-block">' +
+            '<h2 class="fs-section-title">' + esc(g.nombre) + '<span class="fs-section-count">' + g.entries.length + '</span></h2>' +
+            '<div class="fs-grid-wrap' + (esGrande ? ' is-collapsed' : '') + '" id="fsWrap' + idx + '">' +
+              '<div class="fs-grid">' + g.entries.map(tarjetaHTML).join('') + '</div>' +
+            '</div>' +
+            (esGrande ? '<button class="fs-expand-btn" data-target="fsWrap' + idx + '">Mostrar los ' + g.entries.length + ' artículos ↓</button>' : '') +
+          '</div>'
         );
       }).join('');
+      content.querySelectorAll('.fs-expand-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var wrap = document.getElementById(btn.getAttribute('data-target'));
+          if (wrap) wrap.classList.remove('is-collapsed');
+          btn.remove();
+        });
+      });
     }
 
     function actualizarSelloTienda(data) {
@@ -429,6 +457,7 @@
     function procesarTienda(json) {
       var data = json && json.data;
       if (!data) throw new Error('Respuesta vacía');
+      if (data.vbuckIcon) VBUCKS_ICON_URL = data.vbuckIcon;
       if (data.date !== ultimaFechaTienda) {
         ultimaFechaTienda = data.date;
         renderTienda(data);
@@ -482,112 +511,6 @@
     }
     actualizarCountdown();
     setInterval(actualizarCountdown, 1000);
-
-    // ====== Checklist de Sprites ======
-    var SPRITES = [
-      { id: 'earth', nombre: 'Earth Sprite', rareza: 'Rare', temporada: 'Inicio de temporada', habilidad: 'Más probabilidad de encontrar objetos raros extra al abrir cofres.' },
-      { id: 'fire', nombre: 'Fire Sprite', rareza: 'Rare', temporada: 'Inicio de temporada', habilidad: 'Crea una explosión de fuego cuando haces suficiente daño a un enemigo.' },
-      { id: 'water', nombre: 'Water Sprite', rareza: 'Rare', temporada: 'Inicio de temporada', habilidad: 'Restaura escudo mientras estás en el agua, para ti y tu escuadra cercana.' },
-      { id: 'duck', nombre: 'Duck Sprite', rareza: 'Epic', temporada: 'Inicio de temporada', habilidad: 'Emotear o tocar un instrumento restaura escudo.' },
-      { id: 'ghost', nombre: 'Ghost Sprite', rareza: 'Epic', temporada: 'Inicio de temporada', habilidad: 'Otorga sigilo (camuflaje) por un tiempo al recargar.' },
-      { id: 'demon', nombre: 'Demon Sprite', rareza: 'Epic', temporada: 'Inicio de temporada', habilidad: 'Absorbe algo de vida y escudo al eliminar a un rival.' },
-      { id: 'king', nombre: 'King Sprite', rareza: 'Epic', temporada: 'Inicio de temporada', habilidad: 'Tu pico hace más daño.' },
-      { id: 'dream', nombre: 'Dream Sprite', rareza: 'Legendary', temporada: 'Inicio de temporada', habilidad: 'Otorga un objeto aleatorio en cada nivel; explota con botín legendario al nivel máximo.' },
-      { id: 'punk', nombre: 'Punk Sprite', rareza: 'Legendary', temporada: 'Inicio de temporada', habilidad: 'A veces otorga munición ilimitada por un tiempo.' },
-      { id: 'burntpeanut', nombre: 'TheBurntPeanut Sprite', rareza: 'Mythic', temporada: 'Inicio de temporada', habilidad: 'Pequeña probabilidad de botín extra al eliminar rivales.' },
-      { id: 'zeropoint', nombre: 'Zero Point Sprite', rareza: 'Mythic', temporada: 'Inicio de temporada', habilidad: 'Genera una mini burbuja de escudo al usar un objeto de curación en ti mismo.' },
-      { id: 'fishy', nombre: 'Fishy Sprite', rareza: 'Rare', temporada: '25 jun. 2026', habilidad: 'Más velocidad al nadar, con un impulso extra de velocidad al recibir daño.' },
-      { id: 'aura', nombre: 'Aura Sprite', rareza: 'Epic', temporada: '25 jun. 2026', habilidad: 'Carga una Roca de Choque al hacer suficiente daño.' },
-      { id: 'striker', nombre: 'Striker Sprite', rareza: 'Epic', temporada: '25 jun. 2026', habilidad: 'Ganas Overdrive al trepar (Mantle) o saltar obstáculos (Hurdle).' },
-      { id: 'boss', nombre: 'Boss Sprite', rareza: 'Legendary', temporada: '25 jun. 2026', habilidad: 'Aumenta tu vida y escudo máximos.' },
-      { id: 'grim', nombre: 'Grim Sprite', rareza: 'Mythic', temporada: '25 jun. 2026', habilidad: 'Marca a quien te ataca, castigando a quien te presiona en combate.' },
-      { id: 'air', nombre: 'Air Sprite', rareza: 'Rare', temporada: '16 jul. 2026 — Hot Bat Summer', habilidad: 'Más velocidad al correr y saltar, y anula el daño por caída.' },
-      { id: 'seven', nombre: 'Seven Sprite', rareza: 'Legendary', temporada: '16 jul. 2026 — Hot Bat Summer', habilidad: 'Ves las huellas de jugadores rivales en el mapa, junto a tu escuadra.' },
-      { id: 'batman', nombre: 'Batman Sprite', rareza: 'Mythic', temporada: '16 jul. 2026 — Hot Bat Summer', habilidad: 'Despliega la Capa de Batman en el aire; más objetos raros en cofres.' },
-      { id: 'pollo', nombre: 'Pollo Sprite', rareza: 'Mythic', temporada: '16 jul. 2026 — Hot Bat Summer', habilidad: 'Restaura escudo poco a poco a ti y tu escuadra tras eliminar a un rival.' },
-      { id: 'vinijr', nombre: 'Vini Jr. Sprite', rareza: 'Mythic', temporada: '16 jul. 2026 — Hot Bat Summer', habilidad: 'Correr un rato vuelve tu deslizada destructiva y aumenta cadencia de disparo y recarga al golpear con ella.' }
-    ];
-    var VARIANTES = [
-      { key: 'base', label: 'Base' }, { key: 'oro', label: 'Oro' },
-      { key: 'gominola', label: 'Gominola' }, { key: 'galaxia', label: 'Galaxia' }, { key: 'holofoil', label: 'Holofoil' }
-    ];
-    var RAREZA_COLOR_SP = { Rare: '#4fc3f7', Epic: '#b455f2', Legendary: '#ff9830', Mythic: '#ffe066' };
-    var STORAGE_KEY = 'geoarmy_sprites_progress_v1';
-    var progreso = {};
-    try { progreso = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') || {}; } catch (e) { progreso = {}; }
-    var filtroSp = 'todos';
-    var spGrid = document.getElementById('spGrid');
-
-    function guardarSp() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progreso)); } catch (e) {} }
-    function claveDe(spriteId, variante) { return spriteId + ':' + variante; }
-
-    function actualizarProgresoSp() {
-      var total = SPRITES.length * VARIANTES.length;
-      var logrados = 0;
-      SPRITES.forEach(function (s) { VARIANTES.forEach(function (v) { if (progreso[claveDe(s.id, v.key)]) logrados++; }); });
-      document.getElementById('spProgressNum').textContent = logrados + ' / ' + total;
-      document.getElementById('spProgressFill').style.width = (total ? (logrados / total * 100) : 0) + '%';
-    }
-
-    function renderSprites() {
-      var lista = filtroSp === 'todos' ? SPRITES : SPRITES.filter(function (s) { return s.rareza === filtroSp; });
-      if (!lista.length) { spGrid.innerHTML = '<div class="sp-empty">No hay Sprites en este filtro.</div>'; return; }
-      spGrid.innerHTML = '';
-      lista.forEach(function (s) {
-        var color = RAREZA_COLOR_SP[s.rareza] || '#00d4ff';
-        var completos = VARIANTES.filter(function (v) { return progreso[claveDe(s.id, v.key)]; }).length;
-        var card = document.createElement('div');
-        card.className = 'sp-card' + (completos === VARIANTES.length ? ' sp-complete' : '');
-        card.style.setProperty('--sp-rarity-color', color);
-        card.innerHTML =
-          '<div class="sp-card-top">' +
-            '<div class="sp-icon-wrap">' +
-              '<span class="sp-icon-fallback">🧿</span>' +
-              '<img class="sp-icon-img" src="icons/sprites/' + s.id + '.png" alt="" loading="lazy" onerror="this.style.display=\'none\'"/>' +
-            '</div>' +
-            '<div class="sp-card-top-info">' +
-              '<div class="sp-card-head"><span class="sp-badge">' + s.rareza + '</span><span class="sp-season">' + s.temporada + '</span></div>' +
-              '<div class="sp-name">' + s.nombre + '</div>' +
-            '</div>' +
-          '</div>' +
-          '<div class="sp-ability">' + s.habilidad + '</div>' +
-          '<div class="sp-variants">' + VARIANTES.map(function (v) {
-            var checked = !!progreso[claveDe(s.id, v.key)];
-            return '<label class="sp-variant' + (checked ? ' checked' : '') + '" data-sprite="' + s.id + '" data-variant="' + v.key + '"><input type="checkbox" ' + (checked ? 'checked' : '') + '/>' + v.label + '</label>';
-          }).join('') + '</div>';
-        spGrid.appendChild(card);
-      });
-      spGrid.querySelectorAll('.sp-variant').forEach(function (label) {
-        label.addEventListener('click', function (e) {
-          e.preventDefault();
-          var key = claveDe(label.getAttribute('data-sprite'), label.getAttribute('data-variant'));
-          progreso[key] = !progreso[key];
-          guardarSp();
-          renderSprites();
-          actualizarProgresoSp();
-        });
-      });
-    }
-
-    var spBtns = document.querySelectorAll('.sp-filters button');
-    spBtns.forEach(function (b) {
-      b.addEventListener('click', function () {
-        spBtns.forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
-        b.setAttribute('aria-pressed', 'true');
-        filtroSp = b.getAttribute('data-f');
-        renderSprites();
-      });
-    });
-    document.getElementById('spResetBtn').addEventListener('click', function () {
-      if (!confirm('¿Reiniciar todo tu progreso de Sprites en este navegador?')) return;
-      progreso = {};
-      guardarSp();
-      renderSprites();
-      actualizarProgresoSp();
-    });
-
-    renderSprites();
-    actualizarProgresoSp();
   })();
   </script>
   <script src="js/premium.js"></script>
