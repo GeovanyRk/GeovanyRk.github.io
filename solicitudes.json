@@ -324,6 +324,19 @@
       "discordUsuario": "elkid_rd36",
       "fecha": "1/8/2026",
       "entregado": false
+    },
+    {
+      "id": 26,
+      "ganadorId": 87,
+      "ganadorUsuario": "Eddy",
+      "ganadorPremio": "2,000 Pavos",
+      "item": "Skin de spiderman",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1785809384891.jpg",
+      "nombreFortnite": "BigEddy_11",
+      "discordId": "749741825656619058",
+      "discordUsuario": "bigeddy11",
+      "fecha": "3/8/2026",
+      "entregado": false
     }
   ]
 }
