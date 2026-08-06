@@ -913,6 +913,16 @@
       "evento": "Piñata Fortnite",
       "fecha": "3/8/2026",
       "entregado": false
+    },
+    {
+      "id": 94,
+      "usuario": "mufasa",
+      "premio": "1 Pavos",
+      "cantidad": 1,
+      "moneda": "pavos",
+      "evento": "ruleta d fn",
+      "fecha": "5/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
