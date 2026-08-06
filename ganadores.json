@@ -922,7 +922,7 @@
       "moneda": "pavos",
       "evento": "ruleta d fn",
       "fecha": "5/8/2026",
-      "entregado": false
+      "entregado": true
     },
     {
       "id": 95,
