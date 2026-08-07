@@ -933,6 +933,16 @@
       "evento": "Ruleta de Fortnite",
       "fecha": "5/8/2026",
       "entregado": false
+    },
+    {
+      "id": 96,
+      "usuario": "Mufasa",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
+      "evento": "Ruleta de Fortnite",
+      "fecha": "6/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
