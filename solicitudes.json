@@ -363,6 +363,19 @@
       "discordUsuario": "emery_nile",
       "fecha": "6/8/2026",
       "entregado": false
+    },
+    {
+      "id": 29,
+      "ganadorId": 71,
+      "ganadorUsuario": "kid",
+      "ganadorPremio": "800 Pavos",
+      "item": "Emote Fame is a gun",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1786069441426.jpg",
+      "nombreFortnite": "elkid_RD36",
+      "discordId": "1072372475360448522",
+      "discordUsuario": "elkid_rd36",
+      "fecha": "6/8/2026",
+      "entregado": false
     }
   ]
 }
