@@ -350,6 +350,19 @@
       "discordUsuario": "iwonny",
       "fecha": "6/8/2026",
       "entregado": false
+    },
+    {
+      "id": 28,
+      "ganadorId": 85,
+      "ganadorUsuario": "Sky",
+      "ganadorPremio": "500 Pavos",
+      "item": "EMOTE: BAILE INOLVIDABLE (sección escuadrón del subidon)",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1786061453005.jpg",
+      "nombreFortnite": "Emery_Nile",
+      "discordId": "1414392697313296454",
+      "discordUsuario": "emery_nile",
+      "fecha": "6/8/2026",
+      "entregado": false
     }
   ]
 }
