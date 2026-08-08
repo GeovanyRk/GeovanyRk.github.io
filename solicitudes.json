@@ -376,6 +376,19 @@
       "discordUsuario": "elkid_rd36",
       "fecha": "6/8/2026",
       "entregado": false
+    },
+    {
+      "id": 30,
+      "ganadorId": 97,
+      "ganadorUsuario": "Mufasa",
+      "ganadorPremio": "2,500 Pavos",
+      "item": "Lote de Yoruichi y Kisuke",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1786157943568.jpeg",
+      "nombreFortnite": "Mufasa",
+      "discordId": "722967308804292679",
+      "discordUsuario": "purrfect.meow",
+      "fecha": "7/8/2026",
+      "entregado": false
     }
   ]
 }
