@@ -942,7 +942,7 @@
       "moneda": "pavos",
       "evento": "Ruleta de Fortnite",
       "fecha": "6/8/2026",
-      "entregado": false
+      "entregado": true
     }
   ],
   "gastos": [],
