@@ -831,7 +831,7 @@
       "moneda": "pavos",
       "evento": "Ruleta de Fortnite",
       "fecha": "30/7/2026",
-      "entregado": false,
+      "entregado": true,
       "rankeable": false
     },
     {
