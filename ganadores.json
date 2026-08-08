@@ -872,7 +872,7 @@
       "moneda": "pavos",
       "evento": "Compra en la tienda",
       "fecha": "2/8/2026",
-      "entregado": false
+      "entregado": true
     },
     {
       "id": 90,
