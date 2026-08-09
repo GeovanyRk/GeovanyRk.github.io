@@ -628,6 +628,12 @@
           history.replaceState(null, '', window.location.pathname);
           twitchAccessToken = accessToken;
 
+          // Salta a la sección de inmediato, sin animación y sin esperar
+          // la confirmación con Twitch — así no se ve el salto lento desde
+          // el inicio de la página.
+          var seccion = document.getElementById('puntos');
+          if(seccion) seccion.scrollIntoView({ behavior: 'instant', block: 'start' });
+
           fetch('https://api.twitch.tv/helix/users', {
             headers: { 'Client-ID': TWITCH_CLIENT_ID, Authorization: 'Bearer ' + accessToken }
           })
@@ -640,8 +646,6 @@
               saldoBox.classList.remove('pt-oculto');
               document.getElementById('pcUsuarioNombre').textContent = usuario.display_name;
               cargarSaldo();
-              var seccion = document.getElementById('puntos');
-              if(seccion) seccion.scrollIntoView();
             });
         }
       }
