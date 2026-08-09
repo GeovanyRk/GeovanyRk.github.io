@@ -389,6 +389,19 @@
       "discordUsuario": "purrfect.meow",
       "fecha": "7/8/2026",
       "entregado": false
+    },
+    {
+      "id": 31,
+      "ganadorId": 85,
+      "ganadorUsuario": "Sky",
+      "ganadorPremio": "500 Pavos",
+      "item": "Canción \"Melt\"",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1786233948252.jpg",
+      "nombreFortnite": "Emery_Nile",
+      "discordId": "1414392697313296454",
+      "discordUsuario": "emery_nile",
+      "fecha": "8/8/2026",
+      "entregado": false
     }
   ]
 }
