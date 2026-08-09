@@ -973,6 +973,16 @@
       "evento": "ruleta de fn",
       "fecha": "9/8/2026",
       "entregado": false
+    },
+    {
+      "id": 100,
+      "usuario": "Kiro",
+      "premio": "800 Pavos",
+      "cantidad": 800,
+      "moneda": "pavos",
+      "evento": "Ruleta de Fortnite",
+      "fecha": "9/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
