@@ -35,6 +35,7 @@
         <a href="fortnite.html">Fortnite</a>
         <a href="#horario">Horario</a>
         <a href="#ganadores">Ganadores</a>
+        <a href="#puntos">Puntos</a>
         <a href="#solicitudes">Solicitudes</a>
       </div>
       <a href="https://twitch.tv/geovannyrk" target="_blank" class="btn-nav">Ver stream →</a>
@@ -356,6 +357,136 @@
           filtro = b.getAttribute('data-f'); render();
         });
       });
+      load();
+      setInterval(load, 30000);
+    })();
+    </script>
+  </section>
+
+  <!-- PUNTOS -->
+  <section class="section panel" id="puntos">
+    <style>
+      #puntos .pt-wrap{max-width:940px;margin:0 auto;}
+      #puntos .pt-stats{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 22px;}
+      #puntos .pt-chip{flex:1;min-width:120px;background:var(--card-bg);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:18px 20px;box-shadow:var(--card-shadow);transition:transform .35s var(--ease),border-color .35s var(--ease);}
+      #puntos .pt-chip:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.18);}
+      #puntos .pt-chip b{font-family:'Space Grotesk',sans-serif;font-size:2rem;line-height:1;display:block;color:#a970ff;}
+      #puntos .pt-chip span{font-size:.7rem;text-transform:uppercase;letter-spacing:.13em;color:rgba(255,255,255,.5);}
+      #puntos .pt-rank-card{background:linear-gradient(180deg, rgba(169,112,255,.09), rgba(169,112,255,.03)), var(--bg2);border:1px solid rgba(169,112,255,.25);border-radius:20px;padding:20px 22px;margin-bottom:20px;box-shadow:var(--card-shadow);}
+      #puntos .pt-rank-title{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:600;color:#a970ff;margin-bottom:10px;}
+      #puntos .pt-rank-row{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+      #puntos .pt-rank-row:last-child{border-bottom:0;}
+      #puntos .pt-rank-pos{width:28px;flex-shrink:0;font-size:1.1rem;text-align:center;}
+      #puntos .pt-rank-name{flex:1;font-weight:600;color:#fff;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+      #puntos .pt-rank-total{color:#a970ff;font-family:'Space Grotesk',sans-serif;font-size:.88rem;white-space:nowrap;}
+      #puntos .pt-rank-empty{padding:14px 4px;color:rgba(255,255,255,.5);font-size:.9rem;text-align:center;}
+      #puntos .pt-search{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:#fff;padding:12px 16px;border-radius:12px;font-size:.95rem;font-family:inherit;margin-bottom:14px;}
+      #puntos .pt-search::placeholder{color:rgba(255,255,255,.4);}
+      #puntos .pt-search:focus{outline:2px solid var(--accent-light);outline-offset:1px;}
+      #puntos .pt-card{background:var(--card-bg);border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;box-shadow:var(--card-shadow);}
+      #puntos table{width:100%;border-collapse:collapse;}
+      #puntos thead th{font-family:'Space Grotesk',sans-serif;font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;text-align:left;color:rgba(255,255,255,.45);padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.08);}
+      #puntos tbody td{padding:15px 18px;border-bottom:1px solid rgba(255,255,255,.05);font-size:.93rem;vertical-align:middle;color:#fff;}
+      #puntos tbody tr:last-child td{border-bottom:0;}
+      #puntos tbody tr:hover{background:rgba(169,112,255,.07);}
+      #puntos .pt-pts{color:#a970ff;font-family:'Space Grotesk',sans-serif;}
+      #puntos .pt-empty{padding:44px 20px;text-align:center;color:rgba(255,255,255,.5);}
+      #puntos .pt-empty b{display:block;color:#fff;font-family:'Space Grotesk',sans-serif;margin-bottom:6px;font-size:1.05rem;}
+      #puntos .pt-foot{margin-top:16px;color:rgba(255,255,255,.4);font-size:.78rem;text-align:right;}
+      @media(max-width:620px){
+        #puntos thead{display:none;}
+        #puntos tbody tr{display:block;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.08);}
+        #puntos tbody td{display:flex;justify-content:space-between;gap:12px;border:0;padding:8px 16px;}
+        #puntos tbody td::before{content:attr(data-label);font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.45);}
+        #puntos tbody td.pt-user-cell::before{content:"";}
+      }
+    </style>
+    <div class="section-inner">
+      <div class="section-header" data-decor="PUNTOS">
+        <div class="section-tag">Puntos Geo Army</div>
+        <h2>Ranking de Puntos</h2>
+        <p>Los suscriptores ganan puntos automáticamente por chatear en el stream, más un cofre sorpresa cada rato. Se canjean por el Pase de Batalla y futuras dinámicas.</p>
+      </div>
+      <div class="pt-wrap" data-reveal>
+        <div class="pt-stats">
+          <div class="pt-chip"><b id="ptTotal">0</b><span>Suscriptores con puntos</span></div>
+          <div class="pt-chip"><b id="ptLider">—</b><span>Líder actual</span></div>
+          <div class="pt-chip"><b id="ptSuma">0</b><span>Puntos repartidos</span></div>
+        </div>
+        <div class="pt-rank-card">
+          <div class="pt-rank-title">🪙 Top 10</div>
+          <div id="ptRankBody"></div>
+        </div>
+        <input id="ptSearch" class="pt-search" type="search" placeholder="Buscar por usuario…" aria-label="Buscar en el ranking de puntos">
+        <div class="pt-card">
+          <table>
+            <thead>
+              <tr><th>#</th><th>Usuario</th><th>Puntos</th></tr>
+            </thead>
+            <tbody id="ptBody"></tbody>
+          </table>
+        </div>
+        <div class="pt-foot" id="ptUpdated">Cargando…</div>
+      </div>
+    </div>
+    <script>
+    (function(){
+      var DATA = [];
+      function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+      function renderRanking(){
+        var box = document.getElementById('ptRankBody');
+        if(!DATA.length){
+          box.innerHTML = '<div class="pt-rank-empty">Todavía nadie tiene Puntos Geo Army. ¡Sé el primero chateando en el stream! 🪙</div>';
+          return;
+        }
+        var medallas = ['🥇','🥈','🥉'];
+        box.innerHTML = DATA.slice(0,10).map(function(u,i){
+          var medalla = medallas[i] || ((i+1)+'.');
+          return '<div class="pt-rank-row">'+
+            '<span class="pt-rank-pos">'+medalla+'</span>'+
+            '<span class="pt-rank-name">'+esc(u.usuario)+'</span>'+
+            '<span class="pt-rank-total">'+u.puntos.toLocaleString()+' pts</span>'+
+          '</div>';
+        }).join('');
+      }
+      function render(){
+        var q = document.getElementById('ptSearch').value.trim().toLowerCase();
+        var rows = DATA;
+        if(q) rows = rows.filter(function(u){return (u.usuario||'').toLowerCase().indexOf(q)>-1;});
+        var tb = document.getElementById('ptBody');
+        if(!rows.length){
+          tb.innerHTML = '<tr><td colspan="3" class="pt-empty"><b>Sin resultados</b>Nadie con ese nombre todavía.</td></tr>';
+        } else {
+          tb.innerHTML = rows.map(function(u,i){
+            return '<tr>'+
+              '<td data-label="#">'+(i+1)+'</td>'+
+              '<td data-label="Usuario" class="pt-user-cell">'+esc(u.usuario)+'</td>'+
+              '<td data-label="Puntos" class="pt-pts">'+u.puntos.toLocaleString()+'</td>'+
+            '</tr>';
+          }).join('');
+        }
+        document.getElementById('ptTotal').textContent = DATA.length;
+        document.getElementById('ptLider').textContent = DATA.length ? DATA[0].usuario : '—';
+        document.getElementById('ptSuma').textContent = DATA.reduce(function(a,u){return a+u.puntos;},0).toLocaleString();
+      }
+      function load(){
+        fetch('puntos.json?t='+Date.now(),{cache:'no-store'})
+          .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+          .then(function(j){
+            DATA = Object.keys(j).map(function(k){return j[k];}).sort(function(a,b){return b.puntos-a.puntos;});
+            document.getElementById('ptUpdated').textContent =
+              'Actualizado ' + new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+            render();
+            renderRanking();
+          })
+          .catch(function(){
+            DATA = [];
+            document.getElementById('ptUpdated').textContent = 'Vista previa (sin puntos.json todavía)';
+            render();
+            renderRanking();
+          });
+      }
+      document.getElementById('ptSearch').addEventListener('input', render);
       load();
       setInterval(load, 30000);
     })();
