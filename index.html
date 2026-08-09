@@ -625,27 +625,16 @@
         var hash = new URLSearchParams(window.location.hash.replace('#', '?'));
         var accessToken = hash.get('access_token');
         if(accessToken){
-          history.replaceState(null, '', window.location.pathname);
-          if('scrollRestoration' in history) history.scrollRestoration = 'manual';
+          // Importante: se deja el hash en #puntos (no se borra del todo).
+          // El sitio usa un sistema de "paneles" (ver js/premium.js,
+          // initPanelNav) que muestra una sola sección a la vez según el
+          // #ancla de la URL — si el hash queda vacío, ese sistema activa
+          // "inicio" por defecto y por eso el login parecía mandarte a la
+          // página de inicio. Dejando #puntos, ese mismo sistema activa la
+          // sección correcta solo, sin que nosotros tengamos que forzar
+          // ningún scroll manual.
+          history.replaceState(null, '', window.location.pathname + '#puntos');
           twitchAccessToken = accessToken;
-
-          // Salta a la sección sin animación. Se intenta varias veces
-          // (ya, al terminar de cargar la página, y con un pequeño retraso)
-          // porque el layout todavía se puede mover mientras cargan
-          // imágenes/fuentes, y el navegador a veces resetea el scroll
-          // a 0 después de una navegación completa.
-          function saltarAPuntos(){
-            var seccion = document.getElementById('puntos');
-            if(!seccion) return;
-            var prevBehavior = document.documentElement.style.scrollBehavior;
-            document.documentElement.style.scrollBehavior = 'auto';
-            seccion.scrollIntoView({ behavior: 'instant', block: 'start' });
-            document.documentElement.style.scrollBehavior = prevBehavior;
-          }
-          saltarAPuntos();
-          window.addEventListener('load', saltarAPuntos);
-          setTimeout(saltarAPuntos, 300);
-          setTimeout(saltarAPuntos, 800);
 
           fetch('https://api.twitch.tv/helix/users', {
             headers: { 'Client-ID': TWITCH_CLIENT_ID, Authorization: 'Bearer ' + accessToken }
