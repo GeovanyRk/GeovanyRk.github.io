@@ -258,6 +258,14 @@
       font-size: .68rem; font-weight: 800; border-radius: 999px; padding: 1px 6px;
       box-shadow: 0 2px 6px rgba(0,0,0,.35);
     }
+    .sp-canjear-dup-btn {
+      font-family: 'Space Grotesk', sans-serif; font-size: .62rem; font-weight: 600; cursor: pointer;
+      border: 1px solid var(--border2); background: var(--bg2); color: var(--text2);
+      border-radius: 100px; padding: 3px 8px; display: inline-flex; align-items: center; gap: 3px;
+      transition: background .2s ease, color .2s ease;
+    }
+    .sp-canjear-dup-btn:hover { background: var(--bg3); color: var(--text); }
+    .sp-canjear-dup-btn img { width: 11px; height: 11px; }
   </style>
 </head>
 <body>
@@ -713,9 +721,35 @@
         item.innerHTML =
           '<div class="sp-coleccion-avatar">' + (owned ? '<img src="icons/sprites/' + esc(s.archivo) + '" alt="' + esc(s.nombre) + '">' : '') + '</div>' +
           '<div class="sp-coleccion-nombre">' + (owned ? esc(s.nombre) : '???') + '</div>' +
-          (cantidad > 1 ? '<div class="sp-coleccion-badge">x' + cantidad + '</div>' : '');
+          (cantidad > 1 ? '<div class="sp-coleccion-badge">x' + cantidad + '</div>' : '') +
+          (cantidad > 1 ? '<button class="sp-canjear-dup-btn" data-sprite="' + esc(s.id) + '">Canjear x1 (' + (SP_VALOR_DUPLICADO[s.rareza] || 15) + ' <img src="gcoin-icon.png" alt="G-coin">)</button>' : '');
         grid.appendChild(item);
       });
+
+      grid.querySelectorAll('.sp-canjear-dup-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () { spCanjearDuplicado(btn.getAttribute('data-sprite')); });
+      });
+    }
+
+    var SP_VALOR_DUPLICADO = { comun: 15, raro: 40, epico: 120 };
+
+    function spCanjearDuplicado(spriteId) {
+      var msgEl = document.getElementById('spPinataMsg');
+      fetch(SP_API_BASE + '/api/pinata/coleccion/canjear', {
+        method: 'POST',
+        headers: Object.assign({ 'Content-Type': 'application/json' }, spAuthHeaders()),
+        body: JSON.stringify({ spriteId: spriteId }),
+      })
+        .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
+        .then(function (r) {
+          if (!r.ok) { msgEl.textContent = r.data.error || 'No se pudo canjear'; return; }
+          spSaldo = r.data.saldoRestante;
+          document.getElementById('spSaldoValor').textContent = spSaldo;
+          spActualizarBoton();
+          msgEl.textContent = '¡Canjeaste una copia de más por ' + r.data.gcoinsGanados + ' G-coins!';
+          spCargarColeccion().then(spRenderColeccion);
+        })
+        .catch(function () { msgEl.textContent = 'Error de conexión con la tienda. Intenta de nuevo.'; });
     }
 
     function spSpawnConfetti(count) {
