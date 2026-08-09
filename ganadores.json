@@ -963,6 +963,16 @@
       "evento": "ruleta de fn",
       "fecha": "7/8/2026",
       "entregado": false
+    },
+    {
+      "id": 99,
+      "usuario": "Redmerison",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
+      "evento": "ruleta de fn",
+      "fecha": "9/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
