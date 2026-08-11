@@ -983,6 +983,16 @@
       "evento": "Ruleta de Fortnite",
       "fecha": "9/8/2026",
       "entregado": false
+    },
+    {
+      "id": 101,
+      "usuario": "Lisita",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
+      "evento": "Ruleta de Fortnite",
+      "fecha": "10/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
