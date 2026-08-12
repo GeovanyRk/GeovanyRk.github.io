@@ -415,6 +415,19 @@
       "discordUsuario": "warnerr8",
       "fecha": "11/8/2026",
       "entregado": false
+    },
+    {
+      "id": 33,
+      "ganadorId": 103,
+      "ganadorUsuario": "Demencia",
+      "ganadorPremio": "500 OW Coins",
+      "item": "500 OW Coins",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1786576938067.jpg",
+      "nombreFortnite": "DemenciaNoob #1115",
+      "discordId": "805574486648815616",
+      "discordUsuario": "maria_demente",
+      "fecha": "12/8/2026",
+      "entregado": false
     }
   ]
 }
