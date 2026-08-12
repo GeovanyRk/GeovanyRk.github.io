@@ -401,12 +401,29 @@
       #puntos .pt-canje-saldo{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 18px;margin-bottom:16px;}
       #puntos .pt-canje-saldo-nombre{font-weight:600;color:#fff;font-size:.95rem;}
       #puntos .pt-canje-saldo-valor{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;color:#a970ff;}
-      #puntos .pt-paquetes{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;}
-      #puntos .pt-paquete{background:var(--bg3);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;}
-      #puntos .pt-paquete b{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;color:#fff;}
-      #puntos .pt-paquete span{font-size:.78rem;color:rgba(255,255,255,.5);}
-      #puntos .pt-canjear-btn{width:100%;font-family:'Space Grotesk',sans-serif;font-weight:700;border:none;border-radius:var(--radius-sm);padding:10px;cursor:pointer;color:#fff;background:linear-gradient(135deg,var(--accent),#6c1fe0);transition:opacity .2s,transform .3s var(--ease);}
-      #puntos .pt-canjear-btn:hover:not(:disabled){transform:translateY(-2px);}
+      #puntos .pt-paquetes{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;}
+      #puntos .pt-paquete{background:var(--bg3);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:transform .3s var(--ease),border-color .3s var(--ease),box-shadow .3s var(--ease);}
+      #puntos .pt-paquete:hover{transform:translateY(-5px);border-color:rgba(255,255,255,.2);box-shadow:0 16px 34px -18px rgba(0,0,0,.5);}
+      #puntos .pt-paquete-img{position:relative;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+      #puntos .pt-paquete-img img{width:52%;height:52%;object-fit:contain;filter:drop-shadow(0 10px 22px rgba(0,0,0,.45));transition:transform .4s var(--ease);}
+      #puntos .pt-paquete:hover .pt-paquete-img img{transform:scale(1.08) rotate(-3deg);}
+      #puntos .pt-paquete-body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:5px;flex:1;}
+      #puntos .pt-paquete-tag{font-size:.64rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700;}
+      #puntos .pt-paquete-nombre{font-family:'Space Grotesk',sans-serif;font-size:1.04rem;color:#fff;font-weight:600;margin-bottom:2px;}
+      #puntos .pt-paquete-recibe{display:flex;align-items:center;gap:5px;font-size:.78rem;color:rgba(255,255,255,.5);margin-bottom:10px;}
+      #puntos .pt-paquete-recibe img{width:15px;height:15px;}
+      #puntos .pt-paquete-precio{font-family:'Space Grotesk',sans-serif;font-weight:700;color:#fff;font-size:1rem;margin-top:auto;margin-bottom:12px;}
+      #puntos .pt-paquete.pt-r-basico .pt-paquete-img{background:radial-gradient(circle at 50% 38%, rgba(169,112,255,.4), rgba(169,112,255,.04) 70%);}
+      #puntos .pt-paquete.pt-r-basico{border-top:3px solid #a970ff;}
+      #puntos .pt-paquete.pt-r-basico .pt-paquete-tag{color:#a970ff;}
+      #puntos .pt-paquete.pt-r-plus .pt-paquete-img{background:radial-gradient(circle at 50% 38%, rgba(70,224,208,.4), rgba(70,224,208,.04) 70%);}
+      #puntos .pt-paquete.pt-r-plus{border-top:3px solid #46e0d0;}
+      #puntos .pt-paquete.pt-r-plus .pt-paquete-tag{color:#46e0d0;}
+      #puntos .pt-paquete.pt-r-elite .pt-paquete-img{background:radial-gradient(circle at 50% 38%, rgba(255,210,63,.4), rgba(255,210,63,.04) 70%);}
+      #puntos .pt-paquete.pt-r-elite{border-top:3px solid #ffd23f;}
+      #puntos .pt-paquete.pt-r-elite .pt-paquete-tag{color:#ffd23f;}
+      #puntos .pt-canjear-btn{width:100%;font-family:'Space Grotesk',sans-serif;font-weight:700;border:none;padding:12px;cursor:pointer;color:#fff;background:linear-gradient(135deg,var(--accent),#6c1fe0);transition:opacity .2s,filter .2s;}
+      #puntos .pt-canjear-btn:hover:not(:disabled){filter:brightness(1.15);}
       #puntos .pt-canjear-btn:disabled{opacity:.4;cursor:not-allowed;background:var(--bg2);}
       #puntos .pt-canje-msg{margin-top:14px;font-size:.85rem;color:rgba(255,255,255,.6);text-align:center;}
       #puntos .pt-oculto{display:none!important;}
@@ -568,12 +585,25 @@
         window.location.href = 'https://id.twitch.tv/oauth2/authorize?' + params;
       }
 
+      // Nombres y "rareza" (color de acento) de cada paquete, estilo tienda de
+      // ítems — en el mismo orden que PAQUETES. Si agregas un paquete nuevo,
+      // agrega también su nombre y rareza aquí (si faltan, usa el último).
+      var PAQUETE_NOMBRES = ['Paquete Inicial', 'Paquete Plus', 'Paquete Elite'];
+      var PAQUETE_RAREZAS = ['pt-r-basico', 'pt-r-plus', 'pt-r-elite'];
+
       function renderPaquetes(){
-        paquetesBox.innerHTML = PAQUETES.map(function(p){
+        paquetesBox.innerHTML = PAQUETES.map(function(p, i){
           var puede = saldo >= p.puntos;
-          return '<div class="pt-paquete">' +
-            '<b>' + p.puntos.toLocaleString() + ' pts</b>' +
-            '<span>→ ' + p.gcoins + ' G-coins</span>' +
+          var rareza = PAQUETE_RAREZAS[i] || PAQUETE_RAREZAS[PAQUETE_RAREZAS.length - 1];
+          var nombre = PAQUETE_NOMBRES[i] || (p.puntos.toLocaleString() + ' pts');
+          return '<div class="pt-paquete ' + rareza + '">' +
+            '<div class="pt-paquete-img"><img src="gcoin-icon.png" alt="G-coins"></div>' +
+            '<div class="pt-paquete-body">' +
+              '<span class="pt-paquete-tag">Canje Geo Army</span>' +
+              '<span class="pt-paquete-nombre">' + nombre + '</span>' +
+              '<span class="pt-paquete-recibe"><img src="gcoin-icon.png" alt="">Recibes ' + p.gcoins + ' G-coins</span>' +
+              '<span class="pt-paquete-precio">🪙 ' + p.puntos.toLocaleString() + ' pts</span>' +
+            '</div>' +
             '<button class="pt-canjear-btn" data-puntos="' + p.puntos + '" ' + (puede ? '' : 'disabled') + '>' +
               (puede ? 'Canjear' : 'Puntos insuficientes') +
             '</button>' +
