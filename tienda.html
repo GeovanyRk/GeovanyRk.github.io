@@ -373,13 +373,14 @@
         const card = document.createElement('div');
         card.className = 'ti-card';
         card.innerHTML = `
-          <div class="ti-card-media">${/\.(svg|png|jpg|jpeg|webp)$/i.test(item.icono || '') ? `<img src="${item.icono}" class="ti-icono-img" alt="">` : `<span class="emoji">${item.icono || '🎁'}</span>`}</div>
+          <div class="ti-card-media">${/\.(svg|png|jpg|jpeg|webp)$/i.test(item.icono || '') ? `<img src="icons/${item.icono}" class="ti-icono-img" alt="">` : `<span class="emoji">${item.icono || '🎁'}</span>`}</div>
           <div class="ti-card-body">
             <p class="ti-card-eyebrow">Canje Geo Army</p>
             <p class="ti-item-nombre">${item.nombre}</p>
             <p class="ti-item-desc">${item.descripcion || ''}</p>
             <div class="ti-item-costo"><img src="gcoin-icon.png" class="ti-coin-icon" alt="G-coin"/> ${item.costo}</div>
             ${item.limiteMensual != null ? `<p class="ti-item-limite">${Math.max(item.limiteMensual - canjeadoEsteMes, 0)} de ${item.limiteMensual} disponible${item.limiteMensual > 1 ? 's' : ''} este mes (entre todos)</p>` : ''}
+            ${item.limiteMensual == null && item.stock !== null ? `<p class="ti-item-limite">${item.stock} disponible${item.stock === 1 ? '' : 's'} en total</p>` : ''}
           </div>
           <button class="ti-canjear-btn" ${puedeCanjear ? '' : 'disabled'}>
             ${!usuario ? 'Inicia sesión' : (item.stock === 0 || agotadoEsteMes ? 'Agotado' : 'Canjear')}
