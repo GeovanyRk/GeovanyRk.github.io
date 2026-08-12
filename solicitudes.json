@@ -402,6 +402,19 @@
       "discordUsuario": "emery_nile",
       "fecha": "8/8/2026",
       "entregado": false
+    },
+    {
+      "id": 32,
+      "ganadorId": 84,
+      "ganadorUsuario": "warner",
+      "ganadorPremio": "700 Pavos",
+      "item": "Skin Phantom Blade Zero",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1786500544526.jpg",
+      "nombreFortnite": "Warnerr8",
+      "discordId": "231468237257179137",
+      "discordUsuario": "warnerr8",
+      "fecha": "11/8/2026",
+      "entregado": false
     }
   ]
 }
