@@ -1003,6 +1003,16 @@
       "evento": "Ruleta de Fortnite",
       "fecha": "11/8/2026",
       "entregado": false
+    },
+    {
+      "id": 103,
+      "usuario": "Demencia",
+      "premio": "500 OW Coins",
+      "cantidad": 500,
+      "moneda": "owcoins",
+      "evento": "Ruleta de OW",
+      "fecha": "11/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
