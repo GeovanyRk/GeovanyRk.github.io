@@ -88,55 +88,61 @@
       display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.4rem;
     }
     .ti-card {
+      --card-accent: #9147ff;
       position: relative; overflow: hidden; isolation: isolate;
       background: var(--card-bg); border: 1px solid var(--border);
-      border-radius: var(--radius-lg); padding: 1.7rem 1.6rem 1.6rem;
-      display: flex; flex-direction: column; gap: 12px;
+      border-radius: var(--radius-lg); padding: 0;
+      display: flex; flex-direction: column;
       box-shadow: var(--card-shadow);
       transition: border-color .3s ease, transform .4s var(--ease), box-shadow .4s var(--ease);
     }
+    .ti-card:nth-of-type(3n+1) { --card-accent: #9147ff; }
+    .ti-card:nth-of-type(3n+2) { --card-accent: #2dd4bf; }
+    .ti-card:nth-of-type(3n)   { --card-accent: #ffd23f; }
     .ti-card::before {
-      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-      background: linear-gradient(90deg, #8a5a00, #ffd23f, #fff6cf, #ffd23f, #8a5a00);
-      opacity: 0; transition: opacity .3s ease;
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; z-index: 2;
+      background: var(--card-accent);
+      box-shadow: 0 0 16px 0 var(--card-accent);
     }
-    .ti-card:hover { border-color: rgba(255,210,63,.35); transform: translateY(-5px); box-shadow: var(--card-shadow), 0 20px 42px -24px rgba(255,210,63,.28); }
-    .ti-card:hover::before { opacity: 1; }
-    .ti-icono {
-      width: 54px; height: 54px; display: flex; align-items: center; justify-content: center;
-      font-size: 1.7rem; border-radius: 15px;
-      background: radial-gradient(circle at 30% 30%, rgba(255,210,63,.24), rgba(255,210,63,.06));
-      border: 1px solid rgba(255,210,63,.25);
+    .ti-card:hover { border-color: color-mix(in srgb, var(--card-accent) 45%, var(--border)); transform: translateY(-5px); box-shadow: var(--card-shadow), 0 20px 42px -24px color-mix(in srgb, var(--card-accent) 55%, transparent); }
+    .ti-card-media {
+      width: 100%; height: 148px; margin-top: 3px;
+      display: flex; align-items: center; justify-content: center;
+      background:
+        radial-gradient(60% 80% at 50% 30%, color-mix(in srgb, var(--card-accent) 30%, transparent), transparent 70%),
+        var(--bg2);
+      border-bottom: 1px solid var(--border);
     }
-    .ti-icono-img { width: 40px; height: 40px; object-fit: contain; }
+    .ti-icono-img { width: 64px; height: 64px; object-fit: contain; filter: drop-shadow(0 8px 18px rgba(0,0,0,.4)); }
+    .ti-card-media .emoji { font-size: 2.6rem; filter: drop-shadow(0 8px 18px rgba(0,0,0,.4)); }
     .ti-coin-icon { height: 1em; width: 1em; vertical-align: -0.15em; }
-    .ti-item-nombre { font-family: 'Space Grotesk', sans-serif; font-size: 1.08rem; }
+    .ti-card-body { padding: 1.3rem 1.4rem 1.4rem; display: flex; flex-direction: column; gap: 8px; flex-grow: 1; }
+    .ti-card-eyebrow { font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .09em; color: var(--card-accent); }
+    .ti-item-nombre { font-family: 'Space Grotesk', sans-serif; font-size: 1.08rem; font-weight: 700; }
     .ti-item-desc { color: var(--text2); font-size: .9rem; flex-grow: 1; line-height: 1.55; }
     .ti-item-costo {
       display: inline-flex; align-items: center; gap: 6px; width: fit-content;
       color: #ffd23f; font-weight: 700; font-family: 'Space Grotesk', sans-serif;
-      background: rgba(255,210,63,.1); border: 1px solid rgba(255,210,63,.25);
-      padding: 5px 12px; border-radius: 100px; font-size: .92rem;
+      font-size: 1rem; margin-top: 4px;
     }
     .ti-item-limite { color: var(--text3); font-size: .8rem; margin: -4px 0 0; }
 
     .ti-canjear-btn {
       position: relative; overflow: hidden; isolation: isolate;
       font-family: 'Space Grotesk', sans-serif; font-weight: 700; letter-spacing: .01em;
-      border: none; border-radius: var(--radius-sm);
-      padding: 12px 18px; cursor: pointer; color: #fff;
-      background: linear-gradient(135deg, var(--accent), #6c1fe0);
-      transition: opacity .2s, transform .35s var(--ease), box-shadow .35s var(--ease);
-      box-shadow: 0 10px 26px -12px rgba(145,71,255,.55);
+      border: none; border-top: 1px solid var(--border); border-radius: 0;
+      width: 100%; padding: 14px 18px; cursor: pointer; color: #fff;
+      background: linear-gradient(135deg, var(--card-accent), var(--accent2, #6c1fe0));
+      transition: opacity .2s, filter .35s var(--ease), box-shadow .35s var(--ease);
     }
     .ti-canjear-btn::before {
       content: ""; position: absolute; inset: 0; z-index: -1;
       background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.3) 50%, transparent 70%);
       transform: translateX(-120%); transition: transform .7s var(--ease);
     }
-    .ti-canjear-btn:hover:not(:disabled) { transform: translateY(-2px); }
+    .ti-canjear-btn:hover:not(:disabled) { filter: brightness(1.1); }
     .ti-canjear-btn:hover:not(:disabled)::before { transform: translateX(120%); }
-    .ti-canjear-btn:disabled { opacity: .4; cursor: not-allowed; background: var(--bg3); box-shadow: none; }
+    .ti-canjear-btn:disabled { opacity: 1; color: var(--text3); cursor: not-allowed; background: var(--bg3); box-shadow: none; }
 
     .ti-msg { max-width: 900px; margin: -1.5rem auto 2rem; text-align: center; color: var(--text2); font-size: .9rem; padding: 0 1.5rem; }
     .ti-oculto { display: none !important; }
@@ -367,11 +373,14 @@
         const card = document.createElement('div');
         card.className = 'ti-card';
         card.innerHTML = `
-          <div class="ti-icono">${/\.(svg|png|jpg|jpeg|webp)$/i.test(item.icono || '') ? `<img src="${item.icono}" class="ti-icono-img" alt="">` : (item.icono || '🎁')}</div>
-          <p class="ti-item-nombre">${item.nombre}</p>
-          <p class="ti-item-desc">${item.descripcion || ''}</p>
-          <div class="ti-item-costo"><img src="gcoin-icon.png" class="ti-coin-icon" alt="G-coin"/> ${item.costo}</div>
-          ${item.limiteMensual != null ? `<p class="ti-item-limite">${Math.max(item.limiteMensual - canjeadoEsteMes, 0)} de ${item.limiteMensual} disponible${item.limiteMensual > 1 ? 's' : ''} este mes (entre todos)</p>` : ''}
+          <div class="ti-card-media">${/\.(svg|png|jpg|jpeg|webp)$/i.test(item.icono || '') ? `<img src="${item.icono}" class="ti-icono-img" alt="">` : `<span class="emoji">${item.icono || '🎁'}</span>`}</div>
+          <div class="ti-card-body">
+            <p class="ti-card-eyebrow">Canje Geo Army</p>
+            <p class="ti-item-nombre">${item.nombre}</p>
+            <p class="ti-item-desc">${item.descripcion || ''}</p>
+            <div class="ti-item-costo"><img src="gcoin-icon.png" class="ti-coin-icon" alt="G-coin"/> ${item.costo}</div>
+            ${item.limiteMensual != null ? `<p class="ti-item-limite">${Math.max(item.limiteMensual - canjeadoEsteMes, 0)} de ${item.limiteMensual} disponible${item.limiteMensual > 1 ? 's' : ''} este mes (entre todos)</p>` : ''}
+          </div>
           <button class="ti-canjear-btn" ${puedeCanjear ? '' : 'disabled'}>
             ${!usuario ? 'Inicia sesión' : (item.stock === 0 || agotadoEsteMes ? 'Agotado' : 'Canjear')}
           </button>
