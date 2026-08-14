@@ -189,6 +189,17 @@
       </div>
     </div>
 
+    <div class="pb-nivel-box" id="pbPuntosBox" style="margin-top:1rem;">
+      <div class="pb-nivel-card" style="text-align:left; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;">
+        <div>
+          <div class="pb-nivel-label">Puntos Geo Army</div>
+          <div style="font-family:'Space Grotesk',sans-serif; font-size:1.4rem; font-weight:700;" id="pbPuntosSaldo">—</div>
+          <div class="pb-barra-texto" id="pbPuntosTexto"></div>
+        </div>
+        <button id="pbCanjearPuntosBtn" class="pb-eleccion-btn" style="padding:12px 20px; font-size:14px;">Canjear por Experiencia</button>
+      </div>
+    </div>
+
     <div class="pb-seccion-titulo">Lo que ya ganaste</div>
     <div class="pb-seccion-sub">Todo lo que desbloqueaste hasta tu nivel actual.</div>
     <div class="pb-ganado-lista" id="pbGanadoLista"></div>
@@ -415,8 +426,51 @@
       });
     }
 
+    // ===== PUNTOS GEO ARMY -> EXPERIENCIA =====
+    async function cargarPuntosSaldo() {
+      try {
+        const res = await fetch(`${API_BASE}/api/pase/puntos-saldo`, { headers: authHeaders() });
+        const data = await res.json();
+        if (!res.ok) {
+          $('pbPuntosBox').classList.add('pb-oculto');
+          return;
+        }
+        $('pbPuntosSaldo').textContent = data.saldo + ' pts';
+        $('pbPuntosTexto').textContent = `Cuesta ${data.costoCanje} pts por canje (+${10} XP)`;
+        const btn = $('pbCanjearPuntosBtn');
+        btn.disabled = data.saldo < data.costoCanje;
+        if (btn.disabled) btn.style.opacity = '0.5';
+      } catch (e) {
+        $('pbPuntosBox').classList.add('pb-oculto');
+      }
+    }
+
+    async function canjearConPuntos() {
+      const btn = $('pbCanjearPuntosBtn');
+      btn.disabled = true;
+      try {
+        const res = await fetch(`${API_BASE}/api/pase/canjear-puntos`, {
+          method: 'POST',
+          headers: authHeaders(),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          alert(data.error || 'No se pudo canjear');
+          btn.disabled = false;
+          return;
+        }
+        renderTodo(window.__pbUsuario, data.nivel, data.xp);
+        await cargarPuntosSaldo();
+      } catch (e) {
+        alert('Error de conexión, intenta de nuevo.');
+        btn.disabled = false;
+      }
+    }
+    // ===== fin puntos geo army =====
+
     async function init() {
       loginBtn.addEventListener('click', pedirLogin);
+      $('pbCanjearPuntosBtn').addEventListener('click', canjearConPuntos);
 
       const hash = new URLSearchParams(window.location.hash.replace('#', '?'));
       const accessToken = hash.get('access_token');
@@ -433,6 +487,7 @@
             const data = await res.json();
             elecciones = data.elecciones || {};
             renderTodo(u, data.nivel || 0, data.xp || 0);
+            cargarPuntosSaldo();
           } catch (e) {
             msg.textContent = 'No se pudo cargar el pase de batalla. Intenta de nuevo en un rato.';
           }
