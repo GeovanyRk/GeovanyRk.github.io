@@ -1016,12 +1016,12 @@
     },
     {
       "id": 104,
-      "usuario": "RickyeYT",
-      "premio": "Pase de Batalla de Fortnite",
-      "cantidad": null,
-      "moneda": null,
-      "evento": "Tienda de Oro",
-      "fecha": "12/8/2026",
+      "usuario": "Maton",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
+      "evento": "Ruleta de Fortnite",
+      "fecha": "13/8/2026",
       "entregado": false
     }
   ],
