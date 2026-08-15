@@ -186,6 +186,10 @@
       #ganadores .gn-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;}
       #ganadores .gn-badge.pend{color:#ffb13f;background:rgba(255,177,63,.13);}
       #ganadores .gn-badge.done{color:#46e0a8;background:rgba(70,224,168,.12);}
+      #ganadores .gn-badge.exp{color:#9aa0aa;background:rgba(154,160,170,.13);}
+      #ganadores .gn-chip.exp b{color:#9aa0aa;}
+      #ganadores .gn-cd{display:inline-block;margin-left:8px;font-size:.72rem;font-weight:600;color:#ffb13f;font-family:'Space Grotesk',sans-serif;vertical-align:middle;white-space:nowrap;}
+      #ganadores .gn-cd.urge{color:#ef4444;}
       #ganadores .gn-empty{padding:44px 20px;text-align:center;color:rgba(255,255,255,.5);}
       #ganadores .gn-empty b{display:block;color:#fff;font-family:'Space Grotesk',sans-serif;margin-bottom:6px;font-size:1.05rem;}
       #ganadores .gn-foot{margin-top:16px;color:rgba(255,255,255,.4);font-size:.78rem;text-align:right;}
@@ -209,6 +213,7 @@
         #ganadores tbody td{display:flex;justify-content:space-between;gap:12px;border:0;padding:8px 16px;}
         #ganadores tbody td::before{content:attr(data-label);font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.45);}
         #ganadores tbody td.gn-user-cell::before{content:"";}
+        #ganadores tbody td[data-label="Estado"]{flex-wrap:wrap;justify-content:flex-end;gap:6px;}
       }
     </style>
     <div class="section-inner">
@@ -222,6 +227,7 @@
           <div class="gn-chip gold"><b id="gnTotal">0</b><span>Ganadores</span></div>
           <div class="gn-chip pend"><b id="gnPend">0</b><span>Por entregar</span></div>
           <div class="gn-chip done"><b id="gnDone">0</b><span>Entregados</span></div>
+          <div class="gn-chip exp"><b id="gnExp">0</b><span>Caducados</span></div>
         </div>
         <div class="gn-rank-card">
           <div class="gn-rank-head">
@@ -236,6 +242,7 @@
             <button data-f="todos" aria-pressed="true">Todos</button>
             <button data-f="pendientes" aria-pressed="false">Pendientes</button>
             <button data-f="entregados" aria-pressed="false">Entregados</button>
+            <button data-f="caducados" aria-pressed="false">Caducados</button>
           </div>
         </div>
         <div class="gn-card">
@@ -258,6 +265,30 @@
       ]};
       var DATA = [], filtro = 'todos', RANKING_DESDE_ID = 0;
       var MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+      // ===== Timer de reclamo (2 semanas) =====
+      var DIAS_LIMITE = 14;                             // días para reclamar antes de caducar
+      var TIMER_DESDE = new Date(2026, 7, 15).getTime();// base para premios viejos sin 'creado' (15/08/2026). Cámbialo si publicas otro día.
+      function inicioMs(g){
+        if(g.creado){ var t = new Date(g.creado).getTime(); if(!isNaN(t)) return t; }
+        return TIMER_DESDE;                             // premios sin marca de tiempo: cuentan desde hoy
+      }
+      function expiraMs(g){ return inicioMs(g) + DIAS_LIMITE*86400000; }
+      function estadoGn(g){
+        if(g.entregado) return 'entregado';
+        if(Date.now() >= expiraMs(g)) return 'caducado';
+        return 'pendiente';
+      }
+      function cuentaRegresiva(ms){
+        if(ms<=0) return 'Caducado';
+        var d=Math.floor(ms/86400000); ms%=86400000;
+        var h=Math.floor(ms/3600000);  ms%=3600000;
+        var m=Math.floor(ms/60000);    ms%=60000;
+        var s=Math.floor(ms/1000);
+        if(d>0) return d+'d '+h+'h';
+        if(h>0) return h+'h '+m+'m';
+        if(m>0) return m+'m '+s+'s';
+        return s+'s';
+      }
       function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
       function parseFechaGn(f){
         if(!f) return null;
@@ -305,29 +336,53 @@
       function render(){
         var q = document.getElementById('gnSearch').value.trim().toLowerCase();
         var rows = DATA.slice().sort(function(a,b){return b.id-a.id;});
-        if(filtro==='pendientes') rows = rows.filter(function(g){return !g.entregado;});
-        if(filtro==='entregados') rows = rows.filter(function(g){return g.entregado;});
+        if(filtro==='pendientes') rows = rows.filter(function(g){return estadoGn(g)==='pendiente';});
+        if(filtro==='entregados') rows = rows.filter(function(g){return estadoGn(g)==='entregado';});
+        if(filtro==='caducados')  rows = rows.filter(function(g){return estadoGn(g)==='caducado';});
         if(q) rows = rows.filter(function(g){return (g.usuario+' '+g.premio+' '+(g.evento||'')).toLowerCase().indexOf(q)>-1;});
         var tb = document.getElementById('gnBody');
         if(!rows.length){
           tb.innerHTML = '<tr><td colspan="6" class="gn-empty"><b>Sin resultados</b>Aún no hay ganadores que coincidan.</td></tr>';
         } else {
           tb.innerHTML = rows.map(function(g){
+            var est = estadoGn(g), estadoHtml;
+            if(est==='entregado'){
+              estadoHtml = '<span class="gn-badge done">Entregado</span>';
+            } else if(est==='caducado'){
+              estadoHtml = '<span class="gn-badge exp">Caducado</span>';
+            } else {
+              var restante = expiraMs(g) - Date.now();
+              var urge = restante < 86400000 ? ' urge' : '';   // menos de 1 día = rojo
+              estadoHtml = '<span class="gn-badge pend">Pendiente</span>'+
+                '<span class="gn-cd'+urge+'" data-exp="'+expiraMs(g)+'">⏳ '+cuentaRegresiva(restante)+'</span>';
+            }
             return '<tr>'+
               '<td data-label="#" class="gn-id">#'+g.id+'</td>'+
               '<td data-label="Usuario" class="gn-user-cell"><span class="gn-user">'+esc(g.usuario)+'</span></td>'+
               '<td data-label="Premio" class="gn-prize">'+esc(g.premio)+'</td>'+
               '<td data-label="Evento" class="gn-ev">'+esc(g.evento||'General')+'</td>'+
               '<td data-label="Fecha" class="gn-ev">'+esc(g.fecha||'')+'</td>'+
-              '<td data-label="Estado">'+(g.entregado
-                ? '<span class="gn-badge done">Entregado</span>'
-                : '<span class="gn-badge pend">Pendiente</span>')+'</td>'+
+              '<td data-label="Estado">'+estadoHtml+'</td>'+
             '</tr>';
           }).join('');
         }
         document.getElementById('gnTotal').textContent = DATA.length;
-        document.getElementById('gnPend').textContent  = DATA.filter(function(g){return !g.entregado;}).length;
-        document.getElementById('gnDone').textContent  = DATA.filter(function(g){return g.entregado;}).length;
+        document.getElementById('gnPend').textContent  = DATA.filter(function(g){return estadoGn(g)==='pendiente';}).length;
+        document.getElementById('gnDone').textContent  = DATA.filter(function(g){return estadoGn(g)==='entregado';}).length;
+        var expEl = document.getElementById('gnExp');
+        if(expEl) expEl.textContent = DATA.filter(function(g){return estadoGn(g)==='caducado';}).length;
+      }
+      // Actualiza los contadores en vivo cada segundo; re-renderiza si alguno acaba de caducar
+      function tick(){
+        var cds = document.querySelectorAll('#ganadores .gn-cd');
+        var recargar = false;
+        cds.forEach(function(el){
+          var restante = parseInt(el.getAttribute('data-exp'),10) - Date.now();
+          if(restante <= 0){ recargar = true; return; }
+          el.textContent = '⏳ ' + cuentaRegresiva(restante);
+          if(restante < 86400000) el.classList.add('urge');
+        });
+        if(recargar) render();
       }
       function load(){
         fetch('ganadores.json?t='+Date.now(),{cache:'no-store'})
@@ -359,6 +414,7 @@
       });
       load();
       setInterval(load, 30000);
+      setInterval(tick, 1000);
     })();
     </script>
   </section>
