@@ -1033,6 +1033,16 @@
       "evento": "Tienda de Oro",
       "fecha": "12/8/2026",
       "entregado": false
+    },
+    {
+      "id": 106,
+      "usuario": "Kirby",
+      "premio": "2,000 OW Coins",
+      "cantidad": 2000,
+      "moneda": "owcoins",
+      "evento": "completo los driver",
+      "fecha": "15/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
