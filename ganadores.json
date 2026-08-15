@@ -1073,6 +1073,16 @@
       "evento": "Recompensa de Cofre",
       "fecha": "15/8/2026",
       "entregado": false
+    },
+    {
+      "id": 110,
+      "usuario": "Mati",
+      "premio": "1,000 OW Coins",
+      "cantidad": 1000,
+      "moneda": "owcoins",
+      "evento": "Recompensa de Stream 6hrs",
+      "fecha": "15/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
