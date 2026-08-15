@@ -1043,6 +1043,16 @@
       "evento": "completo los driver",
       "fecha": "15/8/2026",
       "entregado": false
+    },
+    {
+      "id": 107,
+      "usuario": "metrick",
+      "premio": "10 Pavos",
+      "cantidad": 10,
+      "moneda": "pavos",
+      "evento": "Evento de fortnite",
+      "fecha": "15/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
