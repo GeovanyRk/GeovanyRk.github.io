@@ -1053,6 +1053,16 @@
       "evento": "Evento de fortnite",
       "fecha": "15/8/2026",
       "entregado": false
+    },
+    {
+      "id": 108,
+      "usuario": "Mati",
+      "premio": "50 Pavos",
+      "cantidad": 50,
+      "moneda": "pavos",
+      "evento": "Recompensa de Cofre",
+      "fecha": "15/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
