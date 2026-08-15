@@ -323,7 +323,9 @@
       "discordId": "1072372475360448522",
       "discordUsuario": "elkid_rd36",
       "fecha": "1/8/2026",
-      "entregado": false
+      "entregado": false,
+      "rechazado": true,
+      "motivoRechazo": "ya no esta en la tienda"
     },
     {
       "id": 26,
