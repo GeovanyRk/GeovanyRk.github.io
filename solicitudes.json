@@ -180,7 +180,9 @@
       "discordId": "775884502462627871",
       "discordUsuario": "shadowcasreal.",
       "fecha": "23/7/2026",
-      "entregado": false
+      "entregado": false,
+      "rechazado": true,
+      "motivoRechazo": "ya no esta en la tienda"
     },
     {
       "id": 15,
