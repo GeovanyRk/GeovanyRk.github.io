@@ -438,6 +438,21 @@
       "discordUsuario": "maria_demente",
       "fecha": "12/8/2026",
       "entregado": false
+    },
+    {
+      "id": 34,
+      "ganadorId": 97,
+      "ganadorUsuario": "Mufasa",
+      "ganadorPremio": "2,500 Pavos",
+      "item": "Skin Monet",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1786835779118.jpg",
+      "nombreFortnite": "Mufasa",
+      "discordId": "977943323849420860",
+      "discordUsuario": "mufasa1338",
+      "fecha": "15/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
