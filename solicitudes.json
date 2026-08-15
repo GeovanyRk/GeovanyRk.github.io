@@ -396,7 +396,9 @@
       "discordId": "722967308804292679",
       "discordUsuario": "purrfect.meow",
       "fecha": "7/8/2026",
-      "entregado": false
+      "entregado": false,
+      "rechazado": true,
+      "motivoRechazo": "ya no esta en la tienda"
     },
     {
       "id": 31,
