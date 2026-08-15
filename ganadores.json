@@ -1103,6 +1103,16 @@
       "evento": "Recompensa de Stream 6hrs",
       "fecha": "15/8/2026",
       "entregado": false
+    },
+    {
+      "id": 113,
+      "usuario": "Kitty",
+      "premio": "1,000 OW Coins",
+      "cantidad": 1000,
+      "moneda": "owcoins",
+      "evento": "Recompensa de Stream 6hrs",
+      "fecha": "15/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
