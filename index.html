@@ -394,6 +394,7 @@
       #solicitudes .sc-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;}
       #solicitudes .sc-badge.pend{color:#ffb13f;background:rgba(255,177,63,.13);}
       #solicitudes .sc-badge.done{color:#46e0a8;background:rgba(70,224,168,.12);}
+      #solicitudes .sc-badge.rej{color:#ef4444;background:rgba(239,68,68,.13);}
       #solicitudes .sc-empty{padding:44px 20px;text-align:center;color:rgba(255,255,255,.5);}
       #solicitudes .sc-empty b{display:block;color:#fff;font-family:'Space Grotesk',sans-serif;margin-bottom:6px;font-size:1.05rem;}
       #solicitudes .sc-foot{margin-top:16px;color:rgba(255,255,255,.4);font-size:.78rem;text-align:right;}
@@ -420,6 +421,7 @@
             <button data-f="todos" aria-pressed="true">Todos</button>
             <button data-f="pendientes" aria-pressed="false">Pendientes</button>
             <button data-f="entregados" aria-pressed="false">Entregadas</button>
+            <button data-f="rechazados" aria-pressed="false">Rechazadas</button>
           </div>
         </div>
         <div class="sc-card" id="scCard"></div>
@@ -433,28 +435,30 @@
       function render(){
         var q = document.getElementById('scSearch').value.trim().toLowerCase();
         var rows = DATA.slice().sort(function(a,b){return b.id-a.id;});
-        if(filtro==='pendientes') rows = rows.filter(function(s){return !s.entregado;});
+        if(filtro==='pendientes') rows = rows.filter(function(s){return !s.entregado && !s.rechazado;});
         if(filtro==='entregados') rows = rows.filter(function(s){return s.entregado;});
+        if(filtro==='rechazados') rows = rows.filter(function(s){return s.rechazado;});
         if(q) rows = rows.filter(function(s){return (s.nombreFortnite+' '+s.item+' '+(s.ganadorPremio||'')).toLowerCase().indexOf(q)>-1;});
         var card = document.getElementById('scCard');
         if(!rows.length){
           card.innerHTML = '<div class="sc-empty"><b>Sin resultados</b>Aún no hay solicitudes que coincidan.</div>';
         } else {
           card.innerHTML = rows.map(function(s){
+            var badge = s.entregado
+              ? '<span class="sc-badge done">Entregado</span>'
+              : (s.rechazado ? '<span class="sc-badge rej">Rechazado</span>' : '<span class="sc-badge pend">Pendiente</span>');
             return '<div class="sc-row">'+
               '<img class="sc-thumb" src="'+esc(s.imagenUrl||'')+'" alt="" onerror="this.style.visibility=\'hidden\'"/>'+
               '<div class="sc-info">'+
                 '<div class="sc-item">'+esc(s.item)+'</div>'+
                 '<div class="sc-meta">'+esc(s.nombreFortnite)+' · ganó '+esc(s.ganadorPremio||'')+'</div>'+
               '</div>'+
-              (s.entregado
-                ? '<span class="sc-badge done">Entregado</span>'
-                : '<span class="sc-badge pend">Pendiente</span>')+
+              badge+
             '</div>';
           }).join('');
         }
         document.getElementById('scTotal').textContent = DATA.length;
-        document.getElementById('scPend').textContent  = DATA.filter(function(s){return !s.entregado;}).length;
+        document.getElementById('scPend').textContent  = DATA.filter(function(s){return !s.entregado && !s.rechazado;}).length;
         document.getElementById('scDone').textContent  = DATA.filter(function(s){return s.entregado;}).length;
       }
       function load(){
