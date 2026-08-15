@@ -1023,7 +1023,17 @@
       "evento": "Ruleta de Fortnite",
       "fecha": "13/8/2026",
       "entregado": false
-    }
+    },
+        {
+                "id": 105,
+                "usuario": "RickyeYT",
+                "premio": "Pase de Batalla de Fortnite",
+                "cantidad": null,
+                "moneda": null,
+                "evento": "Tienda de Oro",
+                "fecha": "12/8/2026",
+                "entregado": false
+        }
   ],
   "gastos": [],
   "rankingDesdeId": 64
