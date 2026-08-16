@@ -1143,6 +1143,16 @@
       "evento": "Recompensa de Cofre",
       "fecha": "15/8/2026",
       "entregado": false
+    },
+    {
+      "id": 117,
+      "usuario": "alberto9134",
+      "premio": "Pase de Batalla",
+      "cantidad": null,
+      "moneda": null,
+      "evento": "Tienda de Oro",
+      "fecha": "16/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
