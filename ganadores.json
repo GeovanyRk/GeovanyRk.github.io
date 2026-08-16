@@ -1153,6 +1153,16 @@
       "evento": "Tienda de Oro",
       "fecha": "16/8/2026",
       "entregado": false
+    },
+    {
+      "id": 118,
+      "usuario": "ShadowcasReal1",
+      "premio": "Pase de Batalla",
+      "cantidad": null,
+      "moneda": null,
+      "evento": "Tienda de Oro",
+      "fecha": "16/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
