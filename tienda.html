@@ -120,9 +120,11 @@
     .ti-badge-popular  { color: #ffd23f; border-color: rgba(255,210,63,.4); background: rgba(255,210,63,.08); }
     .ti-badge-mensual  { color: var(--accent-light); border-color: rgba(145,71,255,.4); background: rgba(145,71,255,.08); }
     .ti-badge-limitado { color: #ff6fb0; border-color: rgba(255,111,176,.4); background: rgba(255,111,176,.08); }
-    .ti-tag-fortnite  { color: #6fb2ff; border-color: rgba(111,178,255,.35); }
-    .ti-tag-overwatch { color: #ffab4a; border-color: rgba(255,171,74,.35); }
-    .ti-tag-premio    { color: #6fe0a0; border-color: rgba(111,224,160,.35); }
+    .ti-tag-fortnite     { color: #6fb2ff; border-color: rgba(111,178,255,.35); }
+    .ti-tag-overwatch    { color: #ffab4a; border-color: rgba(255,171,74,.35); }
+    .ti-tag-premio       { color: #6fe0a0; border-color: rgba(111,224,160,.35); }
+    .ti-tag-clashroyale  { color: #ffc766; border-color: rgba(255,199,102,.35); }
+    .ti-tag-brawlstars   { color: #ff8a7a; border-color: rgba(255,138,122,.35); }
 
     .ti-card2-iconwrap {
       width: 84px; height: 84px; margin: .4rem auto .2rem; position: relative;
@@ -315,6 +317,8 @@
     <button class="ti-filtro-btn active" data-cat="todos">Todos</button>
     <button class="ti-filtro-btn" data-cat="fortnite"><img src="icons/icon-vbucks.svg" alt=""> Fortnite</button>
     <button class="ti-filtro-btn" data-cat="overwatch"><img src="icons/icon-overwatch.svg" alt=""> Overwatch</button>
+    <button class="ti-filtro-btn" data-cat="clashroyale"><img src="icons/icon-clash-royale.png" alt=""> Clash Royale</button>
+    <button class="ti-filtro-btn" data-cat="brawlstars"><img src="icons/icon-brawl-stars.png" alt=""> Brawl Stars</button>
     <button class="ti-filtro-btn" data-cat="premio">🎁 Premios</button>
   </div>
 
@@ -364,9 +368,11 @@
     let filtroActivo = 'todos';
 
     const CATEGORIAS = {
-      fortnite:  { label: 'Fortnite',  accent: '#2e6fe0' },
-      overwatch: { label: 'Overwatch', accent: '#f7941e' },
-      premio:    { label: 'Premio',    accent: '#3fb768' },
+      fortnite:     { label: 'Fortnite',      accent: '#2e6fe0' },
+      overwatch:    { label: 'Overwatch',     accent: '#f7941e' },
+      premio:       { label: 'Premio',        accent: '#3fb768' },
+      clashroyale:  { label: 'Clash Royale',  accent: '#f5a623' },
+      brawlstars:   { label: 'Brawl Stars',   accent: '#e0342a' },
     };
 
     function authHeaders() {
