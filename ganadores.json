@@ -1133,6 +1133,16 @@
       "evento": "Recompensa de Cofre",
       "fecha": "15/8/2026",
       "entregado": false
+    },
+    {
+      "id": 116,
+      "usuario": "Joshi",
+      "premio": "100 Pavos",
+      "cantidad": 100,
+      "moneda": "pavos",
+      "evento": "Recompensa de Cofre",
+      "fecha": "15/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
