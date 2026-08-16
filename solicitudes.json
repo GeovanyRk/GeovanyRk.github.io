@@ -468,6 +468,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 36,
+      "ganadorId": 110,
+      "ganadorUsuario": "Mati",
+      "ganadorPremio": "1,000 OW Coins",
+      "item": "Pase de batalla (si es posible con la skin de mizuki)",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1786886413841.png",
+      "nombreFortnite": "Matissj#1496",
+      "discordId": "718702910925439046",
+      "discordUsuario": "matissj10",
+      "fecha": "16/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
