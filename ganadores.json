@@ -1123,6 +1123,16 @@
       "evento": "Recompensa de Stream 6hrs",
       "fecha": "15/8/2026",
       "entregado": false
+    },
+    {
+      "id": 115,
+      "usuario": "Kiro",
+      "premio": "300 Pavos",
+      "cantidad": 300,
+      "moneda": "pavos",
+      "evento": "Recompensa de Cofre",
+      "fecha": "15/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
