@@ -151,6 +151,73 @@
     .fs-vbucks-icon { width: 16px; height: 16px; }
     .fs-msg { max-width: 900px; margin: 3rem auto; text-align: center; color: var(--text2); font-size: .95rem; padding: 0 1.5rem; }
 
+    /* ---- Compra pavos (cp-) ---- */
+    .cp-wrap { max-width: 640px; margin: 2.5rem auto 6rem; padding: 0 1.5rem; }
+    .cp-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 2.6rem 2.2rem; text-align: center;
+      box-shadow: var(--card-shadow);
+    }
+    .cp-title {
+      font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.5rem, 3.2vw, 2rem);
+      font-weight: 700; letter-spacing: -0.02em; margin: .8rem 0 .6rem;
+    }
+    .cp-buy-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: .95rem;
+      color: #0a0814; text-decoration: none; border: none; width: 100%;
+      background: linear-gradient(135deg, #ffd23f, #ff9830);
+      padding: 13px 28px; border-radius: 100px; cursor: pointer;
+      box-shadow: 0 10px 30px -10px rgba(255,210,63,.5);
+      transition: transform .3s var(--ease), box-shadow .3s var(--ease), opacity .2s ease;
+    }
+    .cp-buy-btn:hover:not(:disabled) { transform: translateY(-3px); }
+    .cp-buy-btn:disabled { opacity: .35; cursor: not-allowed; }
+    .cp-code-box {
+      margin-top: 2.2rem; padding-top: 1.8rem; border-top: 1px solid var(--border);
+    }
+    .cp-code-label { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--text3); }
+    .cp-code-value {
+      display: inline-flex; font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: var(--gold);
+      background: rgba(255,210,63,.1); border: 1px solid rgba(255,210,63,.25);
+      border-radius: var(--radius-sm); letter-spacing: .04em;
+    }
+    .cp-code-hint { color: var(--text3); font-size: .82rem; margin-top: .7rem; line-height: 1.6; }
+
+    /* Tabla de paquetes */
+    .cp-table { margin-top: 1.8rem; text-align: left; }
+    .cp-table-head, .cp-table-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: center;
+    }
+    .cp-table-head {
+      font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--text3);
+      padding: 0 16px 8px;
+    }
+    .cp-table-row {
+      padding: 12px 16px; border-radius: var(--radius-sm); cursor: pointer;
+      border: 1px solid var(--border); background: var(--bg2); margin-bottom: 8px;
+      transition: border-color .2s ease, background .2s ease;
+    }
+    .cp-table-row:hover { border-color: var(--border2); }
+    .cp-table-row.is-selected { border-color: var(--gold); background: rgba(255,210,63,.08); }
+    .cp-table-vb { font-family: 'Space Grotesk', sans-serif; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    .cp-table-vb img { width: 16px; height: 16px; }
+    .cp-table-precio { font-weight: 700; color: var(--gold); text-align: right; }
+
+    /* Formulario */
+    .cp-form { margin-top: 1.8rem; text-align: left; display: flex; flex-direction: column; gap: 14px; }
+    .cp-field { display: flex; flex-direction: column; gap: 6px; }
+    .cp-field span { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--text3); }
+    .cp-field input {
+      background: rgba(255,255,255,.04); border: 1px solid var(--border); color: var(--text);
+      padding: 12px 14px; border-radius: var(--radius-sm); font-size: .95rem; font-family: inherit;
+    }
+    .cp-field input:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+    .cp-selected { font-size: .85rem; color: var(--text2); text-align: center; }
+    .cp-form-msg { text-align: center; font-size: .85rem; color: var(--text2); min-height: 1.2em; }
+    .cp-form-msg.error { color: var(--red); }
+    .cp-form-msg.ok { color: #46e0a8; }
+
     /* ---- Sprites: Piñata de Espíritus (sp-) ---- */
     .sp-oculto { display: none !important; }
     .sp-hero { max-width: 720px; margin: 0 auto; padding: 0 1.5rem; text-align: center; }
@@ -305,6 +372,7 @@
     <div class="fx-tabs-inner" role="tablist" aria-label="Secciones de Fortnite">
       <button class="fx-tab-btn" data-view="tienda" role="tab" aria-selected="true">🛒 Tienda de hoy</button>
       <button class="fx-tab-btn" data-view="sprites" role="tab" aria-selected="false">🧿 Sprites</button>
+      <button class="fx-tab-btn" data-view="comprar" role="tab" aria-selected="false">🎟️ Compra pavos</button>
     </div>
   </div>
 
@@ -363,6 +431,34 @@
     </div>
   </div>
 
+  <!-- VISTA: COMPRA PAVOS -->
+  <div class="fx-view" id="fxViewComprar">
+    <div class="cp-wrap" data-reveal>
+      <div class="cp-card">
+        <div class="fx-eyebrow">🎟️ Compra pavos</div>
+        <h2 class="cp-title">Consigue V-Bucks directo con Geo</h2>
+        <p class="fx-sub">Elige el paquete, escribe tu usuario de Epic Games y paga por PayPal. Geo te agrega como amigo en Epic y te los regala apenas confirme el pago.</p>
+
+        <div class="cp-table" id="cpTable"></div>
+
+        <form id="cpForm" class="cp-form">
+          <label class="cp-field">
+            <span>Tu usuario de Epic Games</span>
+            <input type="text" id="cpEpicUser" placeholder="Ej. GeoArmyFan123" required autocomplete="off"/>
+          </label>
+          <div class="cp-selected" id="cpSelected">Selecciona un paquete de la tabla de arriba ↑</div>
+          <button type="submit" class="cp-buy-btn" id="cpSubmitBtn" disabled>Continuar al pago →</button>
+          <p class="cp-form-msg" id="cpFormMsg"></p>
+        </form>
+
+        <div class="cp-code-box">
+          <span class="cp-code-label">¿Prefieres comprarlos tú mismo en Epic?</span>
+          <p class="cp-code-hint">También puedes comprarlos directo en la <a href="https://store.epicgames.com/discover/v-bucks" target="_blank" rel="noopener" style="color:var(--gold);">tienda oficial de Epic Games ↗</a> y usar el código de creador <span class="cp-code-value" style="padding:3px 10px;font-size:.9rem;">SORTEOSRK</span> — no te cuesta nada extra y apoya directo a Geo.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- FOOTER -->
   <footer class="footer">
     <div class="footer-inner">
@@ -381,7 +477,11 @@
 
     // ====== Tabs internas ======
     var tabBtns = document.querySelectorAll('.fx-tab-btn');
-    var views = { tienda: document.getElementById('fxViewTienda'), sprites: document.getElementById('fxViewSprites') };
+    var views = {
+      tienda: document.getElementById('fxViewTienda'),
+      sprites: document.getElementById('fxViewSprites'),
+      comprar: document.getElementById('fxViewComprar')
+    };
     tabBtns.forEach(function (btn) {
       btn.addEventListener('click', function () {
         var view = btn.getAttribute('data-view');
@@ -393,7 +493,115 @@
     if (window.location.hash === '#sprites') {
       var spBtn = document.querySelector('.fx-tab-btn[data-view="sprites"]');
       if (spBtn) spBtn.click();
+    } else if (window.location.hash === '#comprar') {
+      var cpBtn = document.querySelector('.fx-tab-btn[data-view="comprar"]');
+      if (cpBtn) cpBtn.click();
     }
+
+    // ====== Compra de pavos (PayPal manual + aviso a Discord) ======
+    // Esta vista NO cobra ni entrega nada automáticamente: solo arma el pedido,
+    // lo manda a un canal de Discord vía webhook y abre PayPal para que el
+    // comprador pague. Geo confirma el pago y entrega los pavos a mano, igual
+    // que con los demás premios/canjes de la comunidad.
+    (function () {
+      var CP_WEBHOOK_URL = 'https://discord.com/api/webhooks/1538511681309769771/IQb2ib2ifAZ_TMUJNfHmWffoJgj-LEpNBFJzKmnzsAYrKYJKAhauKgopwn_2t9Mps50I';
+      var CP_PAYPAL_USER = 'itsradikalz';
+
+      var CP_PAQUETES = [
+        { vb: 800, usd: 5 },
+        { vb: 1200, usd: 8 },
+        { vb: 1500, usd: 10 },
+        { vb: 2000, usd: 13 },
+        { vb: 2400, usd: 16 },
+        { vb: 3500, usd: 23 },
+        { vb: 3800, usd: 25 },
+        { vb: 5000, usd: 32 },
+        { vb: 7500, usd: 47 },
+        { vb: 12500, usd: 79 }
+      ];
+
+      var cpTable = document.getElementById('cpTable');
+      var cpForm = document.getElementById('cpForm');
+      if (!cpTable || !cpForm) return; // esta vista no está en la página
+
+      var cpEpicUser = document.getElementById('cpEpicUser');
+      var cpSelected = document.getElementById('cpSelected');
+      var cpSubmitBtn = document.getElementById('cpSubmitBtn');
+      var cpFormMsg = document.getElementById('cpFormMsg');
+      var cpElegido = null;
+
+      function cpEsc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+      function cpActualizarBoton() {
+        var listo = !!cpElegido && cpEpicUser.value.trim().length > 1;
+        cpSubmitBtn.disabled = !listo;
+      }
+
+      function cpRenderTabla() {
+        var filas = CP_PAQUETES.map(function (p, i) {
+          return '<div class="cp-table-row" data-idx="' + i + '">' +
+            '<span class="cp-table-vb"><img src="icons/icon-vbucks.svg" alt=""/>' + p.vb.toLocaleString('es-ES') + '</span>' +
+            '<span class="cp-table-precio">$' + p.usd + ' USD</span>' +
+          '</div>';
+        }).join('');
+        cpTable.innerHTML =
+          '<div class="cp-table-head"><span>V-Bucks</span><span style="text-align:right;">Precio</span></div>' +
+          filas;
+        cpTable.querySelectorAll('.cp-table-row').forEach(function (row) {
+          row.addEventListener('click', function () {
+            cpTable.querySelectorAll('.cp-table-row').forEach(function (r) { r.classList.remove('is-selected'); });
+            row.classList.add('is-selected');
+            cpElegido = CP_PAQUETES[parseInt(row.getAttribute('data-idx'), 10)];
+            cpSelected.textContent = 'Elegiste ' + cpElegido.vb.toLocaleString('es-ES') + ' pavos por $' + cpElegido.usd + ' USD';
+            cpActualizarBoton();
+          });
+        });
+      }
+      cpRenderTabla();
+
+      cpEpicUser.addEventListener('input', cpActualizarBoton);
+
+      cpForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (!cpElegido) { cpFormMsg.className = 'cp-form-msg error'; cpFormMsg.textContent = 'Elige un paquete de la tabla.'; return; }
+        var epicUser = cpEpicUser.value.trim();
+        if (epicUser.length < 2) { cpFormMsg.className = 'cp-form-msg error'; cpFormMsg.textContent = 'Escribe tu usuario de Epic Games.'; return; }
+
+        cpSubmitBtn.disabled = true;
+        cpFormMsg.className = 'cp-form-msg';
+        cpFormMsg.textContent = 'Enviando pedido…';
+
+        var payload = {
+          username: 'Pedidos Pavos',
+          embeds: [{
+            title: '🎟️ Nuevo pedido de pavos',
+            color: 16766783,
+            fields: [
+              { name: 'V-Bucks', value: String(cpElegido.vb), inline: true },
+              { name: 'Precio', value: '$' + cpElegido.usd + ' USD', inline: true },
+              { name: 'Usuario de Epic', value: cpEsc(epicUser), inline: false }
+            ],
+            timestamp: new Date().toISOString()
+          }]
+        };
+
+        fetch(CP_WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).then(function () {
+          cpFormMsg.className = 'cp-form-msg ok';
+          cpFormMsg.textContent = '¡Pedido enviado! Se abrió PayPal para que pagues — cuando Geo confirme el pago, te agrega y te regala los pavos.';
+          var paypalUrl = 'https://paypal.me/' + CP_PAYPAL_USER + '/' + cpElegido.usd + 'USD';
+          window.open(paypalUrl, '_blank');
+        }).catch(function () {
+          cpFormMsg.className = 'cp-form-msg error';
+          cpFormMsg.textContent = 'No se pudo enviar el pedido. Intenta de nuevo o escríbele a Geo directo.';
+        }).finally(function () {
+          cpActualizarBoton();
+        });
+      });
+    })();
 
     // ====== Tienda de Fortnite de hoy (vía fortnite-api.com, informativo) ======
     // No usa gcoin ni pases — es un espejo de la tienda oficial del juego,
