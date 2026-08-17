@@ -528,6 +528,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 40,
+      "ganadorId": 113,
+      "ganadorUsuario": "Kitty",
+      "ganadorPremio": "1,000 OW Coins",
+      "item": "OW Coins",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787009583413.png",
+      "nombreFortnite": "Kitty",
+      "discordId": "722967308804292679",
+      "discordUsuario": "purrfect.meow",
+      "fecha": "17/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
