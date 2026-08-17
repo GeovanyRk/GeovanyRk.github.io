@@ -513,6 +513,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 39,
+      "ganadorId": 118,
+      "ganadorUsuario": "ShadowcasReal1",
+      "ganadorPremio": "Pase de Batalla",
+      "item": "Pase de Batalla",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787009199519.jpeg",
+      "nombreFortnite": "Shadowcasreal",
+      "discordId": "775884502462627871",
+      "discordUsuario": "shadowcasreal.",
+      "fecha": "17/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
