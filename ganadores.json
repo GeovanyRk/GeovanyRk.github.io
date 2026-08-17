@@ -1173,6 +1173,16 @@
       "evento": "Recompensa de Cofre",
       "fecha": "17/8/2026",
       "entregado": false
+    },
+    {
+      "id": 120,
+      "usuario": "Skky",
+      "premio": "20 Pavos",
+      "cantidad": 20,
+      "moneda": "pavos",
+      "evento": "Recompensa de Cofre",
+      "fecha": "17/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
