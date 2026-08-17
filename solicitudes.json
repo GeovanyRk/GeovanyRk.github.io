@@ -498,6 +498,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 38,
+      "ganadorId": 117,
+      "ganadorUsuario": "alberto9134",
+      "ganadorPremio": "Pase de Batalla",
+      "item": "pase de batalla",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787007578752.png",
+      "nombreFortnite": "alberto0913",
+      "discordId": "541750772530937857",
+      "discordUsuario": "alberto9134",
+      "fecha": "17/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
