@@ -1183,6 +1183,16 @@
       "evento": "Recompensa de Cofre",
       "fecha": "17/8/2026",
       "entregado": false
+    },
+    {
+      "id": 121,
+      "usuario": "skky_de_nile",
+      "premio": "Pase de Batalla",
+      "cantidad": null,
+      "moneda": null,
+      "evento": "Tienda de Oro",
+      "fecha": "18/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
