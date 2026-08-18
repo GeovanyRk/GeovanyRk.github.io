@@ -558,6 +558,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 42,
+      "ganadorId": 114,
+      "ganadorUsuario": "Forsa",
+      "ganadorPremio": "1,000 OW Coins",
+      "item": "pase de batalla",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787097180104.jpg",
+      "nombreFortnite": "alejo45658",
+      "discordId": "1495451555950760009",
+      "discordUsuario": "forsaken458_",
+      "fecha": "18/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
