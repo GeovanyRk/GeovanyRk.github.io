@@ -543,6 +543,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 41,
+      "ganadorId": 100,
+      "ganadorUsuario": "Kiro",
+      "ganadorPremio": "800 Pavos",
+      "item": "Pase de batalla Fortnite Glitch",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787023777111.jpg",
+      "nombreFortnite": "KDA KiroHyer",
+      "discordId": "435588520719941642",
+      "discordUsuario": "kirohyer",
+      "fecha": "17/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
