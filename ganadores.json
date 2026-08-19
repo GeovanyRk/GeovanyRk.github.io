@@ -1243,6 +1243,17 @@
       "evento": "Recompensa de Cofre",
       "fecha": "18/8/2026",
       "entregado": false
+    },
+    {
+      "id": 127,
+      "usuario": "Mati",
+      "premio": "500 OW Coins",
+      "cantidad": 500,
+      "moneda": "owcoins",
+      "evento": "Recompensa de Cofre",
+      "fecha": "18/8/2026",
+      "creado": "2026-08-19T02:20:54.321Z",
+      "entregado": false
     }
   ],
   "gastos": [],
