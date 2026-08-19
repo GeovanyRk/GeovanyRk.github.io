@@ -842,7 +842,7 @@
       "moneda": "pavos",
       "evento": "esto queda despues del lote de spiderman",
       "fecha": "1/8/2026",
-      "entregado": false
+      "entregado": true
     },
     {
       "id": 85,
