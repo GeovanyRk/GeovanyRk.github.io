@@ -1276,6 +1276,17 @@
       "fecha": "18/8/2026",
       "creado": "2026-08-19T02:22:17.751Z",
       "entregado": false
+    },
+    {
+      "id": 130,
+      "usuario": "Kiro",
+      "premio": "655 Pavos",
+      "cantidad": 655,
+      "moneda": "pavos",
+      "evento": "Recompensa de Cofre",
+      "fecha": "18/8/2026",
+      "creado": "2026-08-19T02:24:32.170Z",
+      "entregado": false
     }
   ],
   "gastos": [],
