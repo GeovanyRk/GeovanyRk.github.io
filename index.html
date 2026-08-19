@@ -232,6 +232,39 @@
         return s+'s';
       }
       function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+      var NOMBRES_MONEDA_GN = { pavos: 'Pavos', owcoins: 'OW Coins', usd: 'USD' };
+      function fmtMonedaGn(cant, moneda){
+        var n = NOMBRES_MONEDA_GN[moneda] || moneda || '';
+        return cant.toLocaleString() + ' ' + n;
+      }
+      // Junta en una sola fila por usuario todos los registros marcados "En alcancía"
+      // (en vez de mostrar un renglón nuevo cada vez que se le mete algo a su alcancía).
+      // Los demás estados (pendiente/entregado/caducado) se muestran igual que siempre.
+      function agruparAlcancia(rows){
+        var resultado = [], porUsuario = {};
+        rows.forEach(function(g){
+          if(estadoGn(g) !== 'alcancia'){ resultado.push(g); return; }
+          var key = (g.usuario||'').toLowerCase().trim();
+          if(!porUsuario[key]){
+            var nuevo = {
+              id: g.id, usuario: g.usuario, evento: 'Recompensa de Cofre',
+              fecha: g.fecha, alcancia: true, entregado: false,
+              _montos: {}, _count: 0,
+            };
+            porUsuario[key] = nuevo;
+            resultado.push(nuevo); // entra en el orden de su aparición más reciente (rows ya viene ordenado por id desc)
+          }
+          var p = porUsuario[key];
+          p._montos[g.moneda] = (p._montos[g.moneda] || 0) + (g.cantidad || 0);
+          p._count++;
+        });
+        resultado.forEach(function(r){
+          if(!r._montos) return;
+          r.premio = Object.keys(r._montos).map(function(mon){ return fmtMonedaGn(r._montos[mon], mon); }).join(' + ');
+          r.evento = r._count > 1 ? ('Varios (' + r._count + ' aportes)') : r.evento;
+        });
+        return resultado;
+      }
       function parseFechaGn(f){
         if(!f) return null;
         var partes = String(f).split('/');
@@ -283,6 +316,7 @@
         if(filtro==='entregados') rows = rows.filter(function(g){return estadoGn(g)==='entregado';});
         if(filtro==='caducados')  rows = rows.filter(function(g){return estadoGn(g)==='caducado';});
         if(q) rows = rows.filter(function(g){return (g.usuario+' '+g.premio+' '+(g.evento||'')).toLowerCase().indexOf(q)>-1;});
+        rows = agruparAlcancia(rows);
         var tb = document.getElementById('gnBody');
         if(!rows.length){
           tb.innerHTML = '<tr><td colspan="6" class="gn-empty"><b>Sin resultados</b>Aún no hay ganadores que coincidan.</td></tr>';
