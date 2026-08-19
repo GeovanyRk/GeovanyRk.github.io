@@ -122,6 +122,8 @@
       #ganadores .gn-badge.done{color:#46e0a8;background:rgba(70,224,168,.12);}
       #ganadores .gn-badge.exp{color:#9aa0aa;background:rgba(154,160,170,.13);}
       #ganadores .gn-chip.exp b{color:#9aa0aa;}
+      #ganadores .gn-badge.alc{color:#a970ff;background:rgba(169,112,255,.13);}
+      #ganadores .gn-chip.alc b{color:#a970ff;}
       #ganadores .gn-cd{display:inline-block;margin-left:8px;font-size:.72rem;font-weight:600;color:#ffb13f;font-family:'Space Grotesk',sans-serif;vertical-align:middle;white-space:nowrap;}
       #ganadores .gn-cd.urge{color:#ef4444;}
       #ganadores .gn-empty{padding:44px 20px;text-align:center;color:rgba(255,255,255,.5);}
@@ -160,6 +162,7 @@
         <div class="gn-stats">
           <div class="gn-chip gold"><b id="gnTotal">0</b><span>Ganadores</span></div>
           <div class="gn-chip pend"><b id="gnPend">0</b><span>Por entregar</span></div>
+          <div class="gn-chip alc"><b id="gnAlc">0</b><span>En alcancía</span></div>
           <div class="gn-chip done"><b id="gnDone">0</b><span>Entregados</span></div>
           <div class="gn-chip exp"><b id="gnExp">0</b><span>Caducados</span></div>
         </div>
@@ -175,6 +178,7 @@
           <div class="gn-filters" role="group" aria-label="Filtrar por estado">
             <button data-f="todos" aria-pressed="true">Todos</button>
             <button data-f="pendientes" aria-pressed="false">Pendientes</button>
+            <button data-f="alcancia" aria-pressed="false">En alcancía</button>
             <button data-f="entregados" aria-pressed="false">Entregados</button>
             <button data-f="caducados" aria-pressed="false">Caducados</button>
           </div>
@@ -211,6 +215,7 @@
       }
       function expiraMs(g){ return inicioMs(g) + DIAS_LIMITE*86400000; }
       function estadoGn(g){
+        if(g.alcancia) return 'alcancia';
         if(g.entregado) return 'entregado';
         if(Date.now() >= expiraMs(g)) return 'caducado';
         return 'pendiente';
@@ -274,6 +279,7 @@
         var q = document.getElementById('gnSearch').value.trim().toLowerCase();
         var rows = DATA.slice().sort(function(a,b){return b.id-a.id;});
         if(filtro==='pendientes') rows = rows.filter(function(g){return estadoGn(g)==='pendiente';});
+        if(filtro==='alcancia')   rows = rows.filter(function(g){return estadoGn(g)==='alcancia';});
         if(filtro==='entregados') rows = rows.filter(function(g){return estadoGn(g)==='entregado';});
         if(filtro==='caducados')  rows = rows.filter(function(g){return estadoGn(g)==='caducado';});
         if(q) rows = rows.filter(function(g){return (g.usuario+' '+g.premio+' '+(g.evento||'')).toLowerCase().indexOf(q)>-1;});
@@ -287,6 +293,8 @@
               estadoHtml = '<span class="gn-badge done">Entregado</span>';
             } else if(est==='caducado'){
               estadoHtml = '<span class="gn-badge exp">Caducado</span>';
+            } else if(est==='alcancia'){
+              estadoHtml = '<span class="gn-badge alc">🐷 En alcancía</span>';
             } else {
               var restante = expiraMs(g) - Date.now();
               var urge = restante < 86400000 ? ' urge' : '';   // menos de 1 día = rojo
@@ -305,6 +313,7 @@
         }
         document.getElementById('gnTotal').textContent = DATA.length;
         document.getElementById('gnPend').textContent  = DATA.filter(function(g){return estadoGn(g)==='pendiente';}).length;
+        document.getElementById('gnAlc').textContent   = DATA.filter(function(g){return estadoGn(g)==='alcancia';}).length;
         document.getElementById('gnDone').textContent  = DATA.filter(function(g){return estadoGn(g)==='entregado';}).length;
         var expEl = document.getElementById('gnExp');
         if(expEl) expEl.textContent = DATA.filter(function(g){return estadoGn(g)==='caducado';}).length;
