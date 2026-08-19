@@ -1223,6 +1223,16 @@
       "evento": "Recompensa de Cofre",
       "fecha": "18/8/2026",
       "entregado": false
+    },
+    {
+      "id": 125,
+      "usuario": "Warner",
+      "premio": "1,075 Pavos",
+      "cantidad": 1075,
+      "moneda": "pavos",
+      "evento": "Recompensa de Cofre",
+      "fecha": "18/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
