@@ -1012,7 +1012,7 @@
       "moneda": "owcoins",
       "evento": "Ruleta de OW",
       "fecha": "11/8/2026",
-      "entregado": false
+      "entregado": true
     },
     {
       "id": 104,
