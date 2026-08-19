@@ -1227,12 +1227,13 @@
     {
       "id": 125,
       "usuario": "Warner",
-      "premio": "1,075 Pavos",
-      "cantidad": 1075,
+      "premio": "75 Pavos",
+      "cantidad": 75,
       "moneda": "pavos",
       "evento": "Recompensa de Cofre",
       "fecha": "18/8/2026",
-      "entregado": false
+      "entregado": false,
+      "alcancia": true
     },
     {
       "id": 126,
