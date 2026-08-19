@@ -1346,7 +1346,8 @@
       "evento": "Ruleta",
       "fecha": "19/8/2026",
       "creado": "2026-08-19T22:40:48.538Z",
-      "entregado": false
+      "entregado": false,
+      "rankeable": false
     }
   ],
   "gastos": [],
