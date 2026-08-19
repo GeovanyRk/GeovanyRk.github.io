@@ -1336,6 +1336,17 @@
       "fecha": "18/8/2026",
       "creado": "2026-08-19T02:32:19.358Z",
       "entregado": false
+    },
+    {
+      "id": 135,
+      "usuario": "Warner",
+      "premio": "2,700 Pavos",
+      "cantidad": 2700,
+      "moneda": "pavos",
+      "evento": "Ruleta",
+      "fecha": "19/8/2026",
+      "creado": "2026-08-19T22:40:48.538Z",
+      "entregado": false
     }
   ],
   "gastos": [],
