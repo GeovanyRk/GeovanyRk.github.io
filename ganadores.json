@@ -1193,6 +1193,16 @@
       "evento": "Tienda de Oro",
       "fecha": "18/8/2026",
       "entregado": false
+    },
+    {
+      "id": 122,
+      "usuario": "marianxec",
+      "premio": "800 V-Bucks",
+      "cantidad": 800,
+      "moneda": "pavos",
+      "evento": "Piñata Fortnite",
+      "fecha": "18/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
