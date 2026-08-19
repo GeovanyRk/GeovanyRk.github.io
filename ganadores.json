@@ -1254,6 +1254,17 @@
       "fecha": "18/8/2026",
       "creado": "2026-08-19T02:20:54.321Z",
       "entregado": false
+    },
+    {
+      "id": 128,
+      "usuario": "Hunter",
+      "premio": "40 Pavos",
+      "cantidad": 40,
+      "moneda": "pavos",
+      "evento": "Recompensa de Cofre",
+      "fecha": "18/8/2026",
+      "creado": "2026-08-19T02:21:21.593Z",
+      "entregado": false
     }
   ],
   "gastos": [],
