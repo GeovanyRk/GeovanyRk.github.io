@@ -80,6 +80,15 @@
       "evento": "General",
       "fecha": "19/8/2026",
       "creado": "2026-08-19T22:47:42.115Z"
+    },
+    {
+      "id": 10,
+      "usuario": "Joshi",
+      "cantidad": 100,
+      "moneda": "pavos",
+      "evento": "General",
+      "fecha": "19/8/2026",
+      "creado": "2026-08-19T22:48:18.671Z"
     }
   ],
   "retiros": []
