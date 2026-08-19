@@ -26,6 +26,15 @@
       "evento": "General",
       "fecha": "19/8/2026",
       "creado": "2026-08-19T22:33:35.397Z"
+    },
+    {
+      "id": 4,
+      "usuario": "Hunter",
+      "cantidad": 40,
+      "moneda": "pavos",
+      "evento": "General",
+      "fecha": "19/8/2026",
+      "creado": "2026-08-19T22:34:43.298Z"
     }
   ],
   "retiros": []
