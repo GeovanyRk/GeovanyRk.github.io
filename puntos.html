@@ -122,7 +122,7 @@
         <div class="pt-stats">
           <div class="pt-chip"><b id="ptTotal">0</b><span>Suscriptores con puntos</span></div>
           <div class="pt-chip"><b id="ptLider">—</b><span>Líder actual</span></div>
-          <div class="pt-chip"><b id="ptSuma">0</b><span>Puntos repartidos</span></div>
+          <div class="pt-chip"><b id="ptSuma">0</b><span>Puntos ganados en total</span></div>
         </div>
         <div class="pt-rank-card">
           <div class="pt-rank-title">🪙 Top 10</div>
@@ -132,7 +132,7 @@
         <div class="pt-card">
           <table>
             <thead>
-              <tr><th>#</th><th>Usuario</th><th>Puntos</th></tr>
+              <tr><th>#</th><th>Usuario</th><th>Ganado</th><th>Gastado</th><th>Saldo actual</th></tr>
             </thead>
             <tbody id="ptBody"></tbody>
           </table>
@@ -177,7 +177,7 @@
           return '<div class="pt-rank-row">'+
             '<span class="pt-rank-pos">'+medalla+'</span>'+
             '<span class="pt-rank-name">'+esc(u.usuario)+'</span>'+
-            '<span class="pt-rank-total">'+u.puntos.toLocaleString()+' pts</span>'+
+            '<span class="pt-rank-total">'+u.saldo.toLocaleString()+' pts</span>'+
           '</div>';
         }).join('');
       }
@@ -187,25 +187,32 @@
         if(q) rows = rows.filter(function(u){return (u.usuario||'').toLowerCase().indexOf(q)>-1;});
         var tb = document.getElementById('ptBody');
         if(!rows.length){
-          tb.innerHTML = '<tr><td colspan="3" class="pt-empty"><b>Sin resultados</b>Nadie con ese nombre todavía.</td></tr>';
+          tb.innerHTML = '<tr><td colspan="4" class="pt-empty"><b>Sin resultados</b>Nadie con ese nombre todavía.</td></tr>';
         } else {
           tb.innerHTML = rows.map(function(u,i){
             return '<tr>'+
               '<td data-label="#">'+(i+1)+'</td>'+
               '<td data-label="Usuario" class="pt-user-cell">'+esc(u.usuario)+'</td>'+
-              '<td data-label="Puntos" class="pt-pts">'+u.puntos.toLocaleString()+'</td>'+
+              '<td data-label="Ganado">'+u.ganado.toLocaleString()+'</td>'+
+              '<td data-label="Gastado">'+u.gastado.toLocaleString()+'</td>'+
+              '<td data-label="Saldo actual" class="pt-pts">'+u.saldo.toLocaleString()+'</td>'+
             '</tr>';
           }).join('');
         }
         document.getElementById('ptTotal').textContent = DATA.length;
         document.getElementById('ptLider').textContent = DATA.length ? DATA[0].usuario : '—';
-        document.getElementById('ptSuma').textContent = DATA.reduce(function(a,u){return a+u.puntos;},0).toLocaleString();
+        document.getElementById('ptSuma').textContent = DATA.reduce(function(a,u){return a+u.ganado;},0).toLocaleString();
       }
       function load(){
         fetch('puntos.json?t='+Date.now(),{cache:'no-store'})
           .then(function(r){ if(!r.ok) throw 0; return r.json(); })
           .then(function(j){
-            DATA = Object.keys(j).map(function(k){return j[k];}).sort(function(a,b){return b.puntos-a.puntos;});
+            DATA = Object.keys(j).map(function(k){
+              var u = j[k];
+              var ganado = typeof u.ganado === 'number' ? u.ganado : (u.puntos || 0);
+              var gastado = typeof u.gastado === 'number' ? u.gastado : 0;
+              return { usuario: u.usuario, ganado: ganado, gastado: gastado, saldo: ganado - gastado };
+            }).sort(function(a,b){return b.saldo-a.saldo;});
             document.getElementById('ptUpdated').textContent =
               'Actualizado ' + new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
             render();
