@@ -62,6 +62,15 @@
       "evento": "General",
       "fecha": "19/8/2026",
       "creado": "2026-08-19T22:46:13.794Z"
+    },
+    {
+      "id": 8,
+      "usuario": "sKY",
+      "cantidad": 20,
+      "moneda": "pavos",
+      "evento": "General",
+      "fecha": "19/8/2026",
+      "creado": "2026-08-19T22:46:58.818Z"
     }
   ],
   "retiros": []
