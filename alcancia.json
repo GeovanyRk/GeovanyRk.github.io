@@ -17,6 +17,15 @@
       "evento": "General",
       "fecha": "19/8/2026",
       "creado": "2026-08-19T22:32:44.428Z"
+    },
+    {
+      "id": 3,
+      "usuario": "Redmerinson",
+      "cantidad": 20,
+      "moneda": "pavos",
+      "evento": "General",
+      "fecha": "19/8/2026",
+      "creado": "2026-08-19T22:33:35.397Z"
     }
   ],
   "retiros": []
