@@ -1287,6 +1287,17 @@
       "fecha": "18/8/2026",
       "creado": "2026-08-19T02:24:32.170Z",
       "entregado": false
+    },
+    {
+      "id": 131,
+      "usuario": "JoseAngel",
+      "premio": "70 Pavos",
+      "cantidad": 70,
+      "moneda": "pavos",
+      "evento": "Recompensa de Cofre",
+      "fecha": "18/8/2026",
+      "creado": "2026-08-19T02:25:38.719Z",
+      "entregado": false
     }
   ],
   "gastos": [],
