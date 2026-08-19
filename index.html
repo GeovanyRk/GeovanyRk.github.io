@@ -267,12 +267,13 @@
       var MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
       // ===== Timer de reclamo (2 semanas) =====
       var DIAS_LIMITE = 14;                             // días para reclamar antes de caducar
-      var TIMER_DESDE = new Date(2026, 7, 15).getTime();// último recurso si un premio no tiene ni fecha
+      var TIMER_DESDE = new Date(2026, 7, 15).getTime();// piso: la regla arrancó el sábado 15/08/2026
       function inicioMs(g){
-        if(g.creado){ var t = new Date(g.creado).getTime(); if(!isNaN(t)) return t; } // marca exacta (premios nuevos)
-        var f = parseFechaGn(g.fecha);                  // si no, cuenta desde SU fecha de registro
-        if(f) return f.getTime();
-        return TIMER_DESDE;                             // si tampoco hay fecha válida
+        var propio = null;
+        if(g.creado){ var t = new Date(g.creado).getTime(); if(!isNaN(t)) propio = t; } // marca exacta (premios nuevos)
+        if(propio === null){ var f = parseFechaGn(g.fecha); if(f) propio = f.getTime(); } // si no, su fecha de registro
+        if(propio === null) return TIMER_DESDE;
+        return Math.max(propio, TIMER_DESDE);           // nunca antes del sábado que arrancó la regla
       }
       function expiraMs(g){ return inicioMs(g) + DIAS_LIMITE*86400000; }
       function estadoGn(g){
