@@ -1309,6 +1309,17 @@
       "fecha": "18/8/2026",
       "creado": "2026-08-19T02:26:55.796Z",
       "entregado": false
+    },
+    {
+      "id": 133,
+      "usuario": "Fredi",
+      "premio": "1 Pavos",
+      "cantidad": 1,
+      "moneda": "pavos",
+      "evento": "Pase de Fortnite",
+      "fecha": "18/8/2026",
+      "creado": "2026-08-19T02:28:34.922Z",
+      "entregado": false
     }
   ],
   "gastos": [],
