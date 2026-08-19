@@ -1320,6 +1320,17 @@
       "fecha": "18/8/2026",
       "creado": "2026-08-19T02:28:34.922Z",
       "entregado": false
+    },
+    {
+      "id": 134,
+      "usuario": "Kid",
+      "premio": "800 Pavos",
+      "cantidad": 800,
+      "moneda": "pavos",
+      "evento": "Recompensa Stream 6hrs",
+      "fecha": "18/8/2026",
+      "creado": "2026-08-19T02:32:19.358Z",
+      "entregado": false
     }
   ],
   "gastos": [],
