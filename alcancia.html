@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Alcancía Geo Army — GeoArmy</title>
+  <meta name="description" content="Alcancías personales de la Geo Army: premios chiquitos que se van acumulando hasta que cada quien decide romper la suya."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css"/>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VT78CC8X2V"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VT78CC8X2V');
+  </script>
+</head>
+<body>
+
+  <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="logo.png" alt="GeoArmy" class="nav-logo-img"/>
+        GeoArmy
+      </a>
+      <div class="nav-links">
+        <a href="index.html#inicio">Geo Army</a>
+        <a href="pase.html">Pase de Batalla</a>
+        <a href="tienda.html">Tienda</a>
+        <a href="fortnite.html">Fortnite</a>
+        <a href="index.html#ganadores">Ganadores</a>
+        <a href="puntos.html">Puntos</a>
+        <a href="alcancia.html" style="color:var(--text);">Alcancía</a>
+        <a href="index.html#solicitudes">Solicitudes</a>
+      </div>
+      <a href="https://twitch.tv/geovannyrk" target="_blank" class="btn-nav">Ver stream →</a>
+    </div>
+  </nav>
+
+  <section class="section" id="alcancia">
+    <style>
+      #alcancia .al-wrap{max-width:940px;margin:0 auto;}
+      #alcancia .al-intro{max-width:720px;margin:0 auto 2rem;text-align:center;color:var(--text2);font-size:.95rem;line-height:1.7;}
+      #alcancia .al-stats{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 22px;}
+      #alcancia .al-chip{flex:1;min-width:120px;background:var(--card-bg);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:18px 20px;box-shadow:var(--card-shadow);transition:transform .35s var(--ease),border-color .35s var(--ease);}
+      #alcancia .al-chip:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.18);}
+      #alcancia .al-chip b{font-family:'Space Grotesk',sans-serif;font-size:2rem;line-height:1;display:block;color:#46e0a8;}
+      #alcancia .al-chip span{font-size:.7rem;text-transform:uppercase;letter-spacing:.13em;color:rgba(255,255,255,.5);}
+      #alcancia .al-rank-card{background:linear-gradient(180deg, rgba(70,224,168,.09), rgba(70,224,168,.03)), var(--bg2);border:1px solid rgba(70,224,168,.25);border-radius:20px;padding:20px 22px;margin-bottom:20px;box-shadow:var(--card-shadow);}
+      #alcancia .al-rank-title{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:600;color:#46e0a8;margin-bottom:10px;}
+      #alcancia .al-rank-row{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+      #alcancia .al-rank-row:last-child{border-bottom:0;}
+      #alcancia .al-rank-pos{width:28px;flex-shrink:0;font-size:1.1rem;text-align:center;}
+      #alcancia .al-rank-name{flex:1;font-weight:600;color:#fff;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+      #alcancia .al-rank-total{color:#46e0a8;font-family:'Space Grotesk',sans-serif;font-size:.88rem;white-space:nowrap;}
+      #alcancia .al-rank-empty{padding:14px 4px;color:rgba(255,255,255,.5);font-size:.9rem;text-align:center;}
+      #alcancia .al-search{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:#fff;padding:12px 16px;border-radius:12px;font-size:.95rem;font-family:inherit;margin-bottom:14px;}
+      #alcancia .al-search::placeholder{color:rgba(255,255,255,.4);}
+      #alcancia .al-search:focus{outline:2px solid #46e0a8;outline-offset:1px;}
+      #alcancia .al-card{background:var(--card-bg);border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;box-shadow:var(--card-shadow);}
+      #alcancia table{width:100%;border-collapse:collapse;}
+      #alcancia thead th{font-family:'Space Grotesk',sans-serif;font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;text-align:left;color:rgba(255,255,255,.45);padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.08);}
+      #alcancia tbody td{padding:15px 18px;border-bottom:1px solid rgba(255,255,255,.05);font-size:.93rem;vertical-align:middle;color:#fff;}
+      #alcancia tbody tr:last-child td{border-bottom:0;}
+      #alcancia tbody tr:hover{background:rgba(70,224,168,.07);}
+      #alcancia .al-pts{color:#46e0a8;font-family:'Space Grotesk',sans-serif;}
+      #alcancia .al-empty{padding:44px 20px;text-align:center;color:rgba(255,255,255,.5);}
+      #alcancia .al-empty b{display:block;color:#fff;font-family:'Space Grotesk',sans-serif;margin-bottom:6px;font-size:1.05rem;}
+      #alcancia .al-foot{margin-top:16px;color:rgba(255,255,255,.4);font-size:.78rem;text-align:right;}
+      #alcancia .al-romper-card{background:linear-gradient(180deg, rgba(255,210,63,.07), rgba(255,210,63,.02)), var(--bg2);border:1px solid rgba(255,210,63,.22);border-radius:20px;padding:22px 24px;margin-top:24px;box-shadow:var(--card-shadow);}
+      #alcancia .al-romper-title{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:600;color:#ffd23f;margin-bottom:6px;}
+      #alcancia .al-romper-desc{color:rgba(255,255,255,.6);font-size:.9rem;line-height:1.6;}
+      @media(max-width:620px){
+        #alcancia thead{display:none;}
+        #alcancia tbody tr{display:block;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.08);}
+        #alcancia tbody td{display:flex;justify-content:space-between;gap:12px;border:0;padding:8px 16px;}
+        #alcancia tbody td::before{content:attr(data-label);font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.45);}
+        #alcancia tbody td.al-user-cell::before{content:"";}
+      }
+    </style>
+    <div class="section-inner">
+      <div class="section-header" data-decor="ALCANCIA">
+        <div class="section-tag">Alcancía Geo Army</div>
+        <h2>Cada premio chiquito cuenta</h2>
+        <p>Cuando ganas un premio de pavos u OW Coins demasiado chico para entregarte de una, Geo lo mete a tu alcancía personal — se va acumulando hasta que decidas romperla.</p>
+      </div>
+      <div class="al-wrap" data-reveal>
+        <p class="al-intro">Esto no es un fondo compartido: cada quien tiene su propia alcancía. Nadie más puede tocar la tuya, y tú decides cuándo romperla.</p>
+        <div class="al-stats">
+          <div class="al-chip"><b id="alTotal">0</b><span>Alcancías activas</span></div>
+          <div class="al-chip"><b id="alLider">—</b><span>La más llena</span></div>
+          <div class="al-chip"><b id="alSuma">0</b><span>Pavos acumulados en total</span></div>
+        </div>
+        <div class="al-rank-card">
+          <div class="al-rank-title">🐷 Top alcancías</div>
+          <div id="alRankBody"></div>
+        </div>
+        <input id="alSearch" class="al-search" type="search" placeholder="Buscar por usuario…" aria-label="Buscar en las alcancías">
+        <div class="al-card">
+          <table>
+            <thead>
+              <tr><th>#</th><th>Usuario</th><th>Metido</th><th>Roto</th><th>Saldo actual</th></tr>
+            </thead>
+            <tbody id="alBody"></tbody>
+          </table>
+        </div>
+        <div class="al-foot" id="alUpdated">Cargando…</div>
+
+        <div class="al-romper-card">
+          <div class="al-romper-title">🐷💥 ¿Cómo rompo mi alcancía?</div>
+          <p class="al-romper-desc">Cuando quieras cobrar lo que llevas acumulado, canjea la recompensa de puntos de canal <strong>"Romper mi alcancía"</strong> en Twitch (o avísale a Geo por Discord). Geo confirma tu saldo aquí mismo y te entrega el total — pavos u OW Coins según corresponda.</p>
+        </div>
+      </div>
+    </div>
+    <script>
+    (function(){
+      var DATA = [];
+      function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+      function renderRanking(){
+        var box = document.getElementById('alRankBody');
+        if(!DATA.length){
+          box.innerHTML = '<div class="al-rank-empty">Todavía nadie tiene alcancía. ¡Se va llenando con los premios chiquitos! 🐷</div>';
+          return;
+        }
+        var medallas = ['🥇','🥈','🥉'];
+        box.innerHTML = DATA.slice(0,10).map(function(u,i){
+          var medalla = medallas[i] || ((i+1)+'.');
+          return '<div class="al-rank-row">'+
+            '<span class="al-rank-pos">'+medalla+'</span>'+
+            '<span class="al-rank-name">'+esc(u.usuario)+'</span>'+
+            '<span class="al-rank-total">'+u.saldo.toLocaleString()+'</span>'+
+          '</div>';
+        }).join('');
+      }
+      function render(){
+        var q = document.getElementById('alSearch').value.trim().toLowerCase();
+        var rows = DATA;
+        if(q) rows = rows.filter(function(u){return (u.usuario||'').toLowerCase().indexOf(q)>-1;});
+        var tb = document.getElementById('alBody');
+        if(!rows.length){
+          tb.innerHTML = '<tr><td colspan="5" class="al-empty"><b>Sin resultados</b>Nadie con ese nombre todavía.</td></tr>';
+        } else {
+          tb.innerHTML = rows.map(function(u,i){
+            return '<tr>'+
+              '<td data-label="#">'+(i+1)+'</td>'+
+              '<td data-label="Usuario" class="al-user-cell">'+esc(u.usuario)+'</td>'+
+              '<td data-label="Metido">'+u.metido.toLocaleString()+'</td>'+
+              '<td data-label="Roto">'+u.roto.toLocaleString()+'</td>'+
+              '<td data-label="Saldo actual" class="al-pts">'+u.saldo.toLocaleString()+'</td>'+
+            '</tr>';
+          }).join('');
+        }
+        document.getElementById('alTotal').textContent = DATA.length;
+        document.getElementById('alLider').textContent = DATA.length ? DATA[0].usuario : '—';
+        document.getElementById('alSuma').textContent = DATA.reduce(function(a,u){return a+u.saldo;},0).toLocaleString();
+      }
+      // alcancia.json lo sube el bot (mismo patrón que ganadores.json / puntos.json).
+      // Formato esperado: { aportes: [{usuario, cantidad, moneda, evento, fecha}], retiros: [{usuario, cantidad, moneda, fecha}] }
+      // Aquí solo mostramos pavos (moneda "pavos"); si algún día se acumulan OW Coins
+      // también se pueden sumar aparte sin tocar el resto de la página.
+      function load(){
+        fetch('alcancia.json?t='+Date.now(),{cache:'no-store'})
+          .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+          .then(function(j){
+            var porUsuario = {};
+            (j.aportes||[]).forEach(function(a){
+              if(a.moneda !== 'pavos') return;
+              var k = (a.usuario||'').toLowerCase().trim();
+              if(!porUsuario[k]) porUsuario[k] = { usuario: a.usuario, metido: 0, roto: 0 };
+              porUsuario[k].metido += (a.cantidad||0);
+              porUsuario[k].usuario = a.usuario;
+            });
+            (j.retiros||[]).forEach(function(x){
+              if(x.moneda !== 'pavos') return;
+              var k = (x.usuario||'').toLowerCase().trim();
+              if(!porUsuario[k]) porUsuario[k] = { usuario: x.usuario, metido: 0, roto: 0 };
+              porUsuario[k].roto += (x.cantidad||0);
+            });
+            DATA = Object.keys(porUsuario).map(function(k){
+              var u = porUsuario[k];
+              return { usuario: u.usuario, metido: u.metido, roto: u.roto, saldo: u.metido - u.roto };
+            }).filter(function(u){ return u.metido > 0 || u.roto > 0; })
+              .sort(function(a,b){return b.saldo-a.saldo;});
+            document.getElementById('alUpdated').textContent =
+              'Actualizado ' + new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+            render();
+            renderRanking();
+          })
+          .catch(function(){
+            DATA = [];
+            document.getElementById('alUpdated').textContent = 'Vista previa (sin alcancia.json todavía)';
+            render();
+            renderRanking();
+          });
+      }
+      document.getElementById('alSearch').addEventListener('input', render);
+      load();
+      setInterval(load, 30000);
+    })();
+    </script>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <img src="logo.png" alt="GeoArmy" class="footer-logo-img"/>
+        GeoArmy
+      </div>
+      <div class="footer-text">Comunidad de Geovannyrk · Twitch Affiliate</div>
+      <div class="footer-code">geovanyrk.github.io</div>
+    </div>
+  </footer>
+
+  <script src="js/premium.js"></script>
+</body>
+</html>
