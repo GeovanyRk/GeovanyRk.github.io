@@ -1265,6 +1265,17 @@
       "fecha": "18/8/2026",
       "creado": "2026-08-19T02:21:21.593Z",
       "entregado": false
+    },
+    {
+      "id": 129,
+      "usuario": "Redmerison",
+      "premio": "20 Pavos",
+      "cantidad": 20,
+      "moneda": "pavos",
+      "evento": "Recompensa de Cofre",
+      "fecha": "18/8/2026",
+      "creado": "2026-08-19T02:22:17.751Z",
+      "entregado": false
     }
   ],
   "gastos": [],
