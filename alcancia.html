@@ -121,6 +121,16 @@
     (function(){
       var DATA = [];
       function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+      var NOMBRES_MONEDA_AL = { pavos: 'Pavos', owcoins: 'OW Coins' };
+      function fmtMonedaAl(cant, moneda){
+        var n = NOMBRES_MONEDA_AL[moneda] || moneda || '';
+        return cant.toLocaleString() + ' ' + n;
+      }
+      // Convierte {pavos: 120, owcoins: 45} en "120 Pavos + 45 OW Coins"
+      function formatearMontos(montos){
+        var partes = Object.keys(montos).filter(function(m){ return montos[m]; }).map(function(m){ return fmtMonedaAl(montos[m], m); });
+        return partes.length ? partes.join(' + ') : '0';
+      }
       function renderRanking(){
         var box = document.getElementById('alRankBody');
         if(!DATA.length){
@@ -133,7 +143,7 @@
           return '<div class="al-rank-row">'+
             '<span class="al-rank-pos">'+medalla+'</span>'+
             '<span class="al-rank-name">'+esc(u.usuario)+'</span>'+
-            '<span class="al-rank-total">'+u.saldo.toLocaleString()+'</span>'+
+            '<span class="al-rank-total">'+esc(formatearMontos(u.saldo))+'</span>'+
           '</div>';
         }).join('');
       }
@@ -149,43 +159,49 @@
             return '<tr>'+
               '<td data-label="#">'+(i+1)+'</td>'+
               '<td data-label="Usuario" class="al-user-cell">'+esc(u.usuario)+'</td>'+
-              '<td data-label="Metido">'+u.metido.toLocaleString()+'</td>'+
-              '<td data-label="Roto">'+u.roto.toLocaleString()+'</td>'+
-              '<td data-label="Saldo actual" class="al-pts">'+u.saldo.toLocaleString()+'</td>'+
+              '<td data-label="Metido">'+esc(formatearMontos(u.metido))+'</td>'+
+              '<td data-label="Roto">'+esc(formatearMontos(u.roto))+'</td>'+
+              '<td data-label="Saldo actual" class="al-pts">'+esc(formatearMontos(u.saldo))+'</td>'+
             '</tr>';
           }).join('');
         }
         document.getElementById('alTotal').textContent = DATA.length;
         document.getElementById('alLider').textContent = DATA.length ? DATA[0].usuario : '—';
-        document.getElementById('alSuma').textContent = DATA.reduce(function(a,u){return a+u.saldo;},0).toLocaleString();
+        document.getElementById('alSuma').textContent = DATA.reduce(function(a,u){return a+(u.saldo.pavos||0);},0).toLocaleString();
       }
       // alcancia.json lo sube el bot (mismo patrón que ganadores.json / puntos.json).
       // Formato esperado: { aportes: [{usuario, cantidad, moneda, evento, fecha}], retiros: [{usuario, cantidad, moneda, fecha}] }
-      // Aquí solo mostramos pavos (moneda "pavos"); si algún día se acumulan OW Coins
-      // también se pueden sumar aparte sin tocar el resto de la página.
+      // Se suma cada moneda por separado (pavos y OW Coins no se mezclan) y se muestran
+      // juntas en cada celda, ej. "120 Pavos + 45 OW Coins".
       function load(){
         fetch('alcancia.json?t='+Date.now(),{cache:'no-store'})
           .then(function(r){ if(!r.ok) throw 0; return r.json(); })
           .then(function(j){
             var porUsuario = {};
             (j.aportes||[]).forEach(function(a){
-              if(a.moneda !== 'pavos') return;
               var k = (a.usuario||'').toLowerCase().trim();
-              if(!porUsuario[k]) porUsuario[k] = { usuario: a.usuario, metido: 0, roto: 0 };
-              porUsuario[k].metido += (a.cantidad||0);
+              if(!porUsuario[k]) porUsuario[k] = { usuario: a.usuario, metido: {}, roto: {} };
+              porUsuario[k].metido[a.moneda] = (porUsuario[k].metido[a.moneda]||0) + (a.cantidad||0);
               porUsuario[k].usuario = a.usuario;
             });
             (j.retiros||[]).forEach(function(x){
-              if(x.moneda !== 'pavos') return;
               var k = (x.usuario||'').toLowerCase().trim();
-              if(!porUsuario[k]) porUsuario[k] = { usuario: x.usuario, metido: 0, roto: 0 };
-              porUsuario[k].roto += (x.cantidad||0);
+              if(!porUsuario[k]) porUsuario[k] = { usuario: x.usuario, metido: {}, roto: {} };
+              porUsuario[k].roto[x.moneda] = (porUsuario[k].roto[x.moneda]||0) + (x.cantidad||0);
             });
             DATA = Object.keys(porUsuario).map(function(k){
               var u = porUsuario[k];
-              return { usuario: u.usuario, metido: u.metido, roto: u.roto, saldo: u.metido - u.roto };
-            }).filter(function(u){ return u.metido > 0 || u.roto > 0; })
-              .sort(function(a,b){return b.saldo-a.saldo;});
+              var monedas = {};
+              Object.keys(u.metido).forEach(function(m){ monedas[m] = 1; });
+              Object.keys(u.roto).forEach(function(m){ monedas[m] = 1; });
+              var saldo = {}, total = 0;
+              Object.keys(monedas).forEach(function(m){
+                saldo[m] = (u.metido[m]||0) - (u.roto[m]||0);
+                total += saldo[m];
+              });
+              return { usuario: u.usuario, metido: u.metido, roto: u.roto, saldo: saldo, _total: total };
+            }).filter(function(u){ return Object.keys(u.metido).length || Object.keys(u.roto).length; })
+              .sort(function(a,b){return b._total-a._total;});
             document.getElementById('alUpdated').textContent =
               'Actualizado ' + new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
             render();
