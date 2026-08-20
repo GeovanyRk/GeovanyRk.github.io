@@ -143,6 +143,15 @@
       "evento": "General",
       "fecha": "19/8/2026",
       "creado": "2026-08-20T02:41:42.418Z"
+    },
+    {
+      "id": 17,
+      "usuario": "Shadow",
+      "cantidad": 100,
+      "moneda": "pavos",
+      "evento": "General",
+      "fecha": "19/8/2026",
+      "creado": "2026-08-20T02:42:51.637Z"
     }
   ],
   "retiros": []
