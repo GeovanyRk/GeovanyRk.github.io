@@ -125,6 +125,15 @@
       "evento": "General",
       "fecha": "19/8/2026",
       "creado": "2026-08-20T02:37:56.713Z"
+    },
+    {
+      "id": 15,
+      "usuario": "Kiro",
+      "cantidad": 285,
+      "moneda": "pavos",
+      "evento": "General",
+      "fecha": "19/8/2026",
+      "creado": "2026-08-20T02:40:46.279Z"
     }
   ],
   "retiros": []
