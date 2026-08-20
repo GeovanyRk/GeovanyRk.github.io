@@ -588,6 +588,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 44,
+      "ganadorId": 127,
+      "ganadorUsuario": "Mati",
+      "ganadorPremio": "500 OW Coins",
+      "item": "500 ow coins",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787269527854.png",
+      "nombreFortnite": "Matissj#1496",
+      "discordId": "718702910925439046",
+      "discordUsuario": "matissj10",
+      "fecha": "20/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
