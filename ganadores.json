@@ -1355,6 +1355,16 @@
       "creado": "2026-08-19T22:40:48.538Z",
       "entregado": false,
       "rankeable": false
+    },
+    {
+      "id": 136,
+      "usuario": "bonilla7u7",
+      "premio": "Pase de Batalla",
+      "cantidad": null,
+      "moneda": null,
+      "evento": "Tienda de Oro",
+      "fecha": "19/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
