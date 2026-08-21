@@ -215,6 +215,15 @@
       "evento": "Recompensa de Cofre",
       "fecha": "20/8/2026",
       "creado": "2026-08-21T01:16:36.595Z"
+    },
+    {
+      "id": 25,
+      "usuario": "Warner",
+      "cantidad": 50,
+      "moneda": "pavos",
+      "evento": "Recompensa de Cofre",
+      "fecha": "20/8/2026",
+      "creado": "2026-08-21T01:18:02.987Z"
     }
   ],
   "retiros": []
