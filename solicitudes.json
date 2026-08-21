@@ -648,6 +648,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 48,
+      "ganadorId": 101,
+      "ganadorUsuario": "Lisita",
+      "ganadorPremio": "500 Pavos",
+      "item": "Baile De 500 (de Lujo)",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787313163623.jpg",
+      "nombreFortnite": "De Lujo",
+      "discordId": "857762702852358175",
+      "discordUsuario": "lissonfire_19",
+      "fecha": "21/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
