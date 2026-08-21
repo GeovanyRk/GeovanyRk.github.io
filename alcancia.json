@@ -206,6 +206,15 @@
       "evento": "General",
       "fecha": "20/8/2026",
       "creado": "2026-08-20T17:25:59.413Z"
+    },
+    {
+      "id": 24,
+      "usuario": "Shadow",
+      "cantidad": 50,
+      "moneda": "pavos",
+      "evento": "Recompensa de Cofre",
+      "fecha": "20/8/2026",
+      "creado": "2026-08-21T01:16:36.595Z"
     }
   ],
   "retiros": []
