@@ -618,6 +618,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 46,
+      "ganadorId": 97,
+      "ganadorUsuario": "Mufasa",
+      "ganadorPremio": "2,500 Pavos",
+      "item": "skin kim kardashian icónica-1800",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787275043927.jpg",
+      "nombreFortnite": "Mufasa",
+      "discordId": "977943323849420860",
+      "discordUsuario": "mufasa1338",
+      "fecha": "20/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
