@@ -633,6 +633,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 47,
+      "ganadorId": 71,
+      "ganadorUsuario": "kid",
+      "ganadorPremio": "800 Pavos",
+      "item": "Pase de batalla Glitch",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787290612310.webp",
+      "nombreFortnite": "elkid_RD36",
+      "discordId": "1072372475360448522",
+      "discordUsuario": "elkid_rd36",
+      "fecha": "21/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
