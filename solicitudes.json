@@ -603,6 +603,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 45,
+      "ganadorId": 92,
+      "ganadorUsuario": "Jose Angel",
+      "ganadorPremio": "500 Pavos",
+      "item": "Emote \"Baile de lujo\"  500 vbucks",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787272176328.png",
+      "nombreFortnite": "NakanoJc",
+      "discordId": "1446644777134329876",
+      "discordUsuario": "nakanojc.",
+      "fecha": "20/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
