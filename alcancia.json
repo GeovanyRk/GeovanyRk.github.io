@@ -287,6 +287,15 @@
       "evento": "Ruleta de OW",
       "fecha": "21/8/2026",
       "creado": "2026-08-22T02:24:56.919Z"
+    },
+    {
+      "id": 33,
+      "usuario": "Forsa",
+      "cantidad": 10,
+      "moneda": "owcoins",
+      "evento": "Ruleta de OW",
+      "fecha": "21/8/2026",
+      "creado": "2026-08-22T02:25:14.475Z"
     }
   ],
   "retiros": []
