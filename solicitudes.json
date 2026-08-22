@@ -678,6 +678,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 50,
+      "ganadorId": 90,
+      "ganadorUsuario": "marianxec",
+      "ganadorPremio": "800 V-Bucks",
+      "item": "pase de batalla Fortnite",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787364108411.jpg",
+      "nombreFortnite": "marianxec",
+      "discordId": "1536904572369510423",
+      "discordUsuario": "marianxec.",
+      "fecha": "21/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
