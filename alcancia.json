@@ -233,6 +233,15 @@
       "evento": "Recompensa de Cofre",
       "fecha": "20/8/2026",
       "creado": "2026-08-21T01:19:47.483Z"
+    },
+    {
+      "id": 27,
+      "usuario": "marvin",
+      "cantidad": 45,
+      "moneda": "pavos",
+      "evento": "General",
+      "fecha": "21/8/2026",
+      "creado": "2026-08-22T00:34:22.873Z"
     }
   ],
   "retiros": []
