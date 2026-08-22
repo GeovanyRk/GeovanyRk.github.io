@@ -251,6 +251,15 @@
       "evento": "Ruleta de OW",
       "fecha": "21/8/2026",
       "creado": "2026-08-22T02:22:44.982Z"
+    },
+    {
+      "id": 29,
+      "usuario": "Mati",
+      "cantidad": 55,
+      "moneda": "owcoins",
+      "evento": "Ruleta de OW",
+      "fecha": "21/8/2026",
+      "creado": "2026-08-22T02:23:38.968Z"
     }
   ],
   "retiros": []
