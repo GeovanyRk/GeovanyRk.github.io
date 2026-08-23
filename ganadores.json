@@ -1403,7 +1403,7 @@
     {
       "id": 140,
       "usuario": "fedriquechumpi",
-      "premio": "1200 pavos + 450 owcoins",
+      "premio": "1200 pavos",
       "cantidad": 0,
       "moneda": "pase",
       "rankeable": false,
@@ -1414,13 +1414,14 @@
     {
       "id": 141,
       "usuario": "maikyx__",
-      "premio": "450 pavos + 1200 owcoins",
+      "premio": "450 pavos",
       "cantidad": 0,
       "moneda": "pase",
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "20/8/2026",
-      "entregado": false
+      "entregado": false,
+      "alcancia": true
     },
     {
       "id": 142,
@@ -1453,7 +1454,8 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "15/8/2026",
-      "entregado": false
+      "entregado": false,
+      "alcancia": true
     },
     {
       "id": 145,
@@ -1464,7 +1466,8 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "17/8/2026",
-      "entregado": false
+      "entregado": false,
+      "alcancia": true
     },
     {
       "id": 146,
@@ -1475,7 +1478,8 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "17/8/2026",
-      "entregado": false
+      "entregado": false,
+      "alcancia": true
     },
     {
       "id": 147,
@@ -1486,7 +1490,8 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "11/8/2026",
-      "entregado": false
+      "entregado": false,
+      "alcancia": true
     },
     {
       "id": 148,
@@ -1497,7 +1502,8 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "18/8/2026",
-      "entregado": false
+      "entregado": false,
+      "alcancia": true
     },
     {
       "id": 149,
@@ -1508,7 +1514,8 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "16/8/2026",
-      "entregado": false
+      "entregado": false,
+      "alcancia": true
     },
     {
       "id": 150,
@@ -1519,7 +1526,8 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "15/8/2026",
-      "entregado": false
+      "entregado": false,
+      "alcancia": true
     },
     {
       "id": 151,
@@ -1530,7 +1538,8 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "19/8/2026",
-      "entregado": false
+      "entregado": false,
+      "alcancia": true
     },
     {
       "id": 152,
@@ -1541,7 +1550,8 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "17/8/2026",
-      "entregado": false
+      "entregado": false,
+      "alcancia": true
     },
     {
       "id": 153,
@@ -1552,7 +1562,8 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "6/8/2026",
-      "entregado": false
+      "entregado": false,
+      "alcancia": true
     },
     {
       "id": 154,
@@ -1563,7 +1574,8 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "17/8/2026",
-      "entregado": false
+      "entregado": false,
+      "alcancia": true
     },
     {
       "id": 155,
@@ -1574,7 +1586,8 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "7/8/2026",
-      "entregado": false
+      "entregado": false,
+      "alcancia": true
     },
     {
       "id": 156,
@@ -1585,7 +1598,8 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "6/8/2026",
-      "entregado": false
+      "entregado": false,
+      "alcancia": true
     },
     {
       "id": 157,
@@ -1596,7 +1610,8 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "8/8/2026",
-      "entregado": false
+      "entregado": false,
+      "alcancia": true
     },
     {
       "id": 158,
@@ -1995,6 +2010,29 @@
       "fecha": "4/8/2026",
       "entregado": false,
       "alcancia": true
+    },
+    {
+      "id": 192,
+      "usuario": "fedriquechumpi",
+      "premio": "450 owcoins",
+      "cantidad": 0,
+      "moneda": "pase",
+      "rankeable": false,
+      "evento": "Pase de Batalla",
+      "fecha": "20/8/2026",
+      "entregado": false,
+      "alcancia": true
+    },
+    {
+      "id": 193,
+      "usuario": "maikyx__",
+      "premio": "1200 owcoins",
+      "cantidad": 0,
+      "moneda": "pase",
+      "rankeable": false,
+      "evento": "Pase de Batalla",
+      "fecha": "20/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
