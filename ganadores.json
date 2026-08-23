@@ -1579,7 +1579,7 @@
     {
       "id": 156,
       "usuario": "xWonnyx",
-      "premio": "Nivel 6 + 150 pavos + 40 G coins + Rol Recluta (falta elegir: Nivel 6 (70 pavos u owcoins))",
+      "premio": "Nivel 6 + 220 pavos + 40 G coins + Rol Recluta",
       "cantidad": 0,
       "moneda": "pase",
       "rankeable": false,
@@ -1700,7 +1700,7 @@
     {
       "id": 167,
       "usuario": "HTTMashu",
-      "premio": "Nivel 2 + Rol Recluta (falta elegir: Nivel 2 (40 pavos u owcoins))",
+      "premio": "Nivel 2 + 40 owcoins + Rol Recluta",
       "cantidad": 0,
       "moneda": "pase",
       "rankeable": false,
@@ -1711,89 +1711,12 @@
     {
       "id": 168,
       "usuario": "502jona",
-      "premio": "Nivel 2 + Rol Recluta (falta elegir: Nivel 2 (40 pavos u owcoins))",
+      "premio": "Nivel 2 + 40 pavos + Rol Recluta",
       "cantidad": 0,
       "moneda": "pase",
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "5/8/2026",
-      "entregado": false
-    },
-    {
-      "id": 169,
-      "usuario": "redmerison",
-      "premio": "Nivel 1 + Rol Recluta",
-      "cantidad": 0,
-      "moneda": "pase",
-      "rankeable": false,
-      "evento": "Pase de Batalla",
-      "fecha": "12/8/2026",
-      "entregado": false
-    },
-    {
-      "id": 170,
-      "usuario": "Bonnivom",
-      "premio": "Nivel 1 + Rol Recluta",
-      "cantidad": 0,
-      "moneda": "pase",
-      "rankeable": false,
-      "evento": "Pase de Batalla",
-      "fecha": "15/8/2026",
-      "entregado": false
-    },
-    {
-      "id": 171,
-      "usuario": "Krager_27",
-      "premio": "Nivel 1 + Rol Recluta",
-      "cantidad": 0,
-      "moneda": "pase",
-      "rankeable": false,
-      "evento": "Pase de Batalla",
-      "fecha": "16/8/2026",
-      "entregado": false
-    },
-    {
-      "id": 172,
-      "usuario": "marianxec",
-      "premio": "Nivel 1 + Rol Recluta",
-      "cantidad": 0,
-      "moneda": "pase",
-      "rankeable": false,
-      "evento": "Pase de Batalla",
-      "fecha": "5/8/2026",
-      "entregado": false
-    },
-    {
-      "id": 173,
-      "usuario": "chin0_capuchin0",
-      "premio": "Nivel 1 + Rol Recluta",
-      "cantidad": 0,
-      "moneda": "pase",
-      "rankeable": false,
-      "evento": "Pase de Batalla",
-      "fecha": "2/8/2026",
-      "entregado": false
-    },
-    {
-      "id": 174,
-      "usuario": "mufasa1912",
-      "premio": "Nivel 1 + Rol Recluta",
-      "cantidad": 0,
-      "moneda": "pase",
-      "rankeable": false,
-      "evento": "Pase de Batalla",
-      "fecha": "2/8/2026",
-      "entregado": false
-    },
-    {
-      "id": 175,
-      "usuario": "keitopecausa",
-      "premio": "Nivel 1 + Rol Recluta",
-      "cantidad": 0,
-      "moneda": "pase",
-      "rankeable": false,
-      "evento": "Pase de Batalla",
-      "fecha": "2/8/2026",
       "entregado": false
     }
   ],
