@@ -600,7 +600,7 @@
       "discordId": "718702910925439046",
       "discordUsuario": "matissj10",
       "fecha": "20/8/2026",
-      "entregado": false,
+      "entregado": true,
       "rechazado": false,
       "motivoRechazo": null
     },
