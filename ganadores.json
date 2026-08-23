@@ -1261,7 +1261,7 @@
       "evento": "Recompensa de Cofre",
       "fecha": "18/8/2026",
       "creado": "2026-08-19T02:20:54.321Z",
-      "entregado": false
+      "entregado": true
     },
     {
       "id": 128,
