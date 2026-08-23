@@ -693,6 +693,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 51,
+      "ganadorId": 121,
+      "ganadorUsuario": "skky_de_nile",
+      "ganadorPremio": "Pase de Batalla",
+      "item": "pase temporada glitch",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787462234982.jpg",
+      "nombreFortnite": "Emery_Nile",
+      "discordId": "1414392697313296454",
+      "discordUsuario": "emery_nile",
+      "fecha": "23/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
