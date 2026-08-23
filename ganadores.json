@@ -1388,6 +1388,17 @@
       "creado": "2026-08-23T02:29:15.377Z",
       "entregado": false,
       "rankeable": false
+    },
+    {
+      "id": 139,
+      "usuario": "Mati",
+      "premio": "500 OW Coins",
+      "cantidad": 500,
+      "moneda": "owcoins",
+      "evento": "cofre",
+      "fecha": "22/8/2026",
+      "creado": "2026-08-23T02:35:36.889Z",
+      "entregado": false
     }
   ],
   "gastos": [],
