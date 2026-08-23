@@ -231,7 +231,7 @@
         return s+'s';
       }
       function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
-      var NOMBRES_MONEDA_GN = { pavos: 'Pavos', owcoins: 'OW Coins', usd: 'USD' };
+      var NOMBRES_MONEDA_GN = { pavos: 'Pavos', owcoins: 'OW Coins', usd: 'USD', gcoins: 'G coins' };
       function fmtMonedaGn(cant, moneda){
         var n = NOMBRES_MONEDA_GN[moneda] || moneda || '';
         return cant.toLocaleString() + ' ' + n;
@@ -243,23 +243,25 @@
         var resultado = [], porUsuario = {};
         rows.forEach(function(g){
           if(estadoGn(g) !== 'alcancia'){ resultado.push(g); return; }
-          var key = (g.usuario||'').toLowerCase().trim();
+          // Se agrupa por usuario + moneda, para que pavos, OW Coins y G coins
+          // siempre queden en renglones separados y nunca se mezclen entre sí.
+          var key = (g.usuario||'').toLowerCase().trim() + '|' + (g.moneda||'');
           if(!porUsuario[key]){
             var nuevo = {
               id: g.id, usuario: g.usuario, evento: 'Recompensa de Cofre',
               fecha: g.fecha, alcancia: true, entregado: false,
-              _montos: {}, _count: 0,
+              _moneda: g.moneda, _monto: 0, _count: 0,
             };
             porUsuario[key] = nuevo;
             resultado.push(nuevo); // entra en el orden de su aparición más reciente (rows ya viene ordenado por id desc)
           }
           var p = porUsuario[key];
-          p._montos[g.moneda] = (p._montos[g.moneda] || 0) + (g.cantidad || 0);
+          p._monto += (g.cantidad || 0);
           p._count++;
         });
         resultado.forEach(function(r){
-          if(!r._montos) return;
-          r.premio = Object.keys(r._montos).map(function(mon){ return fmtMonedaGn(r._montos[mon], mon); }).join(' + ');
+          if(r._moneda === undefined) return;
+          r.premio = fmtMonedaGn(r._monto, r._moneda);
           r.evento = r._count > 1 ? ('Varios (' + r._count + ' aportes)') : r.evento;
         });
         return resultado;
