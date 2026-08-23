@@ -1155,7 +1155,7 @@
       "moneda": null,
       "evento": "Tienda de Oro",
       "fecha": "16/8/2026",
-      "entregado": false
+      "entregado": true
     },
     {
       "id": 118,
