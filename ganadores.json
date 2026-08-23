@@ -1228,7 +1228,7 @@
       "moneda": "pavos",
       "evento": "Recompensa de Cofre",
       "fecha": "18/8/2026",
-      "entregado": false,
+      "entregado": true,
       "rankeable": false
     },
     {
