@@ -555,7 +555,7 @@
       "discordId": "435588520719941642",
       "discordUsuario": "kirohyer",
       "fecha": "17/8/2026",
-      "entregado": false,
+      "entregado": true,
       "rechazado": false,
       "motivoRechazo": null
     },
