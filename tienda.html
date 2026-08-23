@@ -26,9 +26,8 @@
         radial-gradient(36% 45% at 50% 10%, rgba(255,210,63,.16), transparent 65%),
         radial-gradient(30% 35% at 15% 40%, rgba(145,71,255,.16), transparent 65%);
       filter: blur(10px);
-      animation: heroMeshDrift 24s ease-in-out infinite alternate;
+      /* estático por rendimiento — antes tenía una animación infinita que causaba lag */
     }
-    @media (prefers-reduced-motion: reduce) { .ti-hero::before { animation: none; } }
     .ti-hero-inner { max-width: 720px; margin: 0 auto; }
     .ti-eyebrow {
       display: inline-flex; align-items: center; gap: 8px;
