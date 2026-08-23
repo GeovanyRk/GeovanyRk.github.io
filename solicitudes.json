@@ -510,7 +510,7 @@
       "discordId": "541750772530937857",
       "discordUsuario": "alberto9134",
       "fecha": "17/8/2026",
-      "entregado": false,
+      "entregado": true,
       "rechazado": false,
       "motivoRechazo": null
     },
