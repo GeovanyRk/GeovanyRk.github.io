@@ -630,7 +630,7 @@
       "discordId": "977943323849420860",
       "discordUsuario": "mufasa1338",
       "fecha": "20/8/2026",
-      "entregado": false,
+      "entregado": true,
       "rechazado": false,
       "motivoRechazo": null
     },
