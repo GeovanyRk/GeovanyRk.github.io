@@ -1376,6 +1376,17 @@
       "fecha": "20/8/2026",
       "creado": "2026-08-21T01:14:25.691Z",
       "entregado": false
+    },
+    {
+      "id": 138,
+      "usuario": "Mufasa",
+      "premio": "700 Pavos",
+      "cantidad": 700,
+      "moneda": "pavos",
+      "evento": "lo que quedo de los 2500",
+      "fecha": "22/8/2026",
+      "creado": "2026-08-23T02:29:15.377Z",
+      "entregado": false
     }
   ],
   "gastos": [],
