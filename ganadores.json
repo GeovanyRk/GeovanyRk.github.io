@@ -729,7 +729,7 @@
       "moneda": "pavos",
       "evento": "ruleta y  piñata",
       "fecha": "26/7/2026",
-      "entregado": false,
+      "entregado": true,
       "rankeable": false
     },
     {
