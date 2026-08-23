@@ -952,7 +952,7 @@
       "moneda": "pavos",
       "evento": "Ruleta de Fortnite",
       "fecha": "7/8/2026",
-      "entregado": false
+      "entregado": true
     },
     {
       "id": 98,
@@ -1375,16 +1375,6 @@
       "evento": "Recompensa de Cofre",
       "fecha": "20/8/2026",
       "creado": "2026-08-21T01:14:25.691Z",
-      "entregado": false
-    },
-    {
-      "id": 138,
-      "usuario": "maikyx__",
-      "premio": "500 monedas de Overwatch",
-      "cantidad": 500,
-      "moneda": "owcoins",
-      "evento": "Tienda de Oro",
-      "fecha": "21/8/2026",
       "entregado": false
     }
   ],
