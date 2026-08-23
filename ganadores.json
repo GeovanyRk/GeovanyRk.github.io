@@ -1386,7 +1386,8 @@
       "evento": "lo que quedo de los 2500",
       "fecha": "22/8/2026",
       "creado": "2026-08-23T02:29:15.377Z",
-      "entregado": false
+      "entregado": false,
+      "rankeable": false
     }
   ],
   "gastos": [],
