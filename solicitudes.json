@@ -843,6 +843,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 61,
+      "ganadorId": 193,
+      "ganadorUsuario": "maikyx__",
+      "ganadorPremio": "1200 owcoins",
+      "item": "Ow coins",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787611660794.jpg",
+      "nombreFortnite": "Maiky#11291",
+      "discordId": "753063895454842890",
+      "discordUsuario": "maiky1804",
+      "fecha": "24/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
