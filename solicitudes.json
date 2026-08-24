@@ -798,6 +798,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 58,
+      "ganadorId": 81,
+      "ganadorUsuario": "matidk_0",
+      "ganadorPremio": "500 V-Bucks",
+      "item": "Sad but true - Metallica",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787593051388.png",
+      "nombreFortnite": "Matidk_0",
+      "discordId": "718702910925439046",
+      "discordUsuario": "matissj10",
+      "fecha": "24/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
