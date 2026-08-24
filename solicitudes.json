@@ -828,6 +828,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 60,
+      "ganadorId": 170,
+      "ganadorUsuario": "maikyx__",
+      "ganadorPremio": "Pase de Overwatch 2 + Pase de Clash Royale",
+      "item": "Pase de Ow",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787611577636.png",
+      "nombreFortnite": "Maiky#11291",
+      "discordId": "753063895454842890",
+      "discordUsuario": "maiky1804",
+      "fecha": "24/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
