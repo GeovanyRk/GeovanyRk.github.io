@@ -723,6 +723,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 53,
+      "ganadorId": 169,
+      "ganadorUsuario": "fedriquechumpi",
+      "ganadorPremio": "Pase de Fortnite + Pase de Clash Royale",
+      "item": "\"Pase de Fortnite\" y \"Pase de Clash Royale\"",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787588857153.jpg",
+      "nombreFortnite": "ID de Fortnite: FedriChumpi13 y ID de Clash Royale:HomelyChumpi",
+      "discordId": "713245537272463381",
+      "discordUsuario": "chumpi20",
+      "fecha": "24/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
