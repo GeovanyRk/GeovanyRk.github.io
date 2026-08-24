@@ -708,6 +708,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 52,
+      "ganadorId": 105,
+      "ganadorUsuario": "RickyeYT",
+      "ganadorPremio": "Pase de Batalla de Fortnite",
+      "item": "pase de batalla fortnite",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787533399340.webp",
+      "nombreFortnite": "x Rickye x",
+      "discordId": "392091646147297290",
+      "discordUsuario": "rickye_yt",
+      "fecha": "23/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
