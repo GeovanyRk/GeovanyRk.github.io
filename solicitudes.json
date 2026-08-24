@@ -768,6 +768,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 56,
+      "ganadorId": 181,
+      "ganadorUsuario": "kirbyx01",
+      "ganadorPremio": "100 G coins",
+      "item": "100 gcoins",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787592431793.png",
+      "nombreFortnite": "Kirby",
+      "discordId": "1351729055715688511",
+      "discordUsuario": "kirbyx.01",
+      "fecha": "24/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
