@@ -813,6 +813,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 59,
+      "ganadorId": 130,
+      "ganadorUsuario": "Kiro",
+      "ganadorPremio": "730 Pavos",
+      "item": "Skin de crash bandicoot  (si soy impaciente)",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787610196699.jpg",
+      "nombreFortnite": "KDA KiroHyer",
+      "discordId": "435588520719941642",
+      "discordUsuario": "kirohyer",
+      "fecha": "24/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
