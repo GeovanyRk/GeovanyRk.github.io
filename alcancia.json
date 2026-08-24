@@ -305,6 +305,15 @@
       "evento": "Ruleta de OW",
       "fecha": "23/8/2026",
       "creado": "2026-08-24T01:42:41.921Z"
+    },
+    {
+      "id": 35,
+      "usuario": "Cristian",
+      "cantidad": 50,
+      "moneda": "owcoins",
+      "evento": "Ruleta de OW",
+      "fecha": "23/8/2026",
+      "creado": "2026-08-24T01:43:50.656Z"
     }
   ],
   "retiros": []
