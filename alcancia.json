@@ -314,6 +314,15 @@
       "evento": "Ruleta de OW",
       "fecha": "23/8/2026",
       "creado": "2026-08-24T01:43:50.656Z"
+    },
+    {
+      "id": 36,
+      "usuario": "Kirby",
+      "cantidad": 80,
+      "moneda": "owcoins",
+      "evento": "Faltante por un error",
+      "fecha": "24/8/2026",
+      "creado": "2026-08-24T21:56:01.490Z"
     }
   ],
   "retiros": []
