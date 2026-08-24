@@ -1,7 +1,7 @@
 {
   "mufasa1912": {
     "usuario": "mufasa1912",
-    "ganado": 12525,
+    "ganado": 12545,
     "gastado": 0
   },
   "kirbyx01": {
@@ -26,7 +26,7 @@
   },
   "fedriquechumpi": {
     "usuario": "fedriquechumpi",
-    "ganado": 3130,
+    "ganado": 3150,
     "gastado": 2800
   },
   "warnerr8": {
@@ -41,7 +41,7 @@
   },
   "kiro_hyer": {
     "usuario": "Kiro_Hyer",
-    "ganado": 3755,
+    "ganado": 3775,
     "gastado": 2500
   },
   "502jona": {
@@ -51,12 +51,12 @@
   },
   "cristiandan89": {
     "usuario": "cristiandan89",
-    "ganado": 835,
+    "ganado": 855,
     "gastado": 0
   },
   "forsaken453": {
     "usuario": "forsaken453",
-    "ganado": 2320,
+    "ganado": 2340,
     "gastado": 0
   },
   "alexjuanforever": {
@@ -71,7 +71,7 @@
   },
   "axismoder": {
     "usuario": "AxisModer",
-    "ganado": 890,
+    "ganado": 910,
     "gastado": 0
   },
   "joshi_rexgg": {
@@ -91,7 +91,7 @@
   },
   "ermichael94": {
     "usuario": "ermichael94",
-    "ganado": 4770,
+    "ganado": 4790,
     "gastado": 0
   },
   "marianxec": {
@@ -107,6 +107,11 @@
   "skky_de_nile": {
     "usuario": "skky_de_nile",
     "ganado": 2290,
+    "gastado": 0
+  },
+  "krager_27": {
+    "usuario": "Krager_27",
+    "ganado": 20,
     "gastado": 0
   }
 }
