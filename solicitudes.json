@@ -738,6 +738,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 54,
+      "ganadorId": 111,
+      "ganadorUsuario": "Michael",
+      "ganadorPremio": "1,000 OW Coins",
+      "item": "Pase de Ow",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787590552950.jpg",
+      "nombreFortnite": "ErMichael94",
+      "discordId": "689912377055117429",
+      "discordUsuario": "jojoto2526",
+      "fecha": "24/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
