@@ -918,6 +918,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 66,
+      "ganadorId": 172,
+      "ganadorUsuario": "fedriquechumpi",
+      "ganadorPremio": "760 G coins",
+      "item": "760 G coins (+40%) = 1064 G coins",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787673074412.jpg",
+      "nombreFortnite": "ID : fedriquechumpi",
+      "discordId": "713245537272463381",
+      "discordUsuario": "chumpi20",
+      "fecha": "25/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
