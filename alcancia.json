@@ -359,6 +359,15 @@
       "evento": "Ruleta de Ow",
       "fecha": "25/8/2026",
       "creado": "2026-08-25T05:20:45.616Z"
+    },
+    {
+      "id": 41,
+      "usuario": "Demencia",
+      "cantidad": 30,
+      "moneda": "owcoins",
+      "evento": "Ruleta de Ow",
+      "fecha": "25/8/2026",
+      "creado": "2026-08-25T05:21:23.194Z"
     }
   ],
   "retiros": []
