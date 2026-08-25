@@ -350,6 +350,15 @@
       "evento": "Ruleta de Ow",
       "fecha": "25/8/2026",
       "creado": "2026-08-25T05:20:17.965Z"
+    },
+    {
+      "id": 40,
+      "usuario": "Maiky",
+      "cantidad": 110,
+      "moneda": "owcoins",
+      "evento": "Ruleta de Ow",
+      "fecha": "25/8/2026",
+      "creado": "2026-08-25T05:20:45.616Z"
     }
   ],
   "retiros": []
