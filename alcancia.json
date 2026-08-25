@@ -332,6 +332,15 @@
       "evento": "Faltante porque la Mod reprobó matemáticas básicas",
       "fecha": "24/8/2026",
       "creado": "2026-08-24T22:01:40.156Z"
+    },
+    {
+      "id": 38,
+      "usuario": "Josema",
+      "cantidad": 50,
+      "moneda": "owcoins",
+      "evento": "Ruleta de Ow",
+      "fecha": "25/8/2026",
+      "creado": "2026-08-25T05:19:51.842Z"
     }
   ],
   "retiros": []
