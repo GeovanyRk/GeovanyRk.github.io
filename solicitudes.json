@@ -933,6 +933,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 67,
+      "ganadorId": 133,
+      "ganadorUsuario": "Fredi",
+      "ganadorPremio": "800 Pavos",
+      "item": "Tengo un total de 2450(+40%)=3430 pavos. 1er pedido: \"Skin de Crash Bandicoot\".",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787677334566.jpg",
+      "nombreFortnite": "ID: FedriChumpi13",
+      "discordId": "713245537272463381",
+      "discordUsuario": "chumpi20",
+      "fecha": "25/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
