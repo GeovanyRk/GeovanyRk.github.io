@@ -888,6 +888,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 64,
+      "ganadorId": 134,
+      "ganadorUsuario": "Kid",
+      "ganadorPremio": "800 Pavos",
+      "item": "Skin Deriva Estival con algunas recompensas de pavos que están cerca de vencer",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787623166765.jpg",
+      "nombreFortnite": "elkid_RD36",
+      "discordId": "1072372475360448522",
+      "discordUsuario": "elkid_rd36",
+      "fecha": "24/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
