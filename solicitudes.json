@@ -903,6 +903,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 65,
+      "ganadorId": 177,
+      "ganadorUsuario": "kittykitty_katt",
+      "ganadorPremio": "170 G coins",
+      "item": "G coins",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787635510310.jpg",
+      "nombreFortnite": "Kitty",
+      "discordId": "722967308804292679",
+      "discordUsuario": "purrfect.meow",
+      "fecha": "25/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
