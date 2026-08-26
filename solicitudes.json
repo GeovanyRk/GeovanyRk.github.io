@@ -948,6 +948,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 68,
+      "ganadorId": 104,
+      "ganadorUsuario": "Maton",
+      "ganadorPremio": "500 Pavos",
+      "item": "algo del lote de crash para poder comprar el lote más barato",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787760982044.png",
+      "nombreFortnite": "Matonzizimo kid",
+      "discordId": "1024771078691766302",
+      "discordUsuario": "matonzizimokid",
+      "fecha": "26/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
