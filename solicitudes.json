@@ -963,6 +963,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 69,
+      "ganadorId": 171,
+      "ganadorUsuario": "bigeddy_",
+      "ganadorPremio": "Pase de Fortnite",
+      "item": "Pase de batalla Glitch",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787771708590.jpg",
+      "nombreFortnite": "BigEddy_11",
+      "discordId": "749741825656619058",
+      "discordUsuario": "bigeddy11",
+      "fecha": "26/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
