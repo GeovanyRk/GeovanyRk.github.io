@@ -1008,6 +1008,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 72,
+      "ganadorId": 74,
+      "ganadorUsuario": "toji",
+      "ganadorPremio": "1,000 Pavos",
+      "item": "pase de batalla Og temporada 10",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787850996081.jpg",
+      "nombreFortnite": "Coronel973rudo",
+      "discordId": "1279273117956575315",
+      "discordUsuario": "toji_fushijiro",
+      "fecha": "27/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
