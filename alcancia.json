@@ -413,6 +413,15 @@
       "evento": "Ruleta de Fortnite",
       "fecha": "26/8/2026",
       "creado": "2026-08-27T01:10:58.960Z"
+    },
+    {
+      "id": 47,
+      "usuario": "Skky",
+      "cantidad": 130,
+      "moneda": "pavos",
+      "evento": "Ruleta de Fortnite",
+      "fecha": "26/8/2026",
+      "creado": "2026-08-27T01:11:22.910Z"
     }
   ],
   "retiros": []
