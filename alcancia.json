@@ -386,6 +386,15 @@
       "evento": "Ruleta de Ow",
       "fecha": "25/8/2026",
       "creado": "2026-08-25T05:21:54.214Z"
+    },
+    {
+      "id": 44,
+      "usuario": "Michael",
+      "cantidad": 50,
+      "moneda": "pavos",
+      "evento": "Ruleta de Fortnite",
+      "fecha": "26/8/2026",
+      "creado": "2026-08-27T01:08:55.159Z"
     }
   ],
   "retiros": []
