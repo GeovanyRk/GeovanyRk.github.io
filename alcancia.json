@@ -404,6 +404,15 @@
       "evento": "Ruleta de Fortnite",
       "fecha": "26/8/2026",
       "creado": "2026-08-27T01:10:15.863Z"
+    },
+    {
+      "id": 46,
+      "usuario": "Maton",
+      "cantidad": 50,
+      "moneda": "pavos",
+      "evento": "Ruleta de Fortnite",
+      "fecha": "26/8/2026",
+      "creado": "2026-08-27T01:10:58.960Z"
     }
   ],
   "retiros": []
