@@ -431,6 +431,240 @@
       "evento": "Ruleta de Fortnite",
       "fecha": "26/8/2026",
       "creado": "2026-08-27T01:11:47.471Z"
+    },
+    {
+      "id": 49,
+      "usuario": "Maiky",
+      "cantidad": 450,
+      "moneda": "pavos",
+      "evento": "Pase de Batalla",
+      "fecha": "20/8/2026",
+      "creado": "2026-08-20T00:00:00.000Z"
+    },
+    {
+      "id": 50,
+      "usuario": "Matid",
+      "cantidad": 400,
+      "moneda": "pavos",
+      "evento": "Pase de Batalla",
+      "fecha": "15/8/2026",
+      "creado": "2026-08-15T00:00:00.000Z"
+    },
+    {
+      "id": 51,
+      "usuario": "Kitty",
+      "cantidad": 400,
+      "moneda": "owcoins",
+      "evento": "Pase de Batalla",
+      "fecha": "17/8/2026",
+      "creado": "2026-08-17T00:00:00.000Z"
+    },
+    {
+      "id": 52,
+      "usuario": "AxisModer",
+      "cantidad": 300,
+      "moneda": "owcoins",
+      "evento": "Pase de Batalla",
+      "fecha": "17/8/2026",
+      "creado": "2026-08-17T00:00:00.000Z"
+    },
+    {
+      "id": 53,
+      "usuario": "Warner",
+      "cantidad": 300,
+      "moneda": "pavos",
+      "evento": "Pase de Batalla",
+      "fecha": "11/8/2026",
+      "creado": "2026-08-11T00:00:00.000Z"
+    },
+    {
+      "id": 54,
+      "usuario": "Forsa",
+      "cantidad": 300,
+      "moneda": "pavos",
+      "evento": "Pase de Batalla",
+      "fecha": "18/8/2026",
+      "creado": "2026-08-18T00:00:00.000Z"
+    },
+    {
+      "id": 55,
+      "usuario": "Kirby",
+      "cantidad": 300,
+      "moneda": "owcoins",
+      "evento": "Pase de Batalla",
+      "fecha": "16/8/2026",
+      "creado": "2026-08-16T00:00:00.000Z"
+    },
+    {
+      "id": 56,
+      "usuario": "josem55a",
+      "cantidad": 220,
+      "moneda": "owcoins",
+      "evento": "Pase de Batalla",
+      "fecha": "15/8/2026",
+      "creado": "2026-08-15T00:00:00.000Z"
+    },
+    {
+      "id": 57,
+      "usuario": "toji",
+      "cantidad": 220,
+      "moneda": "pavos",
+      "evento": "Pase de Batalla",
+      "fecha": "19/8/2026",
+      "creado": "2026-08-19T00:00:00.000Z"
+    },
+    {
+      "id": 58,
+      "usuario": "Kiro",
+      "cantidad": 220,
+      "moneda": "pavos",
+      "evento": "Pase de Batalla",
+      "fecha": "17/8/2026",
+      "creado": "2026-08-17T00:00:00.000Z"
+    },
+    {
+      "id": 59,
+      "usuario": "ermichael94",
+      "cantidad": 220,
+      "moneda": "pavos",
+      "evento": "Pase de Batalla",
+      "fecha": "6/8/2026",
+      "creado": "2026-08-06T00:00:00.000Z"
+    },
+    {
+      "id": 60,
+      "usuario": "AlexJuanForever",
+      "cantidad": 220,
+      "moneda": "pavos",
+      "evento": "Pase de Batalla",
+      "fecha": "17/8/2026",
+      "creado": "2026-08-17T00:00:00.000Z"
+    },
+    {
+      "id": 61,
+      "usuario": "bonilla7u7",
+      "cantidad": 220,
+      "moneda": "pavos",
+      "evento": "Pase de Batalla",
+      "fecha": "7/8/2026",
+      "creado": "2026-08-07T00:00:00.000Z"
+    },
+    {
+      "id": 62,
+      "usuario": "xwonny",
+      "cantidad": 220,
+      "moneda": "pavos",
+      "evento": "Pase de Batalla",
+      "fecha": "6/8/2026",
+      "creado": "2026-08-06T00:00:00.000Z"
+    },
+    {
+      "id": 63,
+      "usuario": "Mango",
+      "cantidad": 150,
+      "moneda": "pavos",
+      "evento": "Pase de Batalla",
+      "fecha": "8/8/2026",
+      "creado": "2026-08-08T00:00:00.000Z"
+    },
+    {
+      "id": 64,
+      "usuario": "ShadowcasReal1",
+      "cantidad": 90,
+      "moneda": "pavos",
+      "evento": "Pase de Batalla",
+      "fecha": "17/8/2026",
+      "creado": "2026-08-17T00:00:00.000Z"
+    },
+    {
+      "id": 65,
+      "usuario": "xVania06",
+      "cantidad": 90,
+      "moneda": "pavos",
+      "evento": "Pase de Batalla",
+      "fecha": "4/8/2026",
+      "creado": "2026-08-04T00:00:00.000Z"
+    },
+    {
+      "id": 66,
+      "usuario": "alberto9134",
+      "cantidad": 90,
+      "moneda": "owcoins",
+      "evento": "Pase de Batalla",
+      "fecha": "4/8/2026",
+      "creado": "2026-08-04T00:00:00.000Z"
+    },
+    {
+      "id": 67,
+      "usuario": "skky_de_nile",
+      "cantidad": 90,
+      "moneda": "pavos",
+      "evento": "Pase de Batalla",
+      "fecha": "4/8/2026",
+      "creado": "2026-08-04T00:00:00.000Z"
+    },
+    {
+      "id": 68,
+      "usuario": "cristiandan89",
+      "cantidad": 40,
+      "moneda": "owcoins",
+      "evento": "Pase de Batalla",
+      "fecha": "4/8/2026",
+      "creado": "2026-08-04T00:00:00.000Z"
+    },
+    {
+      "id": 69,
+      "usuario": "xiaokiis",
+      "cantidad": 40,
+      "moneda": "owcoins",
+      "evento": "Pase de Batalla",
+      "fecha": "4/8/2026",
+      "creado": "2026-08-04T00:00:00.000Z"
+    },
+    {
+      "id": 70,
+      "usuario": "Marvin",
+      "cantidad": 40,
+      "moneda": "pavos",
+      "evento": "Pase de Batalla",
+      "fecha": "7/8/2026",
+      "creado": "2026-08-07T00:00:00.000Z"
+    },
+    {
+      "id": 71,
+      "usuario": "PH3Rxyz",
+      "cantidad": 40,
+      "moneda": "pavos",
+      "evento": "Pase de Batalla",
+      "fecha": "7/8/2026",
+      "creado": "2026-08-07T00:00:00.000Z"
+    },
+    {
+      "id": 72,
+      "usuario": "Mashu",
+      "cantidad": 40,
+      "moneda": "owcoins",
+      "evento": "Pase de Batalla",
+      "fecha": "5/8/2026",
+      "creado": "2026-08-05T00:00:00.000Z"
+    },
+    {
+      "id": 73,
+      "usuario": "502jona",
+      "cantidad": 40,
+      "moneda": "pavos",
+      "evento": "Pase de Batalla",
+      "fecha": "5/8/2026",
+      "creado": "2026-08-05T00:00:00.000Z"
+    },
+    {
+      "id": 74,
+      "usuario": "Fredi",
+      "cantidad": 450,
+      "moneda": "owcoins",
+      "evento": "Pase de Batalla",
+      "fecha": "20/8/2026",
+      "creado": "2026-08-20T00:00:00.000Z"
     }
   ],
   "retiros": []
