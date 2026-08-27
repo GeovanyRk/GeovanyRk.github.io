@@ -978,6 +978,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 70,
+      "ganadorId": 142,
+      "ganadorUsuario": "bigeddy_",
+      "ganadorPremio": "750 pavos",
+      "item": "Skin Ciri (con los 2000 pavos que canjee pero no me diste nada porque no me tenias agregado)",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787789440061.jpg",
+      "nombreFortnite": "BigEddy_11",
+      "discordId": "749741825656619058",
+      "discordUsuario": "bigeddy11",
+      "fecha": "26/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
