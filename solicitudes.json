@@ -993,6 +993,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 71,
+      "ganadorId": 92,
+      "ganadorUsuario": "Jose Angel",
+      "ganadorPremio": "500 Pavos",
+      "item": "Emote Bizcochito",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787792197648.png",
+      "nombreFortnite": "NakanoJc",
+      "discordId": "1446644777134329876",
+      "discordUsuario": "nakanojc.",
+      "fecha": "26/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
