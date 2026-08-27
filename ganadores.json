@@ -1402,7 +1402,7 @@
     },
     {
       "id": 140,
-      "usuario": "fedriquechumpi",
+      "usuario": "Fredi",
       "premio": "1200 pavos",
       "cantidad": 1200,
       "moneda": "pavos",
@@ -1413,7 +1413,7 @@
     },
     {
       "id": 141,
-      "usuario": "maikyx__",
+      "usuario": "Maiky",
       "premio": "450 pavos",
       "cantidad": 450,
       "moneda": "pavos",
@@ -1447,7 +1447,7 @@
     },
     {
       "id": 144,
-      "usuario": "matidk_0",
+      "usuario": "Matid",
       "premio": "400 pavos",
       "cantidad": 400,
       "moneda": "pavos",
@@ -1459,7 +1459,7 @@
     },
     {
       "id": 145,
-      "usuario": "kittykitty_katt",
+      "usuario": "Kitty",
       "premio": "400 owcoins",
       "cantidad": 400,
       "moneda": "owcoins",
@@ -1483,7 +1483,7 @@
     },
     {
       "id": 147,
-      "usuario": "warnerr8",
+      "usuario": "Warner",
       "premio": "300 pavos",
       "cantidad": 300,
       "moneda": "pavos",
@@ -1495,7 +1495,7 @@
     },
     {
       "id": 148,
-      "usuario": "forsaken453",
+      "usuario": "Forsa",
       "premio": "300 pavos",
       "cantidad": 300,
       "moneda": "pavos",
@@ -1507,7 +1507,7 @@
     },
     {
       "id": 149,
-      "usuario": "kirbyx01",
+      "usuario": "Kirby",
       "premio": "300 owcoins",
       "cantidad": 300,
       "moneda": "owcoins",
@@ -1531,7 +1531,7 @@
     },
     {
       "id": 151,
-      "usuario": "toji_fushijiro",
+      "usuario": "toji",
       "premio": "220 pavos",
       "cantidad": 220,
       "moneda": "pavos",
@@ -1543,7 +1543,7 @@
     },
     {
       "id": 152,
-      "usuario": "Kiro_Hyer",
+      "usuario": "Kiro",
       "premio": "220 pavos",
       "cantidad": 220,
       "moneda": "pavos",
@@ -1591,7 +1591,7 @@
     },
     {
       "id": 156,
-      "usuario": "xWonnyx",
+      "usuario": "xwonny",
       "premio": "220 pavos",
       "cantidad": 220,
       "moneda": "pavos",
@@ -1603,7 +1603,7 @@
     },
     {
       "id": 157,
-      "usuario": "MangoAlegre",
+      "usuario": "Mango",
       "premio": "150 pavos",
       "cantidad": 150,
       "moneda": "pavos",
@@ -1628,18 +1628,6 @@
     {
       "id": 159,
       "usuario": "xVania06",
-      "premio": "90 pavos",
-      "cantidad": 90,
-      "moneda": "pavos",
-      "rankeable": false,
-      "evento": "Pase de Batalla",
-      "fecha": "4/8/2026",
-      "entregado": false,
-      "alcancia": true
-    },
-    {
-      "id": 160,
-      "usuario": "Geovannyrk",
       "premio": "90 pavos",
       "cantidad": 90,
       "moneda": "pavos",
@@ -1687,7 +1675,7 @@
     },
     {
       "id": 164,
-      "usuario": "xiaookiss",
+      "usuario": "xiaokiis",
       "premio": "40 owcoins",
       "cantidad": 40,
       "moneda": "owcoins",
@@ -1699,7 +1687,7 @@
     },
     {
       "id": 165,
-      "usuario": "DiosMarvin",
+      "usuario": "Marvin",
       "premio": "40 pavos",
       "cantidad": 40,
       "moneda": "pavos",
@@ -1723,7 +1711,7 @@
     },
     {
       "id": 167,
-      "usuario": "HTTMashu",
+      "usuario": "Mashu",
       "premio": "40 owcoins",
       "cantidad": 40,
       "moneda": "owcoins",
@@ -1747,7 +1735,7 @@
     },
     {
       "id": 169,
-      "usuario": "fedriquechumpi",
+      "usuario": "Fredi",
       "premio": "Pase de Fortnite + Pase de Clash Royale",
       "cantidad": 0,
       "moneda": "pase",
@@ -1758,7 +1746,7 @@
     },
     {
       "id": 170,
-      "usuario": "maikyx__",
+      "usuario": "Maiky",
       "premio": "Pase de Overwatch 2 + Pase de Clash Royale",
       "cantidad": 0,
       "moneda": "pase",
@@ -1780,7 +1768,7 @@
     },
     {
       "id": 172,
-      "usuario": "fedriquechumpi",
+      "usuario": "Fredi",
       "premio": "760 G coins",
       "cantidad": 760,
       "moneda": "gcoins",
@@ -1791,7 +1779,7 @@
     },
     {
       "id": 173,
-      "usuario": "maikyx__",
+      "usuario": "Maiky",
       "premio": "760 G coins",
       "cantidad": 760,
       "moneda": "gcoins",
@@ -1824,7 +1812,7 @@
     },
     {
       "id": 176,
-      "usuario": "matidk_0",
+      "usuario": "Matid",
       "premio": "170 G coins",
       "cantidad": 170,
       "moneda": "gcoins",
@@ -1835,7 +1823,7 @@
     },
     {
       "id": 177,
-      "usuario": "kittykitty_katt",
+      "usuario": "Kitty",
       "premio": "170 G coins",
       "cantidad": 170,
       "moneda": "gcoins",
@@ -1857,7 +1845,7 @@
     },
     {
       "id": 179,
-      "usuario": "warnerr8",
+      "usuario": "Warner",
       "premio": "100 G coins",
       "cantidad": 100,
       "moneda": "gcoins",
@@ -1869,7 +1857,7 @@
     },
     {
       "id": 180,
-      "usuario": "forsaken453",
+      "usuario": "Forsa",
       "premio": "100 G coins",
       "cantidad": 100,
       "moneda": "gcoins",
@@ -1881,7 +1869,7 @@
     },
     {
       "id": 181,
-      "usuario": "kirbyx01",
+      "usuario": "Kirby",
       "premio": "100 G coins",
       "cantidad": 100,
       "moneda": "gcoins",
@@ -1905,7 +1893,7 @@
     },
     {
       "id": 183,
-      "usuario": "toji_fushijiro",
+      "usuario": "toji",
       "premio": "100 G coins",
       "cantidad": 100,
       "moneda": "gcoins",
@@ -1917,7 +1905,7 @@
     },
     {
       "id": 184,
-      "usuario": "Kiro_Hyer",
+      "usuario": "Kiro",
       "premio": "100 G coins",
       "cantidad": 100,
       "moneda": "gcoins",
@@ -1965,7 +1953,7 @@
     },
     {
       "id": 188,
-      "usuario": "xWonnyx",
+      "usuario": "xwonny",
       "premio": "40 G coins",
       "cantidad": 40,
       "moneda": "gcoins",
@@ -1977,7 +1965,7 @@
     },
     {
       "id": 189,
-      "usuario": "MangoAlegre",
+      "usuario": "Mango",
       "premio": "40 G coins",
       "cantidad": 40,
       "moneda": "gcoins",
@@ -2013,7 +2001,7 @@
     },
     {
       "id": 192,
-      "usuario": "fedriquechumpi",
+      "usuario": "Fredi",
       "premio": "450 owcoins",
       "cantidad": 450,
       "moneda": "owcoins",
@@ -2025,7 +2013,7 @@
     },
     {
       "id": 193,
-      "usuario": "maikyx__",
+      "usuario": "Maiky",
       "premio": "1200 owcoins",
       "cantidad": 1200,
       "moneda": "owcoins",
