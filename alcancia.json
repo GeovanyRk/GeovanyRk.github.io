@@ -395,6 +395,15 @@
       "evento": "Ruleta de Fortnite",
       "fecha": "26/8/2026",
       "creado": "2026-08-27T01:08:55.159Z"
+    },
+    {
+      "id": 45,
+      "usuario": "JoseAngel",
+      "cantidad": 20,
+      "moneda": "pavos",
+      "evento": "Ruleta de Fortnite",
+      "fecha": "26/8/2026",
+      "creado": "2026-08-27T01:10:15.863Z"
     }
   ],
   "retiros": []
