@@ -647,7 +647,7 @@
       "discordId": "1072372475360448522",
       "discordUsuario": "elkid_rd36",
       "fecha": "21/8/2026",
-      "entregado": false,
+      "entregado": true,
       "rechazado": false,
       "motivoRechazo": null
     },
