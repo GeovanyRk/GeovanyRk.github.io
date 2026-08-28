@@ -692,6 +692,15 @@
       "evento": "General",
       "fecha": "27/8/2026",
       "creado": "2026-08-28T01:20:18.498Z"
+    },
+    {
+      "id": 78,
+      "usuario": "Kitty",
+      "cantidad": 10,
+      "moneda": "owcoins",
+      "evento": "General",
+      "fecha": "27/8/2026",
+      "creado": "2026-08-28T01:20:45.378Z"
     }
   ],
   "retiros": []
