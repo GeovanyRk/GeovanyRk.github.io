@@ -710,6 +710,15 @@
       "evento": "General",
       "fecha": "27/8/2026",
       "creado": "2026-08-28T01:21:08.040Z"
+    },
+    {
+      "id": 80,
+      "usuario": "Mati",
+      "cantidad": 5,
+      "moneda": "owcoins",
+      "evento": "General",
+      "fecha": "27/8/2026",
+      "creado": "2026-08-28T01:21:26.958Z"
     }
   ],
   "retiros": []
