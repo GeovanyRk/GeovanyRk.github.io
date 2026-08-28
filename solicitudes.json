@@ -542,7 +542,7 @@
       "discordId": "722967308804292679",
       "discordUsuario": "purrfect.meow",
       "fecha": "17/8/2026",
-      "entregado": false,
+      "entregado": true,
       "rechazado": false,
       "motivoRechazo": null
     },
