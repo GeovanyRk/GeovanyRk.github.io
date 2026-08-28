@@ -497,7 +497,7 @@
       "discordId": "632773733857099788",
       "discordUsuario": "josem05a",
       "fecha": "16/8/2026",
-      "entregado": false,
+      "entregado": true,
       "rechazado": false,
       "motivoRechazo": null
     },
