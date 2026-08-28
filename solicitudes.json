@@ -1023,6 +1023,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 73,
+      "ganadorId": 93,
+      "ganadorUsuario": "forsaken453",
+      "ganadorPremio": "500 V-Bucks",
+      "item": "baile de crash",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787946673142.jpg",
+      "nombreFortnite": "forsaken458",
+      "discordId": "1495451555950760009",
+      "discordUsuario": "forsaken458_",
+      "fecha": "28/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
