@@ -424,7 +424,9 @@
       "discordId": "231468237257179137",
       "discordUsuario": "warnerr8",
       "fecha": "11/8/2026",
-      "entregado": false
+      "entregado": false,
+      "rechazado": true,
+      "motivoRechazo": null
     },
     {
       "id": 33,
