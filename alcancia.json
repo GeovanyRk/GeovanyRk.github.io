@@ -701,6 +701,15 @@
       "evento": "General",
       "fecha": "27/8/2026",
       "creado": "2026-08-28T01:20:45.378Z"
+    },
+    {
+      "id": 79,
+      "usuario": "Kiro",
+      "cantidad": 55,
+      "moneda": "pavos",
+      "evento": "General",
+      "fecha": "27/8/2026",
+      "creado": "2026-08-28T01:21:08.040Z"
     }
   ],
   "retiros": []
