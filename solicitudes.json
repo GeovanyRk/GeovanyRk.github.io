@@ -885,7 +885,7 @@
       "discordId": "1446644777134329876",
       "discordUsuario": "nakanojc.",
       "fecha": "24/8/2026",
-      "entregado": false,
+      "entregado": true,
       "rechazado": false,
       "motivoRechazo": null
     },
