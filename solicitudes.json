@@ -1040,6 +1040,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 74,
+      "ganadorId": 126,
+      "ganadorUsuario": "Kirby",
+      "ganadorPremio": "530 OW Coins",
+      "item": "500 monedas de ow",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1787960632587.jpg",
+      "nombreFortnite": "kirby",
+      "discordId": "1351729055715688511",
+      "discordUsuario": "kirbyx.01",
+      "fecha": "28/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
