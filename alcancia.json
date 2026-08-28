@@ -674,6 +674,15 @@
       "evento": "Ruleta de Fortnite",
       "fecha": "27/8/2026",
       "creado": "2026-08-28T01:19:00.966Z"
+    },
+    {
+      "id": 76,
+      "usuario": "Forsa",
+      "cantidad": 60,
+      "moneda": "pavos",
+      "evento": "General",
+      "fecha": "27/8/2026",
+      "creado": "2026-08-28T01:19:46.339Z"
     }
   ],
   "retiros": []
