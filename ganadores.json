@@ -1002,7 +1002,7 @@
       "moneda": "pavos",
       "evento": "Ruleta de Fortnite",
       "fecha": "11/8/2026",
-      "entregado": false
+      "entregado": true
     },
     {
       "id": 103,
@@ -1402,7 +1402,7 @@
     },
     {
       "id": 140,
-      "usuario": "Fredi",
+      "usuario": "fedriquechumpi",
       "premio": "1200 pavos",
       "cantidad": 1200,
       "moneda": "pavos",
@@ -1413,7 +1413,7 @@
     },
     {
       "id": 141,
-      "usuario": "Maiky",
+      "usuario": "maikyx__",
       "premio": "450 pavos",
       "cantidad": 450,
       "moneda": "pavos",
@@ -1447,7 +1447,7 @@
     },
     {
       "id": 144,
-      "usuario": "Matid",
+      "usuario": "matidk_0",
       "premio": "400 pavos",
       "cantidad": 400,
       "moneda": "pavos",
@@ -1459,7 +1459,7 @@
     },
     {
       "id": 145,
-      "usuario": "Kitty",
+      "usuario": "kittykitty_katt",
       "premio": "400 owcoins",
       "cantidad": 400,
       "moneda": "owcoins",
@@ -1483,7 +1483,7 @@
     },
     {
       "id": 147,
-      "usuario": "Warner",
+      "usuario": "warnerr8",
       "premio": "300 pavos",
       "cantidad": 300,
       "moneda": "pavos",
@@ -1495,7 +1495,7 @@
     },
     {
       "id": 148,
-      "usuario": "Forsa",
+      "usuario": "forsaken453",
       "premio": "300 pavos",
       "cantidad": 300,
       "moneda": "pavos",
@@ -1507,7 +1507,7 @@
     },
     {
       "id": 149,
-      "usuario": "Kirby",
+      "usuario": "kirbyx01",
       "premio": "300 owcoins",
       "cantidad": 300,
       "moneda": "owcoins",
@@ -1531,7 +1531,7 @@
     },
     {
       "id": 151,
-      "usuario": "toji",
+      "usuario": "toji_fushijiro",
       "premio": "220 pavos",
       "cantidad": 220,
       "moneda": "pavos",
@@ -1543,7 +1543,7 @@
     },
     {
       "id": 152,
-      "usuario": "Kiro",
+      "usuario": "Kiro_Hyer",
       "premio": "220 pavos",
       "cantidad": 220,
       "moneda": "pavos",
@@ -1591,7 +1591,7 @@
     },
     {
       "id": 156,
-      "usuario": "xwonny",
+      "usuario": "xWonnyx",
       "premio": "220 pavos",
       "cantidad": 220,
       "moneda": "pavos",
@@ -1603,7 +1603,7 @@
     },
     {
       "id": 157,
-      "usuario": "Mango",
+      "usuario": "MangoAlegre",
       "premio": "150 pavos",
       "cantidad": 150,
       "moneda": "pavos",
@@ -1628,6 +1628,18 @@
     {
       "id": 159,
       "usuario": "xVania06",
+      "premio": "90 pavos",
+      "cantidad": 90,
+      "moneda": "pavos",
+      "rankeable": false,
+      "evento": "Pase de Batalla",
+      "fecha": "4/8/2026",
+      "entregado": false,
+      "alcancia": true
+    },
+    {
+      "id": 160,
+      "usuario": "Geovannyrk",
       "premio": "90 pavos",
       "cantidad": 90,
       "moneda": "pavos",
@@ -1675,7 +1687,7 @@
     },
     {
       "id": 164,
-      "usuario": "xiaokiis",
+      "usuario": "xiaookiss",
       "premio": "40 owcoins",
       "cantidad": 40,
       "moneda": "owcoins",
@@ -1687,7 +1699,7 @@
     },
     {
       "id": 165,
-      "usuario": "Marvin",
+      "usuario": "DiosMarvin",
       "premio": "40 pavos",
       "cantidad": 40,
       "moneda": "pavos",
@@ -1711,7 +1723,7 @@
     },
     {
       "id": 167,
-      "usuario": "Mashu",
+      "usuario": "HTTMashu",
       "premio": "40 owcoins",
       "cantidad": 40,
       "moneda": "owcoins",
@@ -1735,7 +1747,7 @@
     },
     {
       "id": 169,
-      "usuario": "Fredi",
+      "usuario": "fedriquechumpi",
       "premio": "Pase de Fortnite + Pase de Clash Royale",
       "cantidad": 0,
       "moneda": "pase",
@@ -1746,7 +1758,7 @@
     },
     {
       "id": 170,
-      "usuario": "Maiky",
+      "usuario": "maikyx__",
       "premio": "Pase de Overwatch 2 + Pase de Clash Royale",
       "cantidad": 0,
       "moneda": "pase",
@@ -1768,7 +1780,7 @@
     },
     {
       "id": 172,
-      "usuario": "Fredi",
+      "usuario": "fedriquechumpi",
       "premio": "760 G coins",
       "cantidad": 760,
       "moneda": "gcoins",
@@ -1779,7 +1791,7 @@
     },
     {
       "id": 173,
-      "usuario": "Maiky",
+      "usuario": "maikyx__",
       "premio": "760 G coins",
       "cantidad": 760,
       "moneda": "gcoins",
@@ -1812,7 +1824,7 @@
     },
     {
       "id": 176,
-      "usuario": "Matid",
+      "usuario": "matidk_0",
       "premio": "170 G coins",
       "cantidad": 170,
       "moneda": "gcoins",
@@ -1823,7 +1835,7 @@
     },
     {
       "id": 177,
-      "usuario": "Kitty",
+      "usuario": "kittykitty_katt",
       "premio": "170 G coins",
       "cantidad": 170,
       "moneda": "gcoins",
@@ -1845,7 +1857,7 @@
     },
     {
       "id": 179,
-      "usuario": "Warner",
+      "usuario": "warnerr8",
       "premio": "100 G coins",
       "cantidad": 100,
       "moneda": "gcoins",
@@ -1857,7 +1869,7 @@
     },
     {
       "id": 180,
-      "usuario": "Forsa",
+      "usuario": "forsaken453",
       "premio": "100 G coins",
       "cantidad": 100,
       "moneda": "gcoins",
@@ -1869,7 +1881,7 @@
     },
     {
       "id": 181,
-      "usuario": "Kirby",
+      "usuario": "kirbyx01",
       "premio": "100 G coins",
       "cantidad": 100,
       "moneda": "gcoins",
@@ -1893,7 +1905,7 @@
     },
     {
       "id": 183,
-      "usuario": "toji",
+      "usuario": "toji_fushijiro",
       "premio": "100 G coins",
       "cantidad": 100,
       "moneda": "gcoins",
@@ -1905,7 +1917,7 @@
     },
     {
       "id": 184,
-      "usuario": "Kiro",
+      "usuario": "Kiro_Hyer",
       "premio": "100 G coins",
       "cantidad": 100,
       "moneda": "gcoins",
@@ -1953,7 +1965,7 @@
     },
     {
       "id": 188,
-      "usuario": "xwonny",
+      "usuario": "xWonnyx",
       "premio": "40 G coins",
       "cantidad": 40,
       "moneda": "gcoins",
@@ -1965,7 +1977,7 @@
     },
     {
       "id": 189,
-      "usuario": "Mango",
+      "usuario": "MangoAlegre",
       "premio": "40 G coins",
       "cantidad": 40,
       "moneda": "gcoins",
@@ -2001,7 +2013,7 @@
     },
     {
       "id": 192,
-      "usuario": "Fredi",
+      "usuario": "fedriquechumpi",
       "premio": "450 owcoins",
       "cantidad": 450,
       "moneda": "owcoins",
@@ -2013,7 +2025,7 @@
     },
     {
       "id": 193,
-      "usuario": "Maiky",
+      "usuario": "maikyx__",
       "premio": "1200 owcoins",
       "cantidad": 1200,
       "moneda": "owcoins",
