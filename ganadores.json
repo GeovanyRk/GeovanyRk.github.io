@@ -1124,7 +1124,7 @@
       "moneda": "owcoins",
       "evento": "Recompensa de Stream 6hrs",
       "fecha": "15/8/2026",
-      "entregado": false
+      "entregado": true
     },
     {
       "id": 115,
