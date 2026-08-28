@@ -665,6 +665,15 @@
       "evento": "Pase de Batalla",
       "fecha": "20/8/2026",
       "creado": "2026-08-20T00:00:00.000Z"
+    },
+    {
+      "id": 75,
+      "usuario": "JoseAngel",
+      "cantidad": 5,
+      "moneda": "pavos",
+      "evento": "Ruleta de Fortnite",
+      "fecha": "27/8/2026",
+      "creado": "2026-08-28T01:19:00.966Z"
     }
   ],
   "retiros": []
