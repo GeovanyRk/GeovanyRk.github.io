@@ -761,7 +761,7 @@
       "moneda": "pavos",
       "evento": "Ruleta de bienvenido",
       "fecha": "26/7/2026",
-      "entregado": false
+      "entregado": true
     },
     {
       "id": 77,
