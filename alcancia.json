@@ -719,6 +719,15 @@
       "evento": "General",
       "fecha": "27/8/2026",
       "creado": "2026-08-28T01:21:26.958Z"
+    },
+    {
+      "id": 81,
+      "usuario": "Marvin",
+      "cantidad": 150,
+      "moneda": "pavos",
+      "evento": "General",
+      "fecha": "30/8/2026",
+      "creado": "2026-08-30T23:46:42.253Z"
     }
   ],
   "retiros": []
