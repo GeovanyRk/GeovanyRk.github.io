@@ -764,6 +764,15 @@
       "evento": "General",
       "fecha": "30/8/2026",
       "creado": "2026-08-30T23:48:13.536Z"
+    },
+    {
+      "id": 86,
+      "usuario": "Kitty",
+      "cantidad": 55,
+      "moneda": "pavos",
+      "evento": "General",
+      "fecha": "30/8/2026",
+      "creado": "2026-08-30T23:48:26.450Z"
     }
   ],
   "retiros": []
