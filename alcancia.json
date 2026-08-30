@@ -737,6 +737,15 @@
       "evento": "General",
       "fecha": "30/8/2026",
       "creado": "2026-08-30T23:46:52.447Z"
+    },
+    {
+      "id": 83,
+      "usuario": "JoseAngel",
+      "cantidad": 100,
+      "moneda": "pavos",
+      "evento": "General",
+      "fecha": "30/8/2026",
+      "creado": "2026-08-30T23:47:46.777Z"
     }
   ],
   "retiros": []
