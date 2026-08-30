@@ -782,6 +782,15 @@
       "evento": "General",
       "fecha": "30/8/2026",
       "creado": "2026-08-30T23:48:40.052Z"
+    },
+    {
+      "id": 88,
+      "usuario": "Maiky",
+      "cantidad": 50,
+      "moneda": "owcoins",
+      "evento": "General",
+      "fecha": "30/8/2026",
+      "creado": "2026-08-30T23:48:52.146Z"
     }
   ],
   "retiros": []
