@@ -773,6 +773,15 @@
       "evento": "General",
       "fecha": "30/8/2026",
       "creado": "2026-08-30T23:48:26.450Z"
+    },
+    {
+      "id": 87,
+      "usuario": "Skky",
+      "cantidad": 110,
+      "moneda": "pavos",
+      "evento": "General",
+      "fecha": "30/8/2026",
+      "creado": "2026-08-30T23:48:40.052Z"
     }
   ],
   "retiros": []
