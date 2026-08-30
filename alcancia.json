@@ -746,6 +746,15 @@
       "evento": "General",
       "fecha": "30/8/2026",
       "creado": "2026-08-30T23:47:46.777Z"
+    },
+    {
+      "id": 84,
+      "usuario": "Marian",
+      "cantidad": 5,
+      "moneda": "pavos",
+      "evento": "General",
+      "fecha": "30/8/2026",
+      "creado": "2026-08-30T23:48:01.863Z"
     }
   ],
   "retiros": []
