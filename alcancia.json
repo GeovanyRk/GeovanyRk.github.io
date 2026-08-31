@@ -845,6 +845,15 @@
       "evento": "General",
       "fecha": "30/8/2026",
       "creado": "2026-08-31T01:12:19.965Z"
+    },
+    {
+      "id": 95,
+      "usuario": "Krager",
+      "cantidad": 5,
+      "moneda": "owcoins",
+      "evento": "General",
+      "fecha": "30/8/2026",
+      "creado": "2026-08-31T01:12:38.404Z"
     }
   ],
   "retiros": []
