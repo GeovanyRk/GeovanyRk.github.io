@@ -1055,6 +1055,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 75,
+      "ganadorId": 92,
+      "ganadorUsuario": "Jose Angel",
+      "ganadorPremio": "500 Pavos",
+      "item": "Emote Lush Life",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1788135871870.png",
+      "nombreFortnite": "NakanoJc",
+      "discordId": "1446644777134329876",
+      "discordUsuario": "nakanojc.",
+      "fecha": "30/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
