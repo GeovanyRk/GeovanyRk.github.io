@@ -899,6 +899,15 @@
       "evento": "General",
       "fecha": "30/8/2026",
       "creado": "2026-08-31T01:15:21.702Z"
+    },
+    {
+      "id": 101,
+      "usuario": "Kirby",
+      "cantidad": 5,
+      "moneda": "owcoins",
+      "evento": "General",
+      "fecha": "30/8/2026",
+      "creado": "2026-08-31T01:15:41.397Z"
     }
   ],
   "retiros": []
