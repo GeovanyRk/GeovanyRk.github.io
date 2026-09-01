@@ -707,7 +707,7 @@
       "discordId": "1414392697313296454",
       "discordUsuario": "emery_nile",
       "fecha": "23/8/2026",
-      "entregado": false,
+      "entregado": true,
       "rechazado": false,
       "motivoRechazo": null
     },
