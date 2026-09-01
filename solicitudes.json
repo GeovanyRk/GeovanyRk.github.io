@@ -903,7 +903,7 @@
       "discordUsuario": "elkid_rd36",
       "fecha": "24/8/2026",
       "entregado": false,
-      "rechazado": false,
+      "rechazado": true,
       "motivoRechazo": null
     },
     {
