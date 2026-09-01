@@ -737,7 +737,7 @@
       "discordId": "713245537272463381",
       "discordUsuario": "chumpi20",
       "fecha": "24/8/2026",
-      "entregado": false,
+      "entregado": true,
       "rechazado": false,
       "motivoRechazo": null
     },
