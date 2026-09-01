@@ -1070,6 +1070,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 76,
+      "ganadorId": 122,
+      "ganadorUsuario": "marianxec",
+      "ganadorPremio": "800 V-Bucks",
+      "item": "emote In The End",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1788223453535.jpg",
+      "nombreFortnite": "marianxec",
+      "discordId": "1536904572369510423",
+      "discordUsuario": "marianxec.",
+      "fecha": "31/8/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
