@@ -917,6 +917,15 @@
       "evento": "General",
       "fecha": "1/9/2026",
       "creado": "2026-09-01T23:41:39.662Z"
+    },
+    {
+      "id": 103,
+      "usuario": "Hoseokie",
+      "cantidad": 50,
+      "moneda": "owcoins",
+      "evento": "General",
+      "fecha": "1/9/2026",
+      "creado": "2026-09-01T23:42:47.689Z"
     }
   ],
   "retiros": []
