@@ -1754,7 +1754,7 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "20/8/2026",
-      "entregado": false
+      "entregado": true
     },
     {
       "id": 170,
