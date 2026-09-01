@@ -2033,6 +2033,16 @@
       "evento": "Pase de Batalla",
       "fecha": "20/8/2026",
       "entregado": false
+    },
+    {
+      "id": 194,
+      "usuario": "RickyeYT",
+      "premio": "2,000 V-Bucks",
+      "cantidad": 2000,
+      "moneda": "pavos",
+      "evento": "Tienda de Oro",
+      "fecha": "31/8/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
