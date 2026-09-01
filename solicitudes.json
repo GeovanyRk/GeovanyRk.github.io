@@ -722,7 +722,7 @@
       "discordId": "392091646147297290",
       "discordUsuario": "rickye_yt",
       "fecha": "23/8/2026",
-      "entregado": false,
+      "entregado": true,
       "rechazado": false,
       "motivoRechazo": null
     },
