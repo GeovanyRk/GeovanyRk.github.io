@@ -944,6 +944,15 @@
       "evento": "General",
       "fecha": "1/9/2026",
       "creado": "2026-09-01T23:44:42.662Z"
+    },
+    {
+      "id": 106,
+      "usuario": "Kitty",
+      "cantidad": 500,
+      "moneda": "pavos",
+      "evento": "General",
+      "fecha": "1/9/2026",
+      "creado": "2026-09-02T00:53:57.770Z"
     }
   ],
   "retiros": []
