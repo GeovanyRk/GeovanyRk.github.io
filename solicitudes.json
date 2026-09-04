@@ -1085,6 +1085,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 77,
+      "ganadorId": 137,
+      "ganadorUsuario": "Mati",
+      "ganadorPremio": "500 Pavos",
+      "item": "Can you feel my heart - Bring me the horizon",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1788481481786.png",
+      "nombreFortnite": "Matidk_0",
+      "discordId": "718702910925439046",
+      "discordUsuario": "matissj10",
+      "fecha": "3/9/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
