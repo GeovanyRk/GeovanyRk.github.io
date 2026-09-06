@@ -1960,7 +1960,7 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "7/8/2026",
-      "entregado": false,
+      "entregado": true,
       "alcancia": true
     },
     {
