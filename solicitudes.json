@@ -977,7 +977,7 @@
       "discordId": "749741825656619058",
       "discordUsuario": "bigeddy11",
       "fecha": "26/8/2026",
-      "entregado": false,
+      "entregado": true,
       "rechazado": false,
       "motivoRechazo": null
     },
