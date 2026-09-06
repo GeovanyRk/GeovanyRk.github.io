@@ -752,7 +752,7 @@
       "discordId": "689912377055117429",
       "discordUsuario": "jojoto2526",
       "fecha": "24/8/2026",
-      "entregado": false,
+      "entregado": true,
       "rechazado": false,
       "motivoRechazo": null
     },
