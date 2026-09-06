@@ -962,7 +962,7 @@
       "discordId": "1024771078691766302",
       "discordUsuario": "matonzizimokid",
       "fecha": "26/8/2026",
-      "entregado": false,
+      "entregado": true,
       "rechazado": false,
       "motivoRechazo": null
     },
