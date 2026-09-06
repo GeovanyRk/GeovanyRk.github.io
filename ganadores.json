@@ -1398,7 +1398,7 @@
       "evento": "cofre",
       "fecha": "22/8/2026",
       "creado": "2026-08-23T02:35:36.889Z",
-      "entregado": false
+      "entregado": true
     },
     {
       "id": 140,
