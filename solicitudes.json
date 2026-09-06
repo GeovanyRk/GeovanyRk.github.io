@@ -1100,6 +1100,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 78,
+      "ganadorId": 92,
+      "ganadorUsuario": "Jose Angel",
+      "ganadorPremio": "500 Pavos",
+      "item": "Emote Independence",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1788653535282.jpg",
+      "nombreFortnite": "NakanoJc",
+      "discordId": "1446644777134329876",
+      "discordUsuario": "nakanojc.",
+      "fecha": "5/9/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
