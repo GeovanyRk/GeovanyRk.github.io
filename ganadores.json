@@ -2034,17 +2034,28 @@
       "fecha": "20/8/2026",
       "entregado": true
     },
-  {
-    "id": 194,
-    "usuario": "RickyeYT",
-    "premio": "2,000 V-Bucks",
-    "cantidad": 2000,
-    "moneda": "pavos",
-    "evento": "Tienda de Oro",
-    "fecha": "31/8/2026",
-    "entregado": false
-  }
-],
+    {
+      "id": 194,
+      "usuario": "RickyeYT",
+      "premio": "2,000 V-Bucks",
+      "cantidad": 2000,
+      "moneda": "pavos",
+      "evento": "Tienda de Oro",
+      "fecha": "31/8/2026",
+      "entregado": false
+    },
+    {
+      "id": 195,
+      "usuario": "Eddy",
+      "premio": "2,750 Pavos",
+      "cantidad": 2750,
+      "moneda": "pavos",
+      "evento": "General",
+      "fecha": "6/9/2026",
+      "creado": "2026-09-07T03:18:16.502Z",
+      "entregado": false
+    }
+  ],
   "gastos": [],
   "rankingDesdeId": 64
 }
