@@ -1130,6 +1130,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 80,
+      "ganadorId": 194,
+      "ganadorUsuario": "RickyeYT",
+      "ganadorPremio": "2,000 V-Bucks",
+      "item": "Skin:Crash (1500pavos) y Gesto:Victoria de Crash (500pavos)",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1788743669466.webp",
+      "nombreFortnite": "x Rickye x",
+      "discordId": "392091646147297290",
+      "discordUsuario": "rickye_yt",
+      "fecha": "6/9/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
