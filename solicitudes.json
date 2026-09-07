@@ -1083,7 +1083,7 @@
       "discordUsuario": "marianxec.",
       "fecha": "31/8/2026",
       "entregado": false,
-      "rechazado": false,
+      "rechazado": true,
       "motivoRechazo": null
     },
     {
