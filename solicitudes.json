@@ -1022,7 +1022,7 @@
       "discordId": "1279273117956575315",
       "discordUsuario": "toji_fushijiro",
       "fecha": "27/8/2026",
-      "entregado": false,
+      "entregado": true,
       "rechazado": false,
       "motivoRechazo": null
     },
