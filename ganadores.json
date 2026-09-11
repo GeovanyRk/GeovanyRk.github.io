@@ -2042,7 +2042,7 @@
       "moneda": "pavos",
       "evento": "Tienda de Oro",
       "fecha": "31/8/2026",
-      "entregado": false
+      "entregado": true
     },
     {
       "id": 195,
