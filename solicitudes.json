@@ -1145,6 +1145,21 @@
       "entregado": false,
       "rechazado": false,
       "motivoRechazo": null
+    },
+    {
+      "id": 81,
+      "ganadorId": 147,
+      "ganadorUsuario": "warnerr8",
+      "ganadorPremio": "300 pavos",
+      "item": "Megaman X y Sable Z",
+      "imagenUrl": "https://raw.githubusercontent.com/GeovanyRk/GeovanyRk.github.io/main/canjes/canje-1789099820431.jpg",
+      "nombreFortnite": "warnerr8",
+      "discordId": "231468237257179137",
+      "discordUsuario": "warnerr8",
+      "fecha": "11/9/2026",
+      "entregado": false,
+      "rechazado": false,
+      "motivoRechazo": null
     }
   ]
 }
