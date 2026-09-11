@@ -1113,7 +1113,7 @@
       "discordUsuario": "nakanojc.",
       "fecha": "5/9/2026",
       "entregado": false,
-      "rechazado": false,
+      "rechazado": true,
       "motivoRechazo": null
     },
     {
