@@ -2054,6 +2054,17 @@
       "fecha": "6/9/2026",
       "creado": "2026-09-07T03:18:16.502Z",
       "entregado": false
+    },
+    {
+      "id": 196,
+      "usuario": "Geovannyrk",
+      "premio": "10 Pavos",
+      "cantidad": 10,
+      "moneda": "pavos",
+      "evento": "ruleta",
+      "fecha": "17/9/2026",
+      "creado": "2026-09-17T23:25:55.043Z",
+      "entregado": false
     }
   ],
   "gastos": [],
