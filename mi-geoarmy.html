@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mi Geo Army — GeoArmy</title>
+  <meta name="description" content="Tu perfil dentro de la comunidad Geo Army: G-Coins, rango y ranking."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css"/>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VT78CC8X2V"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VT78CC8X2V');
+  </script>
+  <!-- Mi Geo Army: cuentas (Supabase Auth + Twitch) -->
+  <script src="lib/supabase.min.js"></script>
+  <script src="js/geoarmy-config.js"></script>
+  <!-- Esta página sigue el estilo nuevo (V3), no el estilo viejo del resto del sitio -->
+  <link rel="stylesheet" href="css/v3-theme.css"/>
+</head>
+<body>
+
+  <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
+
+  <div class="v3-page" style="min-height:100vh;">
+    <div class="v3-stars"></div>
+
+    <!-- NAV -->
+    <nav class="v3-nav">
+      <div class="v3-nav-inner">
+        <a href="index.html" class="v3-logo">
+          <span class="v3-logo-mark"><img src="logo.png" alt="GeoArmy"/></span>
+          <span class="v3-wordmark">GEO ARMY</span>
+        </a>
+        <div class="v3-page-links">
+          <a href="index.html#inicio">Inicio</a>
+          <a href="tienda.html">Tienda</a>
+          <a href="puntos.html">Puntos</a>
+        </div>
+        <div class="v3-auth">
+          <div id="geoAccountWidget"></div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="v3-page-hero">
+      <div class="v3-tagline" style="letter-spacing:.28em;">TU CUENTA</div>
+      <h1 class="v3-page-title">Mi Geo Army</h1>
+      <p class="v3-page-sub">Tu perfil dentro del universo Geo Army: G-Coins, rango y tu lugar en el ranking de la comunidad.</p>
+    </section>
+
+    <!-- Estado: sin sesión -->
+    <div id="mgLoggedOut" class="v3-simple-card" hidden>
+      <div class="v3-simple-ic">👤</div>
+      <p>Inicia sesión con tu cuenta de Twitch para ver tu perfil, tus G-Coins, tu rango y tu posición en el ranking.</p>
+      <button type="button" class="v3-btn-secondary" id="mgLoginBtn" style="width:100%; justify-content:center;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M4 2 2 6v14h6v2h4l2-2h4l4-4V2H4Zm16 12-3 3h-5l-2 2v-2H6V4h14v10Z"/><rect x="9" y="7" width="2" height="5"/><rect x="14" y="7" width="2" height="5"/></svg>
+        Continuar con Twitch
+      </button>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="mgDashboard" hidden>
+      <div class="v3-now-section" style="margin-top:6px; padding-bottom:0;">
+        <div class="v3-now-grid">
+          <div class="v3-now-card v3-c-purple">
+            <div class="v3-now-head"><span class="v3-now-ic">👤</span>Perfil</div>
+            <div style="display:flex; align-items:center; gap:12px;">
+              <img id="mgAvatar" src="" alt="" style="width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid rgba(145,71,255,.5);flex-shrink:0;"/>
+              <div style="min-width:0;">
+                <div id="mgName" class="v3-now-winner-name" style="font-size:16px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:flex; align-items:center; gap:6px;">
+                  <span id="mgNameText">—</span><img id="mgNameFlag" src="" alt="" hidden style="width:18px; height:13px; border-radius:2px; flex-shrink:0; box-shadow:0 0 0 1px rgba(255,255,255,.25);"/>
+                </div>
+                <div id="mgLevel" class="v3-now-sub">—</div>
+                <div class="v3-now-sub" style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-top:2px;">
+                  <span id="mgCountryName">Sin país configurado</span>
+                  <button type="button" id="mgCountryBtn" hidden style="border:none; cursor:pointer; background:rgba(145,71,255,.18); color:#eaf2ff; border-radius:999px; padding:2px 10px; font-size:11px; font-family:'Orbitron',sans-serif;">Elegir país</button>
+                  <span id="mgCountryMsg" style="font-size:11px; color:#7CFC9A;"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="v3-now-card v3-c-gold" id="gcoins">
+            <div class="v3-now-head"><img class="v3-now-ic-img" src="gcoin-icon.png" alt="" onerror="this.replaceWith(document.createTextNode(String.fromCodePoint(129689)))"/>G-Coins</div>
+            <div class="v3-now-big" id="mgGcoins">—<span>G</span></div>
+            <div class="v3-now-sub">G-Coins disponibles</div>
+            <button type="button" class="v3-now-btn" id="mgRefreshSaldo" style="border:none; cursor:pointer; font-family:'Orbitron',sans-serif;">Actualizar saldo</button>
+          </div>
+
+          <!-- Ranking: tarjeta resumen compacta únicamente. Todo el detalle
+               grande (insignia grande, progreso al siguiente rango, siguiente
+               rango, posición global) vive ahora en su propia página — ver
+               ranking.html. Acá solo queda: insignia pequeña + rango + XP +
+               posición + botón "Ver mi progreso", todo desde el mismo
+               my_rank_summary() de siempre (ver loadRankSummary() más abajo). -->
+          <div class="v3-now-card v3-c-blue">
+            <div class="v3-now-head"><span class="v3-now-ic">🏆</span>Ranking</div>
+            <div style="display:flex; align-items:center; gap:12px;">
+              <img id="mgRankBadge" src="" alt="" hidden onerror="this.hidden=true;" style="width:40px;height:40px;object-fit:contain;flex-shrink:0;"/>
+              <div style="min-width:0;">
+                <div id="mgRankName" style="font-family:'Orbitron',sans-serif;font-weight:700;font-size:14.5px;color:#eaf2ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">—</div>
+                <div id="mgRankSub" class="v3-now-sub">Cargando…</div>
+              </div>
+            </div>
+            <div class="v3-now-big" id="mgRank" style="margin-top:2px;">—</div>
+            <a href="ranking.html" class="v3-now-btn">Ver mi progreso</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Misiones: CTA compacto únicamente. Toda la lógica real (leer
+           my_missions_status(), progreso, y el claim de STREAM_RETWEET vía
+           claim-stream-retweet) vive en misiones.html — no se duplica acá
+           ninguna llamada ni estado. Reusa las mismas clases .v3-x-* de la
+           tarjeta de "Cuentas vinculadas" (mismo layout icono+texto+botón),
+           sin agregar CSS nueva. -->
+      <div class="v3-now-section" style="margin-top:6px; padding-bottom:0;">
+        <div class="v3-x-card">
+          <div class="v3-x-card-main">
+            <span class="v3-x-ic">🎯</span>
+            <div class="v3-x-info">
+              <div class="v3-x-title">Misiones</div>
+              <p class="v3-x-desc">Completa misiones y gana XP para subir de rango.</p>
+            </div>
+          </div>
+          <a href="misiones.html" class="v3-btn-secondary v3-x-connect-btn">Ver misiones</a>
+        </div>
+      </div>
+
+      <!-- Mis recompensas: saldos reales de wallet_balances (Supabase). GCOIN
+           sigue aparte, viene de tienda-server (ver tarjeta G-Coins arriba). -->
+      <div class="v3-now-section" style="margin-top:6px; padding-bottom:0;">
+        <div class="v3-now-header v3-now-header-sm"><span class="v3-now-ic">🎁</span>Mis recompensas</div>
+        <div class="v3-now-grid" id="mgWalletGrid">
+          <div class="v3-table-empty">Cargando…</div>
+        </div>
+      </div>
+
+      <!-- Cuentas vinculadas: UI cableada al backend real de X (ya validado
+           en producción — no se toca acá). El estado conectado/no conectado
+           se lee de public.profile_x_accounts (RLS ya limita esto a la fila
+           del propio usuario) dentro de loadDashboard() -> loadXAccount().
+           El botón dispara únicamente x-member-connect-start vía fetch con
+           el access_token de la sesión — ver el listener de #xConnectBtn
+           más abajo. Nada de SQL/Edge Functions/OAuth se modifica desde
+           acá. -->
+      <div class="v3-now-section" id="cuentasVinculadas" style="margin-top:6px; padding-bottom:0;">
+        <div class="v3-now-header v3-now-header-sm"><span class="v3-now-ic">🔗</span>Cuentas vinculadas</div>
+
+        <!-- Banner de resultado del flujo de conexión (?x_connect=...) o de
+             un fallo al iniciar el flujo desde el botón. Oculto por
+             defecto; initXAccountUI() limpia el query param de la URL
+             después de pintarlo (ver más abajo). -->
+        <div id="xConnectBanner" class="v3-x-banner" hidden>
+          <span id="xConnectBannerIc" class="v3-x-banner-ic"></span>
+          <span id="xConnectBannerText"></span>
+        </div>
+
+        <div class="v3-x-card">
+          <div class="v3-x-card-main">
+            <span class="v3-x-ic">𝕏</span>
+            <div class="v3-x-info">
+              <div id="xNotConnected">
+                <div class="v3-x-title">Conecta tu cuenta de X</div>
+                <p class="v3-x-desc">Se utilizará para verificar futuras misiones e interacciones de Geo Army.</p>
+              </div>
+              <div id="xConnected" hidden>
+                <div class="v3-x-title"><span class="v3-x-check">✓</span> X conectado</div>
+                <p class="v3-x-username" id="xUsername"></p>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="v3-btn-secondary v3-x-connect-btn" id="xConnectBtn">Conectar X</button>
+        </div>
+      </div>
+
+      <!-- Mis solicitudes: historial de redemption_requests del propio usuario. -->
+      <div class="v3-table-wrap" id="misSolicitudes">
+        <div class="v3-now-header v3-now-header-sm"><span class="v3-now-ic">📨</span>Mis solicitudes</div>
+        <div id="mgRequestsList">
+          <div class="v3-table-empty">Cargando…</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <img src="logo.png" alt="GeoArmy" class="footer-logo-img"/>
+        GeoArmy
+      </div>
+      <div class="footer-text">Comunidad de Geovannyrk · Twitch Affiliate</div>
+      <div class="footer-code">geovanyrk.github.io</div>
+    </div>
+  </footer>
+
+  <script src="js/premium.js"></script>
+  <script src="js/geoarmy-ranks.js"></script>
+  <script src="js/geoarmy-account.js"></script>
+  <script>
+  (function () {
+    var currentCountryCode = null; // solo lectura de estado en memoria para el botón "Cambiar país"
+
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+      });
+    }
+
+    // ===== Mis recompensas / Mis solicitudes (wallet_balances, redemption_requests) =====
+    // GCOIN queda fuera a propósito: sigue siendo externally_managed (tienda-server),
+    // no tiene fila en wallet_balances y no se toca aquí (ver tarjeta G-Coins arriba,
+    // que sigue leyendo el saldo real de tienda-server como siempre).
+    var WALLET_CURRENCIES = [
+      { code: 'VBUCKS',     label: 'Fortnite',  unit: 'V-Bucks',  icon: '<img class="v3-now-ic-img" src="icon-fortnite.png" alt="" onerror="this.replaceWith(document.createTextNode(String.fromCodePoint(127918)))"/>', accent: 'v3-c-purple', decimals: 0 },
+      { code: 'OWCOINS',    label: 'Overwatch', unit: 'OW Coins', icon: '<img class="v3-now-ic-img" src="icon-overwatch.png" alt="" onerror="this.replaceWith(document.createTextNode(String.fromCodePoint(128377)))"/>', accent: 'v3-c-blue',   decimals: 0 },
+      { code: 'PAYPAL_USD', label: 'PayPal',    unit: 'USD',      icon: '💵', accent: 'v3-c-gold',   decimals: 2 },
+      { code: 'TWITCH_SUB', label: 'Twitch',    unit: 'Subs',     icon: '🟣', accent: 'v3-c-purple', decimals: 0 }
+    ];
+
+    var STATUS_LABELS = {
+      pending: 'Pendiente', approved: 'Aprobado', delivered: 'Entregado',
+      rejected: 'Rechazado', cancelled: 'Cancelada'
+    };
+
+    // ===== Mi país (set_my_country RPC) =====
+    // Mismo listado de 249 códigos ISO 3166-1 alpha-2 que valida
+    // set_my_country() en supabase/migracion-perfil-pais-rol.sql — si un
+    // código no está aquí, la RPC tampoco lo va a aceptar. Si el código SÍ
+    // es válido pero por algún motivo faltara su nombre aquí, se muestra el
+    // propio código como texto (ver countryName()) en vez de romper la UI.
+    var COUNTRY_NAMES = {
+      AD:'Andorra', AE:'Emiratos Árabes Unidos', AF:'Afganistán', AG:'Antigua y Barbuda', AI:'Anguila',
+      AL:'Albania', AM:'Armenia', AO:'Angola', AQ:'Antártida', AR:'Argentina', AS:'Samoa Americana',
+      AT:'Austria', AU:'Australia', AW:'Aruba', AX:'Islas Åland', AZ:'Azerbaiyán',
+      BA:'Bosnia y Herzegovina', BB:'Barbados', BD:'Bangladés', BE:'Bélgica', BF:'Burkina Faso',
+      BG:'Bulgaria', BH:'Baréin', BI:'Burundi', BJ:'Benín', BL:'San Bartolomé', BM:'Bermudas',
+      BN:'Brunéi', BO:'Bolivia', BQ:'Bonaire, San Eustaquio y Saba', BR:'Brasil', BS:'Bahamas',
+      BT:'Bután', BV:'Isla Bouvet', BW:'Botsuana', BY:'Bielorrusia', BZ:'Belice',
+      CA:'Canadá', CC:'Islas Cocos', CD:'República Democrática del Congo', CF:'República Centroafricana',
+      CG:'República del Congo', CH:'Suiza', CI:'Costa de Marfil', CK:'Islas Cook', CL:'Chile',
+      CM:'Camerún', CN:'China', CO:'Colombia', CR:'Costa Rica', CU:'Cuba', CV:'Cabo Verde',
+      CW:'Curazao', CX:'Isla de Navidad', CY:'Chipre', CZ:'Chequia',
+      DE:'Alemania', DJ:'Yibuti', DK:'Dinamarca', DM:'Dominica', DO:'República Dominicana', DZ:'Argelia',
+      EC:'Ecuador', EE:'Estonia', EG:'Egipto', EH:'Sahara Occidental', ER:'Eritrea', ES:'España', ET:'Etiopía',
+      FI:'Finlandia', FJ:'Fiyi', FK:'Islas Malvinas', FM:'Micronesia', FO:'Islas Feroe', FR:'Francia',
+      GA:'Gabón', GB:'Reino Unido', GD:'Granada', GE:'Georgia', GF:'Guayana Francesa', GG:'Guernsey',
+      GH:'Ghana', GI:'Gibraltar', GL:'Groenlandia', GM:'Gambia', GN:'Guinea', GP:'Guadalupe',
+      GQ:'Guinea Ecuatorial', GR:'Grecia', GS:'Georgia del Sur y las Islas Sandwich del Sur', GT:'Guatemala',
+      GU:'Guam', GW:'Guinea-Bisáu', GY:'Guyana',
+      HK:'Hong Kong', HM:'Islas Heard y McDonald', HN:'Honduras', HR:'Croacia', HT:'Haití', HU:'Hungría',
+      ID:'Indonesia', IE:'Irlanda', IL:'Israel', IM:'Isla de Man', IN:'India',
+      IO:'Territorio Británico del Océano Índico', IQ:'Irak', IR:'Irán', IS:'Islandia', IT:'Italia',
+      JE:'Jersey', JM:'Jamaica', JO:'Jordania', JP:'Japón',
+      KE:'Kenia', KG:'Kirguistán', KH:'Camboya', KI:'Kiribati', KM:'Comoras', KN:'San Cristóbal y Nieves',
+      KP:'Corea del Norte', KR:'Corea del Sur', KW:'Kuwait', KY:'Islas Caimán', KZ:'Kazajistán',
+      LA:'Laos', LB:'Líbano', LC:'Santa Lucía', LI:'Liechtenstein', LK:'Sri Lanka', LR:'Liberia',
+      LS:'Lesoto', LT:'Lituania', LU:'Luxemburgo', LV:'Letonia', LY:'Libia',
+      MA:'Marruecos', MC:'Mónaco', MD:'Moldavia', ME:'Montenegro', MF:'San Martín', MG:'Madagascar',
+      MH:'Islas Marshall', MK:'Macedonia del Norte', ML:'Malí', MM:'Myanmar', MN:'Mongolia', MO:'Macao',
+      MP:'Islas Marianas del Norte', MQ:'Martinica', MR:'Mauritania', MS:'Montserrat', MT:'Malta',
+      MU:'Mauricio', MV:'Maldivas', MW:'Malaui', MX:'México', MY:'Malasia', MZ:'Mozambique',
+      NA:'Namibia', NC:'Nueva Caledonia', NE:'Níger', NF:'Isla Norfolk', NG:'Nigeria', NI:'Nicaragua',
+      NL:'Países Bajos', NO:'Noruega', NP:'Nepal', NR:'Nauru', NU:'Niue', NZ:'Nueva Zelanda',
+      OM:'Omán',
+      PA:'Panamá', PE:'Perú', PF:'Polinesia Francesa', PG:'Papúa Nueva Guinea', PH:'Filipinas',
+      PK:'Pakistán', PL:'Polonia', PM:'San Pedro y Miquelón', PN:'Islas Pitcairn', PR:'Puerto Rico',
+      PS:'Palestina', PT:'Portugal', PW:'Palaos', PY:'Paraguay',
+      QA:'Catar',
+      RE:'Reunión', RO:'Rumania', RS:'Serbia', RU:'Rusia', RW:'Ruanda',
+      SA:'Arabia Saudita', SB:'Islas Salomón', SC:'Seychelles', SD:'Sudán', SE:'Suecia', SG:'Singapur',
+      SH:'Santa Elena', SI:'Eslovenia', SJ:'Svalbard y Jan Mayen', SK:'Eslovaquia', SL:'Sierra Leona',
+      SM:'San Marino', SN:'Senegal', SO:'Somalia', SR:'Surinam', SS:'Sudán del Sur',
+      ST:'Santo Tomé y Príncipe', SV:'El Salvador', SX:'Sint Maarten', SY:'Siria', SZ:'Esuatini',
+      TC:'Islas Turcas y Caicos', TD:'Chad', TF:'Territorios Australes Franceses', TG:'Togo',
+      TH:'Tailandia', TJ:'Tayikistán', TK:'Tokelau', TL:'Timor Oriental', TM:'Turkmenistán', TN:'Túnez',
+      TO:'Tonga', TR:'Turquía', TT:'Trinidad y Tobago', TV:'Tuvalu', TW:'Taiwán', TZ:'Tanzania',
+      UA:'Ucrania', UG:'Uganda', UM:'Islas Ultramarinas Menores de EE. UU.', US:'Estados Unidos',
+      UY:'Uruguay', UZ:'Uzbekistán',
+      VA:'Ciudad del Vaticano', VC:'San Vicente y las Granadinas', VE:'Venezuela',
+      VG:'Islas Vírgenes Británicas', VI:'Islas Vírgenes de EE. UU.', VN:'Vietnam', VU:'Vanuatu',
+      WF:'Wallis y Futuna', WS:'Samoa',
+      YE:'Yemen', YT:'Mayotte',
+      ZA:'Sudáfrica', ZM:'Zambia', ZW:'Zimbabue'
+    };
+
+    function countryName(code) { return COUNTRY_NAMES[code] || code; }
+
+    function flagEmoji(code) {
+      if (!code || code.length !== 2) return '🏳️';
+      var BASE = 0x1F1E6, A = 'A'.charCodeAt(0);
+      var c1 = code.charCodeAt(0) - A, c2 = code.charCodeAt(1) - A;
+      if (c1 < 0 || c1 > 25 || c2 < 0 || c2 > 25) return '🏳️';
+      return String.fromCodePoint(BASE + c1) + String.fromCodePoint(BASE + c2);
+    }
+
+    // Imagen real de bandera (flagcdn.com, mismo servicio ya usado
+    // ampliamente y sin necesidad de subir archivos nuevos al repo). Se usa
+    // en vez del emoji Unicode de bandera porque Windows no lo renderiza
+    // como imagen — muestra el código de 2 letras en texto plano.
+    function flagImgUrl(code) {
+      return 'https://flagcdn.com/24x18/' + code.toLowerCase() + '.png';
+    }
+
+    // Una vez que profile.country_code tiene valor, el botón para
+    // elegir/cambiar país se OCULTA por completo (no solo se deshabilita):
+    // sin botón, sin enlace, sin forma de abrir el modal desde esta
+    // sección — la única salida es que un admin resetee country_code a
+    // NULL desde el backend (admin_reset_user_country, todavía no
+    // implementada). Como esta función se vuelve a llamar cada vez que
+    // loadDashboard() recarga el perfil, el día que eso pase el botón
+    // "Elegir país" reaparece solo, sin ningún cambio de código adicional.
+    function renderCountryDisplay(code) {
+      var flagImg = document.getElementById('mgNameFlag');
+      var nameEl = document.getElementById('mgCountryName');
+      var btnEl = document.getElementById('mgCountryBtn');
+      if (code) {
+        flagImg.src = flagImgUrl(code);
+        flagImg.alt = countryName(code);
+        flagImg.hidden = false;
+        nameEl.textContent = countryName(code);
+        btnEl.hidden = true;
+      } else {
+        flagImg.hidden = true;
+        flagImg.removeAttribute('src');
+        nameEl.textContent = 'Sin país configurado';
+        btnEl.hidden = false;
+        btnEl.textContent = 'Elegir país';
+      }
+    }
+
+    // Único lugar del frontend que llama set_my_country. Nunca se usa
+    // sb.from('profiles').update(...) para esto — ese camino ya está
+    // cerrado a propósito (ver migracion-perfil-pais-rol.sql), y aunque no
+    // lo estuviera, esta RPC es la única vía que valida el país de verdad.
+    function openCountryModal(sb, currentCode, onSaved) {
+      var sending = false;
+      var codesSorted = Object.keys(COUNTRY_NAMES).sort(function (a, b) {
+        return COUNTRY_NAMES[a].localeCompare(COUNTRY_NAMES[b], 'es');
+      });
+
+      var overlay = document.createElement('div');
+      overlay.className = 'ga-modal-overlay';
+      overlay.innerHTML =
+        '<div class="ga-modal">' +
+          '<button type="button" class="ga-modal-close" aria-label="Cerrar">✕</button>' +
+          '<div class="ga-modal-logo">🌍</div>' +
+          '<h3>Cambiar país</h3>' +
+          '<p>Elige el país que quieres mostrar en tu perfil de Geo Army.</p>' +
+          '<form id="mgCountryForm" style="text-align:left; display:flex; flex-direction:column; gap:10px; margin-top:10px;">' +
+            '<select id="mgCountrySelectInput" required style="width:100%; padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.05); color:#eaf2ff; box-sizing:border-box;">' +
+              '<option value="" disabled style="color:#111;background:#fff;" ' + (currentCode ? '' : 'selected') + '>Selecciona un país…</option>' +
+              codesSorted.map(function (code) {
+                var sel = (code === currentCode) ? ' selected' : '';
+                return '<option value="' + code + '" style="color:#111;background:#fff;"' + sel + '>' + flagEmoji(code) + ' ' + esc(COUNTRY_NAMES[code]) + '</option>';
+              }).join('') +
+            '</select>' +
+            '<div id="mgCountryError" style="color:#ff8080; font-size:13px;"></div>' +
+            '<button type="submit" class="ga-twitch-btn" id="mgCountrySubmit">Guardar país</button>' +
+          '</form>' +
+        '</div>';
+      document.body.appendChild(overlay);
+      overlay.addEventListener('click', function (e) { if (e.target === overlay) overlay.remove(); });
+      overlay.querySelector('.ga-modal-close').addEventListener('click', function () { overlay.remove(); });
+
+      overlay.querySelector('#mgCountryForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        if (sending) return;
+        sending = true;
+        var submitBtn = document.getElementById('mgCountrySubmit');
+        var errEl = document.getElementById('mgCountryError');
+        errEl.textContent = '';
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Guardando…';
+
+        var selected = document.getElementById('mgCountrySelectInput').value;
+
+        try {
+          var res = await sb.rpc('set_my_country', { p_country_code: selected });
+          if (res.error) throw res.error;
+          overlay.remove();
+          // El país anterior en pantalla solo se reemplaza tras la
+          // confirmación de la RPC — si falla, se queda como estaba.
+          onSaved(res.data && res.data.country_code ? res.data.country_code : selected);
+        } catch (err) {
+          console.warn('[mi-geoarmy] error cambiando de país', err);
+          errEl.textContent = (err && err.message) ? err.message : 'No se pudo guardar el país. Intenta de nuevo.';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Guardar país';
+          sending = false;
+        }
+      });
+    }
+
+    function findCurrency(code) {
+      for (var i = 0; i < WALLET_CURRENCIES.length; i++) {
+        if (WALLET_CURRENCIES[i].code === code) return WALLET_CURRENCIES[i];
+      }
+      return { code: code, label: code, unit: code, icon: '🎁', accent: 'v3-c-purple', decimals: 0 };
+    }
+
+    function formatWalletAmount(cur, valor) {
+      var n = Number(valor || 0);
+      if (cur.decimals === 2) return '$' + n.toFixed(2);
+      return n.toLocaleString() + ' ' + cur.unit;
+    }
+
+    function formatFechaCorta(iso) {
+      if (!iso) return '';
+      try {
+        return new Date(iso).toLocaleDateString('es', { day: '2-digit', month: 'short', year: 'numeric' });
+      } catch (e) { return iso; }
+    }
+
+    async function loadWallets(sb, userId) {
+      var grid = document.getElementById('mgWalletGrid');
+      if (!grid) return;
+      var res = await sb.from('wallet_balances').select('currency_code, balance, reserved').eq('profile_id', userId);
+      if (res.error) {
+        console.warn('[mi-geoarmy] no se pudieron leer los saldos de wallet', res.error);
+        grid.innerHTML = '<div class="v3-table-empty">No se pudieron cargar tus recompensas.</div>';
+        return;
+      }
+      var byCurrency = {};
+      (res.data || []).forEach(function (row) { byCurrency[row.currency_code] = row; });
+
+      grid.innerHTML = WALLET_CURRENCIES.map(function (cur) {
+        var row = byCurrency[cur.code];
+        var balance = row ? Number(row.balance) : 0;
+        var reserved = row ? Number(row.reserved) : 0;
+        var disponible = balance - reserved;
+        var puedeSolicitar = disponible > 0;
+        return (
+          '<div class="v3-now-card ' + cur.accent + '">' +
+            '<div class="v3-now-head"><span class="v3-now-ic">' + cur.icon + '</span>' + esc(cur.label) + '</div>' +
+            '<div class="v3-now-big">' + formatWalletAmount(cur, disponible) + '</div>' +
+            '<div class="v3-now-sub">Disponible' +
+              (reserved > 0 ? ' · ' + formatWalletAmount(cur, reserved) + ' reservado' : '') +
+            '</div>' +
+            (puedeSolicitar
+              ? '<button type="button" class="v3-now-btn mg-redeem-btn" data-currency="' + cur.code + '" data-disponible="' + disponible + '" style="border:none; cursor:pointer; font-family:\'Orbitron\',sans-serif;">Solicitar recompensa</button>'
+              : '')
+          + '</div>'
+        );
+      }).join('');
+
+      Array.prototype.forEach.call(grid.querySelectorAll('.mg-redeem-btn'), function (btn) {
+        btn.addEventListener('click', function () {
+          var code = btn.getAttribute('data-currency');
+          var disponible = Number(btn.getAttribute('data-disponible'));
+          openRedeemModal(sb, findCurrency(code), disponible, userId);
+        });
+      });
+    }
+
+    // El usuario puede solicitar una parte de su saldo disponible.
+    // El backend request_redemption() sigue siendo la autoridad final:
+    // valida el monto, revisa balance-reserved y reserva exactamente lo pedido.
+    function openRedeemModal(sb, cur, disponible, userId) {
+      var requestKey = (window.crypto && window.crypto.randomUUID)
+        ? window.crypto.randomUUID()
+        : ('rk-' + Date.now() + '-' + Math.random().toString(16).slice(2));
+      var sending = false;
+
+      var overlay = document.createElement('div');
+      overlay.className = 'ga-modal-overlay';
+      overlay.innerHTML =
+        '<div class="ga-modal">' +
+          '<button type="button" class="ga-modal-close" aria-label="Cerrar">✕</button>' +
+          '<div class="ga-modal-logo">' + cur.icon + '</div>' +
+          '<h3>Solicitar recompensa — ' + esc(cur.label) + '</h3>' +
+          '<p>Tienes <strong>' + formatWalletAmount(cur, disponible) + '</strong> disponibles. El monto que solicites quedará reservado mientras se procesa tu solicitud.</p>' +
+          '<form id="mgRedeemForm" style="text-align:left; display:flex; flex-direction:column; gap:10px; margin-top:10px;">' +
+            '<label style="font-size:13px; color:#a9bad6;">Cantidad a reclamar' +
+              '<input type="number" id="mgReqAmount" required min="' + (cur.decimals === 2 ? '0.01' : '1') + '" max="' + disponible + '" step="' + (cur.decimals === 2 ? '0.01' : '1') + '" placeholder="' + (cur.decimals === 2 ? 'Ej: 5.00' : 'Ej: 500') + '" style="width:100%; margin-top:4px; padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.05); color:#eaf2ff; box-sizing:border-box;">' +
+              '<span id="mgReqAmountHelp" style="display:block; margin-top:4px; font-size:11px; color:#7f91ad;">Disponible: ' + esc(formatWalletAmount(cur, disponible)) + '</span>' +
+            '</label>' +
+            '<label style="font-size:13px; color:#a9bad6;">¿Qué estás solicitando?' +
+              '<input type="text" id="mgReqItem" required maxlength="200" placeholder="Ej: Skin Fortnite de prueba" style="width:100%; margin-top:4px; padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.05); color:#eaf2ff; box-sizing:border-box;">' +
+            '</label>' +
+            '<label style="font-size:13px; color:#a9bad6;">Tu usuario/cuenta para recibirlo' +
+              '<input type="text" id="mgReqAccount" required maxlength="200" placeholder="Ej: tu Epic username" style="width:100%; margin-top:4px; padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.05); color:#eaf2ff; box-sizing:border-box;">' +
+            '</label>' +
+            '<label style="font-size:13px; color:#a9bad6;">Notas (opcional)' +
+              '<textarea id="mgReqNotes" maxlength="1000" rows="2" style="width:100%; margin-top:4px; padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.05); color:#eaf2ff; box-sizing:border-box;"></textarea>' +
+            '</label>' +
+            '<div id="mgReqError" style="color:#ff8080; font-size:13px;"></div>' +
+            '<button type="submit" class="ga-twitch-btn" id="mgReqSubmit">Confirmar solicitud</button>' +
+          '</form>' +
+        '</div>';
+      document.body.appendChild(overlay);
+      overlay.addEventListener('click', function (e) { if (e.target === overlay) overlay.remove(); });
+      overlay.querySelector('.ga-modal-close').addEventListener('click', function () { overlay.remove(); });
+
+      var amountInput = overlay.querySelector('#mgReqAmount');
+      var amountHelp = overlay.querySelector('#mgReqAmountHelp');
+      var submitBtnLive = overlay.querySelector('#mgReqSubmit');
+
+      function normalizarMonto(raw) {
+        var n = Number(raw);
+        if (!Number.isFinite(n)) return null;
+        if (cur.decimals === 0) {
+          if (!Number.isInteger(n)) return null;
+          return n;
+        }
+        return Math.round(n * 100) / 100;
+      }
+
+      function actualizarResumenMonto() {
+        var monto = normalizarMonto(amountInput.value);
+        if (monto != null && monto > 0 && monto <= disponible) {
+          submitBtnLive.textContent = 'Confirmar solicitud (' + formatWalletAmount(cur, monto) + ')';
+          amountHelp.textContent = 'Después quedarían ' + formatWalletAmount(cur, disponible - monto) + ' disponibles.';
+          amountHelp.style.color = '#7CFC9A';
+        } else {
+          submitBtnLive.textContent = 'Confirmar solicitud';
+          amountHelp.textContent = 'Disponible: ' + formatWalletAmount(cur, disponible);
+          amountHelp.style.color = '#7f91ad';
+        }
+      }
+
+      amountInput.addEventListener('input', actualizarResumenMonto);
+
+      overlay.querySelector('#mgRedeemForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        // Mismo request_key en cada intento de ESTE modal (doble clic o
+        // retry tras un error) — nunca se genera uno nuevo aquí dentro.
+        if (sending) return;
+        sending = true;
+        var submitBtn = document.getElementById('mgReqSubmit');
+        var errEl = document.getElementById('mgReqError');
+        errEl.textContent = '';
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Enviando…';
+
+        var monto = normalizarMonto(document.getElementById('mgReqAmount').value);
+        var item = document.getElementById('mgReqItem').value.trim();
+        var account = document.getElementById('mgReqAccount').value.trim();
+        var notes = document.getElementById('mgReqNotes').value.trim();
+
+        if (monto == null || monto <= 0) {
+          errEl.textContent = cur.decimals === 0
+            ? 'Ingresa una cantidad entera mayor a 0.'
+            : 'Ingresa una cantidad válida mayor a 0.';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Confirmar solicitud';
+          sending = false;
+          return;
+        }
+
+        if (monto > disponible) {
+          errEl.textContent = 'No puedes solicitar más de ' + formatWalletAmount(cur, disponible) + '.';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Confirmar solicitud';
+          sending = false;
+          return;
+        }
+
+        try {
+          var res = await sb.rpc('request_redemption', {
+            p_currency_code: cur.code,
+            p_amount: monto,
+            p_request_key: requestKey,
+            p_requested_item: item || null,
+            p_account_identifier: account || null,
+            p_user_notes: notes || null
+          });
+          if (res.error) throw res.error;
+          overlay.remove();
+          await loadWallets(sb, userId);
+          await loadMyRequests(sb, userId);
+        } catch (err) {
+          console.warn('[mi-geoarmy] error solicitando recompensa', err);
+          errEl.textContent = (err && err.message) ? err.message : 'No se pudo enviar la solicitud. Intenta de nuevo.';
+          submitBtn.disabled = false;
+          submitBtn.textContent = monto && monto > 0 && monto <= disponible
+            ? 'Confirmar solicitud (' + formatWalletAmount(cur, monto) + ')'
+            : 'Confirmar solicitud';
+          sending = false;
+        }
+      });
+    }
+
+    async function loadMyRequests(sb, userId) {
+      var wrap = document.getElementById('mgRequestsList');
+      if (!wrap) return;
+      var res = await sb.from('redemption_requests')
+        .select('id, currency_code, amount, status, requested_item, requested_at')
+        .eq('user_id', userId)
+        .order('requested_at', { ascending: false });
+      if (res.error) {
+        console.warn('[mi-geoarmy] no se pudieron leer tus solicitudes', res.error);
+        wrap.innerHTML = '<div class="v3-table-empty">No se pudieron cargar tus solicitudes.</div>';
+        return;
+      }
+      var rows = res.data || [];
+      if (!rows.length) {
+        wrap.innerHTML = '<div class="v3-table-empty">Todavía no tienes solicitudes.</div>';
+        return;
+      }
+      wrap.innerHTML = rows.map(function (r) {
+        var cur = findCurrency(r.currency_code);
+        return (
+          '<div class="v3-table-card" style="margin-bottom:10px; padding:14px;">' +
+            '<div style="display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;">' +
+              '<div>' +
+                '<div style="font-weight:600;">' + esc(r.requested_item || cur.label) + '</div>' +
+                '<div class="v3-now-sub">' + formatWalletAmount(cur, r.amount) + ' · ' + formatFechaCorta(r.requested_at) + '</div>' +
+              '</div>' +
+              '<div class="v3-now-sub" style="align-self:center; white-space:nowrap;">' + esc(STATUS_LABELS[r.status] || r.status) + '</div>' +
+            '</div>' +
+          '</div>'
+        );
+      }).join('');
+    }
+
+    function whenReady(cb) {
+      if (window.GeoArmyAccount && window.GeoArmyAccount.client) { cb(); return; }
+      setTimeout(function () { whenReady(cb); }, 60);
+    }
+
+    async function refreshSaldo(sb, session) {
+      var el = document.getElementById('mgGcoins');
+      el.innerHTML = '…';
+      try {
+        if (session.provider_token) {
+          var res = await fetch('https://geoarmy.duckdns.org/api/saldo', {
+            headers: { Authorization: 'Bearer ' + session.provider_token },
+          });
+          if (res.ok) {
+            var data = await res.json();
+            if (typeof data.oro === 'number') { el.innerHTML = data.oro.toLocaleString() + '<span>G</span>'; return; }
+          }
+        }
+        el.innerHTML = '<span style="font-size:.9rem;">Reconecta para ver tu saldo</span>';
+      } catch (e) {
+        console.warn('[mi-geoarmy] no se pudo leer el saldo', e);
+        el.innerHTML = '<span style="font-size:.9rem;">Sin conexión</span>';
+      }
+    }
+
+    // Tarjeta resumen "Ranking" (arriba, junto a Perfil/G-Coins) — ÚNICA
+    // lectura de my_rank_summary() en esta página (la tarjeta grande con
+    // progreso/siguiente rango/posición global se movió por completo a
+    // ranking.html). Muestra insignia pequeña + rango + XP + posición.
+    // Nunca inventa datos ni calcula nada que ya venga resuelto del backend.
+    // También llena #mgLevel (línea "rango" bajo el nombre en la tarjeta de
+    // Perfil), que antes llenaba la tarjeta grande ya eliminada — mismo dato
+    // (current_name), sin pedirlo de nuevo a Supabase.
+    async function loadRankSummary(sb) {
+      var el = document.getElementById('mgRank');
+      var nameEl = document.getElementById('mgRankName');
+      var subEl = document.getElementById('mgRankSub');
+      var badgeEl = document.getElementById('mgRankBadge');
+      var levelSlot = document.getElementById('mgLevel');
+      if (!el) return;
+      var ranks = window.GeoArmyRanks;
+      function fallback() {
+        el.textContent = '—';
+        if (nameEl) nameEl.textContent = '';
+        if (subEl) subEl.textContent = 'Ranking Geo Army';
+        if (badgeEl) badgeEl.hidden = true;
+        if (levelSlot) levelSlot.textContent = '—';
+      }
+      try {
+        var res = await sb.rpc('my_rank_summary');
+        if (res.error) {
+          console.warn('[mi-geoarmy] no se pudo leer my_rank_summary()', res.error);
+          fallback();
+          return;
+        }
+        var row = Array.isArray(res.data) ? res.data[0] : res.data;
+        if (!row) { fallback(); return; }
+
+        var name = row.current_name || (ranks ? ranks.rankName(row.current_code) : row.current_code) || '';
+        if (nameEl) nameEl.textContent = name;
+        if (levelSlot) levelSlot.textContent = name;
+        if (badgeEl) {
+          var url = ranks ? ranks.rankBadgeUrl(row.current_code) : null;
+          if (url) { badgeEl.src = url; badgeEl.alt = name; badgeEl.hidden = false; }
+          else { badgeEl.hidden = true; }
+        }
+
+        if (row.position == null) {
+          // Mismo patrón que ya usa la tarjeta de G-Coins (mgGcoins) cuando
+          // el contenido es una frase en vez de un número grande: se achica
+          // con un <span> inline en vez de mostrar la frase al tamaño de
+          // número gigante por defecto de .v3-now-big.
+          el.innerHTML = '<span style="font-size:.9rem;">Sin posición todavía</span>';
+          if (subEl) subEl.textContent = 'Gana XP para entrar al ranking';
+        } else {
+          el.textContent = '#' + row.position;
+          if (subEl) subEl.textContent = Number(row.xp || 0).toLocaleString() + ' XP';
+        }
+      } catch (e) {
+        console.warn('[mi-geoarmy] error cargando my_rank_summary()', e);
+        fallback();
+      }
+    }
+
+    // El leaderboard completo (xp_leaderboard) y la tarjeta grande de rango
+    // (insignia grande, progreso al siguiente rango, siguiente rango,
+    // posición global) ahora viven en su propia página — ver ranking.html.
+    // Acá solo queda el resumen personal compacto (loadRankSummary, arriba),
+    // que enlaza a esa página.
+
+    async function loadDashboard(sb) {
+      var loggedOutEl = document.getElementById('mgLoggedOut');
+      var dashEl = document.getElementById('mgDashboard');
+      try {
+        var sessionRes = await sb.auth.getSession();
+        var session = sessionRes.data && sessionRes.data.session;
+        if (!session) { loggedOutEl.hidden = false; dashEl.hidden = true; return; }
+
+        var profRes = await sb.from('profiles').select('*').eq('id', session.user.id).single();
+        if (profRes.error || !profRes.data) { loggedOutEl.hidden = false; dashEl.hidden = true; return; }
+        var profile = profRes.data;
+
+        loggedOutEl.hidden = true;
+        dashEl.hidden = false;
+
+        var avatarEl = document.getElementById('mgAvatar');
+        avatarEl.src = profile.avatar_url || '';
+        avatarEl.style.display = profile.avatar_url ? '' : 'none';
+        document.getElementById('mgNameText').textContent = profile.display_name || profile.twitch_login || 'Miembro';
+        // El "Nivel X" legado se quitó de acá — mgLevel ahora lo llena
+        // loadRankSummary() con el rango real (current_name de
+        // my_rank_summary()), reusando la misma llamada de la tarjeta
+        // compacta de Ranking en vez de pedirlo de nuevo.
+
+        currentCountryCode = profile.country_code || null;
+        renderCountryDisplay(currentCountryCode);
+
+        await refreshSaldo(sb, session);
+        await loadWallets(sb, session.user.id);
+        await loadMyRequests(sb, session.user.id);
+
+        loadRankSummary(sb);
+        loadXAccount(sb, session.user.id);
+      } catch (e) {
+        console.warn('[mi-geoarmy] error cargando el dashboard (¿falta configurar Supabase en js/geoarmy-account.js?)', e);
+        loggedOutEl.hidden = false;
+        dashEl.hidden = true;
+      }
+    }
+
+    // ===== Cuentas vinculadas (X) =====
+    // El estado conectado/no conectado NUNCA se decide por query param — se
+    // lee de verdad en loadXAccount() (ver abajo), llamada desde
+    // loadDashboard() en cada carga/refresh de sesión. Acá solo vive: (1) el
+    // banner visual de ?x_connect=... (puramente informativo — no controla
+    // el estado de la tarjeta) y (2) el click de #xConnectBtn que dispara el
+    // backend real de X. Nada de SQL/Edge Functions/OAuth se toca ni se
+    // reimplementa: el botón solo llama a x-member-connect-start, que ya
+    // existe y está validado en producción.
+    var X_CONNECT_MESSAGES = {
+      success:         { tone: 'ok',      ic: '✓', text: 'Cuenta de X conectada correctamente.' },
+      conflict:        { tone: 'warn',    ic: '⚠', text: 'Esta cuenta de X no puede vincularse a este perfil.' },
+      cancelled:       { tone: 'neutral', ic: 'ℹ', text: 'Conexión con X cancelada.' },
+      session_expired: { tone: 'error',   ic: '⚠', text: 'Tu sesión expiró. Inicia sesión nuevamente.' },
+      invalid_state:   { tone: 'error',   ic: '⚠', text: 'Este intento de conexión ya no es válido. Inténtalo nuevamente.' },
+      not_allowed:     { tone: 'warn',    ic: '⚠', text: 'No pudimos completar esta vinculación.' },
+      error:           { tone: 'error',   ic: '⚠', text: 'Ocurrió un error al conectar X. Inténtalo nuevamente.' }
+    };
+
+    // Reutilizado tanto por el banner de ?x_connect= como por el error
+    // genérico del botón "Conectar X" (mismo componente visual, ya
+    // aprobado, en vez de inventar uno nuevo para el caso de error del
+    // botón).
+    function showXConnectBanner(tone, ic, text) {
+      var banner = document.getElementById('xConnectBanner');
+      var bannerIc = document.getElementById('xConnectBannerIc');
+      var bannerText = document.getElementById('xConnectBannerText');
+      if (!banner) return;
+      banner.className = 'v3-x-banner v3-x-banner-' + tone;
+      if (bannerIc) bannerIc.textContent = ic;
+      if (bannerText) bannerText.textContent = text;
+      banner.hidden = false;
+    }
+
+    function initXAccountUI() {
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var resultKey = params.get('x_connect');
+        if (resultKey && X_CONNECT_MESSAGES[resultKey]) {
+          var msg = X_CONNECT_MESSAGES[resultKey];
+          showXConnectBanner(msg.tone, msg.ic, msg.text);
+
+          // Ya se pintó el mensaje — se limpia SOLO x_connect de la URL
+          // (sin recargar), dejando intactos cualquier otro query param y
+          // el hash. Si por lo que sea falla (navegador viejo, etc.), no
+          // pasa nada grave: el peor caso es que el param se quede en la
+          // URL, el banner ya se mostró igual.
+          try {
+            params.delete('x_connect');
+            var newSearch = params.toString();
+            var newUrl = window.location.pathname + (newSearch ? '?' + newSearch : '') + window.location.hash;
+            window.history.replaceState(null, '', newUrl);
+          } catch (e) {}
+        }
+      } catch (e) {
+        console.warn('[mi-geoarmy] error en initXAccountUI', e);
+      }
+    }
+    initXAccountUI();
+
+    // Lectura real de public.profile_x_accounts — RLS ya restringe esto a
+    // la fila del propio usuario (authenticated SELECT solo su propia
+    // fila), así que el filtro por profile_id acá es cinturón-y-tirantes,
+    // no la única protección. Solo se pide x_username: nunca x_user_id, ni
+    // ningún otro campo. maybeSingle() en vez de single() porque "no tener
+    // fila todavía" (no conectado) es un resultado válido, no un error.
+    async function loadXAccount(sb, userId) {
+      var notConnected = document.getElementById('xNotConnected');
+      var connected = document.getElementById('xConnected');
+      var btn = document.getElementById('xConnectBtn');
+      var usernameEl = document.getElementById('xUsername');
+      if (!notConnected || !connected) return;
+
+      function renderNotConnected() {
+        notConnected.hidden = false;
+        connected.hidden = true;
+        if (btn) btn.hidden = false;
+      }
+
+      // Fail closed: si la lectura falla (error o excepción), NO se asume
+      // "no conectado" — eso mostraría el botón "Conectar X" cuando en
+      // realidad no se sabe el estado real, y podría llevar a iniciar una
+      // conexión sobre una cuenta que ya está vinculada. Se ocultan ambos
+      // estados y el botón, y se avisa con el banner ya existente.
+      function renderUnknown() {
+        notConnected.hidden = true;
+        connected.hidden = true;
+        if (btn) btn.hidden = true;
+        showXConnectBanner('error', '⚠', 'No pudimos verificar el estado de tu cuenta de X. Recarga la página.');
+      }
+
+      try {
+        var res = await sb.from('profile_x_accounts').select('x_username').eq('profile_id', userId).maybeSingle();
+        if (res.error) {
+          console.warn('[mi-geoarmy] no se pudo leer profile_x_accounts', res.error);
+          renderUnknown();
+          return;
+        }
+        var row = res.data;
+        if (!row) {
+          // Consulta exitosa, sin fila: "no conectado" es un resultado
+          // legítimo acá, no una falla.
+          renderNotConnected();
+          return;
+        }
+        notConnected.hidden = true;
+        connected.hidden = false;
+        if (btn) btn.hidden = true;
+        // x_username es solo metadata visual — si viniera null/vacío no se
+        // inventa nada, el título "X conectado" ya alcanza por sí solo.
+        if (usernameEl) usernameEl.textContent = row.x_username ? ('@' + row.x_username) : '';
+      } catch (e) {
+        console.warn('[mi-geoarmy] error leyendo profile_x_accounts', e);
+        renderUnknown();
+      }
+    }
+
+    whenReady(function () {
+      var sb = window.GeoArmyAccount.client;
+      document.getElementById('mgLoginBtn').addEventListener('click', function () {
+        window.GeoArmyAccount.openLogin();
+      });
+      document.getElementById('mgRefreshSaldo').addEventListener('click', async function () {
+        var sessionRes = await sb.auth.getSession();
+        var session = sessionRes.data && sessionRes.data.session;
+        if (!session || !session.provider_token) {
+          await window.GeoArmyAccount.signInWithTwitch(window.location.pathname + '#gcoins');
+          return;
+        }
+        await refreshSaldo(sb, session);
+      });
+      document.getElementById('mgCountryBtn').addEventListener('click', function () {
+        openCountryModal(sb, currentCountryCode, function (nuevoCodigo) {
+          currentCountryCode = nuevoCodigo;
+          renderCountryDisplay(currentCountryCode);
+          var msgEl = document.getElementById('mgCountryMsg');
+          msgEl.textContent = '✅ País actualizado';
+          setTimeout(function () { msgEl.textContent = ''; }, 2500);
+        });
+      });
+
+      // ===== Conectar X: dispara x-member-connect-start (ya validado en
+      // producción). El frontend NUNCA decide profile_id/x_user_id/state/
+      // verifier — solo manda el access_token de la sesión actual y el
+      // backend deriva todo lo demás. La authorize_url que responde no se
+      // imprime ni se guarda en ningún lado: se navega directo con
+      // location.assign() y se descarta. =====
+      document.getElementById('xConnectBtn').addEventListener('click', async function () {
+        var btn = this;
+        if (btn.disabled) return; // evita doble click / doble request
+        var originalText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'Conectando…';
+        try {
+          var sessionRes = await sb.auth.getSession();
+          var session = sessionRes.data && sessionRes.data.session;
+          if (!session || !session.access_token) {
+            // Sin sesión no se inicia OAuth.
+            btn.disabled = false;
+            btn.textContent = originalText;
+            return;
+          }
+          var res = await fetch(window.GEOARMY_SUPABASE_URL + '/functions/v1/x-member-connect-start', {
+            method: 'POST',
+            headers: {
+              Authorization: 'Bearer ' + session.access_token,
+              'Content-Type': 'application/json'
+            }
+          });
+          if (!res.ok) throw new Error('x-member-connect-start respondió ' + res.status);
+          var body = await res.json();
+          if (!body || !body.authorize_url) throw new Error('x-member-connect-start no devolvió authorize_url');
+          window.location.assign(body.authorize_url);
+        } catch (e) {
+          console.warn('[mi-geoarmy] no se pudo iniciar la conexión con X', e);
+          btn.disabled = false;
+          btn.textContent = originalText;
+          showXConnectBanner('error', '⚠', 'No se pudo iniciar la conexión con X. Inténtalo nuevamente.');
+        }
+      });
+
+      sb.auth.onAuthStateChange(function () { loadDashboard(sb); });
+      loadDashboard(sb);
+    });
+  })();
+  </script>
+</body>
+</html>
