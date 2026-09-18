@@ -1,0 +1,906 @@
+/* =====================================================================
+   GEO ARMY — TEMA "V3" (espacial/holográfico)
+   Extraído del <style> que vivía inline en index-v3.html para poder
+   reusarlo en páginas nuevas (mi-geoarmy.html y las que sigan) sin
+   duplicar el bloque completo en cada archivo. index-v3.html ahora
+   enlaza este archivo en vez de tener el <style> embebido — mismo CSS,
+   solo cambió dónde vive.
+   ===================================================================== */
+
+.v3-page {
+  background:
+    radial-gradient(ellipse 90% 60% at 50% -6%, #12244a 0%, #0a1730 40%, rgba(10,23,48,0) 72%),
+    radial-gradient(50% 55% at -8% 42%, rgba(58,160,255,.16), rgba(58,160,255,0) 70%),
+    radial-gradient(50% 55% at 108% 58%, rgba(145,71,255,.17), rgba(145,71,255,0) 70%),
+    radial-gradient(40% 40% at 50% 102%, rgba(236,72,153,.07), rgba(236,72,153,0) 70%),
+    #04070f;
+  position: relative; overflow: hidden;
+}
+.v3-stars {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .55;
+  background-image:
+    radial-gradient(1.4px 1.4px at 10% 12%, #fff, transparent),
+    radial-gradient(1px 1px at 46% 6%, #fff, transparent),
+    radial-gradient(1.6px 1.6px at 23% 38%, #fff, transparent),
+    radial-gradient(1px 1px at 76% 22%, #fff, transparent),
+    radial-gradient(1.4px 1.4px at 62% 48%, #fff, transparent),
+    radial-gradient(1px 1px at 90% 14%, #fff, transparent),
+    radial-gradient(1.6px 1.6px at 34% 68%, #fff, transparent),
+    radial-gradient(1px 1px at 84% 62%, #fff, transparent),
+    radial-gradient(1.4px 1.4px at 6% 82%, #fff, transparent),
+    radial-gradient(1px 1px at 55% 84%, #fff, transparent);
+  background-repeat: repeat; background-size: 340px 340px;
+  animation: v3Twinkle 5s ease-in-out infinite alternate;
+}
+@keyframes v3Twinkle { 0% { opacity: .4; } 100% { opacity: .68; } }
+@media (prefers-reduced-motion: reduce) { .v3-stars { animation: none; } }
+
+/* ===== Nebulosas de las esquinas — recortadas de la imagen de referencia
+   ("Elige tu mundo"), para que el fondo de la página se vea igual que ahí.
+   Puramente decorativo, detrás de todo el contenido. ===== */
+.v3-nebula { position: absolute; z-index: 0; pointer-events: none; width: 560px; height: auto; max-width: 42vw; opacity: .85; }
+.v3-nebula-tl { top: 0; left: 0; }
+.v3-nebula-tr { top: 0; right: 0; }
+.v3-nebula-bl { bottom: 0; left: 0; }
+.v3-nebula-br { bottom: 0; right: 0; }
+@media (max-width: 900px) { .v3-nebula { opacity: .55; width: 380px; } }
+.v3-nav { position: relative; z-index: 3; }
+/* .v3-nav-inner tiene solo 2 hijos directos (.v3-logo y .v3-auth), sin
+   ancho fijo en ninguno de los dos — a ancho de ventana chico, su suma
+   puede superar el ancho disponible. Antes eso se resolvía "solo" (en
+   realidad NO se resolvía: .v3-page tiene overflow:hidden para recortar
+   las nebulosas decorativas, así que cualquier desborde del nav quedaba
+   recortado en silencio, incluyendo el botón "Únete"). flex-wrap es la
+   red de seguridad estructural: si de verdad no cabe, .v3-auth pasa a su
+   propia línea completa en vez de cortarse — nunca queda oculto. */
+.v3-nav-inner {
+  max-width: 1320px; margin: 0 auto; padding: 22px 1.5rem 0;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; row-gap: 10px;
+}
+.v3-logo { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.v3-logo-mark {
+  width: 42px; height: 42px; flex-shrink: 0; overflow: hidden;
+  background: #04101f;
+  clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 26px rgba(58,160,255,.55);
+}
+.v3-logo-mark img { width: 100%; height: 100%; object-fit: cover; }
+.v3-wordmark { font-family: 'Orbitron', sans-serif; font-weight: 700; letter-spacing: .12em; font-size: 19px; color: #eaf2ff; }
+.v3-auth { display: flex; align-items: center; gap: 20px; min-width: 0; flex-shrink: 1; }
+/* El widget de cuenta (avatar+nombre+bandera+insignia) es lo único del
+   header con contenido variable en longitud (el nombre de Twitch). Es el
+   que debe absorber la reducción de espacio primero — nunca el botón. */
+#geoAccountWidget { min-width: 0; }
+.v3-login-link { display: flex; align-items: center; gap: 7px; font-size: 14px; color: #b9cdea; transition: color .25s; }
+.v3-login-link:hover { color: #fff; }
+.v3-join-btn {
+  font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 12.5px; letter-spacing: .03em;
+  color: #fff; background: linear-gradient(135deg, #2f7ce6, #3aa0ff); border-radius: 8px;
+  padding: 11px 22px; box-shadow: 0 10px 26px -10px rgba(58,160,255,.65); transition: transform .3s var(--ease);
+  flex-shrink: 0; white-space: nowrap;
+}
+.v3-join-btn:hover { transform: translateY(-2px); }
+
+/* ---- Nav: degradación gradual antes de llegar al flex-wrap de emergencia.
+   A estos anchos, el nombre de usuario se acorta más y el logo/botón
+   pierden un poco de padding — así el layout de una sola línea
+   [LOGO] ... [cuenta][Únete] se mantiene en mucho más rango de anchos, y
+   .v3-nav-inner solo tiene que partirse a dos líneas en casos extremos. ---- */
+@media (max-width: 760px) {
+  .v3-nav-inner { padding: 16px 1rem 0; column-gap: 14px; }
+  .v3-auth { gap: 12px; }
+  .v3-wordmark { font-size: 15px; }
+  .v3-logo-mark { width: 34px; height: 34px; }
+  .v3-join-btn { padding: 9px 16px; font-size: 11.5px; }
+}
+
+/* Nav real (accesible/funcional) oculto — sigue alimentando el sistema de paneles y los tabs de móvil */
+.v3-page .nav-links { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; pointer-events: none; }
+
+/* ===== Nav como marcadores sobre el planeta (estilo mapa de Fortnite) ===== */
+.v3-planet-nav { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
+.v3-planet-nav a {
+  position: absolute; left: var(--mx); top: var(--my);
+  display: flex; flex-direction: column; align-items: center;
+  transform: translate(-50%, -100%);
+  pointer-events: auto; text-decoration: none; cursor: pointer;
+}
+.v3-marker-icon {
+  width: 46px; height: 46px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 20px;
+  background: rgba(8,16,34,.88); border: 1px solid rgba(150,200,255,.55);
+  box-shadow: 0 0 18px rgba(90,170,255,.55), inset 0 0 0 1px rgba(0,0,0,.25);
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+}
+/* El badge de Fortnite tenía una esquina con solo .35 de opacidad — sobre
+   zonas claras del planeta el relleno casi desaparecía y la "F" se leía
+   mal (el bug real detrás de "el pin de Fortnite casi desaparece"). Ahora
+   el degradado es opaco de punta a punta como el resto de los pins, sin
+   perder el tinte azul que lo distingue. */
+.v3-marker-fn {
+  font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 19px; font-style: italic;
+  color: #eaf6ff; background: linear-gradient(150deg, rgba(40,110,205,.85), rgba(8,16,34,.94));
+  border-color: rgba(120,190,255,.8); text-shadow: 0 0 10px rgba(150,210,255,.8);
+}
+/* Pedido explícito: los pins quedan solo como el círculo con el ícono,
+   sin el tallo/línea ni el anillo pulsante de abajo. Se ocultan acá, en la
+   regla compartida (.v3-marker-stem/.v3-marker-ring), así que aplica a los
+   8 pins a la vez sin tocarlos uno por uno ni tocar el HTML. */
+.v3-marker-stem { display: none; }
+.v3-marker-ring { display: none; }
+.v3-marker-label {
+  order: -1; margin-bottom: 6px;
+  font-family: 'Orbitron', sans-serif; font-size: 10px; letter-spacing: .05em; white-space: nowrap;
+  color: #eaf2ff; background: rgba(8,16,34,.88); border: 1px solid rgba(150,200,255,.4);
+  padding: 3px 9px; border-radius: 6px;
+  opacity: 0; transform: translateY(4px); transition: opacity .25s, transform .25s; pointer-events: none;
+}
+.v3-planet-nav a:hover .v3-marker-label,
+.v3-planet-nav a:focus-visible .v3-marker-label { opacity: 1; transform: translateY(0); }
+.v3-planet-nav a:hover .v3-marker-icon,
+.v3-planet-nav a:focus-visible .v3-marker-icon { transform: scale(1.18); box-shadow: 0 0 22px rgba(120,200,255,.8); }
+@keyframes v3RingPulse { 0%, 100% { transform: scale(1); opacity: .9; } 50% { transform: scale(1.3); opacity: .55; } }
+@media (prefers-reduced-motion: reduce) { .v3-marker-ring { animation: none; } }
+@media (max-width: 560px) {
+  .v3-marker-icon { width: 36px; height: 36px; font-size: 15px; }
+  .v3-marker-fn { font-size: 14px; }
+}
+
+/* ===== Alcancía pospuesta: pin visible, bloqueado, con "Próximamente" =====
+   Solo afecta al pin #alcancia (aria-disabled="true" en el HTML). No toca
+   .v3-marker-label/.v3-marker-icon compartidos ni ningún otro pin. */
+.v3-marker-label-soon {
+  opacity: 1 !important; /* siempre visible, no solo al hover como el resto */
+  min-width: 100px; text-align: center; line-height: 1.3; padding: 5px 10px;
+}
+.v3-marker-soon-name {
+  display: block; font-size: 10px; letter-spacing: .05em; color: #eaf2ff;
+}
+.v3-marker-soon-tag {
+  display: block; margin-top: 2px;
+  font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 8px;
+  letter-spacing: .12em; text-transform: uppercase; color: #93a8d6; /* morado/azul tenue */
+}
+.v3-marker-icon-soon { filter: saturate(.7) brightness(.88); }
+.v3-planet-nav a[aria-disabled="true"] { cursor: not-allowed; }
+.v3-planet-nav a[aria-disabled="true"]:hover .v3-marker-icon,
+.v3-planet-nav a[aria-disabled="true"]:focus-visible .v3-marker-icon {
+  transform: none; box-shadow: 0 0 18px rgba(90,170,255,.55), inset 0 0 0 1px rgba(0,0,0,.25);
+}
+@media (max-width: 560px) {
+  .v3-marker-label-soon { min-width: 88px; padding: 4px 8px; }
+  .v3-marker-soon-name { font-size: 9px; }
+  .v3-marker-soon-tag { font-size: 7px; }
+}
+
+/* ===== Hero: globo + wordmark ===== */
+.v3-hero-stage { position: relative; z-index: 2; text-align: center; padding: 4px 1.5rem 6px; }
+.v3-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; }
+.v3-h1-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; }
+
+/* ===== "Elige tu mundo" — header ornamental arriba del planeta principal ===== */
+.v3-world-header {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: .32em;
+  color: #eaf2ff; text-transform: uppercase; margin: 0 0 6px;
+}
+.v3-world-header .v3-now-line { max-width: 90px; }
+.v3-world-star { color: #7fb0f5; font-size: 11px; }
+
+/* ===== "Elige tu mundo" — 3 planetas. En desktop ancho (>1300px) van fijos,
+   lado a lado (02 · activo · 03), usando "order" para acomodarlos aunque el
+   DOM empiece en el activo. Por debajo de 1300px es un carrusel horizontal
+   con scroll-snap (deslizar con el dedo): sin JS — como el activo es
+   literalmente el primer elemento del HTML y el scroll arranca en 0,
+   siempre se ve primero. ===== */
+.v3-orbit-wrap { display: flex; align-items: center; justify-content: center; gap: 40px; max-width: 2100px; margin: 0 auto; }
+.v3-globe-col { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+.v3-world-slide { flex-shrink: 0; display: flex; justify-content: center; }
+.v3-world-slide-main { order: 2; }
+.v3-world-slide-02 { order: 1; }
+.v3-world-slide-03 { order: 3; }
+
+.v3-world-locked {
+  width: min(460px, 72vw); flex-shrink: 0; display: flex; flex-direction: column; align-items: center;
+  text-align: center; opacity: .92; transition: opacity .3s var(--ease), transform .3s var(--ease);
+  animation: v3Float 6s ease-in-out infinite;
+}
+.v3-world-locked:hover { opacity: 1; transform: translateY(-3px); }
+@media (prefers-reduced-motion: reduce) { .v3-world-locked { animation: none; } }
+.v3-world-planet-img {
+  width: min(460px, 72vw); height: min(460px, 72vw); object-fit: cover; display: block; border-radius: 50%;
+  filter: drop-shadow(0 0 34px rgba(150,110,255,.55)) drop-shadow(0 0 70px rgba(90,60,180,.35));
+  -webkit-mask-image: radial-gradient(closest-side, #000 78%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 78%, transparent 100%);
+  transition: transform .4s var(--ease);
+}
+/* Zoom suave al pasar el mouse sobre un mundo bloqueado */
+.v3-world-locked:hover .v3-world-planet-img { transform: scale(1.08); }
+@media (max-width: 1700px) {
+  .v3-world-locked, .v3-world-planet-img { width: 300px; height: 300px; }
+}
+
+/* ===== Mundo 02 — Halloween con countdown real =====
+   Overlay, candado y texto viven como HTML/CSS reales (no quemados en la
+   imagen) para poder animarlos y, más adelante, quitarlos cuando se
+   desbloquee. Todas las clases son nuevas y con prefijo v3-wl- -- no se
+   modificó ninguna regla compartida de arriba (.v3-world-locked /
+   .v3-world-planet-img), así que Mundo 03 sigue exactamente igual. */
+.v3-wl-orb { position: relative; display: inline-block; line-height: 0; }
+.v3-wl-img {
+  object-position: 50% 22%; /* castillo arriba visible, no lo recorta el cover cuadrado */
+  /* Ajuste visual (mismo glow morado que .v3-world-planet-img, más sutil) +
+     brillo/contraste/saturación para que el planeta bloqueado no se sienta
+     apagado -- reemplaza el filter compartido SOLO en este <img> (mismo
+     selector-specificity, gana por venir después en el archivo), así que
+     Mundo 03 sigue exactamente igual. */
+  filter:
+    brightness(1.13) contrast(1.12) saturate(1.18)
+    drop-shadow(0 0 30px rgba(150,110,255,.40))
+    drop-shadow(0 0 60px rgba(90,60,180,.26));
+}
+.v3-wl-tint {
+  position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
+  /* Overlay ~35% menos intenso que antes (.16/.6 -> .10/.39) para que el
+     castillo, árboles, cementerio y calabazas se vean sin perder el look
+     "bloqueado". */
+  background: radial-gradient(circle at 40% 30%, rgba(40,10,60,.10), rgba(8,4,18,.39) 78%);
+  -webkit-mask-image: radial-gradient(closest-side, #000 78%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 78%, transparent 100%);
+  transition: opacity .4s var(--ease);
+}
+.v3-wl-lockbadge {
+  position: absolute; right: 8%; bottom: 12%; width: 38px; height: 38px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 16px; background: rgba(10,4,24,.82); border: 1px solid rgba(180,120,255,.55);
+  box-shadow: 0 0 16px rgba(150,80,255,.55), inset 0 0 0 1px rgba(0,0,0,.3);
+  transition: opacity .4s var(--ease), transform .4s var(--ease);
+}
+.v3-wl-eyebrow {
+  margin-top: 14px; font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 10.5px;
+  letter-spacing: .22em; text-transform: uppercase; color: #b98cf5;
+}
+.v3-wl-title {
+  font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: clamp(17px, 3.6vw, 21px);
+  letter-spacing: .03em; color: #f2ecff; margin-top: 2px;
+  text-shadow: 0 0 18px rgba(150,90,255,.55), 0 0 30px rgba(255,140,60,.18);
+}
+.v3-wl-sub {
+  font-family: 'Orbitron', sans-serif; font-weight: 500; font-size: 10.5px;
+  letter-spacing: .07em; color: rgba(230,225,245,.6); margin-top: 4px; text-transform: uppercase;
+}
+.v3-wl-countdown {
+  display: inline-flex; align-items: baseline; gap: 7px; margin-top: 12px;
+  background: rgba(24,10,40,.34); border: 1px solid rgba(160,90,255,.28);
+  border-radius: 100px; padding: 7px 16px; font-family: 'Orbitron', sans-serif;
+}
+.v3-wl-seg { display: inline-flex; align-items: baseline; gap: 2px; }
+.v3-wl-seg b {
+  font-size: clamp(13px, 3vw, 15px); font-weight: 700; color: #ffcf8a;
+  text-shadow: 0 0 10px rgba(255,150,60,.55), 0 0 16px rgba(160,90,255,.4);
+}
+.v3-wl-seg i { font-style: normal; font-size: 9px; color: rgba(230,225,245,.5); margin-left: 1px; }
+.v3-wl-colon { color: rgba(230,225,245,.32); font-size: 12px; }
+.v3-wl-available {
+  font-weight: 700; letter-spacing: .1em; color: #ffb84a; font-size: 12.5px;
+  text-shadow: 0 0 14px rgba(255,150,60,.6);
+}
+/* Preparado para el 1 de octubre: el countdown en JS agrega "is-unlocked" a
+   .v3-wl-halloween apenas llega la fecha -- esto ya sabe quitar el tinte y
+   el candado visualmente, sin tocar el resto de la estructura del mundo. */
+.v3-wl-halloween.is-unlocked .v3-wl-tint,
+.v3-wl-halloween.is-unlocked .v3-wl-lockbadge { opacity: 0; pointer-events: none; }
+@media (max-width: 1700px) {
+  .v3-wl-lockbadge { width: 30px; height: 30px; font-size: 13px; }
+}
+
+/* Modo carrusel (mobile/tablet): scroll horizontal con snap, un mundo a la
+   vez, centrado. Orden del DOM tal cual (activo, 02, 03) — sin "order". */
+@media (max-width: 1300px) {
+  .v3-orbit-wrap {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    gap: 0;
+    padding: 4px 0 10px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .v3-orbit-wrap::-webkit-scrollbar { display: none; }
+  .v3-world-slide.v3-world-slide-main,
+  .v3-world-slide.v3-world-slide-02,
+  .v3-world-slide.v3-world-slide-03 { order: 0; }
+  .v3-world-slide {
+    width: 100%; min-width: 100%; flex-shrink: 0;
+    scroll-snap-align: center; scroll-snap-stop: always;
+  }
+  .v3-world-locked, .v3-world-planet-img { width: min(300px, 66vw); height: min(300px, 66vw); }
+}
+@media (min-width: 1301px) {
+  .v3-world-hint { display: none; }
+}
+@media (max-width: 1300px) {
+  .v3-world-hint {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    font-family: 'Orbitron', sans-serif; font-size: 10px; letter-spacing: .1em;
+    color: #7fb0f5; text-transform: uppercase; opacity: .75; margin: -8px 0 4px;
+  }
+}
+
+/* Etiqueta bajo el planeta activo (Mundo 01) */
+.v3-world-active { display: flex; flex-direction: column; align-items: center; gap: 7px; margin-top: -14px; }
+.v3-world-active-eyebrow { font-family: 'Orbitron', sans-serif; font-size: 10.5px; letter-spacing: .12em; color: #7fb0f5; text-transform: uppercase; }
+.v3-world-active-name { font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 15px; letter-spacing: .03em; color: #eaf2ff; }
+.v3-world-active-pill {
+  display: inline-flex; align-items: center; gap: 6px; font-family: 'Orbitron', sans-serif; font-weight: 700;
+  font-size: 10px; letter-spacing: .06em; color: #00c853; text-transform: uppercase;
+  background: rgba(0,200,83,.08); border: 1px solid rgba(0,200,83,.35); padding: 5px 13px; border-radius: 100px;
+}
+.v3-world-active-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: #00c853; box-shadow: 0 0 8px #00c853; }
+
+/* ===== ¿Cómo funciona la Geo Army? — ahora va debajo de los planetas, como
+   su propia sección centrada, en vez de ir pegada al lado. ===== */
+.v3-howworks { text-align: center; margin: 30px auto 0; max-width: 620px; }
+.v3-orbit-title {
+  font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: .04em;
+  color: #eaf2ff; text-transform: uppercase; margin-bottom: 14px;
+}
+.v3-orbit-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.v3-orbit-card {
+  --ac: #9147ff; width: 168px; flex-shrink: 0; text-align: left;
+  background: rgba(9,18,38,.5); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(150,200,255,.22); border-left: 2px solid var(--ac);
+  border-radius: 10px; padding: 11px 13px;
+  box-shadow: 0 12px 26px -20px var(--ac);
+}
+.v3-oc-purple { --ac: #9147ff; } .v3-oc-blue { --ac: #3aa0ff; } .v3-oc-green { --ac: #00c853; }
+.v3-oc-num { font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 12px; color: var(--ac); letter-spacing: .05em; margin-bottom: 4px; }
+.v3-oc-body b { display: block; font-family: 'Orbitron', sans-serif; font-size: 11.5px; color: #eaf2ff; text-transform: uppercase; letter-spacing: .03em; margin-bottom: 3px; }
+.v3-oc-body span { font-size: 10.5px; color: #9fb2d1; line-height: 1.35; display: block; }
+.v3-globe-wrap { position: relative; width: min(460px, 72vw); margin: -6px 0 -6%; animation: v3Float 6s ease-in-out infinite; flex-shrink: 0; }
+.v3-globe-wrap img {
+  width: 100%; height: auto; display: block;
+  -webkit-mask-image: radial-gradient(closest-side, #000 62%, transparent 88%);
+  mask-image: radial-gradient(closest-side, #000 62%, transparent 88%);
+}
+@keyframes v3Float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+@media (prefers-reduced-motion: reduce) { .v3-globe-wrap { animation: none; } }
+.v3-tagline { font-family: 'Orbitron', sans-serif; letter-spacing: .32em; font-size: 12.5px; color: #7fb0f5; margin: 10px 0 0; position: relative; z-index: 2; }
+.v3-sub { color: #a9bad6; font-size: 16px; max-width: 520px; margin: 12px auto 0; line-height: 1.6; }
+.v3-live-pill {
+  display: inline-flex; align-items: center; gap: 10px; margin: 14px auto 0;
+  font-size: 12.5px; color: #b9cdea; background: rgba(58,160,255,.08); border: 1px solid rgba(120,180,255,.28);
+  padding: 7px 16px; border-radius: 100px;
+}
+.v3-live-pill .live-dot { width: 7px; height: 7px; border-radius: 50%; background: #6b7a95; transition: background .3s; }
+.v3-live-pill .live-dot.live { background: #00c853; box-shadow: 0 0 8px #00c853; animation: v3DotPulse 1.8s ease-in-out infinite; }
+@keyframes v3DotPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.35); } }
+.v3-cta-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 18px; }
+.v3-btn-primary {
+  display: inline-flex; align-items: center; gap: 8px; font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 13px;
+  color: #041022; background: linear-gradient(135deg, #eaf4ff, #9fd0ff); padding: 14px 28px; border-radius: 8px;
+  box-shadow: 0 14px 34px -12px rgba(120,190,255,.55); transition: transform .3s var(--ease);
+  animation: v3CtaPulse 2.6s ease-in-out infinite;
+}
+.v3-btn-primary:hover { transform: translateY(-3px); animation-play-state: paused; }
+@keyframes v3CtaPulse {
+  0%, 100% { box-shadow: 0 14px 34px -12px rgba(120,190,255,.55), 0 0 0 0 rgba(150,200,255,.5); }
+  50% { box-shadow: 0 14px 34px -12px rgba(120,190,255,.55), 0 0 0 9px rgba(150,200,255,0); }
+}
+@media (prefers-reduced-motion: reduce) { .v3-btn-primary, .v3-live-pill .live-dot.live { animation: none; } }
+.v3-btn-secondary {
+  display: inline-flex; align-items: center; gap: 8px; font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 13px;
+  color: #eaf2ff; background: rgba(255,255,255,.04); border: 1px solid rgba(150,190,255,.35);
+  padding: 14px 26px; border-radius: 8px; cursor: pointer; transition: transform .3s var(--ease), border-color .3s;
+}
+.v3-btn-secondary:hover { transform: translateY(-3px); border-color: rgba(150,190,255,.7); }
+
+/* ===== Ahora en Geo Army ===== */
+.v3-now-section { position: relative; z-index: 2; max-width: 1380px; margin: 26px auto 0; padding: 0 1.5rem 70px; }
+.v3-now-header {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 15px; letter-spacing: .14em;
+  color: #eaf2ff; text-transform: uppercase; margin-bottom: 26px;
+}
+.v3-now-line { flex: 1; max-width: 120px; height: 1px; background: linear-gradient(90deg, transparent, rgba(150,200,255,.5)); }
+.v3-now-line:last-child { background: linear-gradient(90deg, rgba(150,200,255,.5), transparent); }
+.v3-now-header-sm { font-size: 13px; justify-content: flex-start; gap: 10px; margin: 34px 0 16px; }
+.v3-now-header-sm .v3-now-line { display: none; }
+
+/* ===== Cuentas vinculadas (X) — solo visual, ver mi-geoarmy.html =====
+   Misma familia de tarjeta que .v3-now-card (gradiente, borde, radio,
+   glow) pero en fila horizontal en vez de columna de stat, porque acá no
+   hay un número grande que mostrar. */
+.v3-x-card {
+  --ac: #3aa0ff;
+  display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;
+  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
+  border: 1px solid rgba(255,255,255,.1); border-top: 2px solid var(--ac);
+  border-radius: 14px; padding: 18px 22px;
+  box-shadow: 0 20px 40px -30px var(--ac), inset 0 1px 0 rgba(255,255,255,.04);
+}
+.v3-x-card-main { display: flex; align-items: center; gap: 16px; min-width: 0; }
+.v3-x-ic {
+  width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.14);
+  font-size: 19px; font-weight: 700; color: #eaf2ff;
+}
+.v3-x-info { min-width: 0; }
+.v3-x-title { font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 14px; color: #eaf2ff; display: flex; align-items: center; gap: 8px; }
+.v3-x-desc { font-size: 12.5px; color: #9fb2d1; margin-top: 4px; line-height: 1.5; max-width: 460px; }
+.v3-x-check {
+  display: inline-flex; align-items: center; justify-content: center; width: 17px; height: 17px;
+  border-radius: 50%; background: rgba(0,200,83,.12); color: #00c853; font-size: 11px; flex-shrink: 0;
+}
+.v3-x-username { font-size: 12.5px; color: #9fb2d1; margin-top: 3px; }
+.v3-x-connect-btn { flex-shrink: 0; padding: 11px 22px; font-size: 12.5px; }
+.v3-x-connect-btn[hidden] { display: none; }
+
+/* Banner de resultado del flujo (?x_connect=...). Un solo tono de acento
+   por resultado, borde izquierdo, nada de fondos saturados. */
+.v3-x-banner {
+  display: flex; align-items: center; gap: 10px; font-size: 13px; color: #eaf2ff;
+  background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08);
+  border-left: 3px solid rgba(150,190,255,.6); border-radius: 8px;
+  padding: 11px 16px; margin-bottom: 14px;
+}
+/* Mismo bug que ya se corrigió en .ga-dropdown: el atributo `hidden` que
+   pone initXAccountUI() depende de la regla del navegador
+   [hidden]{display:none}, pero esa regla es de origen UA (la prioridad
+   más baja del cascade) y CUALQUIER regla de autor con `display` -como la
+   de arriba- la gana siempre, sin importar especificidad. Resultado: sin
+   esto, el banner quedaba visible (con su padding/borde/margen) incluso
+   con el atributo `hidden` puesto, cuando no hay ?x_connect=... en la URL. */
+.v3-x-banner[hidden] { display: none; }
+.v3-x-banner-ic { flex-shrink: 0; font-size: 13px; line-height: 1; }
+.v3-x-banner-ok { border-left-color: #00c853; }
+.v3-x-banner-ok .v3-x-banner-ic { color: #00c853; }
+.v3-x-banner-warn { border-left-color: #f5a623; }
+.v3-x-banner-warn .v3-x-banner-ic { color: #f5a623; }
+.v3-x-banner-error { border-left-color: #ff5c5c; }
+.v3-x-banner-error .v3-x-banner-ic { color: #ff5c5c; }
+.v3-x-banner-neutral { border-left-color: rgba(150,190,255,.6); }
+.v3-x-banner-neutral .v3-x-banner-ic { color: #9fb2d1; }
+
+@media (max-width: 620px) {
+  .v3-x-card { flex-direction: column; align-items: stretch; text-align: center; }
+  .v3-x-card-main { flex-direction: column; text-align: center; }
+  .v3-x-desc { max-width: none; }
+  .v3-x-connect-btn { width: 100%; justify-content: center; }
+}
+
+.v3-now-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; }
+.v3-now-card {
+  --ac: #9147ff;
+  position: relative; background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
+  border: 1px solid rgba(255,255,255,.1); border-top: 2px solid var(--ac);
+  border-radius: 14px; padding: 20px 20px 22px; display: flex; flex-direction: column; gap: 14px;
+  box-shadow: 0 20px 40px -30px var(--ac), inset 0 1px 0 rgba(255,255,255,.04);
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+}
+.v3-now-card:hover { transform: translateY(-4px); }
+.v3-c-purple { --ac: #9147ff; }
+.v3-c-gold { --ac: #ffd23f; }
+.v3-c-blue { --ac: #3aa0ff; }
+.v3-c-green { --ac: #00c853; }
+.v3-c-discord { --ac: #5865f2; }
+.v3-c-whatsapp { --ac: #25d366; }
+.v3-c-pink { --ac: #ec4899; }
+
+.v3-now-head {
+  display: flex; align-items: center; gap: 9px; font-family: 'Orbitron', sans-serif; font-weight: 700;
+  font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; color: #eaf2ff;
+  padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.v3-now-ic { font-size: 16px; color: var(--ac); display: inline-flex; }
+.v3-now-ic-img { width: 16px; height: 16px; object-fit: contain; display: block; }
+.v3-now-status { display: flex; align-items: center; gap: 8px; font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 19px; color: var(--ac); text-transform: uppercase; }
+.v3-now-dot { width: 9px; height: 9px; border-radius: 50%; background: #5a6478; flex-shrink: 0; }
+.v3-now-dot.live { background: #00c853; box-shadow: 0 0 10px #00c853; animation: v3DotPulse 1.8s ease-in-out infinite; }
+.v3-now-sub { font-size: 12.5px; color: #9fb2d1; min-height: 14px; }
+/* Tarjeta resumen de Ranking (mi-geoarmy.html): línea de nombre de rango,
+   entre el número grande (#mgRank) y la línea de XP (#mgRankSub). */
+#mgRankName { font-weight: 600; color: #c3d4ef; min-height: 0; }
+#mgRankName:empty { display: none; }
+.v3-now-big { font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 2rem; color: var(--ac); line-height: 1.08; }
+.v3-now-big span { font-size: .85rem; font-weight: 700; color: #c9d6ec; text-transform: uppercase; margin-left: 4px; }
+.v3-now-big-sm { font-size: 1.4rem; }
+.v3-now-winner { display: flex; align-items: center; gap: 12px; }
+.v3-now-winner-ava {
+  width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; font-size: 18px;
+  background: radial-gradient(circle at 35% 30%, #1d2b52, #0a1122); border: 1px solid rgba(255,255,255,.15);
+  display: flex; align-items: center; justify-content: center;
+}
+.v3-now-winner-name { font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 14.5px; color: var(--ac); }
+.v3-now-winner-prize { font-size: 12.5px; color: #c9d6ec; margin-top: 2px; }
+.v3-now-btn {
+  margin-top: auto; text-align: center; font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 12px;
+  background: var(--ac); padding: 10px 14px; border-radius: 8px; transition: transform .3s var(--ease), filter .3s var(--ease);
+}
+.v3-now-btn:hover { transform: translateY(-2px); filter: brightness(1.12); }
+.v3-c-purple .v3-now-btn, .v3-c-blue .v3-now-btn, .v3-c-discord .v3-now-btn, .v3-c-pink .v3-now-btn { color: #fff; }
+.v3-c-gold .v3-now-btn, .v3-c-green .v3-now-btn, .v3-c-whatsapp .v3-now-btn { color: #04101f; }
+
+.v3-recent { margin-top: 8px; background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; padding: 22px 24px; }
+.v3-recent-row { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; }
+.v3-recent-item { flex: 1; min-width: 210px; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); border-radius: 12px; padding: 12px 14px; }
+.v3-recent-rank {
+  width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 12px;
+  display: flex; align-items: center; justify-content: center; background: #1c2740; color: #eaf2ff; border: 1px solid rgba(255,255,255,.15);
+}
+.v3-recent-rank.g1 { background: #7a5a00; color: #ffd23f; border-color: rgba(255,210,63,.5); }
+.v3-recent-rank.g2 { background: #3a3f4a; color: #d7dee8; border-color: rgba(215,222,232,.4); }
+.v3-recent-rank.g3 { background: #5a3517; color: #e0a06a; border-color: rgba(224,160,106,.4); }
+.v3-recent-name { font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 13px; color: #eaf2ff; }
+.v3-recent-prize { font-size: 12px; color: #8fb0e0; margin-top: 2px; }
+.v3-recent-time { font-size: 10.5px; color: #5f7396; margin-top: 2px; }
+.v3-recent-more { display: inline-block; font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 12px; color: #8fc4ff; }
+.v3-recent-more:hover { color: #c3e2ff; }
+.v3-recent-empty { color: #7f92b3; font-size: 13px; padding: 8px 0; }
+
+.v3-ridge { position: relative; z-index: 1; width: 100%; height: 90px; display: block; margin-top: -60px; }
+
+@media (max-width: 980px) { .v3-now-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) {
+  .v3-now-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .v3-auth .v3-login-link span { display: none; }
+}
+@media (max-width: 560px) { .v3-cards { grid-template-columns: 1fr; } }
+
+/* =====================================================================
+   AÑADIDO PARA SUBPÁGINAS (mi-geoarmy.html y las que sigan este estilo)
+   El home (index-v3.html) navega con marcadores sobre el planeta; una
+   subpágina sin planeta necesita una fila de links normal en el nav.
+   ===================================================================== */
+.v3-page-links { display: flex; align-items: center; gap: 22px; }
+.v3-page-links a { font-family: 'Inter', sans-serif; font-size: 13.5px; color: #b9cdea; transition: color .25s; white-space: nowrap; }
+.v3-page-links a:hover { color: #fff; }
+@media (max-width: 900px) { .v3-page-links { display: none; } }
+
+.v3-page-hero { position: relative; z-index: 2; text-align: center; padding: 64px 1.5rem 8px; max-width: 640px; margin: 0 auto; }
+.v3-page-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 700; margin-bottom: .6rem; color: #eaf2ff; }
+.v3-page-sub { color: #a9bad6; font-size: 15.5px; line-height: 1.6; }
+
+.v3-simple-card {
+  max-width: 440px; margin: 1.5rem auto; text-align: center;
+  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
+  border: 1px solid rgba(255,255,255,.1); border-radius: 20px;
+  padding: 2.4rem 2rem; box-shadow: 0 20px 40px -30px rgba(145,71,255,.4);
+  position: relative; z-index: 2;
+}
+.v3-simple-card .v3-simple-ic { font-size: 32px; margin-bottom: .75rem; }
+.v3-simple-card p { color: #a9bad6; font-size: 13.5px; line-height: 1.6; margin-bottom: 1.6rem; }
+
+.v3-xp-card {
+  position: relative; z-index: 2; max-width: 1320px; margin: 1.2rem auto 0; padding: 0 1.5rem;
+}
+.v3-xp-inner {
+  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
+  border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 1.6rem 1.8rem;
+  box-shadow: 0 20px 40px -30px rgba(145,71,255,.35);
+}
+.v3-xp-bar-bg { height: 8px; border-radius: 100px; background: rgba(255,255,255,.08); overflow: hidden; }
+.v3-xp-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #9147ff, #3aa0ff); border-radius: 100px; transition: width .6s ease; }
+.v3-xp-note { margin-top: 10px; font-size: 11.5px; color: #5f7396; }
+
+/* ===== Perfil Grande: tarjeta de rango (reemplaza el bloque de Nivel/XP) =====
+   Reusa el mismo contenedor .v3-xp-card/.v3-xp-inner (mismo fondo, borde,
+   glow morado y radios que ya tenía esa sección) y solo cambia lo de
+   adentro: 2 columnas en desktop (rango grande | progreso), 1 columna
+   apilada en mobile. */
+.v3-rank-grid { display: flex; align-items: center; gap: 34px; }
+.v3-rank-left {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  flex-shrink: 0; min-width: 180px; text-align: center;
+}
+.v3-rank-badge-big {
+  width: 128px; height: 128px; object-fit: contain;
+  filter: drop-shadow(0 0 24px rgba(145,71,255,.45));
+}
+.v3-rank-name-big {
+  font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 1.5rem;
+  letter-spacing: .04em; text-transform: uppercase; color: #eaf2ff;
+}
+.v3-rank-xp-big { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.05rem; color: #9fb2d1; }
+
+.v3-rank-right { flex: 1; min-width: 0; padding-left: 34px; border-left: 1px solid rgba(255,255,255,.08); }
+.v3-rank-progress-title {
+  font-family: 'Orbitron', sans-serif; font-size: .72rem; letter-spacing: .1em;
+  text-transform: uppercase; color: #7fb0f5; margin-bottom: 10px;
+}
+.v3-rank-progress-row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+.v3-rank-progress-text { font-size: 13px; color: #eaf2ff; }
+.v3-rank-progress-pct { font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 13px; color: #b48cff; }
+
+.v3-rank-max { padding: 10px 0 4px; }
+.v3-rank-max-title {
+  font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: .05em;
+  text-transform: uppercase; color: #eaf2ff; text-shadow: 0 0 16px rgba(145,71,255,.5);
+}
+
+/* Siguiente rango + Posición global: antes eran dos secciones sueltas
+   separadas solo por una línea horizontal en un espacio ancho. Ahora son
+   dos bloques compactos con su propio panel (fondo/borde), uno al lado
+   del otro en desktop; si "Siguiente rango" está oculto (rango máximo),
+   "Posición global" ocupa el ancho completo sola. */
+.v3-rank-bottom-row { display: flex; gap: 14px; margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.08); }
+.v3-rank-mini {
+  flex: 1; min-width: 0; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px; padding: 14px 16px;
+}
+.v3-rank-mini-label {
+  font-family: 'Orbitron', sans-serif; font-size: .66rem; letter-spacing: .1em;
+  text-transform: uppercase; color: #7fb0f5; margin-bottom: 10px;
+}
+.v3-rank-next-row { display: flex; align-items: center; gap: 12px; }
+.v3-rank-next-badge { width: 40px; height: 40px; object-fit: contain; flex-shrink: 0; }
+.v3-rank-next-name { font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: .85rem; letter-spacing: .03em; text-transform: uppercase; color: #eaf2ff; }
+.v3-rank-next-xp { font-size: 12px; color: #9fb2d1; margin-top: 2px; }
+.v3-rank-position-value { font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 1.3rem; color: #eaf2ff; }
+.v3-rank-position-sub { font-size: 12px; color: #9fb2d1; margin-top: 2px; }
+
+@media (max-width: 760px) {
+  .v3-rank-grid { flex-direction: column; text-align: center; }
+  .v3-rank-right { padding-left: 0; border-left: none; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.08); width: 100%; }
+  .v3-rank-progress-row { justify-content: center; gap: 14px; }
+  .v3-rank-bottom-row { flex-direction: column; }
+  .v3-rank-next-row { justify-content: center; }
+  .v3-rank-next-row > div { text-align: left; }
+  .v3-rank-mini { text-align: center; }
+}
+
+.v3-table-wrap { position: relative; z-index: 2; max-width: 1320px; margin: 2.2rem auto 0; padding: 0 1.5rem 70px; }
+.v3-table-card {
+  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
+  border: 1px solid rgba(255,255,255,.1); border-radius: 16px; overflow: hidden;
+  box-shadow: 0 20px 40px -30px rgba(58,160,255,.4);
+}
+.v3-table-card table { width: 100%; border-collapse: collapse; }
+.v3-table-card thead th {
+  font-family: 'Orbitron', sans-serif; font-size: .68rem; text-transform: uppercase; letter-spacing: .1em;
+  text-align: left; color: rgba(234,242,255,.5); padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.v3-table-card tbody td { padding: 13px 18px; border-bottom: 1px solid rgba(255,255,255,.06); font-size: .92rem; color: #eaf2ff; }
+.v3-table-card tbody tr:last-child td { border-bottom: 0; }
+.v3-table-card tbody tr:hover { background: rgba(58,160,255,.06); }
+.v3-table-empty { text-align: center; color: #7f92b3; padding: 30px 18px !important; }
+@media (max-width: 620px) {
+  .v3-table-card thead { display: none; }
+  .v3-table-card tbody tr { display: block; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,.08); }
+  .v3-table-card tbody td { display: flex; justify-content: space-between; gap: 12px; border: 0; padding: 8px 16px; }
+  .v3-table-card tbody td::before { content: attr(data-label); font-size: .65rem; text-transform: uppercase; letter-spacing: .1em; color: rgba(234,242,255,.4); }
+}
+
+/* ===== Ranking Geo Army (xp_leaderboard) — filas compactas, no tabla.
+   #1/#2/#3 reciben un poco más de presencia (medalla, insignia/avatar un
+   poco más grandes, color del número) pero el mismo layout que el resto. */
+.gr-rank-card { padding: 4px 0; }
+/* ranking.html usa la misma .v3-table-wrap que mi-geoarmy.html (Mis
+   solicitudes), así que el margen/padding grande de esa clase compartida
+   no se toca acá — se recorta solo para el ranking vía el id #rankingFull,
+   sin afectar la otra página. */
+#rankingFull { margin-top: 1.1rem; padding-bottom: 40px; }
+.gr-rank-row {
+  display: flex; align-items: center; gap: 11px;
+  padding: 10px 18px; border-bottom: 1px solid rgba(255,255,255,.06);
+  transition: background .2s var(--ease);
+}
+.gr-rank-row:last-child { border-bottom: 0; }
+.gr-rank-row:hover { background: rgba(58,160,255,.06); }
+.gr-rank-pos {
+  width: 38px; flex-shrink: 0; text-align: left;
+  font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 12.5px; color: #8fb0e0; white-space: nowrap;
+}
+.gr-rank-row.gr-top .gr-rank-pos { font-size: 14px; }
+.gr-rank-row.gr-top1 .gr-rank-pos { color: #ffd23f; }
+.gr-rank-row.gr-top2 .gr-rank-pos { color: #d7dee8; }
+.gr-rank-row.gr-top3 .gr-rank-pos { color: #e0a06a; }
+.gr-rank-avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #1c2740; }
+.gr-rank-avatar-fallback {
+  display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700; font-size: 12px; color: #eaf2ff; background: #4a3a8a;
+}
+.gr-rank-row.gr-top .gr-rank-avatar { width: 32px; height: 32px; box-shadow: 0 0 0 2px rgba(255,255,255,.14); }
+.gr-rank-flag { width: 17px; height: 12px; border-radius: 2px; object-fit: cover; flex-shrink: 0; box-shadow: 0 0 0 1px rgba(255,255,255,.2); }
+/* Insignia con más presencia que en el header (23px), sin volverse enorme. */
+.gr-rank-badge { width: 26px; height: 26px; object-fit: contain; flex-shrink: 0; }
+.gr-rank-row.gr-top .gr-rank-badge { width: 32px; height: 32px; }
+.gr-rank-id { display: flex; align-items: baseline; gap: 8px; min-width: 0; flex: 1 1 auto; }
+.gr-rank-name { font-weight: 600; font-size: 13.5px; color: #eaf2ff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gr-rank-rankname { font-size: 11px; color: #7f92b3; white-space: nowrap; flex-shrink: 0; }
+.gr-rank-xp {
+  margin-left: auto; flex-shrink: 0; padding-left: 10px;
+  font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 12.5px; color: #ffd23f; white-space: nowrap;
+}
+.gr-rank-loading { text-align: center; color: #7f92b3; padding: 30px 18px; font-size: 13px; }
+/* Empty state: columna centrada con separación explícita vía gap (no
+   depende de márgenes de tags sueltos, así no se pueden pegar entre sí). */
+.gr-rank-empty {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; gap: 9px; padding: 26px 24px; min-height: 190px;
+  box-sizing: border-box;
+}
+.gr-rank-empty-ic { font-size: 30px; line-height: 1; }
+.gr-rank-empty-title { font-family: 'Orbitron', sans-serif; font-size: 12.5px; letter-spacing: .04em; text-transform: uppercase; color: #eaf2ff; }
+.gr-rank-empty-sub { font-size: 12.5px; color: #a9bad6; max-width: 320px; line-height: 1.5; }
+@media (max-width: 480px) {
+  .gr-rank-flag { display: none; }
+  .gr-rank-rankname { max-width: 74px; overflow: hidden; text-overflow: ellipsis; }
+}
+
+/* =====================================================================
+   MI GEO ARMY — dashboard de cuenta (mi-geoarmy.html)
+   Todo lo de abajo es solo presentación: no crea ni renombra ningún id/
+   clase que el script inline de mi-geoarmy.html use para leer/escribir
+   datos (mgAvatar, mgName, mgGcoins, mgWalletGrid, mgRequestsList,
+   mgRank/mgRankName/mgRankSub, etc. siguen intactos). El leaderboard
+   completo (.gr-rank-*) vive en ranking.html, no acá.
+   ===================================================================== */
+
+/* ---- Mis saldos: fila compacta de 5 (G-Coins fija + 4 de wallet_balances) ---- */
+.v3-saldos-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; align-items: stretch; }
+/* #mgWalletGrid es un contenedor sin estilo propio: sus hijos (generados por
+   loadWallets(), sin tocar ese JS) se vuelven items directos de esta grid. */
+.v3-saldos-row #mgWalletGrid { display: contents; }
+
+.v3-saldo-card {
+  --ac: #ffd23f;
+  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
+  border: 1px solid rgba(255,255,255,.1); border-top: 2px solid var(--ac);
+  border-radius: 12px; padding: 14px 14px 16px; display: flex; flex-direction: column; gap: 8px;
+  box-shadow: 0 14px 26px -22px var(--ac);
+}
+.v3-saldo-head {
+  display: flex; align-items: center; gap: 6px; font-family: 'Orbitron', sans-serif; font-weight: 700;
+  font-size: 10.5px; letter-spacing: .04em; text-transform: uppercase; color: #c9d6ec;
+}
+.v3-saldo-ic { font-size: 13px; color: var(--ac); }
+.v3-saldo-amt { font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 1.3rem; color: var(--ac); line-height: 1.1; }
+.v3-saldo-amt span { font-size: .7rem; font-weight: 700; color: #c9d6ec; text-transform: uppercase; margin-left: 3px; }
+.v3-saldo-sub { font-size: 10.5px; color: #8fa2c4; min-height: 12px; }
+.v3-saldo-link {
+  margin-top: 2px; align-self: flex-start; background: none; border: none; padding: 0; cursor: pointer;
+  font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 10px; color: var(--ac); text-decoration: none;
+}
+.v3-saldo-link:hover { text-decoration: underline; }
+
+/* Las 4 tarjetas de wallet_balances siguen usando las clases .v3-now-card
+   originales (así las genera loadWallets() sin que se toque ese JS); aquí
+   solo se compactan cuando viven dentro de #mgWalletGrid, para que se vean
+   igual de chicas que la tarjeta de G-Coins. */
+#mgWalletGrid .v3-now-card { padding: 14px 14px 16px; gap: 8px; border-radius: 12px; }
+#mgWalletGrid .v3-now-head { font-size: 10.5px; padding-bottom: 8px; gap: 6px; }
+#mgWalletGrid .v3-now-ic { font-size: 13px; }
+#mgWalletGrid .v3-now-ic-img { width: 13px; height: 13px; }
+#mgWalletGrid .v3-now-big { font-size: 1.3rem; }
+#mgWalletGrid .v3-now-big span { font-size: .7rem; margin-left: 3px; }
+#mgWalletGrid .v3-now-sub { font-size: 10.5px; min-height: 12px; }
+#mgWalletGrid .v3-now-btn {
+  margin-top: 2px; padding: 0; background: none; text-align: left; border-radius: 0;
+  font-size: 10px; color: var(--ac);
+}
+#mgWalletGrid .v3-now-btn:hover { text-decoration: underline; transform: none; filter: none; }
+
+@media (max-width: 980px) { .v3-saldos-row { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 640px) { .v3-saldos-row { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 380px) { .v3-saldos-row { grid-template-columns: 1fr; } }
+
+/* ---- Mi perfil + Progreso: una fila de 2 columnas en desktop ---- */
+.v3-account-row { display: grid; grid-template-columns: 1.1fr 1.5fr; gap: 16px; align-items: stretch; }
+@media (max-width: 760px) { .v3-account-row { grid-template-columns: 1fr; } }
+
+.v3-profile-card {
+  --ac: #9147ff;
+  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
+  border: 1px solid rgba(255,255,255,.1); border-top: 2px solid var(--ac);
+  border-radius: 14px; padding: 18px 20px; display: flex; align-items: center; gap: 16px;
+  box-shadow: 0 20px 40px -30px var(--ac), inset 0 1px 0 rgba(255,255,255,.04);
+}
+
+/* ---- Ranking: placeholder compacto (la tabla real queda oculta hasta que se conecte) ---- */
+.v3-ranking-placeholder {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+  padding: 20px 22px;
+}
+
+/* ===== Ajuste Comunidad: llamada para nuevos + intro centrado =====
+   Solo afecta al pin #comunidad y al encabezado de la pestaña Comunidad. */
+.v3-marker-label-community {
+  min-width: 118px;
+  padding: 6px 10px;
+  line-height: 1.2;
+  text-align: center;
+  white-space: normal;
+}
+.v3-marker-label-community span,
+.v3-marker-label-community strong {
+  display: block;
+}
+.v3-marker-label-community span {
+  font-size: 9px;
+  color: #a9bad6;
+  letter-spacing: .03em;
+}
+.v3-marker-label-community strong {
+  margin-top: 2px;
+  font-size: 10px;
+  color: #eaf2ff;
+  letter-spacing: .05em;
+}
+
+#comunidad .v3-community-intro {
+  max-width: 760px;
+  margin: 0 auto 24px;
+  text-align: center;
+}
+#comunidad .v3-community-intro .v3-tagline {
+  margin: 0;
+  text-align: center;
+}
+#comunidad .v3-community-intro .v3-sub {
+  margin: 10px auto 0;
+  text-align: center;
+}
+#comunidad .v3-howworks {
+  margin-top: 0;
+}
+
+@media (max-width: 560px) {
+  .v3-marker-label-community {
+    min-width: 104px;
+    padding: 5px 8px;
+  }
+  #comunidad .v3-community-intro {
+    margin-bottom: 20px;
+    padding: 0 6px;
+  }
+}
+
+/* === Comunidad CTA visible + flecha dorada === */
+.v3-marker-label-community {
+  position: relative;
+  z-index: 12;
+  opacity: 1 !important;
+  transform: translate(58px, 8px) !important;
+  margin-bottom: 14px !important;
+}
+
+.v3-marker-label-community::after {
+  content: "↙";
+  position: absolute;
+  left: 20px;
+  bottom: -16px;
+  z-index: 13;
+  font-family: Arial, sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+  color: #ffd54a;
+  text-shadow:
+    0 0 6px rgba(255, 223, 99, .98),
+    0 0 14px rgba(255, 200, 40, .95),
+    0 0 24px rgba(255, 170, 0, .7);
+  pointer-events: none;
+}
+
+@media (max-width: 560px) {
+  .v3-marker-label-community {
+    transform: translate(48px, 8px) !important;
+    margin-bottom: 12px !important;
+  }
+
+  .v3-marker-label-community::after {
+    left: 18px;
+    bottom: -14px;
+    font-size: 27px;
+  }
+}
+
