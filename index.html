@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GeoArmy — Comunidad de Geovannyrk</title>
+  <meta name="description" content="Cuartel general de la comunidad GeoArmy. Streams de Fortnite y Overwatch con Geovannyrk en Twitch."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css"/>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VT78CC8X2V"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VT78CC8X2V');
+  </script>
+</head>
+<body>
+
+  <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#inicio" class="nav-logo">
+        <img src="logo.png" alt="GeoArmy" class="nav-logo-img"/>
+        GeoArmy
+      </a>
+      <div class="nav-links">
+        <a href="#inicio">Geo Army</a>
+		<a href="pase.html">Pase de Batalla</a>
+        <a href="tienda.html">Tienda</a>
+        <a href="fortnite.html">Fortnite</a>
+        <a href="#horario">Horario</a>
+        <a href="#ganadores">Ganadores</a>
+        <a href="puntos.html">Puntos</a>
+        <a href="#solicitudes">Solicitudes</a>
+      </div>
+      <a href="https://twitch.tv/geovannyrk" target="_blank" class="btn-nav">Ver stream →</a>
+    </div>
+  </nav>
+
+  <!-- Tabs de navegación para móvil (donde el nav de arriba se oculta) -->
+  <div class="panel-tabs" id="panelTabs" aria-label="Secciones"></div>
+
+  <!-- HERO / GEO ARMY (inicio) -->
+  <section class="hero panel" id="inicio">
+    <div class="hero-inner">
+      <div class="hero-text" data-reveal>
+        <div class="hero-eyebrow" id="live-badge">
+          <span class="live-dot"></span>
+          <span id="live-label">Cargando...</span>
+        </div>
+        <div class="hero-logo-wrap">
+          <img src="logo-banner-transparent.png" alt="Geo Army" class="hero-logo-img"/>
+        </div>
+        <h1 class="hero-subtitle">Bienvenidos al Cuartel General de la <span class="accent">Geo Army</span></h1>
+        <p>Streams de Fortnite y Overwatch. Eventos, boss raids y puntos para la comunidad.</p>
+        <div class="hero-actions">
+          <a href="https://twitch.tv/geovannyrk" target="_blank" class="btn-primary">Seguir en Twitch</a>
+          <button class="btn-secondary" onclick="copyCode()">Código: SORTEOSRK</button>
+        </div>
+      </div>
+      <div class="hero-card" data-reveal>
+        <div class="stream-card-label">Estado del canal</div>
+        <div class="stream-status-row">
+          <div class="status-indicator" id="status-dot"></div>
+          <span id="status-text">Cargando...</span>
+        </div>
+        <div class="stream-meta" id="stream-game"></div>
+        <div class="stream-viewers" id="stream-viewers"></div>
+        <div class="stream-divider"></div>
+        <div class="code-box">
+          <span class="code-label">Código creador Fortnite</span>
+          <span class="code-value">SORTEOSRK</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-bio-wrap" data-reveal>
+      <div class="hero-bio">
+        <div class="hero-bio-tag">Sobre Geo</div>
+        <p>Soy Geo, streamer salvadoreño y creador de la Geo Army, una comunidad donde disfrutamos Fortnite, Overwatch, eventos, retos, sorteos y muchas buenas experiencias juntos. Empecé este proyecto con la idea de construir algo más grande que un canal: un espacio donde todos puedan participar, divertirse y sentirse parte de una verdadera comunidad. Si quieres apoyar este sueño y ayudarme a seguir creciendo, puedes suscribirte al canal o usar mi código de creador <strong>SORTEOSRK</strong> en Fortnite. Cada apoyo, por pequeño que parezca, significa muchísimo para mí y para el futuro de la Geo Army.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HORARIO -->
+  <section class="section alt panel" id="horario">
+    <div class="section-inner">
+      <div class="section-header" data-decor="HORARIO">
+        <div class="section-tag">Horario</div>
+        <h2>Cuándo streamea Geo</h2>
+        <p>En vivo todos los días. Horarios por país abajo.</p>
+      </div>
+      <div class="timezone-card" data-reveal>
+        <div class="tz-header">
+          <span>🕖</span>
+          <span>Horarios por país — todos los días</span>
+        </div>
+        <div class="tz-grid">
+          <div class="tz-row"><span class="tz-country">🇺🇸 USA Costa Este</span><span class="tz-time">7:00 PM – 9:00 PM</span></div>
+          <div class="tz-row"><span class="tz-country">🇲🇽 México (Centro)</span><span class="tz-time">5:00 PM – 7:00 PM</span></div>
+          <div class="tz-row"><span class="tz-country">🇨🇴 Colombia</span><span class="tz-time">7:00 PM – 9:00 PM</span></div>
+          <div class="tz-row"><span class="tz-country">🇵🇪 Perú</span><span class="tz-time">7:00 PM – 9:00 PM</span></div>
+          <div class="tz-row"><span class="tz-country">🇻🇪 Venezuela</span><span class="tz-time">7:00 PM – 9:00 PM</span></div>
+          <div class="tz-row"><span class="tz-country">🇧🇴 Bolivia</span><span class="tz-time">8:00 PM – 10:00 PM</span></div>
+          <div class="tz-row"><span class="tz-country">🇦🇷 Argentina</span><span class="tz-time">8:00 PM – 10:00 PM</span></div>
+          <div class="tz-row"><span class="tz-country">🇨🇱 Chile</span><span class="tz-time">8:00 PM – 10:00 PM</span></div>
+          <div class="tz-row"><span class="tz-country">🇸🇻 Centro América</span><span class="tz-time">5:00 PM – 7:00 PM</span></div>
+          <div class="tz-row"><span class="tz-country">🇪🇸 España</span><span class="tz-time">1:00 AM – 3:00 AM</span></div>
+        </div>
+      </div>
+      <div class="schedule-grid" data-reveal>
+        <div class="schedule-card">
+          <div class="day-label">Lunes</div>
+          <div class="day-time">7:00 PM</div>
+          <div class="day-games"><span class="day-game ow">Overwatch 2</span><span class="day-game fn">Fortnite</span></div>
+        </div>
+        <div class="schedule-card">
+          <div class="day-label">Martes</div>
+          <div class="day-time">7:00 PM</div>
+          <div class="day-games"><span class="day-game ow">Overwatch 2</span><span class="day-game fn">Fortnite</span></div>
+        </div>
+        <div class="schedule-card">
+          <div class="day-label">Miércoles</div>
+          <div class="day-time">7:00 PM</div>
+          <div class="day-games"><span class="day-game ow">Overwatch 2</span><span class="day-game fn">Fortnite</span></div>
+        </div>
+        <div class="schedule-card">
+          <div class="day-label">Jueves</div>
+          <div class="day-time">7:00 PM</div>
+          <div class="day-games"><span class="day-game ow">Overwatch 2</span><span class="day-game fn">Fortnite</span></div>
+        </div>
+        <div class="schedule-card">
+          <div class="day-label">Viernes</div>
+          <div class="day-time">7:00 PM</div>
+          <div class="day-games"><span class="day-game ow">Overwatch 2</span><span class="day-game fn">Fortnite</span></div>
+        </div>
+        <div class="schedule-card">
+          <div class="day-label">Sábado</div>
+          <div class="day-time">6:00 PM</div>
+          <div class="day-games"><span class="day-game ow">Overwatch 2</span><span class="day-game fn">Fortnite</span></div>
+        </div>
+        <div class="schedule-card">
+          <div class="day-label">Domingo</div>
+          <div class="day-time">6:00 PM</div>
+          <div class="day-games"><span class="day-game ow">Overwatch 2</span><span class="day-game fn">Fortnite</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GANADORES -->
+  <section class="section alt panel" id="ganadores">
+    <style>
+      #ganadores .gn-wrap{max-width:940px;margin:0 auto;}
+      #ganadores .gn-stats{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 22px;}
+      #ganadores .gn-chip{flex:1;min-width:120px;background:var(--card-bg);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:18px 20px;box-shadow:var(--card-shadow);transition:transform .35s var(--ease),border-color .35s var(--ease);}
+      #ganadores .gn-chip:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.18);}
+      #ganadores .gn-chip b{font-family:'Space Grotesk',sans-serif;font-size:2rem;line-height:1;display:block;}
+      #ganadores .gn-chip span{font-size:.7rem;text-transform:uppercase;letter-spacing:.13em;color:rgba(255,255,255,.5);}
+      #ganadores .gn-chip.gold b{color:#ffd23f;}
+      #ganadores .gn-chip.pend b{color:#ffb13f;}
+      #ganadores .gn-chip.done b{color:#46e0a8;}
+      #ganadores .gn-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
+      #ganadores .gn-search{flex:1;min-width:200px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:#fff;padding:12px 16px;border-radius:12px;font-size:.95rem;font-family:inherit;}
+      #ganadores .gn-search::placeholder{color:rgba(255,255,255,.4);}
+      #ganadores .gn-search:focus{outline:2px solid var(--accent-light);outline-offset:1px;}
+      #ganadores .gn-filters{display:flex;gap:5px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);padding:5px;border-radius:100px;}
+      #ganadores .gn-filters button{font-family:'Space Grotesk',sans-serif;font-size:.78rem;background:transparent;border:0;color:rgba(255,255,255,.55);padding:8px 14px;border-radius:100px;cursor:pointer;transition:background .25s var(--ease),color .25s var(--ease);}
+      #ganadores .gn-filters button[aria-pressed="true"]{background:linear-gradient(135deg,var(--accent-light),var(--accent));color:#0a0814;}
+      #ganadores .gn-card{background:var(--card-bg);border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;box-shadow:var(--card-shadow);}
+      #ganadores table{width:100%;border-collapse:collapse;}
+      #ganadores thead th{font-family:'Space Grotesk',sans-serif;font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;text-align:left;color:rgba(255,255,255,.45);padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.08);}
+      #ganadores tbody td{padding:15px 18px;border-bottom:1px solid rgba(255,255,255,.05);font-size:.93rem;vertical-align:middle;color:#fff;}
+      #ganadores tbody tr:last-child td{border-bottom:0;}
+      #ganadores tbody tr:hover{background:rgba(169,112,255,.07);}
+      #ganadores .gn-id{font-family:'Space Grotesk',sans-serif;color:#a970ff;font-size:.82rem;}
+      #ganadores .gn-user{font-weight:600;}
+      #ganadores .gn-prize{color:#ffd23f;}
+      #ganadores .gn-ev{color:rgba(255,255,255,.55);font-size:.85rem;}
+      #ganadores .gn-badge{display:inline-flex;align-items:center;gap:6px;font-size:.73rem;font-weight:600;padding:5px 11px;border-radius:99px;white-space:nowrap;}
+      #ganadores .gn-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;}
+      #ganadores .gn-badge.pend{color:#ffb13f;background:rgba(255,177,63,.13);}
+      #ganadores .gn-badge.done{color:#46e0a8;background:rgba(70,224,168,.12);}
+      #ganadores .gn-empty{padding:44px 20px;text-align:center;color:rgba(255,255,255,.5);}
+      #ganadores .gn-empty b{display:block;color:#fff;font-family:'Space Grotesk',sans-serif;margin-bottom:6px;font-size:1.05rem;}
+      #ganadores .gn-foot{margin-top:16px;color:rgba(255,255,255,.4);font-size:.78rem;text-align:right;}
+      #ganadores .gn-rank-card{background:linear-gradient(180deg, rgba(255,210,63,.09), rgba(255,210,63,.03)), var(--bg2);border:1px solid rgba(255,210,63,.25);border-radius:20px;padding:20px 22px;margin-bottom:20px;box-shadow:var(--card-shadow);}
+      #ganadores .gn-rank-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;flex-wrap:wrap;gap:6px;}
+      #ganadores .gn-rank-title{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:600;color:#ffd23f;}
+      #ganadores .gn-rank-sub{font-size:.78rem;color:rgba(255,255,255,.5);text-transform:capitalize;}
+      #ganadores .gn-rank-row{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+      #ganadores .gn-rank-row:last-child{border-bottom:0;}
+      #ganadores .gn-rank-pos{width:28px;flex-shrink:0;font-size:1.1rem;text-align:center;}
+      #ganadores .gn-rank-name{flex:1;font-weight:600;color:#fff;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+      #ganadores .gn-rank-total{color:#ffd23f;font-family:'Space Grotesk',sans-serif;font-size:.88rem;white-space:nowrap;}
+      #ganadores .gn-rank-count{color:rgba(255,255,255,.45);font-size:.76rem;min-width:74px;text-align:right;white-space:nowrap;}
+      #ganadores .gn-rank-empty{padding:14px 4px;color:rgba(255,255,255,.5);font-size:.9rem;text-align:center;}
+      @media(max-width:560px){
+        #ganadores .gn-rank-count{min-width:0;}
+      }
+      @media(max-width:620px){
+        #ganadores thead{display:none;}
+        #ganadores tbody tr{display:block;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.08);}
+        #ganadores tbody td{display:flex;justify-content:space-between;gap:12px;border:0;padding:8px 16px;}
+        #ganadores tbody td::before{content:attr(data-label);font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.45);}
+        #ganadores tbody td.gn-user-cell::before{content:"";}
+        #ganadores tbody td[data-label="Estado"]{flex-wrap:wrap;justify-content:flex-end;gap:6px;}
+      }
+    </style>
+    <div class="section-inner">
+      <div class="section-header" data-decor="GANADORES">
+        <div class="section-tag">Salón de la Fama</div>
+        <h2>Ganadores de la Geo Army</h2>
+        <p>Cada victoria en la ruleta, el boss y los sorteos queda registrada aquí. Transparencia total para la comunidad.</p>
+      </div>
+      <div class="gn-wrap" data-reveal>
+        <div class="gn-stats">
+          <div class="gn-chip gold"><b id="gnTotal">0</b><span>Ganadores</span></div>
+          <div class="gn-chip pend"><b id="gnPend">0</b><span>Por entregar</span></div>
+          <div class="gn-chip done"><b id="gnDone">0</b><span>Entregados</span></div>
+        </div>
+        <div class="gn-rank-card">
+          <div class="gn-rank-head">
+            <span class="gn-rank-title">🏆 Ranking de Pavos</span>
+            <span class="gn-rank-sub" id="gnRankMes">—</span>
+          </div>
+          <div id="gnRankBody"></div>
+        </div>
+        <div class="gn-controls">
+          <input id="gnSearch" class="gn-search" type="search" placeholder="Buscar por usuario o premio…" aria-label="Buscar ganadores">
+          <div class="gn-filters" role="group" aria-label="Filtrar por estado">
+            <button data-f="todos" aria-pressed="true">Todos</button>
+            <button data-f="pendientes" aria-pressed="false">Pendientes</button>
+            <button data-f="entregados" aria-pressed="false">Entregados</button>
+          </div>
+        </div>
+        <div class="gn-card">
+          <table>
+            <thead>
+              <tr><th>#</th><th>Usuario</th><th>Premio</th><th>Evento</th><th>Fecha</th><th>Estado</th></tr>
+            </thead>
+            <tbody id="gnBody"></tbody>
+          </table>
+        </div>
+        <div class="gn-foot" id="gnUpdated">Cargando…</div>
+      </div>
+    </div>
+    <script>
+    (function(){
+      var SAMPLE = { ganadores: [
+        {id:3, usuario:"Andrea_GG", premio:"800 V-Bucks", evento:"Ruleta Fortnite", fecha:"17/06/2026", entregado:false},
+        {id:2, usuario:"Kratos_OW", premio:"10.000 OW Coins", evento:"Boss Nemesis", fecha:"15/06/2026", entregado:true},
+        {id:1, usuario:"LunaStream", premio:"500 V-Bucks", evento:"Ruleta Fortnite", fecha:"12/06/2026", entregado:true}
+      ]};
+      var DATA = [], filtro = 'todos', RANKING_DESDE_ID = 0;
+      var MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+      function estadoGn(g){ return g.entregado ? 'entregado' : 'pendiente'; }
+      function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+      function parseFechaGn(f){
+        if(!f) return null;
+        var partes = String(f).split('/');
+        if(partes.length!==3) return null;
+        var d=parseInt(partes[0],10), m=parseInt(partes[1],10), y=parseInt(partes[2],10);
+        if(!d||!m||!y) return null;
+        return new Date(y, m-1, d);
+      }
+      function renderRanking(){
+        var ahora = new Date();
+        var anoM = ahora.getFullYear(), mesM = ahora.getMonth();
+        var mapa = {};
+        DATA.forEach(function(g){
+          if(g.rankeable===false) return;
+          if(g.moneda!=='pavos') return;
+          if(!(g.id > RANKING_DESDE_ID)) return;
+          var f = parseFechaGn(g.fecha);
+          if(!f || f.getFullYear()!==anoM || f.getMonth()!==mesM) return;
+          var key = (g.usuario||'').toLowerCase().trim();
+          if(!mapa[key]) mapa[key] = {nombre:g.usuario, total:0, premios:0};
+          mapa[key].total += (g.cantidad||0);
+          mapa[key].premios += 1;
+          mapa[key].nombre = g.usuario;
+        });
+        var lista = Object.keys(mapa).map(function(k){return mapa[k];}).sort(function(a,b){return b.total-a.total;});
+        var box = document.getElementById('gnRankBody');
+        var sub = document.getElementById('gnRankMes');
+        sub.textContent = MESES[mesM] + ' ' + anoM;
+        if(!lista.length){
+          box.innerHTML = '<div class="gn-rank-empty">Todavía nadie ha ganado pavos este mes. ¡Sé el primero! 🟣</div>';
+          return;
+        }
+        var medallas = ['🥇','🥈','🥉'];
+        box.innerHTML = lista.slice(0,10).map(function(r,i){
+          var medalla = medallas[i] || ((i+1)+'.');
+          return '<div class="gn-rank-row">'+
+            '<span class="gn-rank-pos">'+medalla+'</span>'+
+            '<span class="gn-rank-name">'+esc(r.nombre)+'</span>'+
+            '<span class="gn-rank-total">'+r.total.toLocaleString()+' 🟣</span>'+
+            '<span class="gn-rank-count">'+r.premios+' premio'+(r.premios===1?'':'s')+'</span>'+
+          '</div>';
+        }).join('');
+      }
+      function render(){
+        var q = document.getElementById('gnSearch').value.trim().toLowerCase();
+        var rows = DATA.slice().sort(function(a,b){return b.id-a.id;});
+        if(filtro==='pendientes') rows = rows.filter(function(g){return !g.entregado;});
+        if(filtro==='entregados') rows = rows.filter(function(g){return g.entregado;});
+        if(q) rows = rows.filter(function(g){return (g.usuario+' '+g.premio+' '+(g.evento||'')).toLowerCase().indexOf(q)>-1;});
+        var tb = document.getElementById('gnBody');
+        if(!rows.length){
+          tb.innerHTML = '<tr><td colspan="6" class="gn-empty"><b>Sin resultados</b>Aún no hay ganadores que coincidan.</td></tr>';
+        } else {
+          tb.innerHTML = rows.map(function(g){
+            var estadoHtml = g.entregado
+              ? '<span class="gn-badge done">Entregado</span>'
+              : '<span class="gn-badge pend">Pendiente</span>';
+            return '<tr>'+
+              '<td data-label="#" class="gn-id">#'+g.id+'</td>'+
+              '<td data-label="Usuario" class="gn-user-cell"><span class="gn-user">'+esc(g.usuario)+'</span></td>'+
+              '<td data-label="Premio" class="gn-prize">'+esc(g.premio)+'</td>'+
+              '<td data-label="Evento" class="gn-ev">'+esc(g.evento||'General')+'</td>'+
+              '<td data-label="Fecha" class="gn-ev">'+esc(g.fecha||'')+'</td>'+
+              '<td data-label="Estado">'+estadoHtml+'</td>'+
+            '</tr>';
+          }).join('');
+        }
+        document.getElementById('gnTotal').textContent = DATA.length;
+        document.getElementById('gnPend').textContent  = DATA.filter(function(g){return !g.entregado;}).length;
+        document.getElementById('gnDone').textContent  = DATA.filter(function(g){return g.entregado;}).length;
+      }
+      function load(){
+        fetch('ganadores.json?t='+Date.now(),{cache:'no-store'})
+          .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+          .then(function(j){
+            DATA = j.ganadores || [];
+            RANKING_DESDE_ID = typeof j.rankingDesdeId === 'number' ? j.rankingDesdeId : 0;
+            document.getElementById('gnUpdated').textContent =
+              'Actualizado ' + new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+            render();
+            renderRanking();
+          })
+          .catch(function(){
+            DATA = SAMPLE.ganadores;
+            RANKING_DESDE_ID = 0;
+            document.getElementById('gnUpdated').textContent = 'Vista previa (sin ganadores.json todavía)';
+            render();
+            renderRanking();
+          });
+      }
+      document.getElementById('gnSearch').addEventListener('input', render);
+      var btns = document.querySelectorAll('#ganadores .gn-filters button');
+      btns.forEach(function(b){
+        b.addEventListener('click', function(){
+          btns.forEach(function(x){x.setAttribute('aria-pressed','false');});
+          b.setAttribute('aria-pressed','true');
+          filtro = b.getAttribute('data-f'); render();
+        });
+      });
+      load();
+      setInterval(load, 30000);
+    })();
+    </script>
+  </section>
+
+  <!-- SOLICITUDES -->
+  <section class="section panel" id="solicitudes">
+    <style>
+      #solicitudes .sc-wrap{max-width:960px;margin:0 auto;}
+      #solicitudes .sc-stats{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 22px;}
+      #solicitudes .sc-chip{flex:1;min-width:120px;background:var(--card-bg);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:18px 20px;box-shadow:var(--card-shadow);transition:transform .35s var(--ease),border-color .35s var(--ease);}
+      #solicitudes .sc-chip:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.18);}
+      #solicitudes .sc-chip b{font-family:'Space Grotesk',sans-serif;font-size:2rem;line-height:1;display:block;}
+      #solicitudes .sc-chip span{font-size:.7rem;text-transform:uppercase;letter-spacing:.13em;color:rgba(255,255,255,.5);}
+      #solicitudes .sc-chip.gold b{color:#ec4899;}
+      #solicitudes .sc-chip.pend b{color:#ffb13f;}
+      #solicitudes .sc-chip.done b{color:#46e0a8;}
+      #solicitudes .sc-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
+      #solicitudes .sc-search{flex:1;min-width:200px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:#fff;padding:12px 16px;border-radius:12px;font-size:.95rem;font-family:inherit;}
+      #solicitudes .sc-search::placeholder{color:rgba(255,255,255,.4);}
+      #solicitudes .sc-search:focus{outline:2px solid var(--pink);outline-offset:1px;}
+      #solicitudes .sc-filters{display:flex;gap:5px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);padding:5px;border-radius:100px;}
+      #solicitudes .sc-filters button{font-family:'Space Grotesk',sans-serif;font-size:.78rem;background:transparent;border:0;color:rgba(255,255,255,.55);padding:8px 14px;border-radius:100px;cursor:pointer;transition:background .25s var(--ease),color .25s var(--ease);}
+      #solicitudes .sc-filters button[aria-pressed="true"]{background:linear-gradient(135deg,#f472b6,var(--pink));color:#fff;}
+      #solicitudes .sc-card{background:var(--card-bg);border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;box-shadow:var(--card-shadow);}
+      #solicitudes .sc-row{display:flex;gap:14px;align-items:center;padding:15px 18px;border-bottom:1px solid rgba(255,255,255,.06);transition:background .25s var(--ease);}
+      #solicitudes .sc-row:hover{background:rgba(236,72,153,.05);}
+      #solicitudes .sc-row:last-child{border-bottom:0;}
+      #solicitudes .sc-thumb{width:56px;height:56px;border-radius:12px;object-fit:cover;flex-shrink:0;background:rgba(0,0,0,.3);}
+      #solicitudes .sc-info{flex:1;min-width:0;}
+      #solicitudes .sc-item{color:#fff;font-weight:600;font-size:.95rem;}
+      #solicitudes .sc-meta{color:rgba(255,255,255,.55);font-size:.82rem;margin-top:2px;}
+      #solicitudes .sc-badge{display:inline-flex;align-items:center;gap:6px;font-size:.73rem;font-weight:600;padding:5px 11px;border-radius:99px;white-space:nowrap;flex-shrink:0;}
+      #solicitudes .sc-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;}
+      #solicitudes .sc-badge.pend{color:#ffb13f;background:rgba(255,177,63,.13);}
+      #solicitudes .sc-badge.done{color:#46e0a8;background:rgba(70,224,168,.12);}
+      #solicitudes .sc-badge.rej{color:#ef4444;background:rgba(239,68,68,.13);}
+      #solicitudes .sc-empty{padding:44px 20px;text-align:center;color:rgba(255,255,255,.5);}
+      #solicitudes .sc-empty b{display:block;color:#fff;font-family:'Space Grotesk',sans-serif;margin-bottom:6px;font-size:1.05rem;}
+      #solicitudes .sc-foot{margin-top:16px;color:rgba(255,255,255,.4);font-size:.78rem;text-align:right;}
+      @media(max-width:560px){
+        #solicitudes .sc-row{flex-wrap:wrap;}
+        #solicitudes .sc-badge{margin-left:70px;}
+      }
+    </style>
+    <div class="section-inner">
+      <div class="section-header" data-decor="CANJES">
+        <div class="section-tag">Canjes de la Geo Army</div>
+        <h2>Solicitudes de canje</h2>
+        <p>Lo que cada ganador pidió a cambio de su premio de la ruleta, con imagen del item. Se piden con <strong>/reclamar</strong> en Discord.</p>
+      </div>
+      <div class="sc-wrap" data-reveal>
+        <div class="sc-stats">
+          <div class="sc-chip gold"><b id="scTotal">0</b><span>Solicitudes</span></div>
+          <div class="sc-chip pend"><b id="scPend">0</b><span>Por entregar</span></div>
+          <div class="sc-chip done"><b id="scDone">0</b><span>Entregadas</span></div>
+        </div>
+        <div class="sc-controls">
+          <input id="scSearch" class="sc-search" type="search" placeholder="Buscar por usuario o item…" aria-label="Buscar solicitudes">
+          <div class="sc-filters" role="group" aria-label="Filtrar por estado">
+            <button data-f="todos" aria-pressed="true">Todos</button>
+            <button data-f="pendientes" aria-pressed="false">Pendientes</button>
+            <button data-f="entregados" aria-pressed="false">Entregadas</button>
+            <button data-f="rechazados" aria-pressed="false">Rechazadas</button>
+          </div>
+        </div>
+        <div class="sc-card" id="scCard"></div>
+        <div class="sc-foot" id="scUpdated">Cargando…</div>
+      </div>
+    </div>
+    <script>
+    (function(){
+      var DATA = [], filtro = 'todos';
+      function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+      function render(){
+        var q = document.getElementById('scSearch').value.trim().toLowerCase();
+        var rows = DATA.slice().sort(function(a,b){return b.id-a.id;});
+        if(filtro==='pendientes') rows = rows.filter(function(s){return !s.entregado && !s.rechazado;});
+        if(filtro==='entregados') rows = rows.filter(function(s){return s.entregado;});
+        if(filtro==='rechazados') rows = rows.filter(function(s){return s.rechazado;});
+        if(q) rows = rows.filter(function(s){return (s.nombreFortnite+' '+s.item+' '+(s.ganadorPremio||'')).toLowerCase().indexOf(q)>-1;});
+        var card = document.getElementById('scCard');
+        if(!rows.length){
+          card.innerHTML = '<div class="sc-empty"><b>Sin resultados</b>Aún no hay solicitudes que coincidan.</div>';
+        } else {
+          card.innerHTML = rows.map(function(s){
+            var badge = s.entregado
+              ? '<span class="sc-badge done">Entregado</span>'
+              : (s.rechazado ? '<span class="sc-badge rej">Rechazado</span>' : '<span class="sc-badge pend">Pendiente</span>');
+            return '<div class="sc-row">'+
+              '<img class="sc-thumb" src="'+esc(s.imagenUrl||'')+'" alt="" onerror="this.style.visibility=\'hidden\'"/>'+
+              '<div class="sc-info">'+
+                '<div class="sc-item">'+esc(s.item)+'</div>'+
+                '<div class="sc-meta">'+esc(s.nombreFortnite)+' · ganó '+esc(s.ganadorPremio||'')+'</div>'+
+              '</div>'+
+              badge+
+            '</div>';
+          }).join('');
+        }
+        document.getElementById('scTotal').textContent = DATA.length;
+        document.getElementById('scPend').textContent  = DATA.filter(function(s){return !s.entregado && !s.rechazado;}).length;
+        document.getElementById('scDone').textContent  = DATA.filter(function(s){return s.entregado;}).length;
+      }
+      function load(){
+        fetch('solicitudes.json?t='+Date.now(),{cache:'no-store'})
+          .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+          .then(function(j){
+            DATA = j.solicitudes || [];
+            document.getElementById('scUpdated').textContent =
+              'Actualizado ' + new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+            render();
+          })
+          .catch(function(){
+            DATA = [];
+            document.getElementById('scUpdated').textContent = 'Aún no hay solicitudes.json (todavía no se ha usado /reclamar).';
+            render();
+          });
+      }
+      document.getElementById('scSearch').addEventListener('input', render);
+      var btns = document.querySelectorAll('#solicitudes .sc-filters button');
+      btns.forEach(function(b){
+        b.addEventListener('click', function(){
+          btns.forEach(function(x){x.setAttribute('aria-pressed','false');});
+          b.setAttribute('aria-pressed','true');
+          filtro = b.getAttribute('data-f'); render();
+        });
+      });
+      load();
+      setInterval(load, 30000);
+    })();
+    </script>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <img src="logo.png" alt="GeoArmy" class="footer-logo-img"/>
+        GeoArmy
+      </div>
+      <div class="footer-text">Comunidad de Geovannyrk · Twitch Affiliate</div>
+      <div class="footer-code">geovanyrk.github.io</div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast">¡Código copiado!</div>
+  <script src="js/main.js"></script>
+  <script src="js/premium.js"></script>
+</body>
+</html>
