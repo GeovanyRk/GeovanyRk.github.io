@@ -668,291 +668,39 @@
     },
     {
       "id": 75,
-      "usuario": "JoseAngel",
-      "cantidad": 5,
+      "usuario": "Fredi",
+      "cantidad": 1200,
       "moneda": "pavos",
-      "evento": "Ruleta de Fortnite",
-      "fecha": "27/8/2026",
-      "creado": "2026-08-28T01:19:00.966Z"
+      "evento": "Pase de Batalla",
+      "fecha": "20/8/2026",
+      "creado": "2026-08-20T00:00:00.000Z"
     },
     {
       "id": 76,
-      "usuario": "Forsa",
-      "cantidad": 60,
+      "usuario": "bigeddy_",
+      "cantidad": 750,
       "moneda": "pavos",
-      "evento": "General",
-      "fecha": "27/8/2026",
-      "creado": "2026-08-28T01:19:46.339Z"
+      "evento": "Pase de Batalla",
+      "fecha": "16/8/2026",
+      "creado": "2026-08-16T00:00:00.000Z"
     },
     {
       "id": 77,
-      "usuario": "Maiky",
-      "cantidad": 65,
-      "moneda": "owcoins",
-      "evento": "General",
-      "fecha": "27/8/2026",
-      "creado": "2026-08-28T01:20:18.498Z"
+      "usuario": "elkid_rd36",
+      "cantidad": 600,
+      "moneda": "pavos",
+      "evento": "Pase de Batalla",
+      "fecha": "20/8/2026",
+      "creado": "2026-08-20T00:00:00.000Z"
     },
     {
       "id": 78,
-      "usuario": "Kitty",
-      "cantidad": 10,
-      "moneda": "owcoins",
-      "evento": "General",
-      "fecha": "27/8/2026",
-      "creado": "2026-08-28T01:20:45.378Z"
-    },
-    {
-      "id": 79,
-      "usuario": "Kiro",
-      "cantidad": 55,
-      "moneda": "pavos",
-      "evento": "General",
-      "fecha": "27/8/2026",
-      "creado": "2026-08-28T01:21:08.040Z"
-    },
-    {
-      "id": 80,
-      "usuario": "Mati",
-      "cantidad": 5,
-      "moneda": "owcoins",
-      "evento": "General",
-      "fecha": "27/8/2026",
-      "creado": "2026-08-28T01:21:26.958Z"
-    },
-    {
-      "id": 81,
-      "usuario": "Marvin",
-      "cantidad": 150,
-      "moneda": "pavos",
-      "evento": "General",
-      "fecha": "30/8/2026",
-      "creado": "2026-08-30T23:46:42.253Z"
-    },
-    {
-      "id": 82,
-      "usuario": "Kirby",
-      "cantidad": 30,
-      "moneda": "owcoins",
-      "evento": "General",
-      "fecha": "30/8/2026",
-      "creado": "2026-08-30T23:46:52.447Z"
-    },
-    {
-      "id": 83,
-      "usuario": "JoseAngel",
-      "cantidad": 100,
-      "moneda": "pavos",
-      "evento": "General",
-      "fecha": "30/8/2026",
-      "creado": "2026-08-30T23:47:46.777Z"
-    },
-    {
-      "id": 84,
-      "usuario": "Marian",
-      "cantidad": 5,
-      "moneda": "pavos",
-      "evento": "General",
-      "fecha": "30/8/2026",
-      "creado": "2026-08-30T23:48:01.863Z"
-    },
-    {
-      "id": 85,
-      "usuario": "Toji",
-      "cantidad": 5,
-      "moneda": "pavos",
-      "evento": "General",
-      "fecha": "30/8/2026",
-      "creado": "2026-08-30T23:48:13.536Z"
-    },
-    {
-      "id": 86,
-      "usuario": "Kitty",
-      "cantidad": 55,
-      "moneda": "pavos",
-      "evento": "General",
-      "fecha": "30/8/2026",
-      "creado": "2026-08-30T23:48:26.450Z"
-    },
-    {
-      "id": 87,
-      "usuario": "Skky",
-      "cantidad": 110,
-      "moneda": "pavos",
-      "evento": "General",
-      "fecha": "30/8/2026",
-      "creado": "2026-08-30T23:48:40.052Z"
-    },
-    {
-      "id": 88,
       "usuario": "Maiky",
-      "cantidad": 50,
+      "cantidad": 1200,
       "moneda": "owcoins",
-      "evento": "General",
-      "fecha": "30/8/2026",
-      "creado": "2026-08-30T23:48:52.146Z"
-    },
-    {
-      "id": 89,
-      "usuario": "Forsa",
-      "cantidad": 5,
-      "moneda": "pavos",
-      "evento": "General",
-      "fecha": "30/8/2026",
-      "creado": "2026-08-30T23:49:11.530Z"
-    },
-    {
-      "id": 90,
-      "usuario": "Razer",
-      "cantidad": 5,
-      "moneda": "owcoins",
-      "evento": "General",
-      "fecha": "30/8/2026",
-      "creado": "2026-08-30T23:49:51.188Z"
-    },
-    {
-      "id": 91,
-      "usuario": "Josema",
-      "cantidad": 10,
-      "moneda": "owcoins",
-      "evento": "General",
-      "fecha": "30/8/2026",
-      "creado": "2026-08-30T23:49:59.972Z"
-    },
-    {
-      "id": 92,
-      "usuario": "Hunter",
-      "cantidad": 50,
-      "moneda": "pavos",
-      "evento": "General",
-      "fecha": "30/8/2026",
-      "creado": "2026-08-30T23:50:13.430Z"
-    },
-    {
-      "id": 93,
-      "usuario": "Marian",
-      "cantidad": 5,
-      "moneda": "pavos",
-      "evento": "General",
-      "fecha": "30/8/2026",
-      "creado": "2026-08-30T23:50:20.487Z"
-    },
-    {
-      "id": 94,
-      "usuario": "Skky",
-      "cantidad": 10,
-      "moneda": "pavos",
-      "evento": "General",
-      "fecha": "30/8/2026",
-      "creado": "2026-08-31T01:12:19.965Z"
-    },
-    {
-      "id": 95,
-      "usuario": "Krager",
-      "cantidad": 5,
-      "moneda": "owcoins",
-      "evento": "General",
-      "fecha": "30/8/2026",
-      "creado": "2026-08-31T01:12:38.404Z"
-    },
-    {
-      "id": 96,
-      "usuario": "Forsa",
-      "cantidad": 10,
-      "moneda": "pavos",
-      "evento": "General",
-      "fecha": "30/8/2026",
-      "creado": "2026-08-31T01:12:56.895Z"
-    },
-    {
-      "id": 97,
-      "usuario": "Demencia",
-      "cantidad": 5,
-      "moneda": "owcoins",
-      "evento": "General",
-      "fecha": "30/8/2026",
-      "creado": "2026-08-31T01:14:06.261Z"
-    },
-    {
-      "id": 98,
-      "usuario": "JoseAngel",
-      "cantidad": 35,
-      "moneda": "pavos",
-      "evento": "General",
-      "fecha": "30/8/2026",
-      "creado": "2026-08-31T01:14:42.700Z"
-    },
-    {
-      "id": 99,
-      "usuario": "Maton",
-      "cantidad": 60,
-      "moneda": "pavos",
-      "evento": "General",
-      "fecha": "30/8/2026",
-      "creado": "2026-08-31T01:15:00.890Z"
-    },
-    {
-      "id": 100,
-      "usuario": "Marvin",
-      "cantidad": 15,
-      "moneda": "pavos",
-      "evento": "General",
-      "fecha": "30/8/2026",
-      "creado": "2026-08-31T01:15:21.702Z"
-    },
-    {
-      "id": 101,
-      "usuario": "Kirby",
-      "cantidad": 5,
-      "moneda": "owcoins",
-      "evento": "General",
-      "fecha": "30/8/2026",
-      "creado": "2026-08-31T01:15:41.397Z"
-    },
-    {
-      "id": 102,
-      "usuario": "Maton",
-      "cantidad": 5,
-      "moneda": "pavos",
-      "evento": "General",
-      "fecha": "1/9/2026",
-      "creado": "2026-09-01T23:41:39.662Z"
-    },
-    {
-      "id": 103,
-      "usuario": "Hoseokie",
-      "cantidad": 50,
-      "moneda": "owcoins",
-      "evento": "General",
-      "fecha": "1/9/2026",
-      "creado": "2026-09-01T23:42:47.689Z"
-    },
-    {
-      "id": 104,
-      "usuario": "Kitty",
-      "cantidad": 100,
-      "moneda": "pavos",
-      "evento": "General",
-      "fecha": "1/9/2026",
-      "creado": "2026-09-01T23:44:24.237Z"
-    },
-    {
-      "id": 105,
-      "usuario": "Kiro",
-      "cantidad": 10,
-      "moneda": "pavos",
-      "evento": "General",
-      "fecha": "1/9/2026",
-      "creado": "2026-09-01T23:44:42.662Z"
-    },
-    {
-      "id": 106,
-      "usuario": "Kitty",
-      "cantidad": 500,
-      "moneda": "pavos",
-      "evento": "General",
-      "fecha": "1/9/2026",
-      "creado": "2026-09-02T00:53:57.770Z"
+      "evento": "Pase de Batalla",
+      "fecha": "20/8/2026",
+      "creado": "2026-08-20T00:00:00.000Z"
     }
   ],
   "retiros": []

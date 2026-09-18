@@ -709,7 +709,7 @@
       "moneda": "pavos",
       "evento": "ruleta de fn",
       "fecha": "25/7/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 72,
@@ -740,7 +740,7 @@
       "moneda": "pavos",
       "evento": "ruleta de fn",
       "fecha": "26/7/2026",
-      "entregado": true,
+      "entregado": false,
       "rankeable": false
     },
     {
@@ -761,7 +761,7 @@
       "moneda": "pavos",
       "evento": "Ruleta de bienvenido",
       "fecha": "26/7/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 77,
@@ -791,7 +791,7 @@
       "moneda": "owcoins",
       "evento": "Piñata Overwatch",
       "fecha": "27/7/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 80,
@@ -882,7 +882,7 @@
       "moneda": "pavos",
       "evento": "Piñata Fortnite",
       "fecha": "30/7/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 91,
@@ -912,7 +912,7 @@
       "moneda": "pavos",
       "evento": "Piñata Fortnite",
       "fecha": "3/8/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 94,
@@ -1002,7 +1002,7 @@
       "moneda": "pavos",
       "evento": "Ruleta de Fortnite",
       "fecha": "11/8/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 103,
@@ -1022,7 +1022,7 @@
       "moneda": "pavos",
       "evento": "Ruleta de Fortnite",
       "fecha": "13/8/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 105,
@@ -1032,7 +1032,7 @@
       "moneda": null,
       "evento": "Tienda de Oro",
       "fecha": "12/8/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 106,
@@ -1052,7 +1052,7 @@
       "moneda": "pavos",
       "evento": "Evento de fortnite",
       "fecha": "15/8/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 108,
@@ -1094,7 +1094,7 @@
       "moneda": "owcoins",
       "evento": "Recompensa de Stream 6hrs",
       "fecha": "15/8/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 112,
@@ -1104,7 +1104,7 @@
       "moneda": "owcoins",
       "evento": "Recompensa de Stream 6hrs",
       "fecha": "15/8/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 113,
@@ -1114,7 +1114,7 @@
       "moneda": "owcoins",
       "evento": "Recompensa de Stream 6hrs",
       "fecha": "15/8/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 114,
@@ -1124,7 +1124,7 @@
       "moneda": "owcoins",
       "evento": "Recompensa de Stream 6hrs",
       "fecha": "15/8/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 115,
@@ -1134,7 +1134,7 @@
       "moneda": "pavos",
       "evento": "Recompensa de Cofre",
       "fecha": "15/8/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 116,
@@ -1144,7 +1144,7 @@
       "moneda": "pavos",
       "evento": "Recompensa de Cofre",
       "fecha": "15/8/2026",
-      "entregado": true,
+      "entregado": false,
       "alcancia": true
     },
     {
@@ -1197,7 +1197,7 @@
       "moneda": null,
       "evento": "Tienda de Oro",
       "fecha": "18/8/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 122,
@@ -1296,7 +1296,7 @@
       "evento": "Recompensa de Cofre",
       "fecha": "18/8/2026",
       "creado": "2026-08-19T02:24:32.170Z",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 131,
@@ -1331,7 +1331,7 @@
       "evento": "Recompensa Stream 6hrs",
       "fecha": "18/8/2026",
       "creado": "2026-08-19T02:28:34.922Z",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 134,
@@ -1342,7 +1342,7 @@
       "evento": "Recompensa Stream 6hrs",
       "fecha": "18/8/2026",
       "creado": "2026-08-19T02:32:19.358Z",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 135,
@@ -1364,7 +1364,7 @@
       "moneda": null,
       "evento": "Tienda de Oro",
       "fecha": "19/8/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 137,
@@ -1398,22 +1398,23 @@
       "evento": "cofre",
       "fecha": "22/8/2026",
       "creado": "2026-08-23T02:35:36.889Z",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 140,
-      "usuario": "fedriquechumpi",
+      "usuario": "Fredi",
       "premio": "1200 pavos",
       "cantidad": 1200,
       "moneda": "pavos",
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "20/8/2026",
-      "entregado": false
+      "entregado": false,
+      "alcancia": true
     },
     {
       "id": 141,
-      "usuario": "maikyx__",
+      "usuario": "Maiky",
       "premio": "450 pavos",
       "cantidad": 450,
       "moneda": "pavos",
@@ -1432,7 +1433,8 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "16/8/2026",
-      "entregado": true
+      "entregado": false,
+      "alcancia": true
     },
     {
       "id": 143,
@@ -1443,11 +1445,12 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "20/8/2026",
-      "entregado": true
+      "entregado": false,
+      "alcancia": true
     },
     {
       "id": 144,
-      "usuario": "matidk_0",
+      "usuario": "Matid",
       "premio": "400 pavos",
       "cantidad": 400,
       "moneda": "pavos",
@@ -1459,7 +1462,7 @@
     },
     {
       "id": 145,
-      "usuario": "kittykitty_katt",
+      "usuario": "Kitty",
       "premio": "400 owcoins",
       "cantidad": 400,
       "moneda": "owcoins",
@@ -1483,7 +1486,7 @@
     },
     {
       "id": 147,
-      "usuario": "warnerr8",
+      "usuario": "Warner",
       "premio": "300 pavos",
       "cantidad": 300,
       "moneda": "pavos",
@@ -1495,7 +1498,7 @@
     },
     {
       "id": 148,
-      "usuario": "forsaken453",
+      "usuario": "Forsa",
       "premio": "300 pavos",
       "cantidad": 300,
       "moneda": "pavos",
@@ -1507,7 +1510,7 @@
     },
     {
       "id": 149,
-      "usuario": "kirbyx01",
+      "usuario": "Kirby",
       "premio": "300 owcoins",
       "cantidad": 300,
       "moneda": "owcoins",
@@ -1531,7 +1534,7 @@
     },
     {
       "id": 151,
-      "usuario": "toji_fushijiro",
+      "usuario": "toji",
       "premio": "220 pavos",
       "cantidad": 220,
       "moneda": "pavos",
@@ -1543,7 +1546,7 @@
     },
     {
       "id": 152,
-      "usuario": "Kiro_Hyer",
+      "usuario": "Kiro",
       "premio": "220 pavos",
       "cantidad": 220,
       "moneda": "pavos",
@@ -1591,7 +1594,7 @@
     },
     {
       "id": 156,
-      "usuario": "xWonnyx",
+      "usuario": "xwonny",
       "premio": "220 pavos",
       "cantidad": 220,
       "moneda": "pavos",
@@ -1603,7 +1606,7 @@
     },
     {
       "id": 157,
-      "usuario": "MangoAlegre",
+      "usuario": "Mango",
       "premio": "150 pavos",
       "cantidad": 150,
       "moneda": "pavos",
@@ -1628,18 +1631,6 @@
     {
       "id": 159,
       "usuario": "xVania06",
-      "premio": "90 pavos",
-      "cantidad": 90,
-      "moneda": "pavos",
-      "rankeable": false,
-      "evento": "Pase de Batalla",
-      "fecha": "4/8/2026",
-      "entregado": false,
-      "alcancia": true
-    },
-    {
-      "id": 160,
-      "usuario": "Geovannyrk",
       "premio": "90 pavos",
       "cantidad": 90,
       "moneda": "pavos",
@@ -1687,7 +1678,7 @@
     },
     {
       "id": 164,
-      "usuario": "xiaookiss",
+      "usuario": "xiaokiis",
       "premio": "40 owcoins",
       "cantidad": 40,
       "moneda": "owcoins",
@@ -1699,7 +1690,7 @@
     },
     {
       "id": 165,
-      "usuario": "DiosMarvin",
+      "usuario": "Marvin",
       "premio": "40 pavos",
       "cantidad": 40,
       "moneda": "pavos",
@@ -1723,7 +1714,7 @@
     },
     {
       "id": 167,
-      "usuario": "HTTMashu",
+      "usuario": "Mashu",
       "premio": "40 owcoins",
       "cantidad": 40,
       "moneda": "owcoins",
@@ -1747,18 +1738,18 @@
     },
     {
       "id": 169,
-      "usuario": "fedriquechumpi",
+      "usuario": "Fredi",
       "premio": "Pase de Fortnite + Pase de Clash Royale",
       "cantidad": 0,
       "moneda": "pase",
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "20/8/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 170,
-      "usuario": "maikyx__",
+      "usuario": "Maiky",
       "premio": "Pase de Overwatch 2 + Pase de Clash Royale",
       "cantidad": 0,
       "moneda": "pase",
@@ -1776,29 +1767,29 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "16/8/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 172,
-      "usuario": "fedriquechumpi",
+      "usuario": "Fredi",
       "premio": "760 G coins",
       "cantidad": 760,
       "moneda": "gcoins",
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "20/8/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 173,
-      "usuario": "maikyx__",
+      "usuario": "Maiky",
       "premio": "760 G coins",
       "cantidad": 760,
       "moneda": "gcoins",
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "20/8/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 174,
@@ -1809,7 +1800,7 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "16/8/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 175,
@@ -1820,29 +1811,29 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "20/8/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 176,
-      "usuario": "matidk_0",
+      "usuario": "Matid",
       "premio": "170 G coins",
       "cantidad": 170,
       "moneda": "gcoins",
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "15/8/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 177,
-      "usuario": "kittykitty_katt",
+      "usuario": "Kitty",
       "premio": "170 G coins",
       "cantidad": 170,
       "moneda": "gcoins",
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "17/8/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 178,
@@ -1853,42 +1844,42 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "17/8/2026",
-      "entregado": true
+      "entregado": false
     },
     {
       "id": 179,
-      "usuario": "warnerr8",
+      "usuario": "Warner",
       "premio": "100 G coins",
       "cantidad": 100,
       "moneda": "gcoins",
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "11/8/2026",
-      "entregado": true,
+      "entregado": false,
       "alcancia": true
     },
     {
       "id": 180,
-      "usuario": "forsaken453",
+      "usuario": "Forsa",
       "premio": "100 G coins",
       "cantidad": 100,
       "moneda": "gcoins",
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "18/8/2026",
-      "entregado": true,
+      "entregado": false,
       "alcancia": true
     },
     {
       "id": 181,
-      "usuario": "kirbyx01",
+      "usuario": "Kirby",
       "premio": "100 G coins",
       "cantidad": 100,
       "moneda": "gcoins",
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "16/8/2026",
-      "entregado": true,
+      "entregado": false,
       "alcancia": true
     },
     {
@@ -1900,31 +1891,31 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "15/8/2026",
-      "entregado": true,
+      "entregado": false,
       "alcancia": true
     },
     {
       "id": 183,
-      "usuario": "toji_fushijiro",
+      "usuario": "toji",
       "premio": "100 G coins",
       "cantidad": 100,
       "moneda": "gcoins",
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "19/8/2026",
-      "entregado": true,
+      "entregado": false,
       "alcancia": true
     },
     {
       "id": 184,
-      "usuario": "Kiro_Hyer",
+      "usuario": "Kiro",
       "premio": "100 G coins",
       "cantidad": 100,
       "moneda": "gcoins",
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "17/8/2026",
-      "entregado": true,
+      "entregado": false,
       "alcancia": true
     },
     {
@@ -1936,7 +1927,7 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "6/8/2026",
-      "entregado": true,
+      "entregado": false,
       "alcancia": true
     },
     {
@@ -1948,7 +1939,7 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "17/8/2026",
-      "entregado": true,
+      "entregado": false,
       "alcancia": true
     },
     {
@@ -1960,31 +1951,31 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "7/8/2026",
-      "entregado": true,
+      "entregado": false,
       "alcancia": true
     },
     {
       "id": 188,
-      "usuario": "xWonnyx",
+      "usuario": "xwonny",
       "premio": "40 G coins",
       "cantidad": 40,
       "moneda": "gcoins",
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "6/8/2026",
-      "entregado": true,
+      "entregado": false,
       "alcancia": true
     },
     {
       "id": 189,
-      "usuario": "MangoAlegre",
+      "usuario": "Mango",
       "premio": "40 G coins",
       "cantidad": 40,
       "moneda": "gcoins",
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "8/8/2026",
-      "entregado": true,
+      "entregado": false,
       "alcancia": true
     },
     {
@@ -1996,7 +1987,7 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "17/8/2026",
-      "entregado": true,
+      "entregado": false,
       "alcancia": true
     },
     {
@@ -2008,12 +1999,12 @@
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "4/8/2026",
-      "entregado": true,
+      "entregado": false,
       "alcancia": true
     },
     {
       "id": 192,
-      "usuario": "fedriquechumpi",
+      "usuario": "Fredi",
       "premio": "450 owcoins",
       "cantidad": 450,
       "moneda": "owcoins",
@@ -2025,46 +2016,15 @@
     },
     {
       "id": 193,
-      "usuario": "maikyx__",
+      "usuario": "Maiky",
       "premio": "1200 owcoins",
       "cantidad": 1200,
       "moneda": "owcoins",
       "rankeable": false,
       "evento": "Pase de Batalla",
       "fecha": "20/8/2026",
-      "entregado": true
-    },
-    {
-      "id": 194,
-      "usuario": "RickyeYT",
-      "premio": "2,000 V-Bucks",
-      "cantidad": 2000,
-      "moneda": "pavos",
-      "evento": "Tienda de Oro",
-      "fecha": "31/8/2026",
-      "entregado": true
-    },
-    {
-      "id": 195,
-      "usuario": "Eddy",
-      "premio": "2,750 Pavos",
-      "cantidad": 2750,
-      "moneda": "pavos",
-      "evento": "General",
-      "fecha": "6/9/2026",
-      "creado": "2026-09-07T03:18:16.502Z",
-      "entregado": false
-    },
-    {
-      "id": 196,
-      "usuario": "Geovannyrk",
-      "premio": "10 Pavos",
-      "cantidad": 10,
-      "moneda": "pavos",
-      "evento": "ruleta",
-      "fecha": "17/9/2026",
-      "creado": "2026-09-17T23:25:55.043Z",
-      "entregado": false
+      "entregado": false,
+      "alcancia": true
     }
   ],
   "gastos": [],
