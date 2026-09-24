@@ -372,42 +372,6 @@
       .ti-grid { grid-template-columns: 1fr; }
     }
 
-    /* ---------- Modal Epic Display Name (Fortnite Gifts) ----------
-       No usa prompt()/confirm() nativos -- overlay propio integrado al
-       mismo lenguaje visual del resto de la tienda (mismas variables de
-       tema: --bg3/--accent/--accent-light/--text2). Oculto por defecto
-       vía [hidden]; solo lo abren los items con requiereEpicDisplayName. */
-    .ti-epic-overlay {
-      position: fixed; inset: 0; z-index: 999;
-      background: rgba(6, 10, 18, .72); backdrop-filter: blur(3px);
-      display: flex; align-items: center; justify-content: center; padding: 1.2rem;
-    }
-    .ti-epic-overlay[hidden] { display: none; }
-    .ti-epic-modal {
-      width: 100%; max-width: 420px; background: var(--bg3, #161b28);
-      border: 1px solid rgba(150, 190, 255, .16); border-radius: 16px;
-      padding: 1.6rem 1.5rem; box-shadow: 0 20px 60px rgba(0,0,0,.5);
-    }
-    .ti-epic-modal h3 {
-      font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; margin: 0 0 .6rem; color: #fff;
-    }
-    .ti-epic-modal p { color: var(--text2); font-size: .88rem; line-height: 1.55; margin: 0 0 .9rem; }
-    .ti-epic-avisos { margin: 0 0 1rem; padding-left: 1.1rem; color: var(--text2); font-size: .78rem; line-height: 1.6; }
-    .ti-epic-avisos li { margin-bottom: 2px; }
-    .ti-epic-input {
-      width: 100%; box-sizing: border-box; padding: .7rem .85rem; border-radius: 10px;
-      border: 1px solid rgba(150,190,255,.25); background: rgba(255,255,255,.04); color: #fff;
-      font-size: .95rem; font-family: 'Inter', sans-serif; margin-bottom: .4rem;
-    }
-    .ti-epic-input:focus { outline: none; border-color: var(--accent); }
-    .ti-epic-error { min-height: 1.1rem; color: #ff6b6b; font-size: .78rem; margin: 0 0 .8rem; }
-    .ti-epic-botones { display: flex; gap: .7rem; justify-content: flex-end; }
-    .ti-epic-btn {
-      padding: .6rem 1.2rem; border-radius: 10px; border: none; cursor: pointer;
-      font-family: 'Inter', sans-serif; font-weight: 600; font-size: .88rem;
-    }
-    .ti-epic-btn-cancelar { background: transparent; color: var(--text2); border: 1px solid rgba(150,190,255,.2); }
-    .ti-epic-btn-continuar { background: linear-gradient(135deg, var(--accent), #3aa0ff); color: #fff; }
   </style>
 </head>
 <body>
@@ -553,26 +517,6 @@
 
   <div id="tiGrid" class="ti-grid"></div>
   <p id="tiMsg" class="ti-msg"></p>
-
-  <!-- Modal Epic Display Name -- solo se muestra (quita [hidden]) para items
-       con requiereEpicDisplayName === true, justo antes de pedir la
-       confirmación normal del canje. Ver pedirEpicDisplayName() más abajo. -->
-  <div id="tiEpicOverlay" class="ti-epic-overlay" hidden>
-    <div class="ti-epic-modal" role="dialog" aria-modal="true" aria-labelledby="tiEpicTitulo">
-      <h3 id="tiEpicTitulo">Epic Games Display Name</h3>
-      <p>Ingresa exactamente el nombre que usas en Epic Games para poder enviarte el regalo.</p>
-      <ul class="ti-epic-avisos">
-        <li>No escribas tu correo ni contraseña.</li>
-        <li>Debes tener agregada la cuenta de Geo Army en Epic durante al menos 2 días.</li>
-      </ul>
-      <input id="tiEpicInput" class="ti-epic-input" type="text" placeholder="Tu Epic Display Name" maxlength="32" autocomplete="off" />
-      <p id="tiEpicError" class="ti-epic-error"></p>
-      <div class="ti-epic-botones">
-        <button id="tiEpicCancelar" type="button" class="ti-epic-btn ti-epic-btn-cancelar">Cancelar</button>
-        <button id="tiEpicContinuar" type="button" class="ti-epic-btn ti-epic-btn-continuar">Continuar</button>
-      </div>
-    </div>
-  </div>
 
   <!-- FOOTER -->
   <footer class="footer">
@@ -838,88 +782,7 @@
       try { sessionStorage.removeItem(claveClientRequestIdPendiente(itemId)); } catch (e) { /* nada que hacer */ }
     }
 
-    // ---- Fortnite Gifts: Epic Display Name (modal propio, sin prompt()) ----
-    // Igual que con clientRequestId arriba: si un intento anterior no se sabe
-    // con certeza si llegó a completarse, el reintento debe reusar EXACTAMENTE
-    // el mismo Epic Display Name (el backend lo ata al fingerprint de
-    // idempotencia) -- así que se persiste en sessionStorage junto al
-    // clientRequestId pendiente, con la misma política de borrado.
-    function claveEpicPendiente(itemId) {
-      return `geoarmy-canje-epic:${itemId}`;
-    }
-
-    function obtenerEpicDisplayNamePendiente(itemId) {
-      try { return sessionStorage.getItem(claveEpicPendiente(itemId)) || ''; } catch (e) { return ''; }
-    }
-
-    function guardarEpicDisplayNamePendiente(itemId, valor) {
-      try { sessionStorage.setItem(claveEpicPendiente(itemId), valor); } catch (e) { /* si no se puede guardar, se volverá a pedir en el próximo intento */ }
-    }
-
-    function borrarEpicDisplayNamePendiente(itemId) {
-      try { sessionStorage.removeItem(claveEpicPendiente(itemId)); } catch (e) { /* nada que hacer */ }
-    }
-
-    // Devuelve una Promise que resuelve con el Epic Display Name ya validado
-    // (trim, 3-16 caracteres) o null si el usuario canceló el modal. Si ya
-    // hay uno pendiente guardado (intento anterior sin confirmar), lo reusa
-    // SIN volver a mostrar el modal.
-    function pedirEpicDisplayName(itemId) {
-      const pendiente = obtenerEpicDisplayNamePendiente(itemId);
-      if (pendiente) return Promise.resolve(pendiente);
-
-      return new Promise((resolve) => {
-        const overlay = $('tiEpicOverlay');
-        const input = $('tiEpicInput');
-        const error = $('tiEpicError');
-        const btnCancelar = $('tiEpicCancelar');
-        const btnContinuar = $('tiEpicContinuar');
-
-        input.value = '';
-        error.textContent = '';
-        overlay.hidden = false;
-        input.focus();
-
-        function limpiar() {
-          overlay.hidden = true;
-          btnCancelar.removeEventListener('click', onCancelar);
-          btnContinuar.removeEventListener('click', onContinuar);
-          input.removeEventListener('keydown', onKeydown);
-        }
-        function onCancelar() {
-          limpiar();
-          resolve(null);
-        }
-        function onContinuar() {
-          const limpio = input.value.trim();
-          if (limpio.length < 3 || limpio.length > 16) {
-            error.textContent = 'Debe tener entre 3 y 16 caracteres.';
-            return;
-          }
-          guardarEpicDisplayNamePendiente(itemId, limpio);
-          limpiar();
-          resolve(limpio);
-        }
-        function onKeydown(e) {
-          if (e.key === 'Enter') onContinuar();
-          if (e.key === 'Escape') onCancelar();
-        }
-        btnCancelar.addEventListener('click', onCancelar);
-        btnContinuar.addEventListener('click', onContinuar);
-        input.addEventListener('keydown', onKeydown);
-      });
-    }
-
     async function canjear(item) {
-      // Fortnite Gifts: el modal de Epic Display Name se muestra ANTES del
-      // confirm() normal -- "Después de Continuar, sigue el flujo normal de
-      // confirmación del canje."
-      let epicDisplayName = null;
-      if (item.requiereEpicDisplayName) {
-        epicDisplayName = await pedirEpicDisplayName(item.id);
-        if (epicDisplayName === null) return; // el usuario canceló el modal
-      }
-
       if (!confirm(`¿Canjear "${item.nombre}" por ${item.costo} G-coins?`)) return;
       msg.textContent = 'Procesando...';
       let clientRequestId;
@@ -933,14 +796,13 @@
         const res = await fetch(`${API_BASE}/api/canjear`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', ...authHeaders() },
-          body: JSON.stringify({ itemId: item.id, clientRequestId, ...(epicDisplayName ? { epicDisplayName } : {}) }),
+          body: JSON.stringify({ itemId: item.id, clientRequestId }),
         });
         const data = await res.json();
         if (res.ok) {
           // 200: la operación se completó (o el replay devolvió el mismo
           // resultado ya completado) -- ya no hace falta conservar el id.
           borrarClientRequestIdPendiente(item.id);
-          if (item.requiereEpicDisplayName) borrarEpicDisplayNamePendiente(item.id);
           saldo = data.saldoRestante;
           $('tiSaldoValor').textContent = saldo;
           msg.textContent = `¡Listo! Canjeaste "${item.nombre}". Geo te lo entregará pronto.`;
@@ -965,7 +827,6 @@
 
         if (seSabeQueNoOcurrio) {
           borrarClientRequestIdPendiente(item.id);
-          if (item.requiereEpicDisplayName) borrarEpicDisplayNamePendiente(item.id);
         }
         msg.textContent = data.error || 'No se pudo canjear, intenta de nuevo en unos segundos';
       } catch (e) {
