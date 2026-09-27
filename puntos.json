@@ -16,7 +16,7 @@
   },
   "matidk_0": {
     "usuario": "matidk_0",
-    "ganado": 16365,
+    "ganado": 16385,
     "gastado": 8750
   },
   "kittykitty_katt": {
@@ -117,6 +117,11 @@
   "hoseokie13": {
     "usuario": "hoseokie13",
     "ganado": 1830,
+    "gastado": 0
+  },
+  "izanlego05": {
+    "usuario": "izanlego05",
+    "ganado": 20,
     "gastado": 0
   }
 }
