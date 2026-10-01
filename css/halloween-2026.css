@@ -1,0 +1,1340 @@
+/* =====================================================================
+   HALLOWEEN 2026 — "La Heraldo" — sistema de batalla comunitaria
+   =====================================================================
+   Archivo NUEVO y aislado. No modifica css/style.css ni css/v3-theme.css.
+   Se carga desde:
+     - index.html (SOLO los 3 pins sobre el planeta -- producción; ver
+       PASADA FINAL TEST -> PRODUCCIÓN, 2026-09-26)
+     - halloween/batalla.html, rol.html, contratos.html (producción)
+     - halloween/efectos.html, cronicas.html (huérfanas, sin enlace
+       público, se conservan sin borrar -- ver misma pasada)
+
+   CAMBIO DE DIRECCIÓN (v2): se retiró el dashboard de 4 tarjetas + widget
+   gigante dentro del index, y el sistema de modal genérico. Ahora:
+     - el índice solo muestra 3 pins circulares sobre el planeta (mismo
+       lenguaje visual que .v3-planet-nav / .v3-marker-* de Mundo 01);
+     - cada pin lleva a su propia página en halloween/*.html;
+     - el widget de La Heraldo (antes en el index) ahora vive en
+       batalla.html; los antiguos "modales" de Rol/Contratos/Efectos/
+       Crónicas ahora son el contenido directo de cada página.
+   El widget/bars/cataclismo/tarjetas de rol-contratos-efectos-crónicas se
+   conservan tal cual (mismas clases), solo cambia dónde viven en el DOM.
+
+   Estilo pedido: oscuro, serio, cinematográfico, macabro. Nada infantil,
+   sin calabazas caricaturescas, sin exceso de emojis. Coherente con la
+   paleta ya usada en Mundo 02 (violeta oscuro / negro / rojo / naranja
+   de fuego en detalles).
+   ===================================================================== */
+
+/* Variables a nivel :root: tanto el índice (pins) como las páginas
+   dedicadas (halloween/*.html) las usan, y viven en distintos puntos del
+   DOM, así que quedan disponibles globalmente sin colisionar con ninguna
+   variable existente del sitio (prefijo hw26-, único). */
+:root {
+  --hw26-black: #06040a;
+  --hw26-panel: rgba(14, 8, 22, 0.82);
+  --hw26-panel-solid: #120a1c;
+  --hw26-violet: #7c3aed;
+  --hw26-violet-soft: rgba(124, 58, 237, 0.45);
+  --hw26-violet-line: rgba(148, 92, 255, 0.28);
+  --hw26-red: #dc2626;
+  --hw26-red-soft: rgba(220, 38, 38, 0.5);
+  --hw26-orange: #f97316;
+  --hw26-gold: #d4af37;
+  --hw26-text: #f4eefc;
+  --hw26-text-dim: rgba(244, 238, 252, 0.62);
+  --hw26-text-faint: rgba(244, 238, 252, 0.4);
+  --hw26-radius: 18px;
+}
+
+/* ---------------------------------------------------------------------
+   0) Pins sobre el planeta (index.html, producción)
+   ---------------------------------------------------------------------
+   Viven dentro de .v3-wl-orb (mismo contenedor que la imagen del planeta
+   de Mundo 02), igual que .v3-planet-nav vive dentro de .v3-globe-wrap en
+   Mundo 01. Mismo lenguaje visual (círculo + glow + icono + tooltip en
+   hover + posición absoluta por porcentaje), en la paleta violeta/roja de
+   Halloween en vez del azul de Mundo 01. No se tocó .v3-planet-nav ni
+   ninguna clase v3-marker-* -- estas son clases nuevas, sin colisión. */
+.hw26-planet-pins { position: absolute; inset: 0; z-index: 6; pointer-events: none; }
+.hw26-planet-pin {
+  position: absolute; left: var(--mx); top: var(--my);
+  display: flex; flex-direction: column; align-items: center;
+  transform: translate(-50%, -100%);
+  pointer-events: auto; text-decoration: none; cursor: pointer;
+  transition: opacity .4s ease, filter .4s ease;
+}
+.hw26-pin-icon {
+  position: relative;
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 19px;
+  background: rgba(18, 10, 28, .9); border: 1px solid var(--hw26-violet-line);
+  box-shadow: 0 0 18px rgba(124, 58, 237, .5), inset 0 0 0 1px rgba(0, 0, 0, .25);
+  transition: transform .3s ease, box-shadow .3s ease;
+  overflow: hidden; /* recorta la imagen del pin de Batalla en círculo */
+}
+.hw26-pin-icon-img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center 30%;
+  border-radius: 50%;
+  display: block;
+}
+.hw26-pin-batalla .hw26-pin-icon {
+  border-color: rgba(220, 38, 38, .55);
+  box-shadow: 0 0 20px rgba(220, 38, 38, .55), inset 0 0 0 1px rgba(0, 0, 0, .25);
+}
+.hw26-pin-label {
+  order: -1; margin-bottom: 6px;
+  font-family: 'Orbitron', sans-serif; font-size: 10px; letter-spacing: .05em; white-space: nowrap;
+  color: var(--hw26-text); background: rgba(18, 10, 28, .92); border: 1px solid var(--hw26-violet-line);
+  padding: 3px 9px; border-radius: 6px;
+  opacity: 0; transform: translateY(4px); transition: opacity .25s, transform .25s; pointer-events: none;
+}
+.hw26-planet-pin:hover .hw26-pin-label,
+.hw26-planet-pin:focus-visible .hw26-pin-label { opacity: 1; transform: translateY(0); }
+.hw26-planet-pin:hover .hw26-pin-icon,
+.hw26-planet-pin:focus-visible .hw26-pin-icon { transform: scale(1.15); box-shadow: 0 0 24px rgba(148, 92, 255, .8); }
+.hw26-pin-batalla:hover .hw26-pin-icon,
+.hw26-pin-batalla:focus-visible .hw26-pin-icon { box-shadow: 0 0 26px rgba(220, 38, 38, .75); }
+
+/* Candadito superpuesto en los pins secundarios (Rol/Contratos/Registro de
+   Puntos) mientras están bloqueados */
+.hw26-pin-lock {
+  position: absolute; right: -3px; bottom: -3px; width: 17px; height: 17px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 9px; line-height: 1; background: rgba(8, 4, 14, .92); border: 1px solid rgba(148, 92, 255, .5);
+}
+/* Insignia "Programada" bajo el pin de Batalla mientras el evento no
+   arrancó -- deja claro que se puede abrir la página, pero que el combate
+   todavía no comenzó. */
+.hw26-pin-badge {
+  order: -2; margin-bottom: 3px;
+  font-family: 'Space Grotesk', sans-serif; font-size: 8px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase; color: #ffcf8a;
+  background: rgba(18, 10, 28, .85); border: 1px solid rgba(249, 115, 22, .4);
+  padding: 2px 7px; border-radius: 999px; white-space: nowrap;
+}
+
+/* Estado bloqueado (antes del desbloqueo del 1 de octubre): reutiliza la
+   MISMA clase .is-unlocked que ya agrega el countdown existente sobre
+   .v3-wl-halloween -- ningún JS nuevo controla esto, es puro CSS. Batalla
+   (sin .hw26-pin-locked) queda siempre clickeable. */
+.v3-wl-halloween:not(.is-unlocked) .hw26-pin-locked {
+  opacity: .38; filter: grayscale(.55) brightness(.8);
+  pointer-events: none; cursor: not-allowed;
+}
+.v3-wl-halloween.is-unlocked .hw26-pin-locked .hw26-pin-lock { display: none; }
+.v3-wl-halloween.is-unlocked .hw26-pin-batalla .hw26-pin-badge { display: none; }
+
+@media (max-width: 560px) {
+  .hw26-pin-icon { width: 36px; height: 36px; font-size: 15px; }
+  .hw26-pin-label { font-size: 9px; }
+}
+
+/* ---------------------------------------------------------------------
+   1) Páginas dedicadas (halloween/*.html) — chrome genérico compartido
+--------------------------------------------------------------------- */
+.hw26-page {
+  position: relative;
+  z-index: 2;
+  max-width: 760px;
+  margin: 0 auto 60px;
+  padding: 100px 1.25rem 20px;
+  font-family: 'Inter', sans-serif;
+  color: var(--hw26-text);
+}
+.hw26-page * { box-sizing: border-box; }
+
+.hw26-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  color: var(--hw26-text-dim);
+  text-decoration: none;
+  margin-bottom: 22px;
+  padding: 7px 13px 7px 10px;
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .03);
+  transition: border-color .2s ease, color .2s ease, background .2s ease;
+}
+.hw26-back-link:hover {
+  color: var(--hw26-text);
+  border-color: var(--hw26-violet-line);
+  background: rgba(124, 58, 237, .1);
+}
+
+.hw26-page-head {
+  text-align: center;
+  margin-bottom: 22px;
+}
+.hw26-page-icon {
+  font-size: 1.8rem;
+  filter: drop-shadow(0 0 14px rgba(148, 92, 255, .6));
+  margin-bottom: 6px;
+}
+.hw26-page-eyebrow {
+  font-family: 'Orbitron', sans-serif;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: #b98cf5;
+  margin-bottom: 4px;
+}
+.hw26-page-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.3rem, 4vw, 1.7rem);
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 0 18px rgba(124, 58, 237, .5);
+}
+.hw26-page-sub {
+  margin-top: 6px;
+  font-size: .85rem;
+  color: var(--hw26-text-dim);
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* Línea secundaria discreta bajo .hw26-page-sub (p.ej. "Nuevos contratos:
+   martes · jueves · sábado" en Contratos) -- genérica, cualquier página
+   dedicada puede usarla. */
+.hw26-page-note {
+  margin-top: 8px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--hw26-text-faint);
+}
+
+.hw26-page-content {
+  background:
+    radial-gradient(120% 90% at 50% -10%, rgba(124, 58, 237, .16), transparent 55%),
+    linear-gradient(180deg, var(--hw26-panel-solid), #0a0510 85%);
+  border: 1px solid var(--hw26-violet-line);
+  border-radius: var(--hw26-radius);
+  padding: 20px 18px 22px;
+}
+
+/* ---------------------------------------------------------------------
+   Ajustes SOLO de halloween/batalla.html: más ancho para que el hero
+   domine el espacio horizontal, menos aire antes del contenido y (en
+   escritorio) el encabezado alineado al mismo borde izquierdo que el
+   hero, en vez de centrado -- así se leen como UNA sola composición.
+   Scoped a body[data-halloween-page="battle"] a propósito -- las otras 4
+   páginas (Rol/Contratos/Efectos/Crónicas) conservan su max-width,
+   alineación centrada, padding y tipografía sin cambios, como antes.
+--------------------------------------------------------------------- */
+body[data-halloween-page="battle"] .hw26-page {
+  max-width: 1280px;
+  padding-top: 80px;
+}
+body[data-halloween-page="battle"] .hw26-back-link { margin-bottom: 12px; }
+body[data-halloween-page="battle"] .hw26-page-head { margin-bottom: 20px; }
+.hw26-page-content-hero { padding: 0; background: none; border: none; border-radius: 0; }
+
+@media (min-width: 760px) {
+  /* Mobile mantiene todo centrado (como las otras 4 páginas); desde este
+     punto el encabezado se alinea a la izquierda para leerse como parte
+     de la misma composición asimétrica que el hero. */
+  body[data-halloween-page="battle"] .hw26-page-head {
+    text-align: left;
+  }
+  body[data-halloween-page="battle"] .hw26-page-sub {
+    margin-left: 0;
+    margin-right: 0;
+    max-width: 560px;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Barra de pruebas (SOLO test mode) — franja discreta arriba del
+   contenido de cada página dedicada
+--------------------------------------------------------------------- */
+/* PASADA FINAL TEST -> PRODUCCIÓN (2026-09-26): se retiró de aquí el panel
+   de pruebas (.hw26-devbar y variantes) -- el markup que le daba vida
+   (#hw26DevBar/#hw26DevScenario/#hw26DevRole) ya no existe en las páginas
+   de producción (batalla.html/rol.html/contratos.html). Las reglas se
+   quitaron de esta hoja global porque ya no tienen consumidor productivo;
+   efectos.html/cronicas.html (huérfanas, sin enlace público, ver Parte D
+   de la misma pasada) SÍ conservan ese markup en su propio HTML sin
+   tocar -- si algún día se reabren, su devbar seguirá sin estilos hasta
+   que se decida qué hacer con esas 2 páginas. */
+
+/* ---------------------------------------------------------------------
+   2) Widget de La Heraldo — ahora vive en halloween/batalla.html
+--------------------------------------------------------------------- */
+/* Segunda pasada: se quita la sensación de "tarjeta" por completo. Antes
+   .hw26-boss/.hw26-boss-frame eran un panel bordeado con fondo sólido; hoy
+   son contenedores TRANSPARENTES (sin borde, sin relleno, sin
+   border-radius de panel) -- la separación del fondo de Halloween la da
+   solo .hw26-boss-atmosphere, un glow ambiental difuso detrás de todo el
+   layout, nunca una silueta rectangular. */
+.hw26-boss {
+  position: relative;
+  padding: 0;
+}
+.hw26-boss-frame {
+  position: relative;
+  padding: 0;
+  text-align: center;
+}
+/* Atmósfera: mancha de luz violeta/roja muy difusa detrás del hero,
+   sangrando más allá de los bordes del contenido -- da ambientación sin
+   dibujar un rectángulo. Puramente decorativo (aria-hidden), no roba
+   espacio de layout (position:absolute). */
+.hw26-boss-atmosphere {
+  position: absolute;
+  inset: -16px;
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(20px);
+  opacity: 0.9;
+  background:
+    radial-gradient(46% 60% at 24% 38%, rgba(124, 58, 237, 0.30), transparent 72%),
+    radial-gradient(42% 55% at 88% 55%, rgba(124, 58, 237, 0.22), transparent 72%);
+  transition: background 0.6s ease;
+}
+@media (min-width: 760px) {
+  .hw26-boss-atmosphere { inset: -50px -20px -60px; }
+}
+.hw26-boss-layout { position: relative; z-index: 1; }
+
+/* Fase II — transformación real: glow ambiental rojo mucho más intenso que
+   en Fase I (antes casi igual de fuerte, ahora con más presencia) + una
+   respiración muy sutil (opacity) para dar sensación de tensión constante,
+   sin pulsar una caja (eso reintroducía la silueta de "card") ni mover
+   nada del layout. Durante la transición 1→2, hw26-transition-glow (más
+   abajo, mismo peso de especificidad pero declarado después) toma
+   prioridad sobre esta respiración continua. */
+.hw26-boss[data-phase="2"] .hw26-boss-atmosphere {
+  background:
+    radial-gradient(50% 64% at 24% 38%, rgba(220, 38, 38, 0.44), transparent 74%),
+    radial-gradient(46% 60% at 88% 55%, rgba(220, 38, 38, 0.34), transparent 74%);
+  opacity: 1;
+  animation: hw26-phase2-breathe 3.4s ease-in-out infinite;
+}
+@keyframes hw26-phase2-breathe {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
+}
+
+/* Desenlace — victoria/derrota: el glow ambiental toma el color del
+   resultado (verde/dorado si gana Geo Army, rojo oscuro y serio si gana
+   La Heraldo) para que el resultado se sienta en toda la escena, no solo
+   en una etiqueta pequeña. Declarado después de [data-phase="2"] para
+   ganar el empate de especificidad una vez termina la batalla. */
+.hw26-boss[data-outcome="geoarmy_victory"] .hw26-boss-atmosphere {
+  background:
+    radial-gradient(50% 64% at 24% 38%, rgba(70, 224, 168, 0.34), transparent 74%),
+    radial-gradient(46% 60% at 88% 55%, rgba(70, 224, 168, 0.24), transparent 74%);
+  animation: none;
+  opacity: 1;
+}
+.hw26-boss[data-outcome="herald_victory"] .hw26-boss-atmosphere {
+  background:
+    radial-gradient(50% 64% at 24% 38%, rgba(120, 10, 10, 0.46), transparent 74%),
+    radial-gradient(46% 60% at 88% 55%, rgba(120, 10, 10, 0.32), transparent 74%);
+  animation: none;
+  opacity: 1;
+}
+
+/* Cataclismo — mientras pending_attack_key === 'cataclismo' (ver
+   updateBossImg/renderBoss en el JS), la imagen cambia a
+   assets/halloween/cataclismo.webp y el glow ambiental se intensifica más
+   allá de Fase II normal, como alerta temporal. Puro presentación: el
+   navegador nunca decide cuándo empieza/termina, solo refleja
+   pending_attack_key ya cargado -- al desaparecer, el siguiente poll
+   vuelve sola a heraldo-fase2.webp y a este mismo bloque de estilos
+   dejando de aplicar (sin recargar la página). Declarado después de
+   [data-phase="2"]/[data-outcome] para ganar el empate de especificidad
+   mientras Cataclismo está activo. */
+.hw26-boss[data-cataclysm="1"] .hw26-boss-atmosphere {
+  background:
+    radial-gradient(56% 70% at 24% 38%, rgba(220, 38, 38, 0.58), transparent 76%),
+    radial-gradient(50% 64% at 88% 55%, rgba(124, 58, 237, 0.38), transparent 76%);
+  animation: hw26-cataclysm-atmosphere-pulse 1.5s ease-in-out infinite;
+  opacity: 1;
+}
+@keyframes hw26-cataclysm-atmosphere-pulse {
+  0%, 100% { opacity: 0.86; }
+  50% { opacity: 1; }
+}
+/* La imagen de Cataclismo es una escena panorámica (no un retrato como las
+   de fase): se reencuadra un poco más abajo para mantener visible el
+   núcleo de energía/garras en vez del cielo. Mismo object-fit:cover de
+   siempre, mismos degradados de fusión con el fondo (.hw26-boss-art::after
+   no depende de qué imagen haya dentro). */
+.hw26-boss[data-cataclysm="1"] .hw26-boss-img {
+  object-position: center 55%;
+}
+
+/* Panel "boss battle" de dos columnas. Mobile-first: column-reverse hace
+   que .hw26-boss-art (imagen, segunda en el HTML) aparezca PRIMERO
+   visualmente y .hw26-boss-info (texto/barras) después -- sin duplicar
+   markup. En escritorio se vuelve una fila: info a la izquierda, imagen
+   grande a la derecha. */
+.hw26-boss-layout {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 20px;
+  text-align: left;
+}
+@media (min-width: 760px) {
+  .hw26-boss-layout {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 32px;
+  }
+  /* Cuarta pasada: antes "justify-content: center" dejaba mucho vacío
+     entre el encabezado de la página y la insignia de fase (el bloque de
+     texto quedaba centrado en toda la altura de la imagen). Con
+     flex-start el contenido arranca arriba, al mismo nivel que la
+     imagen (ambas columnas ya comparten el mismo borde superior por
+     align-items:stretch en .hw26-boss-layout) -- cierra el vacío y
+     alinea la parte superior de Morvanna con el bloque de texto, sin
+     tocar el ratio de columnas ni el ancho. */
+  .hw26-boss-info { flex: 1 1 42%; display: flex; flex-direction: column; justify-content: flex-start; }
+  .hw26-boss-art { flex: 1 1 58%; }
+}
+@media (min-width: 1020px) {
+  .hw26-boss-layout { gap: 40px; }
+  .hw26-boss-info { flex-basis: 40%; }
+  .hw26-boss-art { flex-basis: 60%; }
+}
+
+.hw26-boss-badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  padding: 4px 11px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #3b1466, #1a0b2e);
+  border: 1px solid rgba(148, 92, 255, 0.5);
+  color: #e6d9ff;
+  white-space: nowrap;
+  margin-bottom: 6px;
+}
+.hw26-boss[data-phase="2"] .hw26-boss-badge {
+  background: linear-gradient(135deg, #5c0f14, #2a0508);
+  border-color: rgba(220, 38, 38, 0.6);
+  color: #ffd8d8;
+}
+
+/* Imagen grande de La Heraldo -- debe sentirse parte del escenario, no una
+   foto metida en una card. Sin marco/borde grueso: apenas un hairline casi
+   invisible (evita un canto duro en monitores con banding) y el "límite"
+   real lo da un degradado que la funde con el fondo, no una línea. */
+.hw26-boss-art {
+  position: relative;
+  min-height: 300px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: #0a0510;
+}
+@media (min-width: 760px) {
+  .hw26-boss-art { min-height: 440px; border-radius: 0; border: none; }
+}
+@media (min-width: 1020px) {
+  .hw26-boss-art { min-height: 560px; }
+}
+/* Se funde con la escena: abajo siempre (para que no corte en seco contra
+   lo que sigue debajo) y, en escritorio, también por la izquierda (donde
+   se junta con la columna de texto) -- así Morvanna se integra en vez de
+   quedar "enmarcada". La derecha/arriba quedan tal cual llega la imagen. */
+.hw26-boss-art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(0deg, rgba(6, 4, 10, 0.75) 0%, transparent 22%);
+}
+@media (min-width: 760px) {
+  /* Cuarta pasada: el borde izquierdo se funde mucho más fuerte con el
+     fondo (mayor opacidad y mayor alcance) para que Morvanna no se lea
+     como "rectángulo pegado" junto a la columna de texto; se agrega un
+     degradado muy sutil también en el borde derecho para que ese canto
+     tampoco quede como un corte duro contra el fondo. El inferior se
+     mantiene igual de suave que antes. */
+  .hw26-boss-art::after {
+    background:
+      linear-gradient(0deg, rgba(6, 4, 10, 0.55) 0%, transparent 22%),
+      linear-gradient(90deg, rgba(6, 4, 10, 0.9) 0%, transparent 34%),
+      linear-gradient(270deg, rgba(6, 4, 10, 0.3) 0%, transparent 10%);
+  }
+}
+.hw26-boss-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 22%; /* prioriza rostro/torso/manos, no los pies */
+  display: block;
+  filter: saturate(1.05) contrast(1.05);
+  transition: filter 0.6s ease;
+}
+.hw26-boss[data-phase="2"] .hw26-boss-img {
+  filter: saturate(1.25) contrast(1.15) brightness(0.9) hue-rotate(-8deg);
+}
+
+/* Overlay de transición de fase 1 -> 2: flash + texto temporal, ver
+   triggerPhaseTransition() en js/halloween-2026.js. */
+.hw26-boss-flash {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 16px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  font-size: clamp(1rem, 4vw, 1.5rem);
+  color: #fff;
+  text-shadow: 0 0 18px rgba(0, 0, 0, 0.85), 0 0 34px rgba(220, 38, 38, 0.9);
+  background: radial-gradient(closest-side, rgba(220, 38, 38, 0.55), rgba(124, 58, 237, 0.4) 60%, transparent 100%);
+  opacity: 0;
+  pointer-events: none;
+}
+.hw26-boss-flash.is-active { animation: hw26-phase-flash 1.8s ease forwards; }
+@keyframes hw26-phase-flash {
+  0% { opacity: 0; }
+  12% { opacity: 1; }
+  75% { opacity: 1; }
+  100% { opacity: 0; }
+}
+/* Glow más dramático mientras dura la transición -- sobre la atmósfera
+   difusa (opacidad/blur), nunca sobre una caja con box-shadow, para no
+   reintroducir una silueta rectangular durante el flash. */
+.hw26-boss.hw26-phase-transitioning .hw26-boss-atmosphere {
+  animation: hw26-transition-glow 1.8s ease;
+}
+@keyframes hw26-transition-glow {
+  0% { opacity: 0.9; filter: blur(20px) brightness(1); }
+  20% { opacity: 1; filter: blur(26px) brightness(1.9); }
+  100% { opacity: 0.9; filter: blur(20px) brightness(1); }
+}
+
+/* La Heraldo ya aparece como título de página ("BATALLA CONTRA LA
+   HERALDO"), así que dentro del widget no se repite su nombre: esta línea
+   es ahora el elemento principal ("FASE I — FORMA SELLADA") y lleva el
+   peso visual que antes tenía .hw26-boss-name. */
+.hw26-boss-phase {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 0 18px rgba(124, 58, 237, 0.65);
+  margin-bottom: 14px;
+}
+.hw26-boss[data-phase="2"] .hw26-boss-phase {
+  text-shadow: 0 0 22px rgba(220, 38, 38, 0.75);
+}
+
+.hw26-bar-block { margin-bottom: 10px; text-align: left; }
+.hw26-bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--hw26-text-dim);
+  margin-bottom: 5px;
+}
+.hw26-bar-label span:last-child {
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--hw26-text);
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.hw26-bar {
+  position: relative;
+  height: 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+.hw26-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.7s cubic-bezier(.22,.68,0,1.01);
+}
+.hw26-bar-boss .hw26-bar-fill {
+  background: linear-gradient(90deg, #7c1d1d, var(--hw26-red), #ff6b4a);
+  box-shadow: 0 0 12px rgba(220, 38, 38, 0.55);
+}
+.hw26-bar-geo .hw26-bar-fill {
+  background: linear-gradient(90deg, #5b21b6, var(--hw26-violet), var(--hw26-gold));
+  box-shadow: 0 0 12px rgba(124, 58, 237, 0.5);
+}
+/* Flash de impacto (daño) / curación — breve, no exagerado */
+.hw26-bar-fill.hw26-flash-hit { animation: hw26-flash-hit 0.55s ease; }
+.hw26-bar-fill.hw26-flash-heal { animation: hw26-flash-heal 0.55s ease; }
+@keyframes hw26-flash-hit {
+  0% { filter: brightness(2.4) saturate(1.4); }
+  100% { filter: brightness(1); }
+}
+@keyframes hw26-flash-heal {
+  0% { filter: brightness(2.2) hue-rotate(40deg); }
+  100% { filter: brightness(1); }
+}
+
+.hw26-boss-status {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+.hw26-status-badge {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(124, 58, 237, 0.18);
+  border: 1px solid rgba(148, 92, 255, 0.4);
+  color: #e6d9ff;
+}
+.hw26-status-detail {
+  font-size: 0.78rem;
+  color: var(--hw26-text-dim);
+}
+/* Estados finales */
+.hw26-boss[data-outcome="geoarmy_victory"] .hw26-status-badge {
+  background: rgba(70, 224, 168, 0.18); border-color: rgba(70, 224, 168, 0.5); color: #b6ffe4;
+}
+.hw26-boss[data-outcome="herald_victory"] .hw26-status-badge {
+  background: rgba(220, 38, 38, 0.22); border-color: rgba(220, 38, 38, 0.55); color: #ffd0d0;
+}
+/* Batalla terminada — el resultado debe dominar la composición sin
+   convertirse en una tarjeta nueva: se agranda y se le da glow al mismo
+   badge/detalle que ya existen, y las barras de HP (ya congeladas, sin
+   sentido de "en vivo") se atenúan para que el resultado sea lo primero
+   que se lee. Nada de esto mueve Morvanna ni agrega marcos nuevos. */
+.hw26-boss[data-eventstatus="finished"] .hw26-status-badge {
+  font-size: 0.92rem;
+  padding: 8px 16px;
+  text-shadow: 0 0 16px currentColor;
+}
+.hw26-boss[data-eventstatus="finished"] .hw26-status-detail {
+  font-size: 0.86rem;
+  letter-spacing: 0.03em;
+}
+.hw26-boss[data-eventstatus="finished"] .hw26-bar-block { opacity: 0.5; }
+@media (min-width: 760px) {
+  .hw26-boss[data-eventstatus="finished"] .hw26-status-badge { font-size: 1.15rem; padding: 9px 20px; }
+  .hw26-boss[data-eventstatus="finished"] .hw26-status-detail { font-size: 0.92rem; }
+}
+
+/* ---------------------------------------------------------------------
+   Cola de movimientos en vivo — puro presentación (ver "Cola visual de
+   movimientos" en js/halloween-2026.js). Todo vive en capas absolutas
+   que nunca empujan el layout ni las barras: la posición/tamaño del hero
+   no cambia mientras juega un movimiento.
+--------------------------------------------------------------------- */
+#hw26GeoBarBlock { position: relative; }
+
+.hw26-move-zone {
+  position: absolute;
+  z-index: 4;
+  pointer-events: none;
+}
+/* Zona Geo Army: overlay corto sobre la barra de resistencia (nombre +
+   valor en una píldora oscura, no tapa el resto de la columna). */
+.hw26-move-zone-geo {
+  inset: -3px -4px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.hw26-move-zone-geo .hw26-move-pop {
+  flex-direction: row;
+  align-items: baseline;
+  gap: 6px;
+  background: rgba(6, 4, 10, 0.78);
+  border: 1px solid rgba(220, 38, 38, 0.4);
+  padding: 4px 9px;
+  border-radius: 8px;
+}
+/* Zona Morvanna: overlay en el tercio inferior de la imagen -- deja el
+   rostro/torso visible, nunca tapa toda la ilustración (pedido explícito
+   de mobile, aplicado también en desktop por consistencia). */
+.hw26-move-zone-boss {
+  inset: auto 12px 10% 12px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.hw26-move-zone-boss .hw26-move-pop {
+  flex-direction: column;
+  align-items: center;
+  background: rgba(6, 4, 10, 0.6);
+  border: 1px solid rgba(148, 92, 255, 0.35);
+  padding: 6px 16px;
+  border-radius: 10px;
+}
+.hw26-move-pop {
+  text-align: center;
+  animation: hw26-move-pop 1.5s ease forwards;
+}
+@keyframes hw26-move-pop {
+  0% { opacity: 0; transform: translateY(6px); }
+  12% { opacity: 1; transform: translateY(0); }
+  78% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-6px); }
+}
+.hw26-move-name {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+.hw26-move-value {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 0.86rem;
+  white-space: nowrap;
+}
+.hw26-move-zone-boss .hw26-move-name { color: #e6d9ff; margin-bottom: 2px; }
+.hw26-move-zone-boss .hw26-move-value { color: #ff8a8a; font-size: 1.05rem; }
+.hw26-move-zone-geo .hw26-move-name { color: #ffd0d0; }
+.hw26-move-zone-geo .hw26-move-value { color: #ff8a8a; }
+.hw26-move-pop-heal .hw26-move-value { color: #b6ffe4; }
+.hw26-move-pop-buff {
+  border-color: rgba(249, 199, 90, 0.4) !important;
+  max-width: 220px;
+}
+.hw26-move-pop-buff .hw26-move-name { color: #ffe6b0; white-space: normal; text-align: center; }
+.hw26-move-pop-buff .hw26-move-value {
+  font-size: 0.66rem; font-weight: 600; letter-spacing: 0.06em;
+  color: var(--hw26-text-dim); text-transform: uppercase; white-space: normal; text-align: center;
+}
+/* Contrato completado (mission_damage) -- mismo golpe visual que un
+   ataque de jugador sobre Morvanna, pero con acento ámbar propio para
+   distinguirlo de un golpe directo de Geo Army. */
+.hw26-move-pop-mission {
+  border-color: rgba(249, 199, 90, 0.45) !important;
+}
+.hw26-move-pop-mission .hw26-move-name { color: #ffd88a; }
+.hw26-move-pop-mission .hw26-move-value { color: #ffb648; }
+
+/* Flash breve blanco/violeta sobre Morvanna al recibir un golpe de Geo
+   Army -- capa aparte de .hw26-boss-flash (reservado a la transición de
+   fase, con su propio texto y timing). */
+.hw26-boss-hit-flash {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: radial-gradient(60% 60% at 50% 45%, rgba(230, 217, 255, 0.5), transparent 70%);
+  opacity: 0;
+}
+.hw26-boss-hit-flash.is-active { animation: hw26-hit-flash 0.5s ease; }
+@keyframes hw26-hit-flash {
+  0% { opacity: 0; }
+  25% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Micro shake local -- SOLO del elemento golpeado (la imagen o el bloque
+   de resistencia), nunca de .hw26-page ni del body. */
+.hw26-shake-local { animation: hw26-shake-local 0.5s ease; }
+@keyframes hw26-shake-local {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-3px); }
+  40% { transform: translateX(3px); }
+  60% { transform: translateX(-2px); }
+  80% { transform: translateX(2px); }
+}
+
+/* Último movimiento -- línea discreta, no una tarjeta nueva. */
+.hw26-last-move {
+  margin-top: 14px;
+  font-size: 0.76rem;
+  color: var(--hw26-text-dim);
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 759px) {
+  .hw26-move-name { font-size: 0.7rem; }
+  .hw26-move-value { font-size: 0.78rem; }
+  .hw26-move-zone-boss .hw26-move-value { font-size: 0.92rem; }
+  .hw26-move-zone-boss { inset: auto 8px 8% 8px; }
+  /* Seguridad extra contra overflow en pantallas angostas: nombres largos
+     (sobre todo los de buff/debuff) pueden envolver en vez de desbordar. */
+  .hw26-move-zone-geo .hw26-move-pop,
+  .hw26-move-zone-boss .hw26-move-pop {
+    max-width: calc(100vw - 64px);
+  }
+  .hw26-move-zone-geo .hw26-move-name,
+  .hw26-move-zone-geo .hw26-move-value {
+    white-space: normal;
+  }
+}
+
+/* Cataclismo — modo emergencia temporal. Vive dentro de la columna de
+   información (texto a la izquierda), pero se auto-centra (text-align)
+   sin depender de la alineación del contenedor padre. */
+.hw26-boss-cataclysm {
+  margin: 12px 0 0;
+  padding: 14px 12px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.22), rgba(249, 115, 22, 0.1));
+  border: 1px solid rgba(220, 38, 38, 0.55);
+  text-align: center;
+  animation: hw26-cataclysm-pulse 1.4s ease-in-out infinite;
+}
+@keyframes hw26-cataclysm-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.35); }
+  50% { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0); }
+}
+.hw26-cataclysm-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #ffb4b4;
+  margin-bottom: 6px;
+}
+.hw26-cataclysm-timer {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2rem;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 0 20px rgba(220, 38, 38, 0.85);
+  line-height: 1;
+}
+.hw26-cataclysm-sub {
+  margin-top: 6px;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #ffcccc;
+}
+
+.hw26-error {
+  margin-top: 14px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(220, 38, 38, 0.12);
+  border: 1px solid rgba(220, 38, 38, 0.35);
+  color: #ffd0d0;
+  font-size: 0.82rem;
+  text-align: left;
+}
+
+/* La franja de 4 tarjetas (Rol/Contratos/Efectos/Crónicas) que vivía aquí
+   se quitó a pedido explícito: esas páginas ya son accesibles desde sus
+   propios pins, y repetirlas debajo del hero hacía que Batalla se sintiera
+   como un dashboard. hw26BattleEffects / hw26SupportEffectsBody ya no
+   existen en el HTML; renderBattleEffects() en el JS sigue existiendo
+   mismo, no se tocó, pero ahora no encuentra su contenedor y no hace nada
+   -- no había necesidad de tocar polling/lógica de datos para quitar esto. */
+
+/* ---------------------------------------------------------------------
+   3) Rol (halloween/rol.html)
+--------------------------------------------------------------------- */
+.hw26-role-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+@media (min-width: 640px) {
+  .hw26-role-grid { grid-template-columns: repeat(3, 1fr); }
+}
+.hw26-role-card {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 14px;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--hw26-text);
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease, opacity 0.2s ease, filter 0.2s ease;
+}
+.hw26-role-card:hover { border-color: rgba(148, 92, 255, 0.55); background: rgba(124, 58, 237, 0.08); transform: translateY(-2px); }
+.hw26-role-card.is-selected { border-color: var(--hw26-violet); background: rgba(124, 58, 237, 0.16); }
+.hw26-role-icon { font-size: 1.4rem; }
+.hw26-role-body { display: block; }
+.hw26-role-name { display: block; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.92rem; margin-bottom: 2px; }
+.hw26-role-desc { font-size: 0.8rem; color: var(--hw26-text-dim); }
+
+/* Vista "preview" de roles antes del 1 de octubre: tarjetas visibles,
+   atenuadas y no clickeables, con badge de candado -- nunca una caja
+   vacía sola. */
+.hw26-role-card.is-locked {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.55;
+  filter: grayscale(0.35);
+}
+.hw26-role-card.is-locked:hover { transform: none; border-color: rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.03); }
+.hw26-role-lock-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ffd9b0;
+  background: rgba(18, 10, 28, 0.92);
+  border: 1px solid rgba(249, 115, 22, 0.45);
+  padding: 3px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.hw26-role-warning {
+  margin: 14px 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(249, 115, 22, 0.1);
+  border: 1px solid rgba(249, 115, 22, 0.35);
+  color: #ffd9b0;
+  font-size: 0.78rem;
+}
+/* Línea de recordatorio de permanencia, repetida dentro de cada tarjeta
+   de rol (además del aviso de .hw26-role-warning debajo de la grilla y
+   del bloque .hw26-role-intro arriba) -- pedido explícito: que las tres
+   tarjetas lleven el recordatorio, no solo el aviso general. */
+.hw26-role-permanent {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.72rem;
+  color: var(--hw26-text-faint);
+}
+/* Etiqueta corta de sección ("TU ROL"), mismo lenguaje visual que
+   .hw26-page-eyebrow (Orbitron, versalitas, violeta claro) pero para uso
+   dentro del contenido de la página, no en el header. */
+.hw26-role-state-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #b98cf5;
+  margin-bottom: 10px;
+}
+/* Bloque "ELIGE TU ROL": intro + aviso de recompensas de Twitch, arriba
+   de la grilla de 3 tarjetas (Estado 1, sin rol elegido todavía).
+   Fondo oscuro/morado integrado con el resto de la página (mismos
+   tokens --hw26-panel-solid/--hw26-violet-line que .hw26-page-content),
+   nunca el aspecto de un alert() del navegador. */
+.hw26-role-intro {
+  margin: 0 0 16px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: linear-gradient(160deg, rgba(124, 58, 237, 0.16), rgba(18, 10, 28, 0.92));
+  border: 1px solid var(--hw26-violet-line);
+}
+.hw26-role-intro-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  color: #fff;
+  text-shadow: 0 0 14px rgba(124, 58, 237, .5);
+  margin-bottom: 6px;
+}
+.hw26-role-intro-text {
+  font-size: 0.82rem;
+  color: var(--hw26-text-dim);
+  margin-bottom: 10px;
+}
+.hw26-role-intro-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 9px 11px;
+  border-radius: 10px;
+  background: rgba(6, 4, 10, 0.55);
+  border: 1px solid rgba(148, 92, 255, 0.35);
+  font-size: 0.76rem;
+  line-height: 1.35;
+  color: #e9d9ff;
+}
+.hw26-role-intro-warning-icon {
+  flex: 0 0 auto;
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
+@media (max-width: 480px) {
+  .hw26-role-intro { padding: 12px 13px; }
+  .hw26-role-intro-title { font-size: 0.85rem; }
+  .hw26-role-intro-text { font-size: 0.78rem; }
+  .hw26-role-intro-warning { font-size: 0.72rem; padding: 8px 10px; }
+}
+.hw26-role-warning-locked {
+  text-align: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.hw26-role-confirm {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #8b3ff0, #6d28d9);
+  color: #fff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+.hw26-role-confirm:disabled { opacity: 0.5; cursor: default; }
+.hw26-role-current {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(124, 58, 237, 0.14);
+  border: 1px solid rgba(148, 92, 255, 0.4);
+}
+.hw26-role-current .hw26-role-icon { font-size: 1.8rem; }
+.hw26-role-current-big { padding: 26px 20px; }
+.hw26-role-current-big .hw26-role-icon { font-size: 2.6rem; }
+.hw26-role-current-big .hw26-role-name { font-size: 1.15rem; }
+.hw26-locked-box {
+  text-align: center;
+  padding: 20px 10px;
+}
+.hw26-locked-box .hw26-lock-icon { font-size: 1.8rem; margin-bottom: 8px; }
+.hw26-locked-box b { display: block; font-family: 'Orbitron', sans-serif; letter-spacing: 0.08em; margin-bottom: 6px; }
+.hw26-locked-box-big { padding: 40px 16px; }
+.hw26-locked-box-big .hw26-lock-icon { font-size: 2.6rem; }
+.hw26-locked-box-big b { font-size: 1.05rem; }
+
+/* ---------------------------------------------------------------------
+   4) Contratos (halloween/contratos.html)
+   ---------------------------------------------------------------------
+   Página de misiones gótica/cinematográfica: agrupada por día real
+   (mission_day), cada contrato es una tarjeta con una identidad de
+   categoría MUY sutil (franja superior + color del rótulo, nunca un
+   repintado completo de la card) y un tratamiento de estado marcado
+   (ACTIVE domina, UPCOMING apagado, ENDED atenuado). Sin dashboard
+   genérico: nada de iconos de check, barras de progreso ni botones de
+   acción -- la verificación es server-side, esta página es solo lectura.
+--------------------------------------------------------------------- */
+/* Colores de categoría -- identidad sutil, no repintan la tarjeta entera:
+   Fortnite = violeta/azul, Overwatch = ámbar/naranja oscuro,
+   Stream/Community = rojo/violeta. Una sola variable por card
+   (--hw26-cat-color) que solo tiñe la franja superior y el rótulo. */
+.hw26-mission-card[data-category="fortnite"] { --hw26-cat-color: #8f7bff; }
+.hw26-mission-card[data-category="overwatch"] { --hw26-cat-color: #e0993d; }
+.hw26-mission-card[data-category="stream"] { --hw26-cat-color: #d6456f; }
+
+.hw26-mission-day-group { margin-bottom: 24px; }
+.hw26-mission-day-group:last-child { margin-bottom: 0; }
+.hw26-mission-day-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #b98cf5;
+  margin: 0 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(148, 92, 255, 0.18);
+}
+.hw26-mission-day-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.hw26-mission-card {
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 3px solid var(--hw26-cat-color, rgba(255, 255, 255, 0.18));
+  border-radius: 14px;
+  padding: 14px 16px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+.hw26-mission-cat {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--hw26-cat-color, var(--hw26-text-faint));
+  margin-bottom: 5px;
+}
+.hw26-mission-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 6px 8px; }
+.hw26-mission-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.9rem; }
+.hw26-mission-desc { font-size: 0.78rem; color: var(--hw26-text-dim); margin: 4px 0 10px; }
+.hw26-mission-meta { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 4px 10px; font-size: 0.7rem; }
+.hw26-mission-dmg { color: var(--hw26-red); font-weight: 700; letter-spacing: 0.02em; white-space: nowrap; }
+.hw26-mission-window { color: var(--hw26-text-faint); letter-spacing: 0.03em; white-space: nowrap; }
+.hw26-mission-badge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 3px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* ACTIVE -- el estado con más presencia: glow dorado, fondo levemente
+   realzado, badge sólido. La franja/rótulo de categoría se mantiene
+   (identidad general única, el estado es lo que domina). */
+.hw26-mission-card[data-status="active"] {
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(212, 175, 55, 0.14), transparent 60%),
+    rgba(255, 255, 255, 0.045);
+  border-color: rgba(212, 175, 55, 0.5);
+  box-shadow: 0 0 22px -9px rgba(212, 175, 55, 0.55);
+}
+.hw26-mission-badge.active {
+  background: linear-gradient(135deg, var(--hw26-gold), #f3d375);
+  color: #1a0e00;
+}
+
+/* UPCOMING -- más apagado, sin glow. */
+.hw26-mission-card[data-status="upcoming"] { opacity: 0.8; }
+.hw26-mission-badge.upcoming { background: rgba(255, 255, 255, 0.07); color: var(--hw26-text-dim); }
+
+/* ENDED -- atenuado pero sigue legible como registro de octubre. */
+.hw26-mission-card[data-status="ended"] { opacity: 0.52; filter: grayscale(0.3); }
+.hw26-mission-badge.ended { background: rgba(255, 255, 255, 0.04); color: var(--hw26-text-faint); }
+
+/* CONTRATO FINAL (is_final_battle) -- mismo mecanismo, presentación
+   mucho más intensa: ocupa el ancho completo del grid del día, glow
+   rojo/violeta combinado y un rótulo propio. Nunca cambia mecánicas,
+   solo la vitrina. */
+.hw26-mission-card-final {
+  grid-column: 1 / -1;
+  padding-top: 34px;
+  border-color: rgba(220, 38, 38, 0.55);
+  background:
+    radial-gradient(140% 160% at 50% 0%, rgba(220, 38, 38, 0.18), transparent 60%),
+    radial-gradient(120% 120% at 100% 100%, rgba(124, 58, 237, 0.18), transparent 55%),
+    rgba(255, 255, 255, 0.04);
+  box-shadow: 0 0 34px -10px rgba(220, 38, 38, 0.55), 0 0 50px -18px rgba(124, 58, 237, 0.5);
+}
+.hw26-mission-final-tag {
+  position: absolute;
+  top: 10px;
+  left: 16px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  color: #ffe8e8;
+  background: linear-gradient(135deg, var(--hw26-red), var(--hw26-violet));
+  padding: 3px 11px;
+  border-radius: 999px;
+  box-shadow: 0 0 16px -2px rgba(220, 38, 38, 0.7);
+}
+.hw26-mission-card-final .hw26-mission-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.02rem;
+  text-shadow: 0 0 16px rgba(220, 38, 38, 0.5);
+}
+.hw26-mission-card-final .hw26-mission-dmg { color: #ff8a8a; }
+
+@media (max-width: 759px) {
+  .hw26-mission-day-grid { grid-template-columns: 1fr; }
+}
+
+/* ---------------------------------------------------------------------
+   5) Efectos (halloween/efectos.html)
+--------------------------------------------------------------------- */
+.hw26-effect-card {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 10px;
+  background:
+    radial-gradient(140% 100% at 0% 0%, rgba(124, 58, 237, 0.1), transparent 60%),
+    rgba(255, 255, 255, 0.03);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.hw26-effect-card:hover { border-color: rgba(148, 92, 255, 0.4); transform: translateY(-1px); }
+.hw26-effect-icon-circle {
+  flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(124, 58, 237, 0.14);
+  border: 1px solid var(--hw26-violet-line);
+  box-shadow: 0 0 16px -4px rgba(124, 58, 237, 0.55);
+}
+.hw26-effect-icon { font-size: 1.25rem; line-height: 1; }
+.hw26-effect-body { flex: 1 1 auto; min-width: 0; }
+.hw26-effect-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.hw26-effect-name { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.85rem; letter-spacing: .02em; }
+.hw26-effect-mult-chip {
+  flex: 0 0 auto;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #1a0e00;
+  background: linear-gradient(135deg, var(--hw26-gold), #f3d375);
+  padding: 2px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.hw26-effect-desc { font-size: 0.78rem; color: var(--hw26-text-dim); margin-top: 3px; }
+.hw26-effect-meta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 8px; }
+.hw26-effect-scope { font-size: 0.68rem; color: var(--hw26-text-faint); text-transform: uppercase; letter-spacing: .05em; }
+.hw26-effect-uses-pill {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--hw26-gold);
+  background: rgba(212, 175, 55, 0.14);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+/* ---------------------------------------------------------------------
+   Empty / error states compartidos (Contratos, Efectos, Crónicas) —
+   icono grande sutil + título + texto secundario de ambientación, en vez
+   de una caja gigante con una sola línea.
+--------------------------------------------------------------------- */
+.hw26-empty-state {
+  text-align: center;
+  padding: 40px 16px 36px;
+  color: var(--hw26-text-dim);
+}
+.hw26-empty-icon {
+  font-size: 2.4rem;
+  line-height: 1;
+  margin-bottom: 10px;
+  opacity: 0.5;
+  filter: grayscale(0.2) drop-shadow(0 0 16px rgba(148, 92, 255, 0.35));
+}
+.hw26-empty-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--hw26-text);
+  margin-bottom: 6px;
+}
+.hw26-empty-sub {
+  font-size: 0.8rem;
+  color: var(--hw26-text-faint);
+  max-width: 340px;
+  margin: 0 auto;
+}
+.hw26-empty-sub + .hw26-empty-sub { margin-top: 4px; }
+.hw26-empty-state-error .hw26-empty-icon { filter: none; color: #ffb4b4; opacity: 0.85; }
+.hw26-empty-state-error .hw26-empty-title { color: #ffd0d0; }
+
+/* ---------------------------------------------------------------------
+   6) Crónicas (halloween/cronicas.html)
+--------------------------------------------------------------------- */
+/* Registro de batalla, no una tabla: jerarquía hora pequeña -> texto del
+   evento -> daño destacado, con los eventos del boss (ataques, anuncios,
+   cambio de fase) marcados con más fuerza visual (borde/fondo/color). */
+.hw26-feed-list { display: flex; flex-direction: column; }
+.hw26-feed-item {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 11px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  border-left: 2px solid transparent;
+  font-size: 0.84rem;
+  color: var(--hw26-text);
+  transition: background 0.2s ease;
+}
+.hw26-feed-item:last-child { border-bottom: none; }
+.hw26-feed-time {
+  flex: 0 0 auto;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--hw26-text-faint);
+  min-width: 38px;
+}
+.hw26-feed-text { flex: 1 1 auto; line-height: 1.45; }
+.hw26-feed-dmg { color: var(--hw26-red); font-weight: 700; }
+.hw26-feed-dmg-boss { color: #ff8a5c; }
+.hw26-feed-heal { color: #7ee6b8; font-weight: 700; }
+
+/* Eventos "de boss" (ataques, anuncios, cambio de fase, derrota): más
+   agresivos visualmente que una entrada normal de la crónica. */
+.hw26-feed-item.is-boss-event {
+  border-left-color: rgba(220, 38, 38, 0.55);
+  background: linear-gradient(90deg, rgba(220, 38, 38, 0.1), transparent 65%);
+}
+.hw26-feed-item[data-type="phase_change"] {
+  border-left-color: rgba(212, 175, 55, 0.65);
+  background: linear-gradient(90deg, rgba(212, 175, 55, 0.14), transparent 65%);
+}
+.hw26-feed-item[data-type="phase_change"] .hw26-feed-text,
+.hw26-feed-item[data-type="victory"] .hw26-feed-text { color: var(--hw26-gold); font-weight: 700; }
+.hw26-feed-item[data-type="defeat"] .hw26-feed-text { color: #ff8f8f; font-weight: 700; }
+.hw26-feed-item[data-type="boss_attack_announced"] .hw26-feed-text {
+  color: #ffb4b4;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* ---------------------------------------------------------------------
+   7) Altura / footer — SOLO en las 5 páginas Halloween
+   ---------------------------------------------------------------------
+   Selector estrictamente scoped a body[data-halloween-page]: estas reglas
+   NO pueden afectar nunca index.html, index-halloween-test.html ni
+   ninguna otra página del sitio, porque ningún otro <body> del sitio usa
+   este atributo. Layout flex + min-height (nada de alturas fijas), para
+   que el footer quede abajo en páginas con poco contenido sin romper
+   mobile.
+--------------------------------------------------------------------- */
+body[data-halloween-page] {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+body[data-halloween-page] > .v3-page {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+body[data-halloween-page] > .v3-page > .hw26-page {
+  flex: 1 0 auto;
+  width: 100%;
+}
+body[data-halloween-page] > .footer {
+  flex-shrink: 0;
+}
