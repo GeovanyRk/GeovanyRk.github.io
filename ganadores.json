@@ -2065,21 +2065,6 @@
       "fecha": "17/9/2026",
       "creado": "2026-09-17T23:25:55.043Z",
       "entregado": false
-    },
-    {
-      "id": 197,
-      "usuario": "Cristian",
-      "premio": "500 OW Coins",
-      "cantidad": 500,
-      "moneda": "owcoins",
-      "evento": "Ruleta OW",
-      "fecha": "2/10/2026",
-      "creado": "2026-10-03T00:13:32.130Z",
-      "entregado": false,
-      "morvanna_curse_applied": true,
-      "morvanna_withheld_amount": 100,
-      "wallet_credit_amount": 400,
-      "morvanna_curse_rate": 0
     }
   ],
   "gastos": [],
