@@ -2095,6 +2095,21 @@
       "morvanna_withheld_amount": 50,
       "wallet_credit_amount": 200,
       "morvanna_curse_rate": 0
+    },
+    {
+      "id": 200,
+      "usuario": "fedriquechumpi",
+      "premio": "700 Pavos",
+      "cantidad": 700,
+      "moneda": "pavos",
+      "evento": "Ruleta de fn",
+      "fecha": "2/10/2026",
+      "creado": "2026-10-03T02:22:02.405Z",
+      "entregado": false,
+      "morvanna_curse_applied": true,
+      "morvanna_withheld_amount": 140,
+      "wallet_credit_amount": 560,
+      "morvanna_curse_rate": 0
     }
   ],
   "gastos": [],
