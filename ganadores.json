@@ -2140,6 +2140,21 @@
       "morvanna_withheld_amount": 300,
       "wallet_credit_amount": 1200,
       "morvanna_curse_rate": 0
+    },
+    {
+      "id": 203,
+      "usuario": "warnerr8",
+      "premio": "800 Pavos",
+      "cantidad": 800,
+      "moneda": "pavos",
+      "evento": "Ruleta Fortnite",
+      "fecha": "4/10/2026",
+      "creado": "2026-10-04T20:48:38.924Z",
+      "entregado": false,
+      "morvanna_curse_applied": true,
+      "morvanna_withheld_amount": 160,
+      "wallet_credit_amount": 640,
+      "morvanna_curse_rate": 0
     }
   ],
   "gastos": [],
