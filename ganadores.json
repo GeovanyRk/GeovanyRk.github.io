@@ -2110,6 +2110,21 @@
       "morvanna_withheld_amount": 140,
       "wallet_credit_amount": 560,
       "morvanna_curse_rate": 0
+    },
+    {
+      "id": 201,
+      "usuario": "mufasa1912",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
+      "evento": "Ruleta Fortnite",
+      "fecha": "3/10/2026",
+      "creado": "2026-10-04T01:39:13.166Z",
+      "entregado": false,
+      "morvanna_curse_applied": true,
+      "morvanna_withheld_amount": 100,
+      "wallet_credit_amount": 400,
+      "morvanna_curse_rate": 0
     }
   ],
   "gastos": [],
