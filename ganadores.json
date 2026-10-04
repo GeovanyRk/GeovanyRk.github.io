@@ -2155,6 +2155,21 @@
       "morvanna_withheld_amount": 160,
       "wallet_credit_amount": 640,
       "morvanna_curse_rate": 0
+    },
+    {
+      "id": 204,
+      "usuario": "matidk_0",
+      "premio": "500 OW Coins",
+      "cantidad": 500,
+      "moneda": "owcoins",
+      "evento": "Ruleta OW",
+      "fecha": "4/10/2026",
+      "creado": "2026-10-04T23:58:04.477Z",
+      "entregado": false,
+      "morvanna_curse_applied": true,
+      "morvanna_withheld_amount": 100,
+      "wallet_credit_amount": 400,
+      "morvanna_curse_rate": 0
     }
   ],
   "gastos": [],
