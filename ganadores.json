@@ -2125,6 +2125,21 @@
       "morvanna_withheld_amount": 100,
       "wallet_credit_amount": 400,
       "morvanna_curse_rate": 0
+    },
+    {
+      "id": 202,
+      "usuario": "rickyeyt",
+      "premio": "1,500 Pavos",
+      "cantidad": 1500,
+      "moneda": "pavos",
+      "evento": "Edicion de video",
+      "fecha": "3/10/2026",
+      "creado": "2026-10-04T03:05:42.192Z",
+      "entregado": false,
+      "morvanna_curse_applied": true,
+      "morvanna_withheld_amount": 300,
+      "wallet_credit_amount": 1200,
+      "morvanna_curse_rate": 0
     }
   ],
   "gastos": [],
