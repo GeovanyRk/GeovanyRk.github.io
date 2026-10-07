@@ -2229,6 +2229,21 @@
       "morvanna_withheld_amount": 100,
       "wallet_credit_amount": 400,
       "morvanna_curse_rate": 0
+    },
+    {
+      "id": 209,
+      "usuario": "alberto9134",
+      "premio": "500 OW Coins",
+      "cantidad": 500,
+      "moneda": "owcoins",
+      "evento": "Ruleta OW",
+      "fecha": "6/10/2026",
+      "creado": "2026-10-07T00:53:45.380Z",
+      "entregado": false,
+      "morvanna_curse_applied": true,
+      "morvanna_withheld_amount": 100,
+      "wallet_credit_amount": 400,
+      "morvanna_curse_rate": 0
     }
   ],
   "gastos": [],
