@@ -2215,6 +2215,16 @@
       "morvanna_withheld_amount": 100,
       "wallet_credit_amount": 400,
       "morvanna_curse_rate": 0
+    },
+    {
+      "id": 208,
+      "usuario": "demencianoob",
+      "premio": "500 OW Coins",
+      "cantidad": 500,
+      "moneda": "owcoins",
+      "evento": "Tienda de Oro",
+      "fecha": "6/10/2026",
+      "entregado": false
     }
   ],
   "gastos": [],
