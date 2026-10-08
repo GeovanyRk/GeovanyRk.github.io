@@ -2289,6 +2289,21 @@
       "morvanna_withheld_amount": 240,
       "wallet_credit_amount": 960,
       "morvanna_curse_rate": 0
+    },
+    {
+      "id": 213,
+      "usuario": "elkid_rd36",
+      "premio": "500 OW Coins",
+      "cantidad": 500,
+      "moneda": "owcoins",
+      "evento": "Ruleta OW",
+      "fecha": "8/10/2026",
+      "creado": "2026-10-08T23:23:05.596Z",
+      "entregado": false,
+      "morvanna_curse_applied": true,
+      "morvanna_withheld_amount": 100,
+      "wallet_credit_amount": 400,
+      "morvanna_curse_rate": 0
     }
   ],
   "gastos": [],
