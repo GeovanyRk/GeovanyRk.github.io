@@ -2259,6 +2259,21 @@
       "morvanna_withheld_amount": 100,
       "wallet_credit_amount": 400,
       "morvanna_curse_rate": 0
+    },
+    {
+      "id": 211,
+      "usuario": "xVania06",
+      "premio": "500 Pavos",
+      "cantidad": 500,
+      "moneda": "pavos",
+      "evento": "Ruleta Fortnite",
+      "fecha": "7/10/2026",
+      "creado": "2026-10-08T00:16:40.368Z",
+      "entregado": false,
+      "morvanna_curse_applied": true,
+      "morvanna_withheld_amount": 100,
+      "wallet_credit_amount": 400,
+      "morvanna_curse_rate": 0
     }
   ],
   "gastos": [],
