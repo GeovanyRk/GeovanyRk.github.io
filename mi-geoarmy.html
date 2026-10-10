@@ -608,7 +608,7 @@
         var balance = row ? Number(row.balance) : 0;
         var reserved = row ? Number(row.reserved) : 0;
         var disponible = balance - reserved;
-        var puedeSolicitar = disponible > 0;
+        var puedeSolicitar = puedeSolicitarMoneda(cur, disponible);
         return (
           '<div class="v3-now-card ' + cur.accent + '">' +
             '<div class="v3-now-head"><span class="v3-now-ic">' + cur.icon + '</span>' + esc(cur.label) + '</div>' +
@@ -653,23 +653,75 @@
       return { ok: true, monto: monto };
     }
 
+    // Validación pura del monto de OW Coins -- a diferencia de VBUCKS, el
+    // canje real con Blizzard solo entrega en paquetes fijos de 500 OW
+    // Coins, así que el monto solicitado SIEMPRE debe ser un múltiplo de
+    // 500 (mínimo 500) y nunca mayor al disponible. El resto del saldo que
+    // no entra en un paquete completo se queda disponible en la billetera
+    // para una solicitud futura. Función pura (igual que
+    // validarMontoVbucks) para poder testearla copiándola literal en el
+    // archivo de pruebas.
+    var OWCOINS_PAQUETE = 500;
+    function validarMontoOwcoins(rawValue, disponible) {
+      var texto = String(rawValue == null ? '' : rawValue).trim();
+      if (texto === '') return { ok: false, error: 'Elige el paquete de OW Coins que quieres solicitar.' };
+      var monto = Number(texto);
+      if (!Number.isFinite(monto) || !Number.isInteger(monto) || monto <= 0) {
+        return { ok: false, error: 'El monto debe ser un número entero mayor que 0.' };
+      }
+      if (monto < OWCOINS_PAQUETE) {
+        return { ok: false, error: 'El mínimo por solicitud es ' + OWCOINS_PAQUETE + ' OW Coins.' };
+      }
+      if (monto % OWCOINS_PAQUETE !== 0) {
+        return { ok: false, error: 'Solo se pueden solicitar paquetes de ' + OWCOINS_PAQUETE + ' OW Coins (' + OWCOINS_PAQUETE + ', ' + (OWCOINS_PAQUETE * 2) + ', ' + (OWCOINS_PAQUETE * 3) + '...).' };
+      }
+      if (monto > disponible) {
+        return { ok: false, error: 'No puedes solicitar más de tu saldo disponible (' + disponible + ').' };
+      }
+      return { ok: true, monto: monto };
+    }
+
+    // Paquetes válidos de 500 OW Coins que caben en el disponible actual,
+    // para el <select> del modal -- nunca se ofrece un paquete que supere
+    // el saldo.
+    function paquetesOwcoinsDisponibles(disponible) {
+      var paquetes = [];
+      for (var m = OWCOINS_PAQUETE; m <= disponible; m += OWCOINS_PAQUETE) {
+        paquetes.push(m);
+      }
+      return paquetes;
+    }
+
+    // Una moneda solo es solicitable si el disponible alcanza para al menos
+    // una unidad canjeable: para la mayoría eso es "> 0", pero OWCOINS solo
+    // se entrega en paquetes de 500, así que con menos de 500 disponibles
+    // no hay nada que se pueda solicitar todavía (el saldo se queda
+    // acumulando hasta llegar al siguiente paquete).
+    function puedeSolicitarMoneda(cur, disponible) {
+      if (cur.code === 'OWCOINS') return disponible >= OWCOINS_PAQUETE;
+      return disponible > 0;
+    }
+
     // Decide el p_amount final y valida los campos específicos de VBUCKS
-    // (monto + Epic Games Display Name) ANTES de llamar a
-    // request_redemption. Función pura (sin tocar el DOM) para poder
-    // testearla igual que validarMontoVbucks() -- copiándola literal en el
-    // archivo de pruebas. Para las demás monedas es un paso vacío: monto =
-    // disponible, sin validaciones nuevas, byte a byte igual que antes de
-    // este cambio.
-    function construirSolicitudRedencion(cur, disponible, montoRawVbucks, accountTrim) {
-      if (cur.code !== 'VBUCKS') {
-        return { ok: true, monto: disponible };
+    // (monto + Epic Games Display Name) y de OWCOINS (paquete de 500) ANTES
+    // de llamar a request_redemption. Función pura (sin tocar el DOM) para
+    // poder testearla igual que validarMontoVbucks()/validarMontoOwcoins()
+    // -- copiándola literal en el archivo de pruebas. Para PAYPAL_USD y
+    // TWITCH_SUB sigue siendo un paso vacío: monto = disponible, sin
+    // validaciones nuevas, byte a byte igual que antes de este cambio.
+    function construirSolicitudRedencion(cur, disponible, montoRawVbucks, accountTrim, montoRawOwcoins) {
+      if (cur.code === 'VBUCKS') {
+        var validacionMonto = validarMontoVbucks(montoRawVbucks, disponible);
+        if (!validacionMonto.ok) return validacionMonto;
+        if (accountTrim.length < 3 || accountTrim.length > 16) {
+          return { ok: false, error: 'El Epic Games Display Name debe tener entre 3 y 16 caracteres.' };
+        }
+        return { ok: true, monto: validacionMonto.monto };
       }
-      var validacionMonto = validarMontoVbucks(montoRawVbucks, disponible);
-      if (!validacionMonto.ok) return validacionMonto;
-      if (accountTrim.length < 3 || accountTrim.length > 16) {
-        return { ok: false, error: 'El Epic Games Display Name debe tener entre 3 y 16 caracteres.' };
+      if (cur.code === 'OWCOINS') {
+        return validarMontoOwcoins(montoRawOwcoins, disponible);
       }
-      return { ok: true, monto: validacionMonto.monto };
+      return { ok: true, monto: disponible };
     }
 
     // El amount NO es libre para OWCOINS/PAYPAL_USD/TWITCH_SUB: se fija al
@@ -690,12 +742,14 @@
 
       // Fortnite (VBUCKS): el campo de cuenta se muestra/valida distinto --
       // pide explícitamente el Epic Games Display Name, con su propio texto
-      // de ayuda y validación (trim, 3-16 caracteres). Las demás monedas
-      // (OWCOINS, PAYPAL_USD, TWITCH_SUB) conservan exactamente su label,
+      // de ayuda y validación (trim, 3-16 caracteres). OWCOINS tiene su
+      // propio formulario completo (sin nada de Fortnite/Epic/Skin), ver
+      // más abajo. PAYPAL_USD y TWITCH_SUB conservan exactamente su label,
       // placeholder y ausencia de validación de longitud de antes.
       var esVbucks = cur.code === 'VBUCKS';
-      var accountLabel = esVbucks ? 'Epic Games Display Name' : 'Tu usuario/cuenta para recibirlo';
-      var accountPlaceholder = esVbucks ? 'Tu Epic Games Display Name' : 'Ej: tu Epic username';
+      var esOwcoins = cur.code === 'OWCOINS';
+      var accountLabel = esVbucks ? 'Epic Games Display Name' : (esOwcoins ? 'BattleTag de Battle.net' : 'Tu usuario/cuenta para recibirlo');
+      var accountPlaceholder = esVbucks ? 'Tu Epic Games Display Name' : (esOwcoins ? 'Ej: Geo#1234' : 'Ej: tu Epic username');
       // La entrega final sigue usando el sistema oficial de regalos de
       // Fortnite (aunque ahora la compra acredita VBUCKS primero y la
       // solicitud del cosmético ocurre después, desde acá) -- por eso la
@@ -707,18 +761,39 @@
         : '';
 
       // VBUCKS: el monto ya no es el disponible completo -- ver
-      // validarMontoVbucks() arriba. El párrafo de intro y el label del botón
-      // reflejan eso (sin comprometerse a un monto fijo todavía). Las demás
-      // monedas conservan EXACTAMENTE su texto/comportamiento de antes.
+      // validarMontoVbucks() arriba. OWCOINS: solo se puede elegir un
+      // paquete de 500 entre los que caben en el disponible -- ver
+      // validarMontoOwcoins()/paquetesOwcoinsDisponibles() arriba. El
+      // párrafo de intro y el label del botón reflejan eso en ambos casos
+      // (sin comprometerse a un monto fijo todavía). PAYPAL_USD y
+      // TWITCH_SUB conservan EXACTAMENTE su texto/comportamiento de antes.
       var introHtml = esVbucks
         ? '<p>Tienes <strong>' + formatWalletAmount(cur, disponible) + '</strong> disponibles. Indica el valor del cosmético que vas a pedir -- se reservará solo ese monto, no todo tu saldo.</p>'
-        : '<p>Vas a solicitar <strong>' + formatWalletAmount(cur, disponible) + '</strong>. Ese monto quedará reservado mientras se procesa tu solicitud.</p>';
+        : (esOwcoins
+            ? '<p>Tienes <strong>' + formatWalletAmount(cur, disponible) + '</strong> disponibles. Elige el paquete de OW Coins que quieres solicitar -- solo se reservará ese paquete, el resto se queda disponible en tu billetera para una próxima solicitud.</p>'
+            : '<p>Vas a solicitar <strong>' + formatWalletAmount(cur, disponible) + '</strong>. Ese monto quedará reservado mientras se procesa tu solicitud.</p>');
       var montoFieldHtml = esVbucks
         ? '<label style="font-size:13px; color:#a9bad6;">Valor del cosmético en V-Bucks' +
             '<input type="number" id="mgReqMonto" required min="1" step="1" inputmode="numeric" placeholder="Ej: 800" style="width:100%; margin-top:4px; padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.05); color:#eaf2ff; box-sizing:border-box;">' +
           '</label>'
-        : '';
-      var submitLabelBase = esVbucks ? 'Confirmar solicitud' : ('Confirmar solicitud (' + formatWalletAmount(cur, disponible) + ')');
+        : (esOwcoins
+            ? '<label style="font-size:13px; color:#a9bad6;">Paquete de OW Coins' +
+                '<select id="mgReqMontoOw" required style="width:100%; margin-top:4px; padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.05); color:#eaf2ff; box-sizing:border-box;">' +
+                  paquetesOwcoinsDisponibles(disponible).map(function (m) {
+                    return '<option value="' + m + '" style="color:#111;background:#fff;">' + m.toLocaleString() + ' OW Coins</option>';
+                  }).join('') +
+                '</select>' +
+              '</label>'
+            : '');
+      // OWCOINS no pregunta "¿qué estás solicitando?" -- siempre son OW
+      // Coins, nunca un ítem libre inventado por el usuario (ver
+      // itemFieldHtml más abajo, que para esta moneda queda vacío).
+      var submitLabelBase = (esVbucks || esOwcoins) ? 'Confirmar solicitud' : ('Confirmar solicitud (' + formatWalletAmount(cur, disponible) + ')');
+      var itemFieldHtml = esOwcoins
+        ? ''
+        : '<label style="font-size:13px; color:#a9bad6;">¿Qué estás solicitando?' +
+            '<input type="text" id="mgReqItem" required maxlength="200" placeholder="Ej: Skin Fortnite de prueba" style="width:100%; margin-top:4px; padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.05); color:#eaf2ff; box-sizing:border-box;">' +
+          '</label>';
 
       var overlay = document.createElement('div');
       overlay.className = 'ga-modal-overlay';
@@ -729,9 +804,7 @@
           '<h3>Solicitar recompensa — ' + esc(cur.label) + '</h3>' +
           introHtml +
           '<form id="mgRedeemForm" style="text-align:left; display:flex; flex-direction:column; gap:10px; margin-top:10px;">' +
-            '<label style="font-size:13px; color:#a9bad6;">¿Qué estás solicitando?' +
-              '<input type="text" id="mgReqItem" required maxlength="200" placeholder="Ej: Skin Fortnite de prueba" style="width:100%; margin-top:4px; padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.05); color:#eaf2ff; box-sizing:border-box;">' +
-            '</label>' +
+            itemFieldHtml +
             montoFieldHtml +
             '<label style="font-size:13px; color:#a9bad6;">' + esc(accountLabel) +
               '<input type="text" id="mgReqAccount" required maxlength="200" placeholder="' + esc(accountPlaceholder) + '" style="width:100%; margin-top:4px; padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.05); color:#eaf2ff; box-sizing:border-box;">' +
@@ -760,17 +833,22 @@
         submitBtn.disabled = true;
         submitBtn.textContent = 'Enviando…';
 
-        var item = document.getElementById('mgReqItem').value.trim();
+        var itemEl = document.getElementById('mgReqItem');
+        var item = itemEl ? itemEl.value.trim() : '';
         var account = document.getElementById('mgReqAccount').value.trim();
         var notes = document.getElementById('mgReqNotes').value.trim();
 
         // VBUCKS: el monto YA NO es el disponible completo -- se valida el
         // campo #mgReqMonto (número entero, mayor que 0, sin superar el
         // disponible) y el Epic Games Display Name juntos, en la misma
-        // función pura usada en las pruebas. Las demás monedas siguen
-        // mandando el disponible completo, sin ninguna validación nueva.
+        // función pura usada en las pruebas. OWCOINS: el monto sale del
+        // <select> de paquetes de 500 (#mgReqMontoOw), validado contra el
+        // disponible real por la misma función pura. PAYPAL_USD y
+        // TWITCH_SUB siguen mandando el disponible completo, sin ninguna
+        // validación nueva.
         var montoRawParaVbucks = esVbucks ? document.getElementById('mgReqMonto').value : null;
-        var decision = construirSolicitudRedencion(cur, disponible, montoRawParaVbucks, account);
+        var montoRawParaOwcoins = esOwcoins ? document.getElementById('mgReqMontoOw').value : null;
+        var decision = construirSolicitudRedencion(cur, disponible, montoRawParaVbucks, account, montoRawParaOwcoins);
         if (!decision.ok) {
           errEl.textContent = decision.error;
           submitBtn.disabled = false;
@@ -779,12 +857,18 @@
           return;
         }
 
+        // OWCOINS nunca manda un ítem inventado por el usuario (no hay
+        // campo #mgReqItem para esta moneda) -- en su lugar se manda una
+        // descripción fija y exacta del paquete reservado, para que quede
+        // claro en el panel de admin y en "Mis solicitudes" qué se pidió.
+        var requestedItemFinal = esOwcoins ? (decision.monto.toLocaleString() + ' OW Coins') : (item || null);
+
         try {
           var res = await sb.rpc('request_redemption', {
             p_currency_code: cur.code,
             p_amount: decision.monto,
             p_request_key: requestKey,
-            p_requested_item: item || null,
+            p_requested_item: requestedItemFinal,
             p_account_identifier: account || null,
             p_user_notes: notes || null
           });
