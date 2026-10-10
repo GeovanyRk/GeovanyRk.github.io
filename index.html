@@ -79,15 +79,6 @@
       .hw-decor .hw-pumpkin, .hw-decor .hw-ghost{ font-size:18px; }
       .hw-decor .hw-web{ font-size:24px; }
     }
-
-    /* ---- Halloween 2026: evento cancelado temporalmente ----
-       Refuerzo puro CSS (no depende de css/halloween-2026.css, que no
-       se toca): aunque algo fallara en el script de más abajo, el
-       planeta y sus pines quedan sin cursor de "clickeable" y sin
-       poder recibir clics. Reversible junto con la bandera
-       HALLOWEEN_EVENT_CANCELLED del script. */
-    #wlHalloween, #wlHalloween *{ cursor:default !important; }
-    #hw26PlanetPins a{ pointer-events:none !important; cursor:default !important; }
   </style>
 
   <script>
@@ -509,16 +500,6 @@
   <script src="js/geoarmy-ranks.js"></script>
   <script src="js/geoarmy-account.js"></script>
   <script>
-  // ===== Bandera centralizada: evento de Halloween cancelado temporalmente.
-  // Para reactivar el evento más adelante, en esta página esto es LO
-  // ÚNICO que hay que cambiar: poner HALLOWEEN_EVENT_CANCELLED = false
-  // (y también revertir la bandera gemela HALLOWEEN_EVENT_ENABLED en
-  // halloween/js/halloween-event-guard.js, que protege las páginas
-  // internas de /halloween/). No borra ni reescribe el countdown real de
-  // abajo: mientras esta bandera sea true, simplemente no lo deja correr. =====
-  var HALLOWEEN_EVENT_CANCELLED = true;
-  </script>
-  <script>
   // ===== V3: countdown real de Mundo 02 (Halloween) hasta el 1 de octubre,
   // calculado en el navegador contra la fecha ISO en data-unlock-iso (ya
   // trae el offset -04:00 de America/New_York, así que Date.now() -- que es
@@ -528,48 +509,6 @@
     try {
       var wrap = document.getElementById('wlHalloween');
       if (!wrap) return;
-
-      // ---- Evento cancelado: deja el Mundo 02 bloqueado para siempre,
-      // sin tocar la lógica real de countdown de más abajo (que
-      // directamente no llega a ejecutarse mientras la bandera sea true). ----
-      if (typeof HALLOWEEN_EVENT_CANCELLED !== 'undefined' && HALLOWEEN_EVENT_CANCELLED) {
-        var subEl = wrap.querySelector('.v3-wl-sub');
-        if (subEl) subEl.textContent = 'Este mundo ya no está disponible.';
-        var cancelBox = document.getElementById('wlHalloweenCountdown');
-        if (cancelBox) cancelBox.innerHTML = '<span class="v3-wl-available" style="color:#ff6b6b;">🔒 EVENTO CANCELADO</span>';
-        // Nunca agrega "is-unlocked": el planeta se queda visualmente
-        // bloqueado (tinte + candado) sin importar la fecha real.
-        wrap.classList.remove('is-unlocked');
-        // Ningún pin del Mundo 02 debe quedar clickeable, incluyendo
-        // Batalla (que normalmente sí era siempre clickeable). Quedan
-        // con aria-disabled, sin puntero, y el href apunta a un ancla
-        // inofensiva de esta misma página (no navega a ningún lado).
-        var pins = document.querySelectorAll('#hw26PlanetPins a');
-        pins.forEach(function (a) {
-          a.setAttribute('aria-disabled', 'true');
-          a.setAttribute('href', '#halloween-cancelado');
-          a.style.pointerEvents = 'none';
-          a.style.cursor = 'default';
-          a.style.opacity = '0.55';
-          a.style.filter = 'grayscale(.5)';
-        });
-        // El pin de Batalla no usa la clase hw26-pin-locked (por diseño
-        // normal queda siempre clickeable, con la insignia "Programada")
-        // -- acá se iguala visualmente a los demás: oculta la insignia y
-        // agrega un candado junto al ícono, sin tocar su markup real.
-        var batallaBadge = document.querySelector('#hw26PlanetPins .hw26-pin-batalla .hw26-pin-badge');
-        if (batallaBadge) batallaBadge.style.display = 'none';
-        var batallaIcon = document.querySelector('#hw26PlanetPins .hw26-pin-batalla .hw26-pin-icon');
-        if (batallaIcon && !batallaIcon.querySelector('.hw26-pin-lock')) {
-          var lock = document.createElement('span');
-          lock.className = 'hw26-pin-lock';
-          lock.setAttribute('aria-hidden', 'true');
-          lock.textContent = '🔒';
-          batallaIcon.appendChild(lock);
-        }
-        return; // el countdown real de abajo no llega a ejecutarse
-      }
-
       var unlockAt = new Date(wrap.getAttribute('data-unlock-iso')).getTime();
       if (isNaN(unlockAt)) return;
 
