@@ -150,6 +150,22 @@
   var lastEffects = [];
   var lastFeed = [];
   var lastMissions = [];
+  // Contratos individuales reclamables (2026-10-10): estado de claims,
+  // próxima oleada y el contrato activo del usuario actual. Igual que
+  // lastParticipation/participationStatus, missionClaimSessionStatus
+  // distingue "no hay sesión" de "falló la consulta" para no tratar un
+  // visitante anónimo como un error.
+  var lastMissionClaims = [];
+  // Separado de lastMissionClaims/missionClaimSessionStatus a propósito
+  // (corrección 2026-10-10): esto responde SOLO "¿pude leer los claims
+  // públicos ahora mismo?". Si la RPC pública falla, null/[] son
+  // indistinguibles para buildClaimsByMission(), y tratar "no sé" como
+  // "nadie lo tomó" dejaría mostrar TOMAR CONTRATO sobre un contrato que
+  // en realidad ya tiene dueño -- debe fallar cerrado.
+  var missionClaimsStatus = 'unknown'; // 'ok' | 'error'
+  var lastMyMissionClaim = null;
+  var missionClaimSessionStatus = 'unknown'; // 'ok' | 'no-session' | 'error'
+  var nextMissionDrop = null;
   var cataclysmTimerId = null;
   var pollIds = { main: null };
 
@@ -243,6 +259,68 @@
         console.warn('[halloween-2026] fallo halloween_2026_get_public_missions', e);
         lastMissions = null;
       });
+  }
+
+  // Claims públicos de los contratos individuales (2026-10-10) --
+  // halloween_2026_get_public_mission_claims() no recibe parámetros y NO
+  // expone participant_id ni user_id (ver spec). Nunca se usa para decidir
+  // nada por sí sola: solo informa qué mission_id ya tiene dueño.
+  function loadMissionClaims() {
+    return callRpc(sbClient, 'halloween_2026_get_public_mission_claims')
+      .then(function (res) {
+        if (res.error) throw res.error;
+        lastMissionClaims = res.data || [];
+        missionClaimsStatus = 'ok';
+      })
+      .catch(function (e) {
+        console.warn('[halloween-2026] fallo halloween_2026_get_public_mission_claims', e);
+        lastMissionClaims = null;
+        missionClaimsStatus = 'error';
+      });
+  }
+
+  // Próxima apertura de contratos individuales -- halloween_2026_get_next_contract_drop()
+  // solo revela la fecha (timestamptz o null), nunca el contrato futuro.
+  function loadNextMissionDrop() {
+    return callRpc(sbClient, 'halloween_2026_get_next_contract_drop')
+      .then(function (res) {
+        if (res.error) throw res.error;
+        var row = res.data;
+        // Un RPC escalar puede volver como valor directo o como [valor]
+        // según cómo lo serialice supabase-js -- se contemplan ambos.
+        nextMissionDrop = Array.isArray(row) ? (row[0] != null ? row[0] : null) : (row != null ? row : null);
+      })
+      .catch(function (e) {
+        console.warn('[halloween-2026] fallo halloween_2026_get_next_contract_drop', e);
+        nextMissionDrop = null;
+      });
+  }
+
+  // Contrato activo DEL USUARIO ACTUAL -- halloween_2026_get_my_active_mission_claim()
+  // es SOLO authenticated; igual que loadParticipation(), primero
+  // comprueba sesión con auth.getSession() y nunca trata "sin sesión" como
+  // un error.
+  function loadMyMissionClaim() {
+    if (!sbClient) { lastMyMissionClaim = null; missionClaimSessionStatus = 'no-session'; return Promise.resolve(); }
+    return sbClient.auth.getSession().then(function (sessionRes) {
+      var session = sessionRes.data && sessionRes.data.session;
+      if (!session) { lastMyMissionClaim = null; missionClaimSessionStatus = 'no-session'; return; }
+      return callRpc(sbClient, 'halloween_2026_get_my_active_mission_claim')
+        .then(function (res) {
+          if (res.error) throw res.error;
+          lastMyMissionClaim = res.data || null;
+          missionClaimSessionStatus = 'ok';
+        })
+        .catch(function (e) {
+          console.warn('[halloween-2026] fallo halloween_2026_get_my_active_mission_claim', e);
+          lastMyMissionClaim = null;
+          missionClaimSessionStatus = 'error';
+        });
+    }).catch(function (e) {
+      console.warn('[halloween-2026] fallo al obtener sesión (mission claim)', e);
+      lastMyMissionClaim = null;
+      missionClaimSessionStatus = 'error';
+    });
   }
 
   // ---------------------------------------------------------------------
@@ -1014,7 +1092,284 @@
     '</div>';
   }
 
+  // ---------------------------------------------------------------------
+  // 7b) Contratos INDIVIDUALES reclamables (Fortnite/Overwatch, 2026-10-10)
+  //
+  //     Reglas ya implementadas en Supabase (autoridad única, nunca
+  //     reimplementadas aquí): un contrato individual solo puede tener un
+  //     dueño, cada persona solo un contrato activo, completed/failed son
+  //     estados terminales que fija el backend. Este bloque NUNCA calcula
+  //     nada de eso -- solo refleja halloween_2026_get_public_mission_claims()
+  //     / halloween_2026_get_my_active_mission_claim() y, al tomar un
+  //     contrato, vuelve a consultar ambas antes de pintar el resultado
+  //     (nunca deja un estado optimista como definitivo).
+  //
+  //     La RPC pública de contratos no expone completion_scope, así que
+  //     (por indicación explícita) acá se consideran reclamables
+  //     SOLAMENTE category 'fortnite'/'overwatch'. Los contratos 'stream'
+  //     (comunitarios) siguen pasando por missionCardHtml() tal cual,
+  //     intacta: nunca tienen botón, dueño, ni badges de este sistema.
+  // ---------------------------------------------------------------------
+  var INDIVIDUAL_MISSION_CATEGORIES = { fortnite: 1, overwatch: 1 };
+
+  function isIndividualMission(m) {
+    return !!INDIVIDUAL_MISSION_CATEGORIES[m.category];
+  }
+
+  function buildClaimsByMission(claims) {
+    var map = {};
+    (claims || []).forEach(function (c) { if (c && c.mission_id != null) map[c.mission_id] = c; });
+    return map;
+  }
+
+  // Mensaje visible (éxito/error) de un intento de tomar contrato. Se
+  // oculta solo (5s) -- no bloquea nada, es puramente informativo.
+  function showMissionClaimMessage(msg, isError) {
+    var box = $('hw26MissionClaimMsg');
+    if (!box) return;
+    box.textContent = msg;
+    box.className = 'hwc-claim-msg' + (isError ? ' is-error' : ' is-ok');
+    box.hidden = false;
+    if (box.__hideTimer) clearTimeout(box.__hideTimer);
+    box.__hideTimer = setTimeout(function () { box.hidden = true; }, 5000);
+  }
+
+  // Decide el badge + línea/acción extra de un contrato individual a
+  // partir de datos 100% autoritativos (claim real, mi claim activo real,
+  // mi rol real, mi estado de sesión real). Devuelve null cuando el
+  // contrato no tiene claim Y no está 'active' -- en ese caso se usa el
+  // render original de missionCardHtml() sin ningún cambio (nunca se
+  // muestra TOMAR CONTRATO fuera de 'active').
+  function individualMissionBodyHtml(m, claim) {
+    // Corrección 2026-10-10 (#1 -- fallar cerrado): "sin claim" solo
+    // significa "libre" cuando missionClaimsStatus === 'ok'. Si la RPC
+    // pública de claims falló, null/[] no se pueden distinguir de "nadie
+    // lo tomó", así que NUNCA se asume libre en ese caso. La única
+    // excepción es mi propio contrato activo: eso lo confirma otra RPC,
+    // autoritativa y privada (halloween_2026_get_my_active_mission_claim),
+    // que sigue siendo válida aunque la pública de claims haya fallado.
+    var mineByPrivateRpc = !!(lastMyMissionClaim && Number(lastMyMissionClaim.mission_id) === Number(m.mission_id));
+    if (mineByPrivateRpc) {
+      return {
+        badgeCls: 'is-claimed-mine', badgeText: 'TU CONTRATO',
+        extra: '<div class="hwc-claim-line hwc-claim-line-mine">⚔ EN MISIÓN</div>' +
+               '<div class="hwc-claim-line hwc-claim-line-sub">Este contrato está reservado para ti.</div>'
+      };
+    }
+
+    if (missionClaimsStatus !== 'ok') {
+      if (m.availability !== 'active') return null; // upcoming/ended: comportamiento original intacto
+      return {
+        badgeCls: 'active', badgeText: MISSION_STATUS_LABEL.active,
+        extra: '<button type="button" class="hwc-claim-btn" disabled>NO SE PUDO VERIFICAR DISPONIBILIDAD</button>'
+      };
+    }
+
+    // missionClaimsStatus === 'ok': claim (o su ausencia) es dato real.
+    if (claim) {
+      if (claim.claim_status === 'completed') {
+        // "NO necesito mostrar claimed_by en contratos completed" (puede
+        // haber sido un esfuerzo de grupo aunque quede un participante
+        // técnico asociado) -- por eso no se usa claim.claimed_by acá.
+        return { badgeCls: 'is-completed', badgeText: 'COMPLETADO', extra: '' };
+      }
+      if (claim.claim_status === 'failed') {
+        return {
+          badgeCls: 'is-failed', badgeText: 'FALLIDO',
+          extra: '<div class="hwc-claim-line hwc-claim-line-failed">No fue completado antes del cierre.</div>'
+        };
+      }
+      // claim_status === 'claimed' -- ya se descartó arriba que sea mío.
+      return {
+        badgeCls: 'is-claimed-other', badgeText: 'EN MISIÓN',
+        extra: '<div class="hwc-claim-line">🔒 Tomado por ' + esc(claim.claimed_by || 'otro jugador') + '</div>'
+      };
+    }
+
+    // Sin claim, confirmado real: fuera de 'active' se mantiene el
+    // comportamiento actual (PRÓXIMAMENTE/FINALIZADO) sin ningún botón.
+    if (m.availability !== 'active') return null;
+
+    if (missionClaimSessionStatus === 'no-session') {
+      return {
+        badgeCls: 'active', badgeText: MISSION_STATUS_LABEL.active,
+        extra: '<button type="button" class="hwc-claim-btn" data-action="login">INICIAR SESIÓN PARA TOMAR</button>'
+      };
+    }
+    if (missionClaimSessionStatus === 'error') {
+      // Estado de "mi contrato activo" desconocido por fallo de red --
+      // nunca se habilita el botón sin saber si ya tengo otro contrato.
+      return {
+        badgeCls: 'active', badgeText: MISSION_STATUS_LABEL.active,
+        extra: '<button type="button" class="hwc-claim-btn" disabled>TOMAR CONTRATO</button>'
+      };
+    }
+    // missionClaimSessionStatus === 'ok' (hay sesión real verificada)
+
+    // Corrección 2026-10-10 (#2): "no sabemos tu rol" (participationStatus
+    // 'error'/'unknown', o lastParticipation ausente) es distinto de
+    // "sabemos que no tienes rol". Solo lo segundo lleva a "ELIGE TU ROL
+    // PRIMERO"; lo primero nunca enlaza a rol.html ni habilita el claim.
+    if (!(participationStatus === 'ok' && lastParticipation)) {
+      return {
+        badgeCls: 'active', badgeText: MISSION_STATUS_LABEL.active,
+        extra: '<button type="button" class="hwc-claim-btn" disabled>NO SE PUDO VERIFICAR TU ROL</button>'
+      };
+    }
+    if (lastParticipation.has_role !== true) {
+      return {
+        badgeCls: 'active', badgeText: MISSION_STATUS_LABEL.active,
+        extra: '<a href="rol.html" class="hwc-claim-btn hwc-claim-link">ELIGE TU ROL PRIMERO</a>'
+      };
+    }
+    if (lastMyMissionClaim) {
+      return {
+        badgeCls: 'active', badgeText: MISSION_STATUS_LABEL.active,
+        extra: '<button type="button" class="hwc-claim-btn" disabled>YA TIENES UN CONTRATO</button>'
+      };
+    }
+    return {
+      badgeCls: 'active', badgeText: MISSION_STATUS_LABEL.active,
+      extra: '<button type="button" class="hwc-claim-btn" data-action="claim" data-mission-id="' + esc(m.mission_id) + '">TOMAR CONTRATO</button>'
+    };
+  }
+
+  function missionCardHtmlIndividual(m, claim) {
+    var body = individualMissionBodyHtml(m, claim);
+    if (!body) return missionCardHtml(m); // upcoming/ended sin claim: idéntico al original
+
+    var isFinal = m.is_final_battle === true;
+    var catLabel = MISSION_CATEGORY_LABEL[m.category] || String(m.category || '').toUpperCase();
+    var badgeCls = body.badgeCls ? (' ' + body.badgeCls) : '';
+
+    return '<div class="hw26-mission-card' + (isFinal ? ' hw26-mission-card-final' : '') + '" data-status="' + esc(m.availability) + '" data-category="' + esc(m.category || '') + '">' +
+      (isFinal ? '<div class="hw26-mission-final-tag">⚔ CONTRATO FINAL</div>' : '') +
+      '<div class="hw26-mission-cat">' + esc(catLabel) + '</div>' +
+      '<div class="hw26-mission-top">' +
+        '<div class="hw26-mission-title">' + esc(m.title) + '</div>' +
+        '<span class="hw26-mission-badge' + badgeCls + '">' + esc(body.badgeText) + '</span>' +
+      '</div>' +
+      '<div class="hw26-mission-desc">' + esc(m.description || '') + '</div>' +
+      '<div class="hw26-mission-meta">' +
+        '<span class="hw26-mission-dmg">' + missionDamageText(m.boss_damage) + '</span>' +
+        '<span class="hw26-mission-window">' + esc(missionWindowText(m)) + '</span>' +
+      '</div>' +
+      body.extra +
+    '</div>';
+  }
+
+  function missionCardHtmlDispatch(m, claimsByMission) {
+    if (!isIndividualMission(m)) return missionCardHtml(m); // stream/community: intacto
+    return missionCardHtmlIndividual(m, claimsByMission[m.mission_id]);
+  }
+
+  // Al tomar un contrato: deshabilita el botón de inmediato (evita doble
+  // click local -- Supabase sigue siendo quien decide quién ganó si dos
+  // personas pulsan a la vez), llama la RPC real con SOLO p_mission_id, y
+  // SIEMPRE vuelve a cargar claims/mi-claim/misiones reales antes de
+  // repintar -- nunca asume éxito localmente.
+  function handleClaimMission(missionId, btn) {
+    btn.disabled = true;
+    var originalText = btn.textContent;
+    btn.textContent = 'TOMANDO CONTRATO…';
+
+    sbClient.rpc('halloween_2026_claim_mission', { p_mission_id: missionId })
+      .then(function (res) {
+        if (res.error) throw res.error;
+        var data = res.data;
+
+        // Corrección 2026-10-10 (#3): SOLO data.ok === true cuenta como
+        // éxito. Antes, cualquier respuesta que no fuera exactamente
+        // { ok:false } caía al camino de éxito -- null, undefined, {} o
+        // un objeto sin "ok" terminaban mostrando "Contrato tomado con
+        // éxito." sin que el backend hubiera confirmado nada. Ahora son 3
+        // ramas excluyentes: ok:false -> error; ok:true -> único éxito
+        // posible; cualquier otra cosa -> respuesta inválida (tampoco
+        // éxito).
+        if (data && data.ok === false) {
+          var msg = data.message ||
+            (data.reason === 'mission_taken' ? 'Alguien tomó este contrato antes que tú.' :
+             data.reason === 'active_contract_exists' ? 'Ya tienes otro contrato activo.' :
+             'No se pudo tomar el contrato.');
+          showMissionClaimMessage(msg, true);
+          btn.disabled = false;
+          btn.textContent = originalText;
+          return;
+        }
+
+        if (!(data && data.ok === true)) {
+          console.warn('[halloween-2026] respuesta inesperada de halloween_2026_claim_mission', data);
+          showMissionClaimMessage('No se pudo confirmar el contrato. Intenta de nuevo.', true);
+          btn.disabled = false;
+          btn.textContent = originalText;
+          return;
+        }
+
+        // data.ok === true (nuevo o replay): sin estado optimista -- se
+        // recarga todo lo relevante desde Supabase y el mensaje de éxito
+        // solo se muestra si ese refresh CONFIRMA que este mission_id
+        // quedó como mi claim activo. Si el claim respondió ok:true pero
+        // el refresh posterior falla o no lo confirma, nunca se dice
+        // "éxito": se avisa que no se pudo confirmar y se repinta con los
+        // datos reales disponibles (sin inventar estado).
+        return Promise.all([loadMissionClaims(), loadMyMissionClaim(), loadMissions()]).then(function () {
+          var confirmed = !!(lastMyMissionClaim &&
+            Number(lastMyMissionClaim.mission_id) === Number(missionId) &&
+            lastMyMissionClaim.status === 'claimed');
+          if (confirmed) {
+            showMissionClaimMessage('Contrato tomado con éxito.', false);
+          } else {
+            console.warn('[halloween-2026] claim_mission respondió ok:true pero el refresh no confirmó el claim', lastMyMissionClaim);
+            showMissionClaimMessage('El contrato fue procesado, pero no se pudo confirmar su estado. Recarga la página.', true);
+          }
+          renderMissionsPage();
+        });
+      })
+      .catch(function (e) {
+        console.warn('[halloween-2026] fallo halloween_2026_claim_mission', e);
+        showMissionClaimMessage('No se pudo tomar el contrato. Intenta de nuevo.', true);
+        btn.disabled = false;
+        btn.textContent = originalText;
+      });
+  }
+
+  // Teaser "PRÓXIMA OLEADA" -- solo fecha (nunca título/juego/daño/
+  // descripción futura), formateada en America/New_York para representar
+  // el calendario real del evento sin depender de la zona horaria del
+  // visitante. Si nextMissionDrop es null, el bloque se oculta por completo.
+  function renderMissionDropNote() {
+    var box = $('hw26MissionDropNote');
+    if (!box) return;
+    if (!nextMissionDrop) { box.hidden = true; box.innerHTML = ''; return; }
+    var d = new Date(nextMissionDrop);
+    if (isNaN(d.getTime())) { box.hidden = true; box.innerHTML = ''; return; }
+
+    var label;
+    try {
+      var parts = new Intl.DateTimeFormat('es-ES', {
+        timeZone: 'America/New_York', weekday: 'long', day: 'numeric', month: 'long'
+      }).formatToParts(d);
+      var map = {};
+      parts.forEach(function (p) { map[p.type] = p.value; });
+      label = (map.weekday || '') + ' ' + (map.day || '') + ' DE ' + (map.month || '');
+    } catch (e) {
+      box.hidden = true; box.innerHTML = '';
+      return;
+    }
+
+    box.hidden = false;
+    box.innerHTML =
+      '<span class="hwc-drop-icon">📜</span>' +
+      '<span class="hwc-drop-body">' +
+        '<span class="hwc-drop-title">PRÓXIMA OLEADA</span>' +
+        '<span class="hwc-drop-text">NUEVOS CONTRATOS EL ' + esc(label.toUpperCase()) + '</span>' +
+        '<span class="hwc-drop-sub">Los próximos encargos permanecerán ocultos hasta su llegada.</span>' +
+      '</span>';
+  }
+
   function renderMissionsPage() {
+    renderMissionDropNote(); // independiente de la lista -- corre siempre
+
     var box = $('hw26MissionsContent');
     if (!box) return;
     if (lastMissions == null) { box.innerHTML = genericErrorHtml('Contratos temporalmente no disponibles.'); return; }
@@ -1027,6 +1382,8 @@
       ]);
       return;
     }
+
+    var claimsByMission = buildClaimsByMission(lastMissionClaims);
 
     // Agrupado por mission_day, en el mismo orden cronológico del sort
     // (mission_day -> sort_order -> opens_at) -- ya no se agrupa por
@@ -1045,16 +1402,37 @@
       return '<div class="hw26-mission-day-group">' +
         '<div class="hw26-mission-day-title">' + esc(missionDayLabel(group.day)) + '</div>' +
         '<div class="hw26-mission-day-grid">' +
-          group.items.map(missionCardHtml).join('') +
+          group.items.map(function (m) { return missionCardHtmlDispatch(m, claimsByMission); }).join('') +
         '</div>' +
       '</div>';
     }).join('');
 
     box.innerHTML = html;
+
+    // Listeners de las acciones de contrato -- box se reemplaza entero en
+    // cada render, así que no hace falta delegación ni limpiar listeners
+    // viejos (el nodo anterior ya no existe).
+    box.querySelectorAll('.hwc-claim-btn[data-action="claim"]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var id = Number(btn.getAttribute('data-mission-id'));
+        handleClaimMission(id, btn);
+      });
+    });
+    box.querySelectorAll('.hwc-claim-btn[data-action="login"]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (window.GeoArmyAccount && window.GeoArmyAccount.openLogin) window.GeoArmyAccount.openLogin();
+      });
+    });
   }
 
   function initMissionsPage() {
-    loadMissions().then(renderMissionsPage);
+    return Promise.all([
+      loadMissions(),
+      loadMissionClaims(),
+      loadNextMissionDrop(),
+      loadParticipation(),
+      loadMyMissionClaim()
+    ]).then(renderMissionsPage);
   }
 
   // ---------------------------------------------------------------------
@@ -1238,7 +1616,7 @@
   // 11) Polling — solo el de la página actual, nada más
   //     (p.ej. cronicas.html NUNCA arranca un poll de misiones/efectos).
   // ---------------------------------------------------------------------
-  var POLL_INTERVAL_MS = { battle: 5000, role: 20000, missions: 45000, effects: 9000, feed: 8000 };
+  var POLL_INTERVAL_MS = { battle: 5000, role: 20000, missions: 20000, effects: 9000, feed: 8000 };
 
   function startPolling() {
     clearAllIntervals();
@@ -1258,6 +1636,12 @@
       if (client && client.auth && client.auth.onAuthStateChange) {
         client.auth.onAuthStateChange(function () {
           if (PAGE === 'role') { loadParticipation().then(renderRolePage); }
+          // Al hacer login/logout en Contratos, los botones (TOMAR /
+          // INICIAR SESIÓN / ELIGE TU ROL / YA TIENES UN CONTRATO) deben
+          // reflejar la nueva sesión de inmediato -- initMissionsPage()
+          // ya recarga todo lo necesario (misiones, claims, próxima
+          // oleada, participación, mi contrato activo) antes de repintar.
+          if (PAGE === 'missions') { initMissionsPage(); }
         });
       }
       if (didInitialLoad) return;
