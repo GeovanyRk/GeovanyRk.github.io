@@ -58,6 +58,19 @@
     body.hw-halloween .v3-world-header{ color:#ff9d3d; }
     body.hw-halloween .footer{ border-top:1px solid rgba(255,140,0,.18); }
 
+    /* ---- Correcciones móviles del inicio (solo esta página) ----
+       1) La tira .panel-tabs (clon de .nav-links que arma js/premium.js) duplicaba la
+          navegación en móvil: los destinos ya están en los pines del planeta. Se oculta
+          aunque premium.js active html.panels-ready. No se toca el JS ni style.css.
+       2) El menú de usuario (#gaDropdown) está anclado a la derecha del botón; en móvil el
+          botón queda a la izquierda (el header se parte en dos líneas) y el menú se salía
+          por la izquierda. Se ancla al borde izquierdo del botón y se limita al ancho de
+          pantalla. Solo en <=760px: escritorio queda exactamente igual. */
+    html.panels-ready body.hw-halloween .panel-tabs{ display:none !important; }
+    @media (max-width:760px){
+      body.hw-halloween .ga-dropdown{ right:auto; left:0; max-width:min(260px, calc(100vw - 32px)); }
+    }
+
     /* ---- Decoraciones flotantes (puramente visuales) ---- */
     .hw-decor{ position:fixed; inset:0; pointer-events:none; z-index:2; overflow:hidden; }
     .hw-decor span{ position:absolute; opacity:.5; filter:drop-shadow(0 0 6px rgba(255,140,0,.35)); }
