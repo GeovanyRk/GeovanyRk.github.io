@@ -24,6 +24,7 @@
   <link rel="stylesheet" href="css/mi-geoarmy-tabs.css?v=1a1"/>
   <link rel="stylesheet" href="css/mi-geoarmy-identity.css?v=1b1"/>
   <link rel="stylesheet" href="css/mi-geoarmy-panels.css?v=1c1"/>
+  <link rel="stylesheet" href="css/mi-geoarmy-streak.css?v=2a1"/>
 
   <!-- ================================================================
        Tematica de Halloween — SOLO decoración y colores para esta página.
@@ -217,9 +218,8 @@
           <button type="button" class="mgt-tab" role="tab" id="mgtTab-progreso" data-mgt-tab="progreso" aria-controls="mgtPanel-progreso" aria-selected="false" tabindex="-1">
             <span class="mgt-tab-ic" aria-hidden="true">📈</span><span class="mgt-tab-label">Progreso</span>
           </button>
-          <!-- Racha: oculta durante la Fase 1A. En la Fase 2 se quita el atributo hidden de
-               este botón y del panel mgtPanel-racha; #mgStreak ya es el ancla definitiva. -->
-          <button type="button" class="mgt-tab" role="tab" id="mgtTab-racha" data-mgt-tab="racha" aria-controls="mgtPanel-racha" aria-selected="false" tabindex="-1" hidden>
+          <!-- Racha Diaria (Fase 2): habilitada. La lógica vive en js/mi-geoarmy-streak.js. -->
+          <button type="button" class="mgt-tab" role="tab" id="mgtTab-racha" data-mgt-tab="racha" aria-controls="mgtPanel-racha" aria-selected="false" tabindex="-1">
             <span class="mgt-tab-ic" aria-hidden="true">🔥</span><span class="mgt-tab-label">Racha</span>
           </button>
           <button type="button" class="mgt-tab" role="tab" id="mgtTab-cuenta" data-mgt-tab="cuenta" aria-controls="mgtPanel-cuenta" aria-selected="false" tabindex="-1">
@@ -409,9 +409,68 @@
       </div>
       </section>
 
-      <!-- ===================== RACHA (Fase 2) ===================== -->
-      <section class="mgt-panel" role="tabpanel" id="mgtPanel-racha" aria-labelledby="mgtTab-racha" data-mgt-panel="racha" hidden>
-        <div id="mgStreak"></div>
+      <!-- ===================== RACHA DIARIA (Fase 2) ===================== -->
+      <section class="mgt-panel" role="tabpanel" id="mgtPanel-racha" aria-labelledby="mgtTab-racha" data-mgt-panel="racha">
+        <div id="mgStreak" class="mgs" data-state="loading" data-day="none" aria-busy="true">
+          <div class="mgs-eyebrow">Racha diaria</div>
+          <p class="mgs-sr" id="mgsLive" role="status" aria-live="polite"></p>
+
+          <div class="mgs-signedout" id="mgsSignedOut" hidden>Inicia sesión con Twitch para ver y registrar tu racha diaria.</div>
+
+          <div class="mgs-error" id="mgsError" role="alert" hidden>
+            <span class="mgs-error-ic" aria-hidden="true">⚠️</span>
+            <p id="mgsErrorText">No pudimos cargar tu racha.</p>
+            <button type="button" class="mgs-btn mgs-btn-ghost" id="mgsRetry">Reintentar</button>
+          </div>
+
+          <div class="mgs-body">
+            <section class="mgs-card mgs-hero" aria-labelledby="mgsHeadline">
+              <div class="mgs-medal" id="mgsMedal" style="--p:0">
+                <div class="mgs-medal-disc">
+                  <svg class="mgs-flame" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+                    <defs>
+                      <linearGradient id="mgsFl1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#ff5a1f"/><stop offset=".55" stop-color="#ff9a2e"/><stop offset="1" stop-color="#ffd978"/></linearGradient>
+                      <linearGradient id="mgsFl2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#ffb84a"/><stop offset="1" stop-color="#fff2c4"/></linearGradient>
+                    </defs>
+                    <path fill="url(#mgsFl1)" d="M33 3c2 11-7 16-7 27 0 6 4 10 8 10 5 0 9-4 9-11 0-4-1-7-3-10 8 5 12 13 12 22 0 13-9 22-20 22S11 54 11 41C11 29 23 22 27 9c1-3 3-5 6-6z"/>
+                    <path fill="url(#mgsFl2)" d="M32 30c1 5-4 8-4 13 0 4 3 7 6 7s6-3 6-7c0-3-1-5-2-7 4 2 6 6 6 10 0 8-5 11-10 11s-10-4-10-11c0-5 5-8 8-16z" opacity=".95"/>
+                  </svg>
+                  <span class="mgs-num" id="mgsNum">—</span>
+                </div>
+              </div>
+              <div class="mgs-hero-text">
+                <span class="mgs-numlabel" id="mgsNumLabel">Racha actual</span>
+                <span class="mgs-status" id="mgsStatus" tabindex="-1">Cargando…</span>
+                <h2 class="mgs-headline" id="mgsHeadline"></h2>
+                <p class="mgs-sub" id="mgsSub"></p>
+                <button type="button" class="mgs-btn mgs-btn-main" id="mgsClaim" hidden><span id="mgsClaimLabel">Registrar asistencia</span></button>
+                <p class="mgs-note" id="mgsNote" hidden></p>
+              </div>
+            </section>
+
+            <div class="mgs-stats">
+              <div class="mgs-stat"><span class="mgs-stat-label">Mejor racha</span><span class="mgs-stat-val" id="mgsBest">—</span></div>
+              <div class="mgs-stat"><span class="mgs-stat-label">Asistencias totales</span><span class="mgs-stat-val" id="mgsTotal">—</span></div>
+              <div class="mgs-stat"><span class="mgs-stat-label">Último registro</span><span class="mgs-stat-val mgs-stat-date" id="mgsLast">—</span></div>
+            </div>
+
+            <section class="mgs-card mgs-next" aria-labelledby="mgsNextTitle">
+              <h3 class="mgs-h" id="mgsNextTitle">Próximo hito</h3>
+              <div class="mgs-bar" id="mgsNextBar" role="progressbar" aria-labelledby="mgsNextTitle" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="mgs-bar-fill" id="mgsNextFill"></div></div>
+              <p class="mgs-next-text" id="mgsNextText">—</p>
+            </section>
+
+            <section class="mgs-card mgs-weekcard" aria-labelledby="mgsWeekTitle">
+              <h3 class="mgs-h" id="mgsWeekTitle">Esta semana</h3>
+              <ol class="mgs-week" id="mgsWeek"></ol>
+            </section>
+
+            <section class="mgs-card mgs-badgescard" aria-labelledby="mgsBadgesTitle">
+              <h3 class="mgs-h" id="mgsBadgesTitle">Insignias de racha</h3>
+              <ul class="mgs-badges" id="mgsBadges"></ul>
+            </section>
+          </div>
+        </div>
       </section>
 
       <!-- ===================== CUENTA ===================== -->
@@ -509,6 +568,7 @@
   <!-- Fase 1A: router de subpestañas. Va ANTES del script en línea para leer ?x_connect=
        antes de que initXAccountUI() lo limpie de la URL. -->
   <script src="js/mi-geoarmy-tabs.js?v=1b1"></script>
+  <script src="js/mi-geoarmy-streak.js?v=2a1"></script>
   <script>
   (function () {
     var currentCountryCode = null; // solo lectura de estado en memoria para el botón "Cambiar país"
