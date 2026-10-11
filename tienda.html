@@ -292,6 +292,86 @@
 
     .ti-card2-nombre { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 700; text-align: center; color: #fff; }
     .ti-card2-desc { color: var(--text2); font-size: .87rem; line-height: 1.5; text-align: center; flex-grow: 1; }
+    .ti-card2-desc-wrap { display: flex; flex-direction: column; align-items: center; gap: 5px; flex-grow: 1; }
+    .ti-card2-desc-wrap .ti-card2-desc { flex-grow: 0; margin: 0; }
+    .ti-card2-desc-clamped {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
+    }
+    .ti-details-btn {
+      appearance: none; border: 0; background: transparent; cursor: pointer;
+      color: #9ed8ff; font: 700 11px/1.2 'Orbitron', sans-serif;
+      letter-spacing: .04em; padding: 3px 6px; border-radius: 6px;
+      transition: color .2s ease, background .2s ease;
+    }
+    .ti-details-btn:hover, .ti-details-btn:focus-visible { color: #fff; background: rgba(158,216,255,.1); outline: none; }
+
+    .ti-card2-rank, .ti-feat-rank, .ti-modal-rank {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      width: fit-content; max-width: 100%; margin: 0 auto;
+      font-size: 11.5px; font-weight: 700; line-height: 1.25; text-align: center;
+      padding: 6px 10px; border-radius: 100px;
+      color: #d6c6ff; background: rgba(145,71,255,.09); border: 1px solid rgba(145,71,255,.28);
+    }
+    .ti-card2-rank-ok, .ti-feat-rank-ok, .ti-modal-rank-ok {
+      color: #9be8bd; background: rgba(61,220,132,.08); border-color: rgba(61,220,132,.28);
+    }
+    .ti-card2-rank-blocked, .ti-feat-rank-blocked, .ti-modal-rank-blocked {
+      color: #ffc078; background: rgba(255,154,64,.08); border-color: rgba(255,154,64,.3);
+    }
+    .ti-feat-rank { margin: -2px 0 0; font-size: 10.5px; }
+    .ti-card2[data-state="rank"] { border-color: rgba(255,154,64,.24); }
+    .ti-card2[data-state="rank"] .ti-card2-btn { opacity: .52; }
+
+    .ti-modal[hidden] { display: none !important; }
+    .ti-modal {
+      position: fixed; inset: 0; z-index: 1200;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .ti-modal-backdrop {
+      position: absolute; inset: 0;
+      background: rgba(4,3,10,.82);
+      backdrop-filter: blur(8px);
+    }
+    .ti-modal-dialog {
+      position: relative; z-index: 1;
+      width: min(520px, 100%); max-height: min(82vh, 720px); overflow: auto;
+      padding: 28px 24px 24px;
+      background: linear-gradient(160deg, rgba(35,22,52,.98), rgba(10,9,20,.99));
+      border: 1px solid rgba(145,71,255,.34);
+      border-radius: 22px;
+      box-shadow: 0 28px 80px rgba(0,0,0,.55), 0 0 40px rgba(145,71,255,.12);
+    }
+    .ti-modal-close {
+      position: absolute; top: 12px; right: 12px;
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.05);
+      color: #fff; font-size: 24px; line-height: 1; cursor: pointer;
+    }
+    .ti-modal-close:hover, .ti-modal-close:focus-visible { background: rgba(255,255,255,.1); outline: 2px solid rgba(158,216,255,.45); }
+    .ti-modal-product { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+    .ti-modal-icon {
+      width: 132px; height: 132px; display: flex; align-items: center; justify-content: center;
+      border-radius: 24px; background: radial-gradient(circle at 40% 30%, rgba(145,71,255,.28), transparent 72%);
+      border: 1px solid rgba(145,71,255,.3);
+    }
+    .ti-modal-icon img { width: 106px; height: 106px; object-fit: contain; filter: drop-shadow(0 8px 18px rgba(0,0,0,.45)); }
+    .ti-modal-icon .emoji { font-size: 2.6rem; }
+    .ti-modal-title { margin: 0; color: #fff; font: 700 1.35rem/1.2 'Space Grotesk', sans-serif; }
+    .ti-modal-desc { margin: 0; color: var(--text2); font-size: .92rem; line-height: 1.7; white-space: pre-line; }
+    .ti-modal-price {
+      display: flex; align-items: center; gap: 7px;
+      color: #ffd23f; font: 800 1.25rem/1 'Space Grotesk', sans-serif;
+    }
+    body.ti-modal-open { overflow: hidden; }
+    body.hw-halloween .ti-modal-dialog {
+      background: linear-gradient(160deg, rgba(48,20,54,.99), rgba(18,9,20,.99));
+      border-color: rgba(255,140,0,.28);
+      box-shadow: 0 28px 80px rgba(0,0,0,.58), 0 0 42px rgba(176,67,255,.14);
+    }
     .ti-card2-divider { border: none; border-top: 1px solid rgba(255,255,255,.08); margin: 2px 0; }
     .ti-card2-costo {
       display: flex; align-items: center; justify-content: center; gap: 7px;
@@ -606,6 +686,15 @@
   <div id="tiGrid" class="ti-grid"></div>
   <p id="tiMsg" class="ti-msg"></p>
 
+  <!-- Modal informativo: solo muestra detalles; nunca inicia canjes ni genera clientRequestId. -->
+  <div id="tiDetailsModal" class="ti-modal" hidden aria-hidden="true">
+    <div class="ti-modal-backdrop" data-ti-modal-close></div>
+    <div class="ti-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="tiDetailsTitle">
+      <button id="tiDetailsClose" class="ti-modal-close" type="button" aria-label="Cerrar detalles">×</button>
+      <div id="tiDetailsBody"></div>
+    </div>
+  </div>
+
   <!-- FOOTER -->
   <footer class="footer">
     <div class="footer-inner">
@@ -637,6 +726,9 @@
 
     let usuario = null; // { login, display_name }
     let saldo = 0;
+    let rankCode = null;
+    let rankName = null;
+    let rankSortOrder = null;
     let twitchAccessToken = null;
     let filtroActivo = 'todos';
 
@@ -677,6 +769,10 @@
       const res = await fetch(`${API_BASE}/api/saldo`, { headers: authHeaders() });
       const data = await res.json();
       saldo = data.oro;
+      rankCode = data.rankCode ?? null;
+      rankName = data.rankName ?? null;
+      const rankSortOrderNumero = data.rankSortOrder == null ? NaN : Number(data.rankSortOrder);
+      rankSortOrder = Number.isFinite(rankSortOrderNumero) ? rankSortOrderNumero : null;
       $('tiSaldoValor').textContent = saldo;
       renderCatalogo();
     }
@@ -726,6 +822,81 @@
       return `<img src="${ruta}" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='';"><span class="emoji" style="display:none;">${fallback}</span>`;
     }
 
+    function minRankSortOrderValido(item) {
+      if (!item || item.minRankSortOrder == null || !item.minRankName) return null;
+      const n = Number(item.minRankSortOrder);
+      return Number.isFinite(n) ? n : null;
+    }
+
+    function estadoRequisitoRango(item) {
+      const requerido = minRankSortOrderValido(item);
+      if (requerido === null) return null;
+      if (!usuario) return 'neutral';
+      if (!Number.isFinite(rankSortOrder)) return 'blocked';
+      return rankSortOrder >= requerido ? 'ok' : 'blocked';
+    }
+
+    function requisitoRangoHtml(item, contexto = 'card') {
+      const estado = estadoRequisitoRango(item);
+      if (!estado) return '';
+      const base = contexto === 'featured'
+        ? 'ti-feat-rank'
+        : contexto === 'modal'
+          ? 'ti-modal-rank'
+          : 'ti-card2-rank';
+      return `<p class="${base} ${base}-${estado}">🔒 Requiere ${item.minRankName}</p>`;
+    }
+
+    function descripcionCardHtml(item) {
+      const descripcion = item.descripcion || '';
+      const esFortniteGift = typeof item.id === 'string' && item.id.startsWith('fortnite-gift-');
+      if (!esFortniteGift) {
+        return `<p class="ti-card2-desc">${descripcion}</p>`;
+      }
+      return `
+        <div class="ti-card2-desc-wrap">
+          <p class="ti-card2-desc ti-card2-desc-clamped">${descripcion}</p>
+          <button type="button" class="ti-details-btn">Ver detalles</button>
+        </div>
+      `;
+    }
+
+    let ultimoFocoDetalles = null;
+
+    function abrirDetalles(item) {
+      const modal = $('tiDetailsModal');
+      const body = $('tiDetailsBody');
+      if (!modal || !body) return;
+
+      ultimoFocoDetalles = document.activeElement;
+      body.innerHTML = `
+        <div class="ti-modal-product">
+          <div class="ti-modal-icon">${iconoHtml(item)}</div>
+          <h2 id="tiDetailsTitle" class="ti-modal-title">${item.nombre}</h2>
+          ${requisitoRangoHtml(item, 'modal')}
+          <p class="ti-modal-desc">${item.descripcion || ''}</p>
+          <div class="ti-modal-price"><img src="gcoin-icon.png" class="ti-coin-icon" alt="G-coin"/> ${item.costo.toLocaleString()} G</div>
+        </div>
+      `;
+
+      modal.hidden = false;
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('ti-modal-open');
+      $('tiDetailsClose')?.focus();
+    }
+
+    function cerrarDetalles() {
+      const modal = $('tiDetailsModal');
+      if (!modal || modal.hidden) return;
+      modal.hidden = true;
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('ti-modal-open');
+      if (ultimoFocoDetalles && typeof ultimoFocoDetalles.focus === 'function') {
+        ultimoFocoDetalles.focus();
+      }
+      ultimoFocoDetalles = null;
+    }
+
     // Destacados: vitrina editorial de hasta 3 productos "popular", puramente
     // informativa (no repite la lógica de habilitado/saldo/stock -- el
     // canje real de cada producto sigue viviendo únicamente en su card del
@@ -755,6 +926,7 @@
               </div>
             </div>
             <p class="ti-feat-desc">${item.descripcion || ''}</p>
+            ${requisitoRangoHtml(item, 'featured')}
             <div class="ti-feat-bottom">
               <span class="ti-feat-price"><img src="gcoin-icon.png" class="ti-coin-icon" alt="G-coin"/> ${item.costo.toLocaleString()} G</span>
               <a class="ti-feat-link" href="#tiGrid">Ver en catálogo ↓</a>
@@ -791,8 +963,13 @@
         // sería un cupo global que ya no existe. Solo el stock (dato
         // global real) puede deshabilitar la card desde el frontend.
         const agotadoStock = item.stock === 0;
-        const puedeCanjear = usuario && saldo >= item.costo && !agotadoStock;
-        const saldoInsuficiente = !!usuario && !agotadoStock && saldo < item.costo;
+        const rangoMinimo = minRankSortOrderValido(item);
+        const requiereRango = rangoMinimo !== null;
+        const rangoNoDisponible = !!usuario && requiereRango && !Number.isFinite(rankSortOrder);
+        const rangoInsuficiente = !!usuario && requiereRango && Number.isFinite(rankSortOrder) && rankSortOrder < rangoMinimo;
+        const bloqueadoPorRango = rangoNoDisponible || rangoInsuficiente;
+        const puedeCanjear = !!usuario && !agotadoStock && !bloqueadoPorRango && saldo >= item.costo;
+        const saldoInsuficiente = !!usuario && !agotadoStock && !bloqueadoPorRango && saldo < item.costo;
         const esMensual = item.limiteMensualPorUsuario === true || item.limiteMensual != null;
         const cat = CATEGORIAS[item.categoria] || { label: item.categoria || '', accent: '#9147ff' };
         const accent = item.popular ? '#ffd23f' : cat.accent;
@@ -808,6 +985,10 @@
         let btnTexto = 'Canjear';
         if (!usuario) { estado = 'login'; btnTexto = '🔒 Inicia sesión'; }
         else if (agotadoStock) { estado = 'soon'; btnTexto = 'Agotado'; }
+        else if (bloqueadoPorRango) {
+          estado = 'rank';
+          btnTexto = rangoNoDisponible ? 'Rango requerido' : '🔒 Rango insuficiente';
+        }
         else if (saldoInsuficiente) { estado = 'low'; btnTexto = 'Saldo insuficiente'; }
 
         const card = document.createElement('div');
@@ -821,13 +1002,19 @@
           </div>
           <div class="ti-card2-iconwrap">${iconoHtml(item)}</div>
           <p class="ti-card2-nombre">${item.nombre}</p>
-          <p class="ti-card2-desc">${item.descripcion || ''}</p>
+          ${descripcionCardHtml(item)}
+          ${requisitoRangoHtml(item)}
           <hr class="ti-card2-divider">
           <div class="ti-card2-costo"><img src="gcoin-icon.png" class="ti-coin-icon" alt="G-coin"/> ${item.costo.toLocaleString()} G</div>
           ${disponibilidad ? `<p class="ti-card2-disponible"><span class="dot"></span>${disponibilidad}</p>` : ''}
           <button class="ti-card2-btn" ${puedeCanjear ? '' : 'disabled'}>${btnTexto}</button>
         `;
-        card.querySelector('button').addEventListener('click', () => canjear(item));
+        const canjearBtn = card.querySelector('.ti-card2-btn');
+        if (canjearBtn) canjearBtn.addEventListener('click', () => canjear(item));
+
+        const detallesBtn = card.querySelector('.ti-details-btn');
+        if (detallesBtn) detallesBtn.addEventListener('click', () => abrirDetalles(item));
+
         grid.appendChild(card);
       });
     }
@@ -924,6 +1111,16 @@
         msg.textContent = 'Error de conexión con la tienda. Intenta de nuevo.';
       }
     }
+
+    $('tiDetailsClose')?.addEventListener('click', cerrarDetalles);
+    $('tiDetailsModal')?.addEventListener('click', (event) => {
+      if (event.target && event.target.hasAttribute('data-ti-modal-close')) {
+        cerrarDetalles();
+      }
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') cerrarDetalles();
+    });
 
     document.querySelectorAll('.ti-filtro-btn').forEach((btn) => {
       btn.addEventListener('click', () => {
