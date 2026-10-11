@@ -110,24 +110,42 @@
 
 /* ===== Insignias ===== */
 .mgs-badges { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
-.mgs-badge { --c1: #ff7a2f; --c2: #ffb84a; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; min-width: 0; }
+.mgs-badge { --c1: #ff7a2f; --c2: #ffb84a; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; min-width: 0; }
 .mgs-badge[data-days="14"] { --c1: #ffb84a; --c2: #ffe08a; }
 .mgs-badge[data-days="30"] { --c1: #ffb84a; --c2: #a54af0; }
 .mgs-badge[data-days="60"] { --c1: #a54af0; --c2: #ff7a2f; }
 .mgs-badge[data-days="100"] { --c1: #c04af0; --c2: #ffb84a; }
 .mgs-badge[data-days="365"] { --c1: #ffe08a; --c2: #ff7a2f; }
-.mgs-badge-medal {
-  width: 64px; max-width: 100%; aspect-ratio: 1; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3px;
+.mgs-badge[data-days="3"], .mgs-badge[data-days="7"], .mgs-badge[data-days="30"], .mgs-badge[data-days="60"], .mgs-badge[data-days="365"] { --glow: rgba(255,170,70,.34); }
+.mgs-badge[data-days="14"] { --glow: rgba(235,225,255,.30); }
+.mgs-badge[data-days="100"] { --glow: rgba(176,90,255,.36); }
+/* Imagen real de cada insignia (cuadrada, con transparencia): se muestra completa y sin recortes
+   (alas de la de 365 incluidas); nada la recorta ni la deforma: el cuadro conserva su proporción 1:1. */
+.mgs-badge-art { position: relative; display: block; width: 100%; max-width: 132px; aspect-ratio: 1; overflow: visible; }
+.mgs-badge-img { display: block; width: 100%; height: 100%; object-fit: contain; border-radius: 0; transition: filter .25s ease; }
+/* Sin dato todavía (cargando, error, sin sesión) o bloqueada: oscurecida y sin brillo. Nunca se ve "desbloqueada" por defecto. */
+.mgs-badge:not(.is-unlocked) .mgs-badge-img { filter: grayscale(.55) brightness(.36) contrast(1.05); opacity: .92; }
+.mgs-badge.is-unlocked .mgs-badge-img { filter: drop-shadow(0 0 9px var(--glow)); }
+.mgs-badge-lock {
+  display: none; position: absolute; left: 50%; top: 50%; width: 24%; height: 24%; transform: translate(-50%, -50%);
+  padding: 12%; box-sizing: content-box; border-radius: 50%; fill: #f3e6c8;
+  background: rgba(10,5,18,.72); border: 1px solid rgba(255,184,74,.45); box-shadow: 0 2px 8px rgba(0,0,0,.55);
+}
+.mgs-badge.is-locked .mgs-badge-lock { display: block; }
+/* Medalla de texto de respaldo: solo si la imagen no carga. */
+.mgs-badge-fb {
+  display: none; position: absolute; inset: 8%; border-radius: 50%; flex-direction: column; align-items: center; justify-content: center;
   border: 2px solid rgba(185,166,214,.25); background: rgba(14,7,22,.7); color: var(--s-mute);
 }
-.mgs-badge-medal b { font-family: 'Orbitron', sans-serif; font-size: 1.15rem; font-weight: 900; line-height: 1; }
-.mgs-badge-medal i { font-style: normal; font-size: .6rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
-.mgs-badge.is-unlocked .mgs-badge-medal {
-  color: #1a0d00; border-color: transparent;
-  background: linear-gradient(135deg, var(--c2), var(--c1)); box-shadow: 0 0 16px color-mix(in srgb, var(--c1) 55%, transparent), 0 0 0 3px rgba(14,7,22,.9);
+.mgs-badge-fb b { font-family: 'Orbitron', sans-serif; font-size: 1.15rem; font-weight: 900; line-height: 1; }
+.mgs-badge-fb i { font-style: normal; font-size: .6rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.mgs-badge.is-noimg .mgs-badge-img, .mgs-badge.is-noimg .mgs-badge-lock { display: none; }
+.mgs-badge.is-noimg .mgs-badge-fb { display: flex; }
+.mgs-badge.is-noimg.is-unlocked .mgs-badge-fb {
+  color: #1a0d00; border-color: transparent; background: linear-gradient(135deg, var(--c2), var(--c1)); box-shadow: 0 0 16px color-mix(in srgb, var(--c1) 55%, transparent);
 }
-.mgs-badge.is-locked .mgs-badge-medal { filter: grayscale(.8); opacity: .65; border-style: dashed; }
-.mgs-badge-state { font-size: .68rem; color: var(--s-mute); line-height: 1.25; overflow-wrap: anywhere; }
+.mgs-badge.is-noimg.is-locked .mgs-badge-fb { filter: grayscale(.8); opacity: .65; border-style: dashed; }
+.mgs-badge-state { font-size: .72rem; color: var(--s-mute); line-height: 1.25; overflow-wrap: anywhere; }
 .mgs-badge.is-unlocked .mgs-badge-state { color: #ffe2a8; }
 
 /* ===== Estados de carga / error / sin sesión ===== */
@@ -166,6 +184,7 @@
   .mgs-stats { grid-template-columns: 1fr; }
   .mgs-stat { flex-direction: row; justify-content: space-between; align-items: center; text-align: left; }
   .mgs-badges { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .mgs-badge:last-child:nth-child(3n + 1) { grid-column: 2; }
   .mgs-card { padding: 16px 12px; }
   .mgs-week { gap: 4px; }
   .mgs-day-name { font-size: .6rem; }
@@ -179,6 +198,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mgs-btn, .mgs-bar-fill { transition: none; }
+  .mgs-btn, .mgs-bar-fill, .mgs-badge-img { transition: none; }
   .mgs[data-state="loading"] .mgs-num, .mgs[data-state="loading"] .mgs-stat-val { animation: none; }
 }
