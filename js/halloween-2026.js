@@ -1373,13 +1373,21 @@
     var box = $('hw26MissionsContent');
     if (!box) return;
     if (lastMissions == null) { box.innerHTML = genericErrorHtml('Contratos temporalmente no disponibles.'); return; }
-    // Estado vacío real (nunca contratos falsos aquí -- si la RPC real
-    // devuelve [], esto es exactamente lo que se muestra).
-    if (!lastMissions.length) {
-      box.innerHTML = emptyStateHtml('📜', 'SIN CONTRATOS DISPONIBLES', [
-        'Morvanna guarda silencio... por ahora.',
-        'Los contratos aparecen martes, jueves y sábados.',
-      ]);
+
+    // Ajuste 2026-10-10: Contratos ahora solo muestra availability ===
+    // 'active' -- sin historial 'ended' ni spoilers de 'upcoming'. El
+    // backend sigue siendo la única autoridad sobre availability (no se
+    // reinterpreta ni se calcula acá); esto solo filtra qué se pinta en
+    // esta página. Esto es puramente de render: no toca loadMissions(),
+    // la RPC, los claims, el poll ni ningún otro módulo.
+    var activeMissions = lastMissions.filter(function (m) { return m.availability === 'active'; });
+
+    // Estado vacío: ni contratos en absoluto, ni ninguno activo ahora
+    // mismo caen en el mismo mensaje (ya no hay nada "ended"/"upcoming"
+    // que mostrar como consuelo).
+    if (!activeMissions.length) {
+      box.innerHTML = emptyStateHtml('📜', 'NO HAY CONTRATOS ACTIVOS EN ESTE MOMENTO',
+        'Los próximos contratos se revelarán en la próxima oleada.');
       return;
     }
 
@@ -1389,7 +1397,7 @@
     // (mission_day -> sort_order -> opens_at) -- ya no se agrupa por
     // categoría, la categoría ahora se distingue por card (ver CSS
     // data-category).
-    var sorted = lastMissions.slice().sort(missionSort);
+    var sorted = activeMissions.slice().sort(missionSort);
     var days = [];
     var byDay = {};
     sorted.forEach(function (m) {
