@@ -20,6 +20,8 @@
 
   var doc = document;
   var MILESTONES = [3, 7, 14, 30, 60, 100, 365];
+  var BADGE_DIR = 'assets/racha-insignia/';
+  function onBadgeImgError(e) { var li = e.target.closest('.mgs-badge'); if (li) li.classList.add('is-noimg'); }
   var MONTHS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
   var DAYS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
   var STALE_MS = 30000; // una pestaña ya leída se vuelve a leer al reabrirla si pasaron más de 30 s
@@ -111,7 +113,7 @@
   function say(msg) { el.live.textContent = ''; el.live.textContent = msg; }
 
   function buildStatic() {
-    var i, n, li;
+    var i, n, li, img;
     el.week.textContent = '';
     for (i = 0; i < 7; i++) {
       li = doc.createElement('li');
@@ -125,8 +127,18 @@
       li = doc.createElement('li');
       li.className = 'mgs-badge';
       li.setAttribute('data-days', String(n));
-      li.innerHTML = '<span class="mgs-badge-medal" aria-hidden="true"><b></b><i>días</i></span><span class="mgs-badge-state"></span>';
-      li.querySelector('b').textContent = String(n);
+      // Imagen real de la insignia (assets/racha-insignia/N-dias.webp, cuadrada y con transparencia). Si no carga,
+      // queda visible la medalla de texto de respaldo; el estado (bloqueada/desbloqueada) siempre sale de achievements.
+      li.innerHTML = '<span class="mgs-badge-art">' +
+        '<img class="mgs-badge-img" width="512" height="512" decoding="async" loading="lazy" alt="">' +
+        '<svg class="mgs-badge-lock" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1h1Zm2 0h6V8a3 3 0 0 0-6 0v2Zm3 4a1.5 1.5 0 0 0-.75 2.8V18h1.5v-1.2A1.5 1.5 0 0 0 12 14Z"/></svg>' +
+        '<span class="mgs-badge-fb" aria-hidden="true"><b></b><i>días</i></span>' +
+        '</span><span class="mgs-badge-state"></span>';
+      li.querySelector('.mgs-badge-fb b').textContent = String(n);
+      img = li.querySelector('.mgs-badge-img');
+      img.alt = 'Insignia de ' + n + ' días';
+      img.addEventListener('error', onBadgeImgError);
+      img.src = BADGE_DIR + n + '-dias.webp';
       el.badges.appendChild(li);
     }
   }
@@ -151,7 +163,7 @@
     }
     var bs = el.badges.children;
     for (i = 0; i < bs.length; i++) {
-      bs[i].className = 'mgs-badge';
+      bs[i].classList.remove('is-unlocked', 'is-locked');
       bs[i].querySelector('.mgs-badge-state').textContent = '';
     }
     root.setAttribute('data-day', 'none');
@@ -239,10 +251,10 @@
       var u = unlocked[days];
       var stEl = bs[j].querySelector('.mgs-badge-state');
       if (u) {
-        bs[j].className = 'mgs-badge is-unlocked';
+        bs[j].classList.remove('is-locked'); bs[j].classList.add('is-unlocked');
         stEl.textContent = typeof u === 'string' ? 'Desde ' + fmtDate(u) : 'Desbloqueada';
       } else {
-        bs[j].className = 'mgs-badge is-locked';
+        bs[j].classList.remove('is-unlocked'); bs[j].classList.add('is-locked');
         stEl.textContent = 'Bloqueada';
       }
     }
