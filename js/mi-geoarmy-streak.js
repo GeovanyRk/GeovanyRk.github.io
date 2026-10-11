@@ -332,6 +332,8 @@
         done();
         data = d; loadedAt = Date.now(); unknownAfterClaim = false;
         render(d);
+        // Aviso para el chip 🔥 N del header: solo tras una lectura vigente y válida, con el uid de esta lectura.
+        try { doc.dispatchEvent(new CustomEvent('geoarmy:streak-updated', { detail: { uid: uid, current_streak: d.current_streak } })); } catch (e) {}
         return 'ok';
       }, fail);
     }, fail);

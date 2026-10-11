@@ -159,7 +159,133 @@
     });
   }
  
+  // ===== Racha Diaria en el header: chip "🔥 N" =====
+  // Solo LECTURA: get_my_streak() (el servidor ya calcula la racha efectiva;
+  // aquí NO se recalcula nada con fechas). Nunca se llama a
+  // claim_daily_streak() desde el header: registrar asistencia es solo por
+  // clic en la pestaña Racha de mi-geoarmy.html.
+  //
+  // Aislamiento por cuenta:
+  //  - streakUid es la identidad vigente (la fija el propio evento de auth y
+  //    el render MÁS RECIENTE; un render viejo que llega tarde no la cambia).
+  //  - El dato en memoria lleva su uid y se descarta al cambiar de cuenta o
+  //    cerrar sesión (nada se guarda en sessionStorage/localStorage).
+  //  - El chip solo se pinta si el uid del dato, el de la sesión vigente y el
+  //    del header que está en pantalla coinciden.
+  //  - Una lectura (o evento) de otra cuenta se descarta; una sola lectura a
+  //    la vez (promesa en vuelo compartida) y TTL de ~60 s.
+  // Se muestra únicamente si current_streak > 0; con racha 0, cargando, error
+  // o sin sesión el chip no existe (nunca un número inventado).
+  var STREAK_TTL_OK = 60000;    // lectura buena: no se vuelve a pedir en ~60 s
+  var STREAK_TTL_FAIL = 20000;  // lectura fallida: reintento no antes de ~20 s
+  var streakUid;                // undefined = aún no se sabe · null = sin sesión
+  var streakState = null;       // { uid, value, ok, ts }
+  var streakFlight = null;      // { uid } lectura en curso (una sola)
+  var streakDataVer = 0;        // sube cada vez que se acepta un dato nuevo
+  var renderSeq = 0;            // secuencia de render(): solo el render más reciente puede pintar el header y fijar la identidad
+  var streakPaintedUid = null;  // uid del header que está dibujado ahora
+
+  function streakIsCount(v) {
+    return typeof v === 'number' && isFinite(v) && Math.floor(v) === v && v >= 0 && v <= 9007199254740991;
+  }
+  // Fecha AAAA-MM-DD real (mismo criterio estricto que la pestaña Racha).
+  function streakYmd(s) {
+    if (typeof s !== 'string') return false;
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s);
+    if (!m) return false;
+    var y = +m[1], mo = +m[2], d = +m[3];
+    if (mo < 1 || mo > 12 || d < 1) return false;
+    var t = new Date(Date.UTC(y, mo - 1, d));
+    return t.getUTCFullYear() === y && t.getUTCMonth() === mo - 1 && t.getUTCDate() === d;
+  }
+  // Solo los campos del contrato que el header usa o de los que depende.
+  function streakValid(d) {
+    if (!d || typeof d !== 'object' || Array.isArray(d)) return false;
+    if (!streakYmd(d.today) || typeof d.claimed_today !== 'boolean') return false;
+    if (!streakIsCount(d.current_streak) || !streakIsCount(d.best_streak) || !streakIsCount(d.total_checkins)) return false;
+    if (d.last_checkin_date !== null && d.last_checkin_date !== undefined && !streakYmd(d.last_checkin_date)) return false;
+    return true;
+  }
+  function streakChipMarkup(uid, n) {
+    var label = 'Racha de ' + n + (n === 1 ? ' día' : ' días');
+    return '<span class="ga-streak" data-uid="' + esc(uid) + '" data-n="' + n + '" role="img" aria-label="' + label + '" title="' + label + '">' +
+      '<span class="ga-streak-ic" aria-hidden="true">🔥</span><span class="ga-streak-n" aria-hidden="true">' + n + '</span></span>';
+  }
+  function streakVisibleFor(uid) {
+    return !!uid && uid === streakUid && !!streakState && streakState.ok === true &&
+      streakState.uid === uid && streakState.value > 0;
+  }
+  // Para el render del header: pintado síncrono desde memoria (el render
+  // reconstruye todo el slot, así que sin esto el chip parpadearía).
+  function streakChipHtml(uid) {
+    return streakVisibleFor(uid) ? streakChipMarkup(uid, streakState.value) : '';
+  }
+  // Para cambios posteriores al render (llega la lectura, llega el evento,
+  // cambia la cuenta): añade, actualiza o quita el chip sin tocar nada más.
+  function syncStreakChip() {
+    try {
+      var btn = document.getElementById('gaToggleMenu');
+      if (!btn) return;
+      var chip = btn.querySelector('.ga-streak');
+      if (!streakVisibleFor(streakPaintedUid)) { if (chip) chip.remove(); return; }
+      var n = streakState.value;
+      if (chip && chip.getAttribute('data-uid') === streakPaintedUid && chip.getAttribute('data-n') === String(n)) return;
+      if (chip) chip.remove();
+      btn.insertAdjacentHTML('beforeend', streakChipMarkup(streakPaintedUid, n));
+    } catch (e) {}
+  }
+  function streakSetIdentity(uid) {
+    uid = uid || null;
+    if (uid === streakUid) return;
+    streakUid = uid;
+    streakState = null;
+    streakFlight = null;   // la lectura en curso (si hay) queda huérfana y se descarta al llegar
+    streakDataVer++;
+    syncStreakChip();
+  }
+  function streakAccept(uid, value, ok) {
+    streakState = { uid: uid, value: value, ok: ok, ts: Date.now() };
+    streakDataVer++;
+    syncStreakChip();
+  }
+  // Pide la racha SOLO si hace falta: sin lectura en curso y sin dato fresco.
+  function ensureStreak(uid) {
+    if (!uid || uid !== streakUid) return;
+    if (streakFlight) return;
+    if (streakState && streakState.uid === uid &&
+        (Date.now() - streakState.ts) < (streakState.ok ? STREAK_TTL_OK : STREAK_TTL_FAIL)) return;
+    var flight = { uid: uid };
+    var ver = streakDataVer;
+    streakFlight = flight;
+    function mine() { return streakFlight === flight && streakUid === uid; }
+    function finish(d) {
+      if (!mine()) return;
+      streakFlight = null;
+      // Si mientras tanto llegó un dato más reciente (evento de la pestaña Racha), esta lectura se descarta.
+      if (streakDataVer !== ver) return;
+      if (streakValid(d)) streakAccept(uid, d.current_streak, true);
+      else streakAccept(uid, null, false);
+    }
+    var p;
+    try { p = sb.rpc('get_my_streak'); } catch (e) { p = Promise.reject(e); }
+    Promise.resolve(p).then(function (r) {
+      finish(r && !r.error ? r.data : null);
+    }, function () { finish(null); });
+  }
+  // La pestaña Racha avisa tras cada lectura válida (también después de
+  // registrar asistencia): el chip se actualiza sin otra llamada a Supabase.
+  // Se acepta solo si el uid del evento es el de la sesión vigente.
+  document.addEventListener('geoarmy:streak-updated', function (e) {
+    try {
+      var d = e && e.detail;
+      if (!d || typeof d.uid !== 'string' || d.uid !== streakUid) return;
+      if (!streakIsCount(d.current_streak)) return;
+      streakAccept(d.uid, d.current_streak, true);
+    } catch (err) {}
+  });
+
   function renderLoggedOut(slot) {
+    streakPaintedUid = null;
     slot.innerHTML =
       '<button type="button" class="ga-account-btn ga-logged-out" id="gaOpenLogin">' +
         '<span class="ga-ic">👤</span><span>Mi Geo Army</span>' +
@@ -167,7 +293,7 @@
     document.getElementById('gaOpenLogin').addEventListener('click', openLoginModal);
   }
  
-  function renderLoggedIn(slot, profile, saldo, miniWallets, compact) {
+  function renderLoggedIn(slot, profile, saldo, miniWallets, compact, uid) {
     var nombre = profile.display_name || profile.twitch_login || 'Miembro';
     var avatar = profile.avatar_url
       ? '<img src="' + esc(profile.avatar_url) + '" alt="" class="ga-avatar"/>'
@@ -209,12 +335,13 @@
         '</span>' +
       '</div>';
  
+    streakPaintedUid = uid || null;
     slot.innerHTML =
       '<div class="ga-account-wrap">' +
         '<button type="button" class="ga-account-btn ga-logged-in" id="gaToggleMenu">' +
           '<span class="ga-dot"></span>' + avatar +
           '<span class="ga-name">' + esc(nombre) + '</span>' +
-          flagHtml + badgeHtml +
+          flagHtml + badgeHtml + streakChipHtml(uid) +
         '</button>' +
         '<div class="ga-dropdown" id="gaDropdown" hidden>' +
           balancesRow +
@@ -368,12 +495,40 @@
     return pendingWinnersClaimPromise;
   }
 
+  // Al confirmarse una identidad distinta de la del header que está en
+  // pantalla (cambio de cuenta o cierre de sesión), el header viejo se retira
+  // de inmediato: nunca se ve el nombre/avatar/saldos de A con la sesión de B.
+  // El render vigente pinta después el header que corresponde. Si la
+  // identidad no cambió (TOKEN_REFRESHED, renders duplicados) no se toca nada.
+  function confirmSessionIdentity(uid) {
+    uid = uid || null;
+    streakSetIdentity(uid);
+    if (streakPaintedUid && streakPaintedUid !== uid) {
+      streakPaintedUid = null;
+      var slot = document.getElementById('geoAccountWidget');
+      if (slot) slot.innerHTML = '';
+    }
+  }
+
+  // Un render sigue vigente solo si es el más reciente Y la identidad
+  // confirmada (evento de auth / getSession del render más reciente) sigue
+  // siendo la suya. Un render viejo (otra cuenta, cierre de sesión o simple
+  // duplicado) termina sin tocar el DOM del header ni la identidad del chip.
+  function renderIsCurrent(seq, uid) {
+    return seq === renderSeq && streakUid === (uid || null);
+  }
+
   async function render() {
     var slot = document.getElementById('geoAccountWidget');
     if (!slot) return;
  
+    var seq = ++renderSeq;
     var sessionRes = await sb.auth.getSession();
+    // Render obsoleto: otro render más reciente ya está en curso y es el único que pinta.
+    if (seq !== renderSeq) return;
     var session = sessionRes.data && sessionRes.data.session;
+    var uid = session && session.user ? session.user.id : null;
+    confirmSessionIdentity(uid);
     if (!session) { renderLoggedOut(slot); return; }
 
     // Fire-and-forget: no se espera este resultado para nada de lo que
@@ -381,25 +536,33 @@
     // visita del dia queda registrada.
     autoClaimDailyVisit();
  
-    var profile = await fetchProfile(session.user.id);
+    var profile = await fetchProfile(uid);
+    if (!renderIsCurrent(seq, uid)) return;
     if (!profile) { renderLoggedOut(slot); return; }
+
+    // Racha del header: lectura aparte, sin bloquear nada de lo demás.
+    try { ensureStreak(uid); } catch (e) {}
 
     // Espera el auto-vinculado antes de leer VBUCKS/OWCOINS para que, si esta
     // sesion acaba de heredar premios pendientes, el widget muestre el saldo
     // actualizado en esta misma carga. DAILY_VISIT sigue independiente.
     await autoClaimPendingWinners();
+    if (!renderIsCurrent(seq, uid)) return;
  
     var saldo = null;
     if (session.provider_token) {
       saldo = await fetchSaldoReal(session.provider_token);
+      if (!renderIsCurrent(seq, uid)) return;
     }
     if (saldo == null) {
       var cached = saldoCacheado();
       if (cached) saldo = cached.valor;
     }
-    var miniWallets = await fetchMiniWallets(session.user.id);
+    var miniWallets = await fetchMiniWallets(uid);
+    if (!renderIsCurrent(seq, uid)) return;
     var compact = await fetchCompactProfile();
-    renderLoggedIn(slot, profile, saldo, miniWallets, compact);
+    if (!renderIsCurrent(seq, uid)) return;
+    renderLoggedIn(slot, profile, saldo, miniWallets, compact, uid);
   }
  
   // ===== Dropdown de cuenta: abrir/cerrar, GLOBAL y una sola vez =====
@@ -449,6 +612,10 @@
   }
   initDropdownGlobalBehavior();
 
-  sb.auth.onAuthStateChange(function () { render(); });
+  sb.auth.onAuthStateChange(function (event, session) {
+    // La identidad vigente (chip de racha y header en pantalla) sigue al evento de auth: cierre de sesión / cambio de cuenta.
+    try { confirmSessionIdentity(session && session.user ? session.user.id : null); } catch (e) {}
+    render();
+  });
   document.addEventListener('DOMContentLoaded', render);
 })();
