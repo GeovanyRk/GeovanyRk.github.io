@@ -21,6 +21,7 @@
   <script src="js/geoarmy-config.js"></script>
   <!-- Esta página sigue el estilo nuevo (V3), no el estilo viejo del resto del sitio -->
   <link rel="stylesheet" href="css/v3-theme.css"/>
+  <link rel="stylesheet" href="css/mi-geoarmy-tabs.css?v=1a1"/>
 
   <!-- ================================================================
        Tematica de Halloween — SOLO decoración y colores para esta página.
@@ -194,7 +195,86 @@
 
     <!-- Dashboard -->
     <div id="mgDashboard" hidden>
+      <!-- ============================================================
+           Fase 1A -- Subpestañas de Mi Geo Army (js/mi-geoarmy-tabs.js +
+           css/mi-geoarmy-tabs.css). Los bloques de abajo son los MISMOS de
+           antes, solo reagrupados por panel: no cambia ningún id, clase ni
+           lógica. Los elementos "mgt*" son espejos de solo presentación
+           (los llena MgTabs.sync() copiando datos ya cargados).
+           Si el JS de pestañas no carga, todos los paneles quedan visibles
+           (columna larga, como antes) y la barra de pestañas se oculta.
+           ============================================================ -->
+      <div class="mgt-shell" id="mgtShell">
+        <div class="mgt-nav" id="mgtNav" role="tablist" aria-label="Secciones de Mi Geo Army" aria-orientation="horizontal">
+          <button type="button" class="mgt-tab is-active" role="tab" id="mgtTab-billetera" data-mgt-tab="billetera" aria-controls="mgtPanel-billetera" aria-selected="true">
+            <span class="mgt-tab-ic"><img class="mgt-tab-ic-img" src="gcoin-icon.png" alt="" onerror="this.replaceWith(document.createTextNode(String.fromCodePoint(129689)))"/></span><span class="mgt-tab-label">Billetera</span>
+          </button>
+          <button type="button" class="mgt-tab" role="tab" id="mgtTab-resumen" data-mgt-tab="resumen" aria-controls="mgtPanel-resumen" aria-selected="false" tabindex="-1">
+            <span class="mgt-tab-ic" aria-hidden="true">👤</span><span class="mgt-tab-label">Resumen</span>
+          </button>
+          <button type="button" class="mgt-tab" role="tab" id="mgtTab-progreso" data-mgt-tab="progreso" aria-controls="mgtPanel-progreso" aria-selected="false" tabindex="-1">
+            <span class="mgt-tab-ic" aria-hidden="true">📈</span><span class="mgt-tab-label">Progreso</span>
+          </button>
+          <!-- Racha: oculta durante la Fase 1A. En la Fase 2 se quita el atributo hidden de
+               este botón y del panel mgtPanel-racha; #mgStreak ya es el ancla definitiva. -->
+          <button type="button" class="mgt-tab" role="tab" id="mgtTab-racha" data-mgt-tab="racha" aria-controls="mgtPanel-racha" aria-selected="false" tabindex="-1" hidden>
+            <span class="mgt-tab-ic" aria-hidden="true">🔥</span><span class="mgt-tab-label">Racha</span>
+          </button>
+          <button type="button" class="mgt-tab" role="tab" id="mgtTab-cuenta" data-mgt-tab="cuenta" aria-controls="mgtPanel-cuenta" aria-selected="false" tabindex="-1">
+            <span class="mgt-tab-ic" aria-hidden="true">⚙️</span><span class="mgt-tab-label">Cuenta</span>
+          </button>
+        </div>
+
+        <div class="mgt-stage">
+
+      <!-- ===================== BILLETERA ===================== -->
+      <section class="mgt-panel" role="tabpanel" id="mgtPanel-billetera" aria-labelledby="mgtTab-billetera" data-mgt-panel="billetera">
+      <div class="v3-now-section">
+        <div class="v3-now-grid mgt-wallet-top">
+          <div class="v3-now-card v3-c-gold" id="gcoins">
+            <div class="v3-now-head"><img class="v3-now-ic-img" src="gcoin-icon.png" alt="" onerror="this.replaceWith(document.createTextNode(String.fromCodePoint(129689)))"/>G-Coins</div>
+            <div class="v3-now-big" id="mgGcoins">—<span>G</span></div>
+            <div class="v3-now-sub">G-Coins disponibles</div>
+            <button type="button" class="v3-now-btn" id="mgRefreshSaldo" style="border:none; cursor:pointer; font-family:'Orbitron',sans-serif;">Actualizar saldo</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mis recompensas: saldos reales de wallet_balances (Supabase). GCOIN
+           sigue aparte, viene de tienda-server (ver tarjeta G-Coins arriba). -->
       <div class="v3-now-section" style="margin-top:6px; padding-bottom:0;">
+        <div class="v3-now-header v3-now-header-sm"><span class="v3-now-ic">🎁</span>Mis recompensas</div>
+        <div class="v3-now-grid" id="mgWalletGrid">
+          <div class="v3-table-empty">Cargando…</div>
+        </div>
+      </div>
+
+      <!-- Acceso a la tienda: solo un enlace a tienda.html (no toca compras ni saldos). -->
+      <div class="v3-now-section">
+        <div class="v3-x-card">
+          <div class="v3-x-card-main">
+            <span class="v3-x-ic">🛒</span>
+            <div class="v3-x-info">
+              <div class="v3-x-title">Tienda</div>
+              <p class="v3-x-desc">Canjea tus G-Coins por recompensas del canal.</p>
+            </div>
+          </div>
+          <a href="tienda.html" class="v3-btn-secondary v3-x-connect-btn">Ir a la tienda</a>
+        </div>
+      </div>
+
+      <!-- Mis solicitudes: historial de redemption_requests del propio usuario. -->
+      <div class="v3-table-wrap" id="misSolicitudes">
+        <div class="v3-now-header v3-now-header-sm"><span class="v3-now-ic">📨</span>Mis solicitudes</div>
+        <div id="mgRequestsList">
+          <div class="v3-table-empty">Cargando…</div>
+        </div>
+      </div>
+      </section>
+
+      <!-- ===================== RESUMEN ===================== -->
+      <section class="mgt-panel" role="tabpanel" id="mgtPanel-resumen" aria-labelledby="mgtTab-resumen" data-mgt-panel="resumen">
+      <div class="v3-now-section">
         <div class="v3-now-grid">
           <div class="v3-now-card v3-c-purple">
             <div class="v3-now-head"><span class="v3-now-ic">👤</span>Perfil</div>
@@ -202,23 +282,19 @@
               <img id="mgAvatar" src="" alt="" style="width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid rgba(145,71,255,.5);flex-shrink:0;"/>
               <div style="min-width:0;">
                 <div id="mgName" class="v3-now-winner-name" style="font-size:16px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:flex; align-items:center; gap:6px;">
-                  <span id="mgNameText">—</span><img id="mgNameFlag" src="" alt="" hidden style="width:18px; height:13px; border-radius:2px; flex-shrink:0; box-shadow:0 0 0 1px rgba(255,255,255,.25);"/>
+                  <span id="mgNameText">—</span><img id="mgtSumFlag" class="mgt-mirror-flag" src="" alt="" hidden style="width:18px; height:13px; border-radius:2px; flex-shrink:0; box-shadow:0 0 0 1px rgba(255,255,255,.25);"/>
                 </div>
                 <div id="mgLevel" class="v3-now-sub">—</div>
-                <div class="v3-now-sub" style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-top:2px;">
-                  <span id="mgCountryName">Sin país configurado</span>
-                  <button type="button" id="mgCountryBtn" hidden style="border:none; cursor:pointer; background:rgba(145,71,255,.18); color:#eaf2ff; border-radius:999px; padding:2px 10px; font-size:11px; font-family:'Orbitron',sans-serif;">Elegir país</button>
-                  <span id="mgCountryMsg" style="font-size:11px; color:#7CFC9A;"></span>
-                </div>
               </div>
             </div>
           </div>
 
-          <div class="v3-now-card v3-c-gold" id="gcoins">
+          <!-- Espejo de presentación del saldo (el original, con su botón de actualizar, está en Billetera). -->
+          <div class="v3-now-card v3-c-gold mgt-mirror-card">
             <div class="v3-now-head"><img class="v3-now-ic-img" src="gcoin-icon.png" alt="" onerror="this.replaceWith(document.createTextNode(String.fromCodePoint(129689)))"/>G-Coins</div>
-            <div class="v3-now-big" id="mgGcoins">—<span>G</span></div>
+            <div class="v3-now-big" id="mgtSumGcoins">—<span>G</span></div>
             <div class="v3-now-sub">G-Coins disponibles</div>
-            <button type="button" class="v3-now-btn" id="mgRefreshSaldo" style="border:none; cursor:pointer; font-family:'Orbitron',sans-serif;">Actualizar saldo</button>
+            <a href="#billetera" class="v3-now-btn" style="cursor:pointer;">Ver billetera</a>
           </div>
 
           <div class="v3-now-card v3-c-blue">
@@ -231,6 +307,28 @@
         </div>
       </div>
 
+      <!-- Misiones: CTA compacto únicamente. Toda la lógica real (leer
+           my_missions_status(), progreso, y el claim de STREAM_RETWEET vía
+           claim-stream-retweet) vive en misiones.html — no se duplica acá
+           ninguna llamada ni estado. Reusa las mismas clases .v3-x-* de la
+           tarjeta de "Cuentas vinculadas" (mismo layout icono+texto+botón),
+           sin agregar CSS nueva. -->
+      <div class="v3-now-section" style="margin-top:6px; padding-bottom:0;">
+        <div class="v3-x-card">
+          <div class="v3-x-card-main">
+            <span class="v3-x-ic">🎯</span>
+            <div class="v3-x-info">
+              <div class="v3-x-title">Misiones</div>
+              <p class="v3-x-desc">Completa misiones y gana XP para subir de rango.</p>
+            </div>
+          </div>
+          <a href="misiones.html" class="v3-btn-secondary v3-x-connect-btn">Ver misiones</a>
+        </div>
+      </div>
+      </section>
+
+      <!-- ===================== PROGRESO ===================== -->
+      <section class="mgt-panel" role="tabpanel" id="mgtPanel-progreso" aria-labelledby="mgtTab-progreso" data-mgt-panel="progreso">
       <!-- Perfil Grande — tarjeta de rango. Reemplaza por completo el bloque
            legado de "Nivel X / X,000 XP" (arriba se calculaba todo en el
            cliente con profile.xp % 1000). Ahora TODO sale tal cual de
@@ -283,32 +381,41 @@
           </div>
         </div>
       </div>
+      </section>
 
-      <!-- Misiones: CTA compacto únicamente. Toda la lógica real (leer
-           my_missions_status(), progreso, y el claim de STREAM_RETWEET vía
-           claim-stream-retweet) vive en misiones.html — no se duplica acá
-           ninguna llamada ni estado. Reusa las mismas clases .v3-x-* de la
-           tarjeta de "Cuentas vinculadas" (mismo layout icono+texto+botón),
-           sin agregar CSS nueva. -->
-      <div class="v3-now-section" style="margin-top:6px; padding-bottom:0;">
+      <!-- ===================== RACHA (Fase 2) ===================== -->
+      <section class="mgt-panel" role="tabpanel" id="mgtPanel-racha" aria-labelledby="mgtTab-racha" data-mgt-panel="racha" hidden>
+        <div id="mgStreak"></div>
+      </section>
+
+      <!-- ===================== CUENTA ===================== -->
+      <section class="mgt-panel" role="tabpanel" id="mgtPanel-cuenta" aria-labelledby="mgtTab-cuenta" data-mgt-panel="cuenta">
+      <div class="v3-now-section">
+        <div class="v3-now-header v3-now-header-sm"><span class="v3-now-ic">👤</span>Información de la cuenta</div>
         <div class="v3-x-card">
           <div class="v3-x-card-main">
-            <span class="v3-x-ic">🎯</span>
+            <img id="mgtAcctAvatar" class="mgt-avatar" src="" alt="" style="display:none;"/>
             <div class="v3-x-info">
-              <div class="v3-x-title">Misiones</div>
-              <p class="v3-x-desc">Completa misiones y gana XP para subir de rango.</p>
+              <div class="v3-x-title" id="mgtAcctName">—</div>
+              <p class="v3-x-desc">Tu avatar y tu nombre vienen de tu cuenta de Twitch.</p>
             </div>
           </div>
-          <a href="misiones.html" class="v3-btn-secondary v3-x-connect-btn">Ver misiones</a>
         </div>
       </div>
 
-      <!-- Mis recompensas: saldos reales de wallet_balances (Supabase). GCOIN
-           sigue aparte, viene de tienda-server (ver tarjeta G-Coins arriba). -->
-      <div class="v3-now-section" style="margin-top:6px; padding-bottom:0;">
-        <div class="v3-now-header v3-now-header-sm"><span class="v3-now-ic">🎁</span>Mis recompensas</div>
-        <div class="v3-now-grid" id="mgWalletGrid">
-          <div class="v3-table-empty">Cargando…</div>
+      <div class="v3-now-section">
+        <div class="v3-now-header v3-now-header-sm"><span class="v3-now-ic">🌍</span>Mi país y bandera</div>
+        <div class="v3-x-card mgt-country">
+          <div class="v3-x-card-main">
+            <img id="mgNameFlag" src="" alt="" hidden style="width:18px; height:13px; border-radius:2px; flex-shrink:0; box-shadow:0 0 0 1px rgba(255,255,255,.25);"/>
+            <div class="v3-x-info">
+                <div class="v3-now-sub" style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-top:2px;">
+                  <span id="mgCountryName">Sin país configurado</span>
+                  <button type="button" id="mgCountryBtn" hidden style="border:none; cursor:pointer; background:rgba(145,71,255,.18); color:#eaf2ff; border-radius:999px; padding:2px 10px; font-size:11px; font-family:'Orbitron',sans-serif;">Elegir país</button>
+                  <span id="mgCountryMsg" style="font-size:11px; color:#7CFC9A;"></span>
+                </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -349,15 +456,10 @@
           <button type="button" class="v3-btn-secondary v3-x-connect-btn" id="xConnectBtn">Conectar X</button>
         </div>
       </div>
+      </section>
 
-      <!-- Mis solicitudes: historial de redemption_requests del propio usuario. -->
-      <div class="v3-table-wrap" id="misSolicitudes">
-        <div class="v3-now-header v3-now-header-sm"><span class="v3-now-ic">📨</span>Mis solicitudes</div>
-        <div id="mgRequestsList">
-          <div class="v3-table-empty">Cargando…</div>
         </div>
       </div>
-
     </div>
   </div>
 
@@ -376,6 +478,9 @@
   <script src="js/premium.js"></script>
   <script src="js/geoarmy-ranks.js"></script>
   <script src="js/geoarmy-account.js"></script>
+  <!-- Fase 1A: router de subpestañas. Va ANTES del script en línea para leer ?x_connect=
+       antes de que initXAccountUI() lo limpie de la URL. -->
+  <script src="js/mi-geoarmy-tabs.js?v=1a1"></script>
   <script>
   (function () {
     var currentCountryCode = null; // solo lectura de estado en memoria para el botón "Cambiar país"
@@ -1115,16 +1220,26 @@
     }
 
     async function loadDashboard(sb) {
+      // Fase 1A: generación de esta carga. MgTabs.sync() solo acepta la más reciente.
+      var mgGen = window.MgTabs ? window.MgTabs.beginLoad() : 0;
       var loggedOutEl = document.getElementById('mgLoggedOut');
       var dashEl = document.getElementById('mgDashboard');
       try {
         var sessionRes = await sb.auth.getSession();
+        if (window.MgTabs && !window.MgTabs.isCurrent(mgGen)) return; // Fase 1A: carga antigua, la más reciente se encarga
         var session = sessionRes.data && sessionRes.data.session;
-        if (!session) { loggedOutEl.hidden = false; dashEl.hidden = true; return; }
+        if (!session) { if (window.MgTabs) window.MgTabs.setUser(null); loggedOutEl.hidden = false; dashEl.hidden = true; return; }
 
         var profRes = await sb.from('profiles').select('*').eq('id', session.user.id).single();
-        if (profRes.error || !profRes.data) { loggedOutEl.hidden = false; dashEl.hidden = true; return; }
+        if (window.MgTabs && !window.MgTabs.isCurrent(mgGen)) return; // Fase 1A
+        if (profRes.error || !profRes.data) { if (window.MgTabs) window.MgTabs.setUser(null); loggedOutEl.hidden = false; dashEl.hidden = true; return; }
         var profile = profRes.data;
+        // Fase 1A: si cambió la cuenta (o se cerró sesión), se limpian los datos visibles de la anterior
+        // antes de pintar los de esta. No consulta nada; los datos los siguen escribiendo las funciones originales.
+        if (window.MgTabs) window.MgTabs.setUser(session.user.id);
+        // Fase 1A: lecturas de Supabase protegidas por identidad: si la sesión cambia mientras una está en
+        // vuelo (aunque tarde minutos), se descarta y la función original no escribe nada. Mismas RPC/consultas.
+        var sbg = window.MgTabs ? window.MgTabs.guard(sb) : sb;
 
         loggedOutEl.hidden = true;
         dashEl.hidden = false;
@@ -1142,13 +1257,22 @@
         renderCountryDisplay(currentCountryCode);
 
         await refreshSaldo(sb, session);
-        await loadWallets(sb, session.user.id);
-        await loadMyRequests(sb, session.user.id);
+        if (window.MgTabs && !window.MgTabs.isCurrent(mgGen)) return; // Fase 1A
+        await loadWallets(sbg, session.user.id);
+        if (window.MgTabs && !window.MgTabs.isCurrent(mgGen)) return; // Fase 1A
+        await loadMyRequests(sbg, session.user.id);
+        if (window.MgTabs && !window.MgTabs.isCurrent(mgGen)) return; // Fase 1A
 
-        loadRankSummary(sb);
-        loadRankCard(sb);
-        loadXAccount(sb, session.user.id);
+        // Fase 1A: refreshSaldo/wallets/solicitudes ya terminaron (await de arriba); aquí se
+        // espera también a las dos cargas de rango y recién entonces se sincronizan los espejos
+        // de presentación. Solo copia datos ya cargados: no consulta nada.
+        var mgUid = session.user.id;
+        Promise.allSettled([loadRankSummary(sbg), loadRankCard(sbg)]).then(function () {
+          if (window.MgTabs) window.MgTabs.sync(mgGen, mgUid);
+        });
+        loadXAccount(sbg, session.user.id);
       } catch (e) {
+        if (window.MgTabs && !window.MgTabs.isCurrent(mgGen)) return; // Fase 1A: un fallo de una carga antigua no toca la UI
         console.warn('[mi-geoarmy] error cargando el dashboard (¿falta configurar Supabase en js/geoarmy-account.js?)', e);
         loggedOutEl.hidden = false;
         dashEl.hidden = true;
@@ -1336,7 +1460,12 @@
         }
       });
 
-      sb.auth.onAuthStateChange(function () { loadDashboard(sb); });
+      sb.auth.onAuthStateChange(function (event, authSession) {
+        // Fase 1A: con el uid que trae el propio evento (sin consultar nada), un cierre de sesión o cambio de
+        // cuenta oculta y limpia de inmediato los datos privados; TOKEN_REFRESHED del mismo usuario no recarga.
+        if (window.MgTabs && window.MgTabs.authEvent(event, authSession && authSession.user ? authSession.user.id : null) === 'skip') return;
+        loadDashboard(sb);
+      });
       loadDashboard(sb);
     });
   })();
