@@ -55,16 +55,29 @@
     .hwc-claim-line-sub { margin-top: .15rem; }
     .hwc-claim-line-failed { color: #e37878; }
 
-    /* Teaser "PRÓXIMA OLEADA" -- reemplaza el texto estático fijo. */
+    /* Teaser "PRÓXIMA OLEADA" -- reemplaza el texto estático fijo.
+       Ajuste 2026-10-10: el bloque entero (icono + 3 líneas) queda
+       centrado sobre el mismo eje que el título/subtítulo de arriba --
+       columna centrada + margin-left/right:auto, sin offsets manuales. */
     #hw26MissionDropNote {
       display: flex;
-      align-items: flex-start;
-      gap: .6rem;
-      margin-top: .65rem;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: .3rem;
+      width: fit-content;
+      max-width: 100%;
+      margin: .65rem auto 0;
     }
     #hw26MissionDropNote[hidden] { display: none; }
     .hwc-drop-icon { font-size: 1.3rem; line-height: 1; }
-    .hwc-drop-body { display: flex; flex-direction: column; gap: .15rem; }
+    .hwc-drop-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: .15rem;
+    }
     .hwc-drop-title {
       font-family: 'Space Grotesk', sans-serif;
       font-size: .72rem;
