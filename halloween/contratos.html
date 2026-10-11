@@ -11,10 +11,89 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <link rel="stylesheet" href="../css/v3-theme.css"/>
   <link rel="stylesheet" href="../css/halloween-2026.css"/>
+  <style>
+    /* Contratos individuales reclamables (2026-10-10) -- scoped a esta
+       página, NO se tocó css/halloween-2026.css ni css/style.css ni
+       css/v3-theme.css. Reusa las custom properties ya definidas en esos
+       archivos (con fallback) para no desentonar con la estética actual. */
+    .hwc-claim-btn {
+      display: inline-block;
+      margin-top: .65rem;
+      padding: .55rem 1rem;
+      border: 1px solid var(--hw26-violet-line, rgba(138,92,246,.45));
+      border-radius: .5rem;
+      background: rgba(138,92,246,.16);
+      color: var(--hw26-gold, #f3c969);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .hwc-claim-btn:hover:not(:disabled) { background: rgba(138,92,246,.28); }
+    .hwc-claim-btn:disabled {
+      cursor: not-allowed;
+      opacity: .55;
+      color: var(--hw26-text-dim, #9a94b5);
+    }
+    .hwc-claim-btn.hwc-claim-link { background: rgba(243,201,105,.12); }
+
+    .hw26-mission-badge.is-claimed-mine { background: rgba(243,201,105,.22); color: var(--hw26-gold, #f3c969); }
+    .hw26-mission-badge.is-claimed-other { background: rgba(154,148,181,.22); color: var(--hw26-text-dim, #9a94b5); }
+    .hw26-mission-badge.is-completed { background: rgba(84,196,120,.22); color: #6fd68a; }
+    .hw26-mission-badge.is-failed { background: rgba(214,80,80,.22); color: #e37878; }
+
+    .hwc-claim-line {
+      margin-top: .5rem;
+      font-size: .85rem;
+      color: var(--hw26-text-dim, #9a94b5);
+    }
+    .hwc-claim-line-mine { font-weight: 700; color: var(--hw26-gold, #f3c969); }
+    .hwc-claim-line-sub { margin-top: .15rem; }
+    .hwc-claim-line-failed { color: #e37878; }
+
+    /* Teaser "PRÓXIMA OLEADA" -- reemplaza el texto estático fijo. */
+    #hw26MissionDropNote {
+      display: flex;
+      align-items: flex-start;
+      gap: .6rem;
+      margin-top: .65rem;
+    }
+    #hw26MissionDropNote[hidden] { display: none; }
+    .hwc-drop-icon { font-size: 1.3rem; line-height: 1; }
+    .hwc-drop-body { display: flex; flex-direction: column; gap: .15rem; }
+    .hwc-drop-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .72rem;
+      letter-spacing: .08em;
+      color: var(--hw26-gold, #f3c969);
+    }
+    .hwc-drop-text { font-weight: 600; }
+    .hwc-drop-sub { font-size: .82rem; color: var(--hw26-text-dim, #9a94b5); }
+
+    /* Mensaje visible de resultado de un intento de tomar contrato. */
+    .hwc-claim-msg {
+      margin: 0 0 1rem;
+      padding: .65rem .9rem;
+      border-radius: .5rem;
+      font-size: .9rem;
+      font-weight: 600;
+    }
+    .hwc-claim-msg[hidden] { display: none; }
+    .hwc-claim-msg.is-ok { background: rgba(84,196,120,.16); color: #6fd68a; border: 1px solid rgba(84,196,120,.35); }
+    .hwc-claim-msg.is-error { background: rgba(214,80,80,.16); color: #e37878; border: 1px solid rgba(214,80,80,.35); }
+  </style>
 </head>
-<!-- data-halloween-page="missions": el router solo carga
-     halloween_2026_get_public_missions(), con un poll lento (45s) -- no
-     toca estado, participación, efectos ni feed. -->
+<!-- data-halloween-page="missions": el router carga
+     halloween_2026_get_public_missions() + (2026-10-10) los contratos
+     INDIVIDUALES reclamables de Fortnite/Overwatch -- claims públicos,
+     próxima oleada, mi contrato activo -- con un poll de 20s. Los
+     contratos STREAM/COMMUNITY no pasan por este sistema y conservan
+     exactamente su comportamiento visual anterior. No toca estado de
+     batalla, roles, efectos ni feed. -->
 <body data-halloween-page="missions">
 
   <div class="v3-page">
@@ -45,8 +124,10 @@
         <div class="hw26-page-eyebrow">Halloween 2026 · Mundo 02</div>
         <div class="hw26-page-title">CONTRATOS</div>
         <div class="hw26-page-sub">Cumple los encargos de Geo Army y debilita a La Heraldo.</div>
-        <div class="hw26-page-note">Nuevos contratos: martes · jueves · sábado</div>
+        <div class="hw26-page-note" id="hw26MissionDropNote" hidden></div>
       </div>
+
+      <div id="hw26MissionClaimMsg" class="hwc-claim-msg" hidden></div>
 
       <div class="hw26-page-content" id="hw26MissionsContent">
         <div class="hw26-empty-state">Cargando…</div>
