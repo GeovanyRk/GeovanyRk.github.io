@@ -16,8 +16,15 @@
   },
   "matidk_0": {
     "usuario": "matidk_0",
-    "ganado": 105705,
-    "gastado": 88750
+    "ganado": 115705,
+    "gastado": 108750,
+    "operaciones": {
+      "4d24a288dbabe0afe605280e2532581e4c81569dc5699b0bb7b77f4e61ac8ea2": {
+        "puntos": 10000,
+        "saldoRestante": 6955,
+        "en": "2026-10-11T01:26:57.582Z"
+      }
+    }
   },
   "kittykitty_katt": {
     "usuario": "kittykitty_katt",
