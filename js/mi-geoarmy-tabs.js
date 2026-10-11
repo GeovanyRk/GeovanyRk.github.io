@@ -175,6 +175,64 @@
     if (a) { a.removeAttribute('src'); a.style.display = 'none'; }
     var n = byId('mgtAcctName');
     if (n) n.textContent = '—';
+    resetIdentityMirrors();
+  }
+
+  // ---------- Espejos de la tarjeta de identidad (Resumen, Fase 1B) ----------
+  // Copias de solo presentación de nodos que ya llenan las funciones originales (Progreso y Cuenta).
+  // Se llenan únicamente desde copyMirrors() (sync / mostrar pestaña) y se limpian con resetMirrors().
+  function setTxt(id, txt) { var e = byId(id); if (e) e.textContent = txt; }
+  function setHidden(id, h) { var e = byId(id); if (e) e.hidden = !!h; }
+  function setImg(id, src, alt) {
+    var e = byId(id);
+    if (!e) return;
+    if (src) { e.src = src; e.alt = alt || ''; e.hidden = false; }
+    else { e.hidden = true; e.removeAttribute('src'); e.alt = ''; }
+  }
+  function setBar(pct) {
+    var f = byId('mgtProgFill'), t = byId('mgtProgTrack');
+    var v = Math.max(0, Math.min(100, parseFloat(pct) || 0));
+    if (f) f.style.width = v + '%';
+    if (t) t.setAttribute('aria-valuenow', String(Math.round(v)));
+  }
+
+  function resetIdentityMirrors() {
+    setImg('mgtBadge', null);
+    setHidden('mgtRankChip', true);
+    setHidden('mgtCountryWrap', true); setTxt('mgtSumCountry', '');
+    setHidden('mgtProgBlock', true); setHidden('mgtMaxBlock', true); setHidden('mgtNextWrap', true);
+    setTxt('mgtProgText', '— / — XP'); setTxt('mgtProgPct', '—%'); setTxt('mgtProgNote', '');
+    setBar(0);
+    setImg('mgtNextBadge', null); setTxt('mgtNextName', '—'); setTxt('mgtNextXp', '— XP');
+    setTxt('mgtXp', '— XP'); setTxt('mgtTopSub', '');
+  }
+
+  function copyIdentityMirrors() {
+    var q = function (id) { var e = byId(id); return e ? e.textContent : ''; };
+    var badge = byId('rankBadgeBig');
+    setImg('mgtBadge', badge && !badge.hidden ? badge.getAttribute('src') : null, badge ? badge.alt : '');
+
+    var lvl = (q('mgLevel') || '').trim();
+    setHidden('mgtRankChip', lvl === '' || lvl === '—');
+
+    var flag = byId('mgNameFlag');
+    var hasCountry = !!(flag && !flag.hidden && flag.getAttribute('src'));
+    setHidden('mgtCountryWrap', !hasCountry);
+    setTxt('mgtSumCountry', hasCountry ? q('mgCountryName') : '');
+
+    var pb = byId('rankProgressBlock'), mb = byId('rankMaxBlock'), nw = byId('rankNextWrap');
+    setHidden('mgtProgBlock', !pb || pb.hidden);
+    setHidden('mgtMaxBlock', !mb || mb.hidden);
+    setHidden('mgtNextWrap', !nw || nw.hidden);
+    setTxt('mgtProgText', q('rankProgressText')); setTxt('mgtProgPct', q('rankProgressPct')); setTxt('mgtProgNote', q('rankProgressNote'));
+    var fill = byId('rankProgressFill');
+    setBar(fill ? fill.style.width : 0);
+    var nb = byId('rankNextBadge');
+    setImg('mgtNextBadge', nb && !nb.hidden ? nb.getAttribute('src') : null, nb ? nb.alt : '');
+    setTxt('mgtNextName', q('rankNextName')); setTxt('mgtNextXp', q('rankNextXp'));
+
+    setTxt('mgtXp', q('rankXpBig'));
+    setTxt('mgtTopSub', q('rankPositionSub'));
   }
 
   function copyMirrors() {
@@ -201,6 +259,7 @@
     }
     var srcN = byId('mgNameText'), dstN = byId('mgtAcctName');
     if (srcN && dstN) dstN.textContent = srcN.textContent;
+    copyIdentityMirrors();
   }
 
   // ---------- Aislamiento entre sesiones ----------
