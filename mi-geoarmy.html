@@ -22,6 +22,7 @@
   <!-- Esta página sigue el estilo nuevo (V3), no el estilo viejo del resto del sitio -->
   <link rel="stylesheet" href="css/v3-theme.css"/>
   <link rel="stylesheet" href="css/mi-geoarmy-tabs.css?v=1a1"/>
+  <link rel="stylesheet" href="css/mi-geoarmy-identity.css?v=1b1"/>
 
   <!-- ================================================================
        Tematica de Halloween — SOLO decoración y colores para esta página.
@@ -272,59 +273,80 @@
       </div>
       </section>
 
-      <!-- ===================== RESUMEN ===================== -->
+      <!-- ===================== RESUMEN (Fase 1B: identidad premium) =====================
+           Una sola tarjeta. Los nodos con id que ya existian (mgAvatar, mgName, mgNameText, mgLevel,
+           mgRank, mgRankName, mgRankSub, mgRankLink, mgtSumFlag, mgtSumGcoins) siguen aqui; los que
+           llenan las funciones originales de Progreso (rango, XP, barra, siguiente rango) se muestran
+           mediante espejos mgt* de solo presentacion que llena MgTabs.sync() (js/mi-geoarmy-tabs.js).
+           Los elementos [data-mgt-slot] estan vacios y ocultos a proposito: son solo puntos de
+           extension futuros (banner, titulo, vitrina, historial). No contienen funcionalidad. -->
       <section class="mgt-panel" role="tabpanel" id="mgtPanel-resumen" aria-labelledby="mgtTab-resumen" data-mgt-panel="resumen">
-      <div class="v3-now-section">
-        <div class="v3-now-grid">
-          <div class="v3-now-card v3-c-purple">
-            <div class="v3-now-head"><span class="v3-now-ic">👤</span>Perfil</div>
-            <div style="display:flex; align-items:center; gap:12px;">
-              <img id="mgAvatar" src="" alt="" style="width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid rgba(145,71,255,.5);flex-shrink:0;"/>
-              <div style="min-width:0;">
-                <div id="mgName" class="v3-now-winner-name" style="font-size:16px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:flex; align-items:center; gap:6px;">
-                  <span id="mgNameText">—</span><img id="mgtSumFlag" class="mgt-mirror-flag" src="" alt="" hidden style="width:18px; height:13px; border-radius:2px; flex-shrink:0; box-shadow:0 0 0 1px rgba(255,255,255,.25);"/>
-                </div>
-                <div id="mgLevel" class="v3-now-sub">—</div>
+      <article class="mgt-id" id="mgtIdentity" aria-label="Identidad del jugador">
+        <div class="mgt-id-banner" data-mgt-slot="banner" hidden></div>
+
+        <div class="mgt-id-top">
+          <div class="mgt-id-who">
+            <div class="mgt-id-avatar" data-mgt-frame>
+              <div class="mgt-id-ring">
+                <span class="mgt-id-ph" aria-hidden="true">&#128100;</span>
+                <img id="mgAvatar" class="mgt-id-img" src="" alt="Avatar de Twitch" style="display:none;"/>
+              </div>
+              <img id="mgtBadge" class="mgt-id-badge" src="" alt="" hidden onerror="this.hidden=true;"/>
+            </div>
+            <div class="mgt-id-text">
+              <div id="mgName" class="mgt-id-name"><span id="mgNameText">—</span><img id="mgtSumFlag" class="mgt-id-flag mgt-mirror-flag" src="" alt="" hidden onerror="this.hidden=true;"/></div>
+              <div class="mgt-id-title" data-mgt-slot="title" hidden></div>
+              <div class="mgt-id-meta">
+                <span class="mgt-id-rank" id="mgtRankChip" hidden><span id="mgLevel">—</span></span>
+                <span class="mgt-id-country" id="mgtCountryWrap" hidden><span id="mgtSumCountry"></span></span>
               </div>
             </div>
           </div>
 
-          <!-- Espejo de presentación del saldo (el original, con su botón de actualizar, está en Billetera). -->
-          <div class="v3-now-card v3-c-gold mgt-mirror-card">
-            <div class="v3-now-head"><img class="v3-now-ic-img" src="gcoin-icon.png" alt="" onerror="this.replaceWith(document.createTextNode(String.fromCodePoint(129689)))"/>G-Coins</div>
-            <div class="v3-now-big" id="mgtSumGcoins">—<span>G</span></div>
-            <div class="v3-now-sub">G-Coins disponibles</div>
-            <a href="#billetera" class="v3-now-btn" style="cursor:pointer;">Ver billetera</a>
-          </div>
-
-          <div class="v3-now-card v3-c-blue">
-            <div class="v3-now-head"><span class="v3-now-ic">🏆</span>Ranking</div>
-            <div class="v3-now-big" id="mgRank">—</div>
-            <div class="v3-now-sub" id="mgRankName"></div>
-            <div class="v3-now-sub" id="mgRankSub">Cargando…</div>
-            <a href="ranking.html" class="v3-now-btn" id="mgRankLink">Ver ranking</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Misiones: CTA compacto únicamente. Toda la lógica real (leer
-           my_missions_status(), progreso, y el claim de STREAM_RETWEET vía
-           claim-stream-retweet) vive en misiones.html — no se duplica acá
-           ninguna llamada ni estado. Reusa las mismas clases .v3-x-* de la
-           tarjeta de "Cuentas vinculadas" (mismo layout icono+texto+botón),
-           sin agregar CSS nueva. -->
-      <div class="v3-now-section" style="margin-top:6px; padding-bottom:0;">
-        <div class="v3-x-card">
-          <div class="v3-x-card-main">
-            <span class="v3-x-ic">🎯</span>
-            <div class="v3-x-info">
-              <div class="v3-x-title">Misiones</div>
-              <p class="v3-x-desc">Completa misiones y gana XP para subir de rango.</p>
+          <div class="mgt-id-progress">
+            <div id="mgtProgBlock" class="mgt-id-prog" hidden>
+              <div class="mgt-id-prog-title">Progreso al siguiente rango</div>
+              <div class="mgt-id-prog-row"><span id="mgtProgText">— / — XP</span><span id="mgtProgPct" class="mgt-id-pct">—%</span></div>
+              <div class="mgt-id-track" id="mgtProgTrack" role="progressbar" aria-label="Progreso al siguiente rango" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="mgt-id-fill" id="mgtProgFill"></div></div>
+              <p class="mgt-id-note" id="mgtProgNote"></p>
+            </div>
+            <div id="mgtMaxBlock" class="mgt-id-max" hidden>&#127942; Rango máximo alcanzado</div>
+            <div id="mgtNextWrap" class="mgt-id-next" hidden>
+              <img id="mgtNextBadge" class="mgt-id-next-badge" src="" alt="" hidden onerror="this.hidden=true;"/>
+              <div class="mgt-id-next-text"><span class="mgt-id-label">Siguiente rango</span><span id="mgtNextName" class="mgt-id-next-name">—</span><span id="mgtNextXp" class="mgt-id-next-xp">— XP</span></div>
             </div>
           </div>
-          <a href="misiones.html" class="v3-btn-secondary v3-x-connect-btn">Ver misiones</a>
         </div>
-      </div>
+
+        <div class="mgt-id-stats">
+          <div class="mgt-stat">
+            <span class="mgt-id-label">Ranking</span>
+            <div class="mgt-stat-val" id="mgRank">—</div>
+            <span class="mgt-stat-sub" id="mgtTopSub"></span>
+          </div>
+          <div class="mgt-stat">
+            <span class="mgt-id-label">XP total</span>
+            <div class="mgt-stat-val" id="mgtXp">— XP</div>
+          </div>
+          <div class="mgt-stat mgt-stat-2">
+            <span class="mgt-id-label">G-Coins</span>
+            <div class="mgt-stat-val" id="mgtSumGcoins">—<span>G</span></div>
+            <a href="#billetera" class="mgt-stat-link">Ver billetera</a>
+          </div>
+        </div>
+        <!-- Nodos originales del resumen de ranking: los sigue llenando loadRankSummary(); aqui no se muestran
+             (su dato ya se ve en la tarjeta). Se conservan por compatibilidad. -->
+        <div class="mgt-id-legacy" hidden><span id="mgRankName"></span><span id="mgRankSub">Cargando…</span></div>
+
+        <div class="mgt-id-showcase" data-mgt-slot="showcase" hidden></div>
+
+        <nav class="mgt-id-links" aria-label="Accesos rápidos">
+          <a href="misiones.html" class="mgt-link">&#127919; Misiones</a>
+          <a href="ranking.html" class="mgt-link" id="mgRankLink">Ver ranking</a>
+          <a href="#progreso" class="mgt-link">&#128200; Progreso</a>
+        </nav>
+      </article>
+      <div class="mgt-id-history" data-mgt-slot="history" hidden></div>
       </section>
 
       <!-- ===================== PROGRESO ===================== -->
@@ -480,7 +502,7 @@
   <script src="js/geoarmy-account.js"></script>
   <!-- Fase 1A: router de subpestañas. Va ANTES del script en línea para leer ?x_connect=
        antes de que initXAccountUI() lo limpie de la URL. -->
-  <script src="js/mi-geoarmy-tabs.js?v=1a1"></script>
+  <script src="js/mi-geoarmy-tabs.js?v=1b1"></script>
   <script>
   (function () {
     var currentCountryCode = null; // solo lectura de estado en memoria para el botón "Cambiar país"
