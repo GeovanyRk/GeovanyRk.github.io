@@ -23,6 +23,7 @@
   <link rel="stylesheet" href="css/v3-theme.css"/>
   <link rel="stylesheet" href="css/mi-geoarmy-tabs.css?v=1a1"/>
   <link rel="stylesheet" href="css/mi-geoarmy-identity.css?v=1b1"/>
+  <link rel="stylesheet" href="css/mi-geoarmy-panels.css?v=1c1"/>
 
   <!-- ================================================================
        Tematica de Halloween — SOLO decoración y colores para esta página.
@@ -230,6 +231,7 @@
 
       <!-- ===================== BILLETERA ===================== -->
       <section class="mgt-panel" role="tabpanel" id="mgtPanel-billetera" aria-labelledby="mgtTab-billetera" data-mgt-panel="billetera">
+      <div class="mgt-wal-top">
       <div class="v3-now-section">
         <div class="v3-now-grid mgt-wallet-top">
           <div class="v3-now-card v3-c-gold" id="gcoins">
@@ -238,15 +240,6 @@
             <div class="v3-now-sub">G-Coins disponibles</div>
             <button type="button" class="v3-now-btn" id="mgRefreshSaldo" style="border:none; cursor:pointer; font-family:'Orbitron',sans-serif;">Actualizar saldo</button>
           </div>
-        </div>
-      </div>
-
-      <!-- Mis recompensas: saldos reales de wallet_balances (Supabase). GCOIN
-           sigue aparte, viene de tienda-server (ver tarjeta G-Coins arriba). -->
-      <div class="v3-now-section" style="margin-top:6px; padding-bottom:0;">
-        <div class="v3-now-header v3-now-header-sm"><span class="v3-now-ic">🎁</span>Mis recompensas</div>
-        <div class="v3-now-grid" id="mgWalletGrid">
-          <div class="v3-table-empty">Cargando…</div>
         </div>
       </div>
 
@@ -261,6 +254,16 @@
             </div>
           </div>
           <a href="tienda.html" class="v3-btn-secondary v3-x-connect-btn">Ir a la tienda</a>
+        </div>
+      </div>
+      </div>
+
+      <!-- Mis recompensas: saldos reales de wallet_balances (Supabase). GCOIN
+           sigue aparte, viene de tienda-server (ver tarjeta G-Coins arriba). -->
+      <div class="v3-now-section" style="margin-top:6px; padding-bottom:0;">
+        <div class="v3-now-header v3-now-header-sm"><span class="v3-now-ic">🎁</span>Mis recompensas</div>
+        <div class="v3-now-grid" id="mgWalletGrid">
+          <div class="v3-table-empty">Cargando…</div>
         </div>
       </div>
 
@@ -351,6 +354,7 @@
 
       <!-- ===================== PROGRESO ===================== -->
       <section class="mgt-panel" role="tabpanel" id="mgtPanel-progreso" aria-labelledby="mgtTab-progreso" data-mgt-panel="progreso">
+      <div class="mgt-prog-eyebrow">Rango del jugador</div>
       <!-- Perfil Grande — tarjeta de rango. Reemplaza por completo el bloque
            legado de "Nivel X / X,000 XP" (arriba se calculaba todo en el
            cliente con profile.xp % 1000). Ahora TODO sale tal cual de
@@ -412,6 +416,7 @@
 
       <!-- ===================== CUENTA ===================== -->
       <section class="mgt-panel" role="tabpanel" id="mgtPanel-cuenta" aria-labelledby="mgtTab-cuenta" data-mgt-panel="cuenta">
+      <div class="mgt-acct-grid">
       <div class="v3-now-section">
         <div class="v3-now-header v3-now-header-sm"><span class="v3-now-ic">👤</span>Información de la cuenta</div>
         <div class="v3-x-card">
@@ -477,6 +482,7 @@
           </div>
           <button type="button" class="v3-btn-secondary v3-x-connect-btn" id="xConnectBtn">Conectar X</button>
         </div>
+      </div>
       </div>
       </section>
 
