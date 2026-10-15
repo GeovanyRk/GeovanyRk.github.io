@@ -6,7 +6,7 @@
   },
   "kirbyx01": {
     "usuario": "kirbyx01",
-    "ganado": 19205,
+    "ganado": 19255,
     "gastado": 3000
   },
   "alberto9134": {
@@ -16,7 +16,7 @@
   },
   "matidk_0": {
     "usuario": "matidk_0",
-    "ganado": 117515,
+    "ganado": 117565,
     "gastado": 108750,
     "operaciones": {
       "4d24a288dbabe0afe605280e2532581e4c81569dc5699b0bb7b77f4e61ac8ea2": {
@@ -114,7 +114,7 @@
   "skky_de_nile": {
     "usuario": "skky_de_nile",
     "ganado": 13380,
-    "gastado": 11000,
+    "gastado": 13000,
     "operaciones": {
       "af0a42b1ab2e784f2425c25fa8652fd6e9c4704a6941b067c1623ac61e8e06e2": {
         "puntos": 5000,
@@ -125,6 +125,11 @@
         "puntos": 2000,
         "saldoRestante": 2360,
         "en": "2026-10-15T00:13:21.025Z"
+      },
+      "6c92048e72857ccdaa9df5f014ccb20041e113e31296ee01cfd076a97705de41": {
+        "puntos": 2000,
+        "saldoRestante": 380,
+        "en": "2026-10-15T00:13:44.965Z"
       }
     }
   },
