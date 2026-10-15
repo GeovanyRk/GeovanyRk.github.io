@@ -4,10 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Comunidad — GeoArmy</title>
-  <meta name="description" content="El cuartel general de la comunidad GeoArmy: stream en vivo, Discord, WhatsApp y los últimos ganadores."/>
+  <meta name="description" content="El cuartel general de la comunidad GeoArmy: stream, misiones, rangos, recompensas, Discord y WhatsApp."/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css"/>
+  <!-- Fase 2B: escena del hero. Se precarga solo la versión que aplica al ancho (LCP). -->
+  <link rel="preload" as="image" type="image/webp" href="assets/comunidad/cuartel-general-movil.webp" media="(max-width: 860px)" fetchpriority="high"/>
+  <link rel="preload" as="image" type="image/webp" href="assets/comunidad/cuartel-general-escritorio.webp" media="(min-width: 861px)" fetchpriority="high"/>
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-VT78CC8X2V"></script>
   <script>
@@ -24,191 +27,16 @@
   <link rel="stylesheet" href="css/v3-theme.css"/>
 
   <style>
-  /* =====================================================================
-     "CUARTEL GENERAL" — rediseño visual exclusivo de comunidad.html.
-     Prefijo hq- (headquarters) para no chocar con nada de v3-theme.css ni
-     de otras páginas. No se tocan clases compartidas (.v3-page, .v3-nav,
-     .v3-page-links, .v3-auth, .v3-join-btn, .v3-sr-only, .v3-now-dot,
-     .v3-recent-rank quedan sin usar aquí a propósito). Solo UI/estructura:
-     ningún ID/clase que lea main.js o el widget de cuenta se tocó.
-     ===================================================================== */
+  /* Comunidad V4: todo el estilo vive en css/comunidad-v4.css. Aquí solo queda el
+     contenedor que usa la página desde la versión anterior. */
   .hq-page-inner { position: relative; z-index: 2; }
-
-  /* ---------- HERO ---------- */
-  .hq-hero { position: relative; isolation: isolate; overflow: hidden; padding: 92px 1.5rem 54px; text-align: center; }
-  .hq-hero::before {
-    content: ""; position: absolute; inset: -20% -10% auto -10%; height: 140%; z-index: -2; pointer-events: none;
-    background:
-      radial-gradient(36% 45% at 28% 18%, rgba(0,212,255,.11), transparent 65%),
-      radial-gradient(32% 40% at 76% 32%, rgba(145,71,255,.15), transparent 65%);
-    filter: blur(18px); /* estático por rendimiento, sin animación infinita */
-  }
-  .hq-hero-bg { position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
-  .hq-hero-grid {
-    position: absolute; inset: -10%;
-    background-image:
-      linear-gradient(rgba(120,190,255,.07) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(120,190,255,.07) 1px, transparent 1px);
-    background-size: 44px 44px;
-    -webkit-mask-image: radial-gradient(55% 55% at 50% 38%, #000 0%, transparent 78%);
-    mask-image: radial-gradient(55% 55% at 50% 38%, #000 0%, transparent 78%);
-  }
-  .hq-hero-radar {
-    position: absolute; top: 40%; left: 50%; width: 640px; height: 640px; transform: translate(-50%, -50%);
-    border-radius: 50%; border: 1px solid rgba(58,160,255,.14);
-  }
-  .hq-hero-radar::before, .hq-hero-radar::after {
-    content: ""; position: absolute; inset: 70px; border-radius: 50%; border: 1px solid rgba(58,160,255,.11);
-  }
-  .hq-hero-radar::after { inset: 160px; border-color: rgba(145,71,255,.14); }
-  .hq-hero-logo {
-    position: absolute; top: 40%; left: 50%; width: 560px; max-width: 78vw; transform: translate(-50%, -50%);
-    opacity: .05; filter: grayscale(1) brightness(1.8); pointer-events: none;
-  }
-  .hq-eyebrow {
-    font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 11.5px; letter-spacing: .34em;
-    text-transform: uppercase; color: #6fe0ff; text-shadow: 0 0 16px rgba(0,212,255,.5); margin-bottom: 14px;
-  }
-  .hq-title {
-    font-family: 'Orbitron', sans-serif; font-weight: 900; letter-spacing: .02em; line-height: 1.02;
-    font-size: clamp(2.5rem, 7vw, 4.4rem); margin: 0 0 14px;
-    background: linear-gradient(120deg, #eaf7ff 10%, #7fd8ff 45%, #c9a3ff 90%);
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-    filter: drop-shadow(0 0 26px rgba(120,190,255,.25));
-  }
-  .hq-sub { font-size: clamp(1.02rem, 2.1vw, 1.28rem); font-weight: 600; color: #eaf2ff; max-width: 620px; margin: 0 auto 8px; }
-  .hq-sub2 { font-size: 15px; color: var(--text2); max-width: 540px; margin: 0 auto 30px; line-height: 1.65; }
-
-  .hq-hero-actions { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; }
-  .hq-status-module {
-    display: inline-flex; align-items: center; gap: 10px;
-    background: rgba(255,255,255,.045); border: 1px solid rgba(120,190,255,.28);
-    padding: 10px 20px; border-radius: 100px; transition: border-color .3s var(--ease), background .3s var(--ease);
-  }
-  .hq-status-module.is-live { border-color: rgba(0,200,83,.5); background: rgba(0,200,83,.08); }
-  .hq-status-module .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #5a6478; flex-shrink: 0; transition: background .3s; }
-  .hq-status-module .live-dot.live { background: var(--green); box-shadow: 0 0 10px var(--green); animation: v3DotPulse 1.8s ease-in-out infinite; }
-  .hq-status-text { font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: #eaf2ff; white-space: nowrap; }
-
-  .hq-btn-primary, .hq-btn-ghost {
-    font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 12.5px; letter-spacing: .03em;
-    padding: 13px 26px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
-    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
-    transition: transform .3s var(--ease), border-color .3s var(--ease), filter .3s var(--ease);
-    text-decoration: none;
-  }
-  .hq-btn-primary { color: #041022; background: linear-gradient(135deg, #eaf4ff, #7fd8ff); box-shadow: 0 14px 30px -12px rgba(120,190,255,.6); border: none; }
-  .hq-btn-primary:hover { transform: translateY(-3px); filter: brightness(1.05); }
-  .hq-btn-ghost { color: #eaf2ff; background: rgba(255,255,255,.04); border: 1px solid rgba(150,190,255,.35); }
-  .hq-btn-ghost:hover { transform: translateY(-3px); border-color: rgba(150,190,255,.7); }
-
-  @media (max-width: 700px) {
-    .hq-hero { padding: 70px 1.2rem 40px; }
-    .hq-hero-radar { width: 420px; height: 420px; }
-    .hq-hero-logo { width: 380px; }
-  }
-
-  /* ---------- SECTION TITLE (compartido por flujo / ahora / recientes) ---------- */
-  .hq-section-title {
-    display: flex; align-items: center; gap: 16px; justify-content: center;
-    font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 11.5px; letter-spacing: .26em;
-    text-transform: uppercase; color: var(--text2); max-width: 900px; margin: 0 auto 34px;
-  }
-  .hq-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent); }
-
-  /* ---------- FLUJO: ÚNETE → PARTICIPA → GANA ---------- */
-  .hq-flow { position: relative; z-index: 2; padding: 10px 1.5rem 56px; }
-  .hq-flow-row { display: flex; align-items: flex-start; justify-content: center; max-width: 920px; margin: 0 auto; }
-  .hq-flow-step { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; min-width: 0; }
-  .hq-fs-node {
-    width: 60px; height: 60px; border-radius: 50%; flex-shrink: 0; z-index: 1;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 20px;
-    background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.06), rgba(4,10,20,.9));
-    border: 2px solid var(--fs-ac); color: var(--fs-ac);
-    box-shadow: 0 0 22px -4px var(--fs-ac), inset 0 0 12px -4px var(--fs-ac);
-  }
-  .hq-fs-purple { --fs-ac: #c9a3ff; }
-  .hq-fs-blue   { --fs-ac: #00d4ff; }
-  .hq-fs-green  { --fs-ac: #00c853; }
-  .hq-fs-eyebrow { font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--fs-ac); }
-  .hq-fs-name { font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 17px; color: #eaf2ff; }
-  .hq-fs-desc { font-size: 12.5px; color: var(--text2); }
-  .hq-flow-conn { flex: 0 0 auto; width: clamp(28px, 7vw, 90px); height: 2px; margin-top: 29px; background: linear-gradient(90deg, rgba(255,255,255,.06), rgba(255,255,255,.4), rgba(255,255,255,.06)); }
-
-  @media (max-width: 700px) {
-    .hq-flow-row { flex-direction: column; align-items: stretch; gap: 8px; max-width: 360px; }
-    .hq-flow-step { flex-direction: row; text-align: left; align-items: center; }
-    .hq-flow-conn { width: 2px; height: 30px; margin: 0 0 0 29px; }
-  }
-
-  /* ---------- BENTO: AHORA EN GEO ARMY ---------- */
-  .hq-now { position: relative; z-index: 2; padding: 10px 1.5rem 60px; }
-  .hq-bento {
-    display: grid; max-width: 1100px; margin: 0 auto; gap: 16px;
-    grid-template-columns: 1.4fr 1fr;
-    grid-template-areas: "stream discord" "stream whatsapp";
-  }
-  .hq-card-stream   { grid-area: stream; }
-  .hq-card-discord  { grid-area: discord; }
-  .hq-card-whatsapp { grid-area: whatsapp; }
-
-  .hq-card {
-    --card-ac: #00d4ff;
-    position: relative; display: flex; flex-direction: column; gap: 10px;
-    background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.012));
-    border: 1px solid rgba(255,255,255,.09);
-    clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
-    padding: 22px 22px 20px; transition: border-color .3s var(--ease), transform .3s var(--ease);
-  }
-  .hq-card::before, .hq-card::after { content: ""; position: absolute; top: 0; left: 0; background: var(--card-ac); }
-  .hq-card::before { width: 28px; height: 2px; }
-  .hq-card::after  { width: 2px; height: 28px; }
-  .hq-card:hover { border-color: rgba(255,255,255,.22); transform: translateY(-3px); }
-  .hq-card-head {
-    display: flex; align-items: center; gap: 8px; font-family: 'Orbitron', sans-serif; font-weight: 700;
-    font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--text2);
-  }
-  .hq-ic { font-size: 15px; color: var(--card-ac); display: inline-flex; }
-  .hq-card-btn {
-    margin-top: auto; align-self: flex-start; font-family: 'Orbitron', sans-serif; font-weight: 700;
-    font-size: 11.5px; letter-spacing: .03em; text-transform: uppercase; color: var(--card-ac);
-    display: inline-flex; align-items: center; gap: 6px; transition: color .25s, transform .25s var(--ease); padding-top: 6px;
-  }
-  .hq-card-btn:hover { color: #fff; transform: translateX(3px); }
-  .hq-card-btn-solid {
-    color: #04101f; background: var(--card-ac); padding: 10px 18px; margin-top: 12px;
-    clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
-  }
-  .hq-card-btn-solid:hover { color: #04101f; filter: brightness(1.12); transform: translateY(-2px); }
-
-  /* Stream: tarjeta principal, más grande */
-  .hq-card-stream { --card-ac: #00d4ff; justify-content: center; padding: 30px 26px 26px; min-height: 220px; }
-  .hq-stream-status { display: flex; align-items: center; gap: 10px; font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: clamp(1.3rem, 3vw, 1.9rem); color: #eaf2ff; text-transform: uppercase; margin-top: 8px; }
-  .hq-stream-status .v3-now-dot { width: 11px; height: 11px; }
-  .hq-stream-meta { color: var(--text2); font-size: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
-
-  /* Discord / WhatsApp: bloques secundarios, directos */
-  .hq-card-discord  { --card-ac: #7aa2ff; }
-  .hq-card-whatsapp { --card-ac: #00c853; }
-  .hq-social-row { display: flex; align-items: center; gap: 14px; }
-  .hq-social-ic { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); color: var(--card-ac); }
-  .hq-social-ic svg { width: 20px; height: 20px; }
-  .hq-social-title { font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 13.5px; color: #eaf2ff; }
-  .hq-social-sub { font-size: 12px; color: var(--text2); }
-
-
-  @media (max-width: 980px) {
-    .hq-bento { grid-template-columns: 1fr 1fr; }
-  }
-  @media (max-width: 700px) {
-    .hq-bento { grid-template-columns: 1fr; grid-template-areas: "stream" "discord" "whatsapp"; }
-  }
-
-
   </style>
+
+  <!-- Comunidad V4 — base visual aislada de esta página (tokens, fondo espacial,
+       componentes base, reduced-motion). Va al final del <head> a propósito. -->
+  <link rel="stylesheet" href="css/comunidad-v4.css"/>
 </head>
-<body>
+<body class="cg-page">
 
   <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
 
@@ -237,97 +65,460 @@
       </div>
     </nav>
 
-    <div class="hq-page-inner">
+    <main class="hq-page-inner" id="contenido">
 
-      <!-- HERO: CUARTEL GENERAL -->
-      <section class="hq-hero" data-reveal>
-        <div class="hq-hero-bg" aria-hidden="true">
-          <div class="hq-hero-grid"></div>
-          <div class="hq-hero-radar"></div>
-          <img src="logo.png" alt="" class="hq-hero-logo"/>
+      <!-- HERO: CUARTEL GENERAL (Fase 2) — sin data-reveal: se ve de inmediato.
+           Conserva #live-badge, #live-label, #v3LiveText y el primer .live-dot del DOM
+           (main.js los usa), y copyCode() del botón de código. -->
+      <section class="cg-hero cg-hero--scene" aria-labelledby="cg-hero-title">
+        <div class="cg-hero__bg" aria-hidden="true">
+          <div class="cg-hero__nebula"></div>
+          <div class="cg-hero__horizon"></div>
+          <div class="cg-hero__floor"></div>
+          <!-- Fase 2B: ilustración original del Cuartel General (ambientación ficticia, no una captura real).
+               Las capas de arriba (nebulosa, horizonte, suelo) son el respaldo de Fase 2: si la imagen
+               falla, onerror quita .cg-hero--scene y se vuelve a ver ese fondo. -->
+          <picture class="cg-hero__scene">
+            <source media="(max-width: 860px)" srcset="assets/comunidad/cuartel-general-movil.webp" width="828" height="1242"/>
+            <img src="assets/comunidad/cuartel-general-escritorio.webp" alt="" width="1774" height="887" fetchpriority="high" decoding="async"
+                 onerror="this.closest('.cg-hero').classList.remove('cg-hero--scene')"/>
+          </picture>
+          <div class="cg-hero__veil"></div>
+          <svg class="cg-hero__rings" viewBox="0 0 800 800" focusable="false">
+            <g class="cg-ring cg-ring--a"><circle cx="400" cy="400" r="384"/></g>
+            <g class="cg-ring cg-ring--b"><circle cx="400" cy="400" r="330"/></g>
+            <g class="cg-ring cg-ring--c"><circle cx="400" cy="400" r="270"/></g>
+            <g class="cg-ring cg-ring--tick">
+              <line x1="400" y1="8" x2="400" y2="40"/><line x1="400" y1="760" x2="400" y2="792"/>
+              <line x1="8" y1="400" x2="40" y2="400"/><line x1="760" y1="400" x2="792" y2="400"/>
+            </g>
+          </svg>
+          <img src="logo.png" alt="" class="cg-hero__emblem" width="480" height="480" decoding="async"/>
+          <div class="cg-hero__beam"></div>
         </div>
-        <div class="hq-eyebrow">Geo Army · Centro de operaciones</div>
-        <h1 class="hq-title">CUARTEL GENERAL</h1>
-        <p class="hq-sub">Todo lo que está pasando en Geo Army, en un solo lugar.</p>
-        <p class="hq-sub2">Compite, participa, gana premios y mantente conectado con la comunidad.</p>
 
-        <div class="hq-hero-actions">
-          <div class="hq-status-module" id="live-badge">
-            <span class="live-dot"></span>
-            <span id="live-label" class="v3-sr-only">Cargando...</span>
-            <span id="v3LiveText" class="hq-status-text">Cargando…</span>
-          </div>
-          <a href="https://twitch.tv/geovannyrk" target="_blank" class="hq-btn-primary">▶ Ver stream</a>
-          <button class="hq-btn-ghost" onclick="copyCode()">Código: SORTEOSRK</button>
-        </div>
-      </section>
+        <div class="cg-hero__inner">
+          <p class="cg-hero__eyebrow">Geo Army · Centro de operaciones</p>
+          <h1 class="cg-hero__title" id="cg-hero-title"><span>Cuartel</span> <span>General</span></h1>
+          <p class="cg-hero__kicker">Bienvenido, recluta.</p>
+          <p class="cg-hero__welcome">Esta es la comunidad gaming de geovannyrk: mira el stream, participa en sorteos y misiones, sube de rango y gana recompensas.</p>
 
-      <!-- ¿CÓMO FUNCIONA LA GEO ARMY? -->
-      <section class="hq-flow" data-reveal>
-        <div class="hq-section-title"><span class="hq-line"></span>¿Cómo funciona la Geo Army?<span class="hq-line"></span></div>
-        <div class="hq-flow-row">
-          <div class="hq-flow-step">
-            <div class="hq-fs-node hq-fs-purple">01</div>
-            <div class="hq-fs-eyebrow" style="color:#c9a3ff;">Únete</div>
-            <div class="hq-fs-name">Comunidad</div>
-            <div class="hq-fs-desc">Entra a la comunidad</div>
-          </div>
-          <div class="hq-flow-conn"></div>
-          <div class="hq-flow-step">
-            <div class="hq-fs-node hq-fs-blue">02</div>
-            <div class="hq-fs-eyebrow" style="color:#00d4ff;">Participa</div>
-            <div class="hq-fs-name">En el stream</div>
-            <div class="hq-fs-desc">Sorteos · Ruletas</div>
-          </div>
-          <div class="hq-flow-conn"></div>
-          <div class="hq-flow-step">
-            <div class="hq-fs-node hq-fs-green">03</div>
-            <div class="hq-fs-eyebrow" style="color:#00c853;">Gana</div>
-            <div class="hq-fs-name">Recompensas</div>
-            <div class="hq-fs-desc">Puntos · Premios</div>
-          </div>
-        </div>
-      </section>
+          <div class="cg-ops" role="group" aria-label="Panel de operaciones">
+            <div class="cg-ops__head">
+              <span>Panel de operaciones</span>
+              <span class="cg-ops__rule" aria-hidden="true"></span>
+              <span class="cg-ops__games">
+                <span><img src="icon-overwatch.png" alt="" width="18" height="18" loading="lazy" decoding="async"/>Overwatch</span>
+                <span><img src="icon-fortnite.png" alt="" width="18" height="18" loading="lazy" decoding="async"/>Fortnite</span>
+              </span>
+            </div>
 
-      <!-- AHORA EN GEO ARMY: bento -->
-      <section class="hq-now" data-reveal>
-        <div class="hq-section-title"><span class="hq-line"></span>Ahora en Geo Army<span class="hq-line"></span></div>
+            <div class="cg-ops__grid">
+              <div class="cg-ops__cell cg-ops__cell--status">
+                <p class="cg-ops__label">Estado de transmisión</p>
+                <div class="cg-status" id="live-badge" data-state="loading" role="status" aria-live="polite">
+                  <span class="live-dot" aria-hidden="true"></span>
+                  <span id="live-label" class="v3-sr-only" aria-hidden="true">Cargando...</span>
+                  <span id="v3LiveText" class="cg-status__text">Conectando con Twitch…</span>
+                </div>
+                <dl class="cg-schedule" aria-label="Horario regular de transmisión">
+                  <div><dt>Lun – Vie</dt><dd>7:00 PM <small>hora del Este de EE. UU.</small></dd></div>
+                  <div><dt>Sáb – Dom</dt><dd>Horario variable</dd></div>
+                </dl>
+              </div>
 
-        <div class="hq-bento">
-          <div class="hq-card hq-card-stream">
-            <div class="hq-card-head"><span class="hq-ic">📡</span>Stream</div>
-            <div class="hq-stream-status"><span class="v3-now-dot" id="status-dot"></span><span id="status-text">Cargando...</span></div>
-            <div class="hq-stream-meta"><span id="stream-game"></span> <span id="stream-viewers"></span></div>
-            <a href="https://twitch.tv/geovannyrk" target="_blank" class="hq-card-btn hq-card-btn-solid">Entrar al stream ›</a>
-          </div>
+              <div class="cg-ops__cell cg-ops__cell--actions">
+                <a href="https://twitch.tv/geovannyrk" target="_blank" rel="noopener noreferrer" class="cg-btn cg-btn--primary" id="cg-watch"><span aria-hidden="true">▶</span> Ver stream<span class="cg-sr-only"> en Twitch (se abre en una pestaña nueva)</span></a>
+                <a href="#como-funciona" class="cg-btn cg-btn--ghost" id="cg-explore" data-cg-scroll>Explorar Geo Army <span aria-hidden="true">↓</span></a>
+              </div>
 
-          <div class="hq-card hq-card-discord">
-            <div class="hq-social-row">
-              <span class="hq-social-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.076.076 0 0 0-.04.106c.36.698.772 1.362 1.225 1.994a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.055c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.334-.946 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.334-.946 2.419-2.157 2.419z"/></svg></span>
-              <div>
-                <div class="hq-social-title">Discord</div>
-                <div class="hq-social-sub">Únete a nuestra comunidad</div>
+              <div class="cg-ops__cell cg-ops__cell--code">
+                <p class="cg-ops__label">Código de sorteos</p>
+                <button type="button" class="cg-code" onclick="copyCode()" aria-label="Copiar código SORTEOSRK">
+                  <span class="cg-code__value">SORTEOSRK</span>
+                  <span class="cg-code__hint">Toca para copiar <span id="copy-arrow" aria-hidden="true">→</span></span>
+                </button>
               </div>
             </div>
-            <a href="https://discord.gg/3y4JmWkC7P" target="_blank" rel="noopener noreferrer" class="hq-card-btn">Entrar al Discord ›</a>
           </div>
-
-          <div class="hq-card hq-card-whatsapp">
-            <div class="hq-social-row">
-              <span class="hq-social-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.004 2.003c-5.514 0-9.997 4.483-9.997 9.997 0 1.762.462 3.484 1.34 5.003L2 22l5.117-1.334a9.96 9.96 0 0 0 4.887 1.28h.004c5.514 0 9.997-4.483 9.997-9.997s-4.483-9.946-9.997-9.946zm0 18.176a8.156 8.156 0 0 1-4.152-1.135l-.298-.176-3.036.792.812-2.958-.194-.304a8.163 8.163 0 0 1-1.253-4.398c0-4.51 3.67-8.18 8.18-8.18 4.508 0 8.18 3.67 8.18 8.18 0 4.51-3.672 8.18-8.18 8.18h-.06z"/></svg></span>
-              <div>
-                <div class="hq-social-title">WhatsApp</div>
-                <div class="hq-social-sub">Avisos y sorteos al instante</div>
-              </div>
-            </div>
-            <a href="https://chat.whatsapp.com/Biv2cUNwewL9LtvUirQBL0" target="_blank" rel="noopener noreferrer" class="hq-card-btn">Entrar al grupo ›</a>
-          </div>
-
+          <div class="cg-ops__reflect" aria-hidden="true"></div>
         </div>
-
       </section>
 
-    </div>
+      <!-- =====================================================================
+           RUTA DE RECLUTAMIENTO (Fase 3) — conserva #como-funciona (ancla de EXPLORAR).
+           Sin JavaScript las tres explicaciones permanecen visibles; js/comunidad-v4.js
+           las convierte en pestañas (roles ARIA, teclado y táctil).
+           ===================================================================== -->
+      <section class="cg-route" id="como-funciona" aria-labelledby="cg-route-title" data-reveal>
+        <div class="cg-container cg-route__layout">
+          <div class="cg-route__intro">
+            <p class="cg-kicker">Ruta de reclutamiento</p>
+            <h2 class="cg-route__title" id="cg-route-title">Tu primer día en Geo Army</h2>
+            <p class="cg-route__lead">¿Primera vez por aquí? Son tres pasos y ninguno exige prisa. Para mirar el stream y recorrer esta página no necesitas cuenta.</p>
+          </div>
+
+          <div class="cg-route__path" data-cg-route>
+            <ol class="cg-stages">
+              <li class="cg-stage cg-stage--1" data-cg-stage>
+                <h3 class="cg-stage__head"><span class="cg-stage__node" aria-hidden="true">01</span><span class="cg-stage__name">Únete</span></h3>
+                <div class="cg-stage__body">
+                  <p>Entra al Discord, la sede de los miembros, y al grupo de WhatsApp para recibir avisos. Para ver tu progreso personal, inicia sesión con Twitch.</p>
+                  <a class="cg-link" href="#comunidad" data-cg-scroll>Ir a la entrada de la comunidad <span aria-hidden="true">→</span></a>
+                </div>
+              </li>
+              <li class="cg-stage cg-stage--2" data-cg-stage>
+                <h3 class="cg-stage__head"><span class="cg-stage__node" aria-hidden="true">02</span><span class="cg-stage__name">Participa</span></h3>
+                <div class="cg-stage__body">
+                  <p>Mira el stream en Twitch y juega con la comunidad. Las misiones te dan XP para subir de rango; llevar tu progreso requiere iniciar sesión.</p>
+                  <a class="cg-link" href="misiones.html">Ver las misiones <span aria-hidden="true">→</span></a>
+                </div>
+              </li>
+              <li class="cg-stage cg-stage--3" data-cg-stage>
+                <h3 class="cg-stage__head"><span class="cg-stage__node" aria-hidden="true">03</span><span class="cg-stage__name">Gana</span></h3>
+                <div class="cg-stage__body">
+                  <p>Sube de rango y usa tus G-Coins en la Tienda. Algunos premios exigen un rango mínimo.</p>
+                  <a class="cg-link" href="tienda.html">Ir a la Tienda <span aria-hidden="true">→</span></a>
+                </div>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           DESCUBRE GEO ARMY (Fase 3) — composición asimétrica:
+           monitor de transmisión · acceso a Misiones · Tienda + vitrina · franja de rangos.
+           Rutas verificadas (públicas; el progreso personal pide sesión): misiones.html,
+           ranking.html, mi-geoarmy.html, tienda.html.
+           Vitrina (Fase 5B): categorías generales de recompensas, sin productos, precios ni rangos concretos.
+           ===================================================================== -->
+      <section class="cg-discover" id="descubre" aria-labelledby="cg-disc-title" data-reveal>
+        <div class="cg-container">
+          <header class="cg-sechead">
+            <p class="cg-kicker">Recorrido libre</p>
+            <h2 class="cg-sechead__title" id="cg-disc-title">Descubre Geo Army</h2>
+            <p class="cg-sechead__note">Explora sin cuenta. Tu progreso personal (misiones, rango, G-Coins) requiere iniciar sesión con Twitch.</p>
+          </header>
+
+          <div class="cg-disc">
+            <!-- Monitor principal. Conserva #status-dot, #status-text, #cg-card-state,
+                 #stream-game y #stream-viewers (main.js y el script de estado los usan). -->
+            <article class="cg-monitor" data-state="loading" aria-labelledby="cg-mon-title">
+              <div class="cg-monitor__bar">
+                <span class="cg-monitor__tag" id="cg-mon-title">Monitor de transmisión</span>
+                <span class="cg-monitor__ch" aria-hidden="true">twitch.tv/geovannyrk</span>
+              </div>
+              <div class="cg-monitor__screen">
+                <div class="cg-monitor__state">
+                  <span class="v3-now-dot" id="status-dot"></span>
+                  <span id="status-text">Cargando...</span>
+                  <span class="cg-card-state" id="cg-card-state">Conectando…</span>
+                </div>
+                <p class="cg-monitor__meta"><span id="stream-game"></span> <span id="stream-viewers"></span></p>
+                <p class="cg-schedule-line">Lun – Vie · 7:00 PM (hora del Este de EE. UU.)<br>Sáb – Dom · Horario variable<br><a class="cg-link" href="#transmisiones" data-cg-scroll>Ver la hora en tu zona <span aria-hidden="true">→</span></a></p>
+              </div>
+              <a href="https://twitch.tv/geovannyrk" target="_blank" rel="noopener noreferrer" class="cg-btn cg-btn--primary cg-monitor__cta">Entrar al stream<span class="cg-sr-only"> en Twitch (se abre en una pestaña nueva)</span> <span aria-hidden="true">›</span></a>
+            </article>
+
+            <!-- Acceso compacto: Misiones -->
+            <a class="cg-access cg-access--missions" href="misiones.html">
+              <svg class="cg-access__ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"/></svg>
+              <span class="cg-access__txt">
+                <strong>Misiones</strong>
+                <span>Completa misiones, gana XP y sube de rango.</span>
+                <small>El progreso personal requiere iniciar sesión.</small>
+              </span>
+              <span class="cg-access__go" aria-hidden="true">→</span>
+            </a>
+
+            <!-- Acceso compacto: Tienda + vitrina de categorías (Fase 5B). Sin productos ni requisitos concretos:
+                 nada aquí puede quedar desactualizado. Disponibilidad y requisitos: siempre en la Tienda. -->
+            <div class="cg-shop">
+              <a class="cg-access cg-access--shop" href="tienda.html">
+                <svg class="cg-access__ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+                <span class="cg-access__txt">
+                  <strong>Tienda</strong>
+                  <span>Canjea tus G-Coins por premios.</span>
+                </span>
+                <span class="cg-access__go" aria-hidden="true">→</span>
+              </a>
+              <div class="cg-vitrina" role="group" aria-label="Categorías de recompensas de Geo Army">
+                <p class="cg-vitrina__lead">Categorías de recompensas</p>
+                <ul class="cg-vitrina__list">
+                  <li class="cg-slot">
+                    <span class="cg-slot__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 2.8 19 5.6v5.4c0 4.6-2.9 8.1-7 10.2-4.1-2.1-7-5.6-7-10.2V5.6l7-2.8Z"/><path d="m12 7.6 1.3 2.7 2.9.4-2.1 2 .5 2.9-2.6-1.4-2.6 1.4.5-2.9-2.1-2 2.9-.4L12 7.6Z"/></svg></span>
+                    <span class="cg-slot__name">Pases de batalla</span>
+                    <span class="cg-slot__tag">Para tus juegos</span>
+                  </li>
+                  <li class="cg-slot">
+                    <span class="cg-slot__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><ellipse cx="12" cy="6.6" rx="6.6" ry="2.7"/><path d="M5.4 6.6v4.2c0 1.5 3 2.7 6.6 2.7s6.6-1.2 6.6-2.7V6.6"/><path d="M5.4 10.8V15c0 1.5 3 2.7 6.6 2.7s6.6-1.2 6.6-2.7v-4.2"/><path d="M5.4 15v2.4c0 1.5 3 2.7 6.6 2.7s6.6-1.2 6.6-2.7V15"/></svg></span>
+                    <span class="cg-slot__name">Monedas de juego</span>
+                    <span class="cg-slot__tag">Para tus partidas</span>
+                  </li>
+                  <li class="cg-slot">
+                    <span class="cg-slot__ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M7.4 7.6h9.2c2 0 3.6 1.4 4 3.3l.9 4.2c.3 1.6-.9 3-2.5 3-.9 0-1.7-.4-2.2-1.1l-1-1.4H8.2l-1 1.4c-.5.7-1.3 1.1-2.2 1.1-1.6 0-2.8-1.4-2.5-3l.9-4.2c.4-1.9 2-3.3 4-3.3Z"/><path d="M8.3 10v3.2M6.7 11.6h3.2"/><circle cx="15.4" cy="10.9" r=".6" fill="currentColor"/><circle cx="17.3" cy="12.7" r=".6" fill="currentColor"/></svg></span>
+                    <span class="cg-slot__name">Periféricos</span>
+                    <span class="cg-slot__tag">Equipo para jugar</span>
+                  </li>
+                </ul>
+                <p class="cg-vitrina__note">Disponibilidad y requisitos, siempre en la Tienda.</p>
+              </div>
+            </div>
+
+            <!-- Franja de rangos: 15 insignias reales del sistema, en el orden oficial. Sin cifras de XP. -->
+            <div class="cg-ranks" role="group" aria-labelledby="cg-ranks-title">
+              <div class="cg-ranks__head">
+                <h3 class="cg-ranks__title" id="cg-ranks-title">Rangos</h3>
+                <p class="cg-ranks__sub">De Bronce III a Legendario.</p>
+                <div class="cg-ranks__ctl" data-cg-ranks-ctl></div>
+                <span class="cg-ranks__links">
+                  <a class="cg-link" href="ranking.html">Ver el ranking <span aria-hidden="true">→</span></a>
+                  <a class="cg-link" href="mi-geoarmy.html">Mi Geo Army <small>(inicia sesión)</small> <span aria-hidden="true">→</span></a>
+                </span>
+              </div>
+              <div class="cg-ranks__scroll" data-cg-ranks tabindex="0" role="region" aria-label="Insignias de rango, de Bronce III a Legendario">
+                <ol class="cg-ranks__track">
+                  <li class="cg-tier cg-tier--bronze"><span class="cg-tier__name">Bronce</span><ul class="cg-tier__list">
+                    <li class="cg-rank"><img src="assets/comunidad/rangos/bronze_3.webp" alt="Bronce III" width="175" height="176" loading="lazy" decoding="async"/><span class="cg-rank__num" aria-hidden="true">III</span></li>
+                    <li class="cg-rank"><img src="assets/comunidad/rangos/bronze_2.webp" alt="Bronce II" width="177" height="176" loading="lazy" decoding="async"/><span class="cg-rank__num" aria-hidden="true">II</span></li>
+                    <li class="cg-rank"><img src="assets/comunidad/rangos/bronze_1.webp" alt="Bronce I" width="173" height="176" loading="lazy" decoding="async"/><span class="cg-rank__num" aria-hidden="true">I</span></li>
+                  </ul></li>
+                  <li class="cg-tier cg-tier--silver"><span class="cg-tier__name">Plata</span><ul class="cg-tier__list">
+                    <li class="cg-rank"><img src="assets/comunidad/rangos/silver_3.webp" alt="Plata III" width="153" height="176" loading="lazy" decoding="async"/><span class="cg-rank__num" aria-hidden="true">III</span></li>
+                    <li class="cg-rank"><img src="assets/comunidad/rangos/silver_2.webp" alt="Plata II" width="159" height="176" loading="lazy" decoding="async"/><span class="cg-rank__num" aria-hidden="true">II</span></li>
+                    <li class="cg-rank"><img src="assets/comunidad/rangos/silver_1.webp" alt="Plata I" width="121" height="176" loading="lazy" decoding="async"/><span class="cg-rank__num" aria-hidden="true">I</span></li>
+                  </ul></li>
+                  <li class="cg-tier cg-tier--gold"><span class="cg-tier__name">Oro</span><ul class="cg-tier__list">
+                    <li class="cg-rank"><img src="assets/comunidad/rangos/gold_3.webp" alt="Oro III" width="157" height="176" loading="lazy" decoding="async"/><span class="cg-rank__num" aria-hidden="true">III</span></li>
+                    <li class="cg-rank"><img src="assets/comunidad/rangos/gold_2.webp" alt="Oro II" width="168" height="176" loading="lazy" decoding="async"/><span class="cg-rank__num" aria-hidden="true">II</span></li>
+                    <li class="cg-rank"><img src="assets/comunidad/rangos/gold_1.webp" alt="Oro I" width="120" height="176" loading="lazy" decoding="async"/><span class="cg-rank__num" aria-hidden="true">I</span></li>
+                  </ul></li>
+                  <li class="cg-tier cg-tier--platinum"><span class="cg-tier__name">Platino</span><ul class="cg-tier__list">
+                    <li class="cg-rank"><img src="assets/comunidad/rangos/platinum_3.webp" alt="Platino III" width="148" height="176" loading="lazy" decoding="async"/><span class="cg-rank__num" aria-hidden="true">III</span></li>
+                    <li class="cg-rank"><img src="assets/comunidad/rangos/platinum_2.webp" alt="Platino II" width="177" height="176" loading="lazy" decoding="async"/><span class="cg-rank__num" aria-hidden="true">II</span></li>
+                    <li class="cg-rank"><img src="assets/comunidad/rangos/platinum_1.webp" alt="Platino I" width="138" height="176" loading="lazy" decoding="async"/><span class="cg-rank__num" aria-hidden="true">I</span></li>
+                  </ul></li>
+                  <li class="cg-tier cg-tier--diamond"><span class="cg-tier__name">Diamante</span><ul class="cg-tier__list">
+                    <li class="cg-rank"><img src="assets/comunidad/rangos/diamond.webp" alt="Diamante" width="194" height="176" loading="lazy" decoding="async"/></li>
+                  </ul></li>
+                  <li class="cg-tier cg-tier--master"><span class="cg-tier__name">Maestro</span><ul class="cg-tier__list">
+                    <li class="cg-rank"><img src="assets/comunidad/rangos/master.webp" alt="Maestro" width="180" height="176" loading="lazy" decoding="async"/></li>
+                  </ul></li>
+                  <li class="cg-tier cg-tier--legendary"><span class="cg-tier__name">Legendario</span><ul class="cg-tier__list">
+                    <li class="cg-rank"><img src="assets/comunidad/rangos/legendary.webp" alt="Legendario" width="169" height="176" loading="lazy" decoding="async"/></li>
+                  </ul></li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           CENTRO DE TRANSMISIONES (Fase 4) — hora del stream en la zona del visitante.
+           Horario confirmado por el propietario: lun–vie 7:00 PM America/New_York;
+           sáb–dom variable. Toda la lógica vive en js/comunidad-v4.js (Intl, sin offsets
+           fijos, sin red). La hora programada NUNCA se presenta como «en vivo»: el estado
+           real lo escribe el script de estado de la página (Twitch) en #cg-hub-state.
+           Sin JavaScript solo se ve el horario base (bloque estático).
+           ===================================================================== -->
+      <section class="cg-hub" id="transmisiones" aria-labelledby="cg-hub-title" data-reveal>
+        <div class="cg-container">
+          <header class="cg-sechead cg-sechead--hub">
+            <p class="cg-kicker">Horario internacional</p>
+            <h2 class="cg-sechead__title" id="cg-hub-title">Centro de transmisiones</h2>
+            <p class="cg-sechead__note">Descubre cuándo empieza el stream de geovannyrk en tu zona horaria.</p>
+          </header>
+
+          <div class="cg-console" data-cg-hub>
+            <div class="cg-console__bar">
+              <span class="cg-console__tag">Consola horaria</span>
+              <dl class="cg-ind" aria-label="Indicadores técnicos">
+                <div><dt>Zona</dt><dd id="cg-ind-tz">—</dd></div>
+                <div><dt>Offset</dt><dd id="cg-ind-off">—</dd></div>
+                <div><dt>Nueva York</dt><dd id="cg-ind-ny">—</dd></div>
+              </dl>
+            </div>
+
+            <div class="cg-console__grid">
+              <!-- Reloj y cuenta regresiva -->
+              <div class="cg-clock" id="cg-clock" hidden>
+                <p class="cg-clock__label" id="cg-cd-label">Próxima transmisión regular · faltan</p>
+                <div class="cg-cd" role="group" aria-labelledby="cg-cd-label">
+                  <div class="cg-cd__cell"><span class="cg-cd__num" id="cg-cd-d" aria-hidden="true">00</span><span class="cg-cd__unit">Días</span></div>
+                  <span class="cg-cd__sep" aria-hidden="true">:</span>
+                  <div class="cg-cd__cell"><span class="cg-cd__num" id="cg-cd-h" aria-hidden="true">00</span><span class="cg-cd__unit">Horas</span></div>
+                  <span class="cg-cd__sep" aria-hidden="true">:</span>
+                  <div class="cg-cd__cell"><span class="cg-cd__num" id="cg-cd-m" aria-hidden="true">00</span><span class="cg-cd__unit">Min</span></div>
+                  <span class="cg-cd__sep" aria-hidden="true">:</span>
+                  <div class="cg-cd__cell"><span class="cg-cd__num" id="cg-cd-s" aria-hidden="true">00</span><span class="cg-cd__unit">Seg</span></div>
+                </div>
+                <p class="cg-cd__sr cg-sr-only" id="cg-cd-sr"></p>
+
+                <div class="cg-next">
+                  <p class="cg-next__when"><span id="cg-next-date">—</span> · <strong id="cg-next-time">—</strong></p>
+                  <p class="cg-next__zone" id="cg-next-zone">—</p>
+                  <p class="cg-next__shift" id="cg-next-shift" hidden></p>
+                </div>
+                <p class="cg-hub__notice" id="cg-hub-notice" hidden></p>
+                <dl class="cg-clocks" aria-label="Relojes actuales">
+                  <div><dt>Tu zona · ahora</dt><dd id="cg-now-local">—</dd></div>
+                  <div><dt>Nueva York · ahora</dt><dd id="cg-now-ny">—</dd></div>
+                </dl>
+              </div>
+
+              <!-- Horario base + selector -->
+              <div class="cg-base">
+                <p class="cg-base__label">Horario base · Estados Unidos</p>
+                <dl class="cg-base__list">
+                  <div><dt>Lun – Vie</dt><dd>7:00 PM <small>America/New_York · hora del Este de EE. UU.</small></dd></div>
+                  <div><dt>Sáb – Dom</dt><dd>Horario variable <small>sin hora fija programada</small></dd></div>
+                </dl>
+
+                <div class="cg-tz" id="cg-tz-box" hidden>
+                  <label class="cg-tz__label" for="cg-tz">Ver la hora en</label>
+                  <div class="cg-tz__field">
+                    <select id="cg-tz" class="cg-tz__select" aria-describedby="cg-tz-note">
+                      <option value="auto">Zona detectada automáticamente</option>
+                      <optgroup label="México">
+                        <option value="America/Mexico_City">Ciudad de México</option>
+                        <option value="America/Cancun">Cancún</option>
+                        <option value="America/Mazatlan">Mazatlán</option>
+                        <option value="America/Hermosillo">Hermosillo (Sonora)</option>
+                        <option value="America/Tijuana">Tijuana</option>
+                      </optgroup>
+                      <optgroup label="Guatemala">
+                        <option value="America/Guatemala">Ciudad de Guatemala</option>
+                      </optgroup>
+                      <optgroup label="Colombia">
+                        <option value="America/Bogota">Bogotá</option>
+                      </optgroup>
+                      <optgroup label="Perú">
+                        <option value="America/Lima">Lima</option>
+                      </optgroup>
+                      <optgroup label="República Dominicana">
+                        <option value="America/Santo_Domingo">Santo Domingo</option>
+                      </optgroup>
+                      <optgroup label="Argentina">
+                        <option value="America/Argentina/Buenos_Aires">Buenos Aires</option>
+                      </optgroup>
+                      <optgroup label="España">
+                        <option value="Europe/Madrid">Península y Baleares (Madrid)</option>
+                        <option value="Atlantic/Canary">Islas Canarias</option>
+                      </optgroup>
+                      <optgroup label="Estados Unidos">
+                        <option value="America/New_York">Este (Nueva York)</option>
+                        <option value="America/Chicago">Centro (Chicago)</option>
+                        <option value="America/Denver">Montaña (Denver)</option>
+                        <option value="America/Phoenix">Arizona (Phoenix)</option>
+                        <option value="America/Los_Angeles">Pacífico (Los Ángeles)</option>
+                        <option value="America/Anchorage">Alaska (Anchorage)</option>
+                        <option value="Pacific/Honolulu">Hawái (Honolulu)</option>
+                      </optgroup>
+                    </select>
+                  </div>
+                  <p class="cg-tz__note" id="cg-tz-note" role="status"></p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sin JavaScript (o sin Intl) solo queda el horario base -->
+            <p class="cg-hub__nojs" id="cg-hub-nojs">La cuenta regresiva y la conversión a tu zona horaria necesitan JavaScript. El horario base de arriba es el oficial: lunes a viernes, 7:00 PM, hora de Nueva York.</p>
+
+            <div class="cg-compare">
+              <p class="cg-compare__row"><span class="cg-compare__k">Programado</span><span class="cg-compare__v">Horario regular. La cuenta regresiva solo mide ese horario; no confirma que haya transmisión.</span></p>
+              <p class="cg-compare__row cg-compare__row--real" id="cg-hub-real" data-state="loading" hidden><span class="cg-compare__k">Estado real</span><span class="cg-compare__v"><span class="cg-compare__dot" aria-hidden="true"></span><strong id="cg-hub-state">Conectando…</strong> <span class="cg-compare__src">según Twitch</span></span></p>
+              <a href="https://twitch.tv/geovannyrk" target="_blank" rel="noopener noreferrer" class="cg-btn cg-btn--primary cg-compare__cta" id="cg-hub-watch"><span aria-hidden="true">▶</span> Ver stream<span class="cg-sr-only"> en Twitch (se abre en una pestaña nueva)</span></a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           COMUNIDAD (Fase 3): Discord = entrada a la sede de los miembros; WhatsApp = baliza de avisos.
+           ===================================================================== -->
+      <section class="cg-community" id="comunidad" aria-labelledby="cg-com-title" data-reveal>
+        <div class="cg-container cg-community__grid">
+          <div class="cg-gate">
+            <div class="cg-gate__portal" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="cg-gate__txt">
+              <p class="cg-kicker">Comunidad</p>
+              <h2 class="cg-gate__title" id="cg-com-title">Discord: la sede de los miembros</h2>
+              <p class="cg-gate__lead">Conversa con la comunidad y conoce a otros reclutas.</p>
+              <a href="https://discord.gg/3y4JmWkC7P" target="_blank" rel="noopener noreferrer" class="cg-btn cg-btn--violet" id="cg-discord"><span class="cg-btn__ic" aria-hidden="true"><svg focusable="false" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.076.076 0 0 0-.04.106c.36.698.772 1.362 1.225 1.994a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.055c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.334-.946 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.334-.946 2.419-2.157 2.419z"/></svg></span>Entrar al Discord<span class="cg-sr-only"> (se abre en una pestaña nueva)</span></a>
+            </div>
+          </div>
+
+          <div class="cg-beacon" role="group" aria-labelledby="cg-wa-title">
+            <span class="cg-beacon__ic" aria-hidden="true"><svg focusable="false" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.004 2.003c-5.514 0-9.997 4.483-9.997 9.997 0 1.762.462 3.484 1.34 5.003L2 22l5.117-1.334a9.96 9.96 0 0 0 4.887 1.28h.004c5.514 0 9.997-4.483 9.997-9.997s-4.483-9.946-9.997-9.946zm0 18.176a8.156 8.156 0 0 1-4.152-1.135l-.298-.176-3.036.792.812-2.958-.194-.304a8.163 8.163 0 0 1-1.253-4.398c0-4.51 3.67-8.18 8.18-8.18 4.508 0 8.18 3.67 8.18 8.18 0 4.51-3.672 8.18-8.18 8.18h-.06z"/></svg></span>
+            <div class="cg-beacon__txt">
+              <h3 class="cg-beacon__title" id="cg-wa-title">WhatsApp</h3>
+              <p>Avisos y sorteos al instante.</p>
+              <a class="cg-link" href="https://chat.whatsapp.com/Biv2cUNwewL9LtvUirQBL0" target="_blank" rel="noopener noreferrer">Entrar al grupo<span class="cg-sr-only"> de WhatsApp (se abre en una pestaña nueva)</span> <span aria-hidden="true">→</span></a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           JUEGOS Y ACTIVIDADES (Fase 3) — solo lo confirmado: dos juegos principales.
+           No se anuncian eventos, ruletas, piñatas ni sorteos.
+           ===================================================================== -->
+      <section class="cg-games" id="juegos" aria-labelledby="cg-games-title" data-reveal>
+        <div class="cg-container">
+          <h2 class="cg-games__title" id="cg-games-title">Juegos y actividades</h2>
+          <div class="cg-games__split">
+            <article class="cg-game cg-game--ow">
+              <img class="cg-game__ic" src="icon-overwatch.png" alt="" width="160" height="160" loading="lazy" decoding="async"/>
+              <div>
+                <h3 class="cg-game__name">Overwatch</h3>
+                <p>Juego principal de la comunidad.</p>
+                <p class="cg-game__shop">Recompensas de este juego: consúltalas en la Tienda.</p>
+              </div>
+            </article>
+            <article class="cg-game cg-game--fn">
+              <img class="cg-game__ic" src="icon-fortnite.png" alt="" width="160" height="160" loading="lazy" decoding="async"/>
+              <div>
+                <h3 class="cg-game__name">Fortnite</h3>
+                <p>Juego principal de la comunidad.</p>
+                <p class="cg-game__shop">Recompensas de este juego: consúltalas en la Tienda.</p>
+              </div>
+            </article>
+          </div>
+          <p class="cg-games__note">Esta página no anuncia eventos ni actividades. Para saber qué hay activo, entra al stream o al Discord.</p>
+        </div>
+      </section>
+
+      <!-- MOMENTOS REALES — reservado. Permanece OCULTO (atributo hidden) hasta que exista
+           material real y autorizado (fotos o clips de la comunidad). Para activarlo: quitar
+           `hidden` y rellenar [data-cg-moments]. No se muestran capturas ficticias como reales. -->
+      <section class="cg-moments" id="momentos" aria-labelledby="cg-mom-title" hidden>
+        <div class="cg-container">
+          <h2 class="cg-moments__title" id="cg-mom-title">Momentos de la comunidad</h2>
+          <div class="cg-moments__slot" data-cg-moments></div>
+        </div>
+      </section>
+
+      <!-- CIERRE (Fase 3): Twitch = CTA principal; Discord = secundario. -->
+      <section class="cg-closing" id="cg-closing" aria-labelledby="cg-close-title" data-reveal>
+        <div class="cg-closing__bg" aria-hidden="true"></div>
+        <div class="cg-container cg-closing__inner">
+          <p class="cg-kicker">Siguiente paso</p>
+          <h2 class="cg-closing__title" id="cg-close-title">Tu lugar en el Cuartel General te espera</h2>
+          <p class="cg-closing__sched">Lun – Vie · 7:00 PM (hora del Este de EE. UU.) &nbsp;·&nbsp; Sáb – Dom · Horario variable</p>
+          <div class="cg-closing__actions">
+            <a href="https://twitch.tv/geovannyrk" target="_blank" rel="noopener noreferrer" class="cg-btn cg-btn--primary cg-btn--lg" id="cg-final-watch"><span aria-hidden="true">▶</span> Ver stream en Twitch<span class="cg-sr-only"> (se abre en una pestaña nueva)</span></a>
+            <a href="https://discord.gg/3y4JmWkC7P" target="_blank" rel="noopener noreferrer" class="cg-btn cg-btn--ghost" id="cg-final-discord">Entrar al Discord<span class="cg-sr-only"> (se abre en una pestaña nueva)</span></a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Aviso «¡Código copiado!» (main.js lo muestra con #toast). Dentro de <main> para que no quede
+           contenido fuera de los landmarks (Fase 5B). Posición fija: no ocupa espacio. -->
+      <div class="toast" id="toast">¡Código copiado!</div>
+
+    </main>
   </div>
 
   <!-- FOOTER -->
@@ -342,36 +533,63 @@
     </div>
   </footer>
 
-  <div class="toast" id="toast">¡Código copiado!</div>
+  <!-- Barra móvil contextual (Fase 3): js/comunidad-v4.js la muestra solo en pantallas
+       estrechas y solo cuando el CTA principal ya no está a la vista. Oculta sin JavaScript. -->
+  <aside class="cg-bar" id="cg-bar" data-state="loading" aria-label="Acceso rápido a Twitch" hidden>
+    <span class="cg-bar__state"><span class="cg-bar__dot" aria-hidden="true"></span><span id="cg-bar-state">Conectando…</span></span>
+    <a href="https://twitch.tv/geovannyrk" target="_blank" rel="noopener noreferrer" class="cg-bar__btn" id="cg-bar-watch"><span aria-hidden="true">▶</span> Ver stream<span class="cg-sr-only"> en Twitch (se abre en una pestaña nueva)</span></a>
+  </aside>
+
   <script src="js/main.js"></script>
   <script src="js/premium.js"></script>
   <script src="js/geoarmy-account.js"></script>
   <script>
-  // ===== V3: estado del stream en el módulo del hero, sin tocar main.js =====
-  // main.js sigue escribiendo en #live-label (oculto visualmente); aquí solo
-  // observamos ese texto para decidir el texto visible y el estado (vivo/offline).
+  // ===== Estado del stream — presentación de Comunidad (sin tocar main.js) =====
+  // main.js escribe en #live-label (texto oculto). Aquí SOLO se traduce ese texto a
+  // data-state (loading | live | offline | unknown) y se rellenan elementos PROPIOS
+  // (#v3LiveText y #cg-card-state). No se escribe en ningún elemento que main.js use.
+  // El texto es la fuente de verdad porque main.js añade .live/.offline pero nunca
+  // las quita. Estado desconocido o error => nunca se muestra "en vivo".
   (function () {
     try {
       var wrap = document.getElementById('live-badge');
       var label = document.getElementById('live-label');
       var out = document.getElementById('v3LiveText');
       if (!wrap || !label || !out) return;
+      var card = document.querySelector('.cg-monitor');
+      var bar = document.getElementById('cg-bar');
+      var barOut = document.getElementById('cg-bar-state');
+      var hub = document.getElementById('cg-hub-real');
+      if (hub) hub.hidden = false; // sin JavaScript la fila «Estado real» permanece oculta (no habría quién la actualice)
+      var hubOut = document.getElementById('cg-hub-state');
+      var cardOut = document.getElementById('cg-card-state');
+      var HERO_TXT = { live: 'GEO ARMY ESTÁ EN VIVO', offline: 'FUERA DE LÍNEA', unknown: 'ESTADO NO DISPONIBLE', loading: 'CONECTANDO CON TWITCH…' };
+      var CARD_TXT = { live: 'EN VIVO AHORA', offline: 'FUERA DE LÍNEA', unknown: 'ESTADO NO DISPONIBLE', loading: 'CONECTANDO…' };
+      var timedOut = false;
+      function stateOf(txt) {
+        if (txt.indexOf('En vivo') !== -1) return 'live';
+        if (txt.indexOf('Fuera de línea') !== -1) return 'offline';
+        if (!txt || txt.indexOf('Cargando') !== -1) return timedOut ? 'unknown' : 'loading';
+        return 'unknown'; // p. ej. 'geovannyrk': main.js no pudo consultar el estado
+      }
+      function setText(el, t) { if (el && el.textContent !== t) el.textContent = t; }
       function sync() {
-        var txt = label.textContent || '';
-        var live = txt.indexOf('En vivo') !== -1;
-        wrap.classList.toggle('is-live', live);
-        if (live) {
-          out.textContent = 'GEO ARMY ESTÁ EN VIVO';
-        } else if (txt.indexOf('Fuera de línea') !== -1) {
-          out.textContent = 'PRÓXIMA TRANSMISIÓN · Hoy · 7:00 PM';
-        } else {
-          out.textContent = txt;
-        }
+        var st = stateOf(label.textContent || '');
+        if (wrap.getAttribute('data-state') !== st) wrap.setAttribute('data-state', st);
+        wrap.classList.toggle('is-live', st === 'live');
+        setText(out, HERO_TXT[st]);
+        if (card && card.getAttribute('data-state') !== st) card.setAttribute('data-state', st);
+        setText(cardOut, CARD_TXT[st]);
+        if (hub) { if (hub.getAttribute('data-state') !== st) hub.setAttribute('data-state', st); setText(hubOut, CARD_TXT[st]); }
+        if (bar) { if (bar.getAttribute('data-state') !== st) bar.setAttribute('data-state', st); setText(barOut, CARD_TXT[st]); }
       }
       sync();
       new MutationObserver(sync).observe(label, { childList: true, characterData: true, subtree: true });
-    } catch (e) { console.warn('[v3-live-text]', e); }
+      // Si main.js no responde en 15 s, se pasa de "conectando" a "no disponible".
+      setTimeout(function () { timedOut = true; sync(); }, 15000);
+    } catch (e) { console.warn('[comunidad-v4:estado]', e); }
   })();
   </script>
+  <script src="js/comunidad-v4.js"></script>
 </body>
 </html>
