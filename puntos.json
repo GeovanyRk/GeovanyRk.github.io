@@ -114,7 +114,14 @@
   "skky_de_nile": {
     "usuario": "skky_de_nile",
     "ganado": 13360,
-    "gastado": 4000
+    "gastado": 9000,
+    "operaciones": {
+      "af0a42b1ab2e784f2425c25fa8652fd6e9c4704a6941b067c1623ac61e8e06e2": {
+        "puntos": 5000,
+        "saldoRestante": 4360,
+        "en": "2026-10-15T00:12:46.301Z"
+      }
+    }
   },
   "krager_27": {
     "usuario": "Krager_27",
