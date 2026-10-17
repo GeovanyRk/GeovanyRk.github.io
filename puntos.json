@@ -34,7 +34,14 @@
   "fedriquechumpi": {
     "usuario": "fedriquechumpi",
     "ganado": 67900,
-    "gastado": 53800
+    "gastado": 63800,
+    "operaciones": {
+      "2ab6a2ba52b06060273e29a519392b1fe26480d5940cc47b7d486e9495c41326": {
+        "puntos": 10000,
+        "saldoRestante": 4100,
+        "en": "2026-10-17T01:24:51.446Z"
+      }
+    }
   },
   "warnerr8": {
     "usuario": "warnerr8",
