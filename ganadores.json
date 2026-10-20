@@ -2529,6 +2529,21 @@
       "morvanna_withheld_amount": 160,
       "wallet_credit_amount": 640,
       "morvanna_curse_rate": 0
+    },
+    {
+      "id": 229,
+      "usuario": "kittykitty_katt",
+      "premio": "500 OW Coins",
+      "cantidad": 500,
+      "moneda": "owcoins",
+      "evento": "Ruleta OW",
+      "fecha": "20/10/2026",
+      "creado": "2026-10-20T23:41:06.925Z",
+      "entregado": false,
+      "morvanna_curse_applied": true,
+      "morvanna_withheld_amount": 100,
+      "wallet_credit_amount": 400,
+      "morvanna_curse_rate": 0
     }
   ],
   "gastos": [],
