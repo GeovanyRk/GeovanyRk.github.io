@@ -2514,6 +2514,21 @@
       "morvanna_withheld_amount": 100,
       "wallet_credit_amount": 400,
       "morvanna_curse_rate": 0
+    },
+    {
+      "id": 228,
+      "usuario": "Kiro_Hyer",
+      "premio": "800 Pavos",
+      "cantidad": 800,
+      "moneda": "pavos",
+      "evento": "Ruleta Fortnite",
+      "fecha": "20/10/2026",
+      "creado": "2026-10-20T23:16:37.970Z",
+      "entregado": false,
+      "morvanna_curse_applied": true,
+      "morvanna_withheld_amount": 160,
+      "wallet_credit_amount": 640,
+      "morvanna_curse_rate": 0
     }
   ],
   "gastos": [],
