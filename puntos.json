@@ -7,7 +7,14 @@
   "kirbyx01": {
     "usuario": "kirbyx01",
     "ganado": 22725,
-    "gastado": 3000
+    "gastado": 13000,
+    "operaciones": {
+      "aac1be8a55971a13f18bfd83cd47d5378fad27cfc96130152526f417220ad436": {
+        "puntos": 10000,
+        "saldoRestante": 9725,
+        "en": "2026-10-21T21:26:23.640Z"
+      }
+    }
   },
   "alberto9134": {
     "usuario": "alberto9134",
