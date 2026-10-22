@@ -1122,6 +1122,101 @@
     return map;
   }
 
+  // -----------------------------------------------------------------
+  // 7c) Roles por contrato + recompensa tipada + penalización (2026-10-21)
+  //
+  //     Backend ya terminado: halloween_2026_get_public_missions() ahora
+  //     también devuelve required_role/reward_type/geoarmy_heal/
+  //     reward_effect_*/failure_geoarmy_damage, y halloween_2026_claim_mission()
+  //     ya valida el rol server-side. Todo este bloque es PURA
+  //     presentación -- nunca decide si un claim es válido, solo:
+  //       (a) muestra qué rol pide un contrato,
+  //       (b) muestra el texto de recompensa correcto según reward_type
+  //           en vez de asumir boss_damage siempre,
+  //       (c) oculta visualmente el botón TOMAR cuando el rol del usuario
+  //           (autoritativo, de lastParticipation) no coincide -- el
+  //           backend igual lo rechazaría si se forzara, esto es solo UX.
+  //     Solo se usa desde missionCardHtmlIndividual()/individualMissionBodyHtml();
+  //     missionCardHtml() (stream/community) no se toca y sigue sin saber
+  //     que esto existe.
+  // -----------------------------------------------------------------
+  var CONTRACT_ROLE_CHIP = {
+    attacker: { icon: '⚔', label: 'ATACANTE', cls: 'hwc-role-attacker' },
+    support: { icon: '💚', label: 'SOPORTE', cls: 'hwc-role-support' },
+    defender: { icon: '🛡', label: 'DEFENSOR', cls: 'hwc-role-defender' },
+  };
+  // Texto del botón deshabilitado cuando el rol no coincide -- pedido
+  // explícitamente así (plural, "SOLO <ROL>S"), no reutiliza CONTRACT_ROLE_CHIP.label.
+  var CONTRACT_ROLE_ONLY_LABEL = {
+    attacker: 'SOLO ATACANTES',
+    support: 'SOLO SOPORTES',
+    defender: 'SOLO DEFENSORES',
+  };
+
+  function missionRoleChipHtml(m) {
+    var meta = m.required_role && CONTRACT_ROLE_CHIP[m.required_role];
+    if (!meta) return ''; // null = "no usa esta mecánica" (p.ej. contrato final) -- sin chip
+    return '<div class="hwc-role-chip ' + meta.cls + '">' + meta.icon + ' ' + meta.label + '</div>';
+  }
+
+  // Multiplicador de daño remanente (0.500/0.400/0.350) -> % de reducción.
+  // reward_effect_multiplier representa lo que SIGUE pasando del daño, así
+  // que la reducción es (1 - multiplier). Nunca se muestra el multiplier
+  // crudo. Redondeado al entero más cercano (los 3 valores documentados ya
+  // dan enteros exactos: 50/60/65).
+  function missionEffectReductionPercent(multiplier) {
+    var n = Number(multiplier);
+    if (!isFinite(n) || n <= 0) return 0;
+    return Math.round((1 - n) * 100);
+  }
+
+  // remaining_uses -> "PRÓXIMO ATAQUE" (1 o indefinido) / "PRÓXIMOS N ATAQUES".
+  function missionEffectUsesText(remainingUses) {
+    var n = Number(remainingUses);
+    if (!isFinite(n) || n <= 1) return 'PRÓXIMO ATAQUE';
+    return 'PRÓXIMOS ' + n + ' ATAQUES';
+  }
+
+  // Función central de recompensa: reemplaza la vieja suposición de que
+  // toda misión usa boss_damage. Dispatch por reward_type -- SOLO se usa
+  // en contratos individuales (ver nota de la sección 7c más arriba); los
+  // contratos stream/community nunca pasan por acá, siguen usando
+  // missionDamageText()/missionCardHtml() tal cual, intactos.
+  function missionRewardText(m) {
+    if (m.reward_type === 'heal') {
+      return '💚 +' + fmtNum(m.geoarmy_heal) + ' HP GEO ARMY';
+    }
+    if (m.reward_type === 'effect') {
+      // Único applies_to documentado por ahora: 'boss_attack' (reduce el
+      // daño del próximo ataque de La Heraldo). Si el backend manda un
+      // applies_to no documentado, no se inventa semántica nueva: se
+      // muestra un texto neutro con el mismo % y duración reales.
+      var pct = missionEffectReductionPercent(m.reward_effect_multiplier);
+      var usesText = missionEffectUsesText(m.reward_effect_remaining_uses);
+      if (m.reward_effect_applies_to && m.reward_effect_applies_to !== 'boss_attack') {
+        return '🛡 ' + pct + '% DE PROTECCIÓN · ' + usesText;
+      }
+      return '🛡 ' + pct + '% MENOS DAÑO · ' + usesText;
+    }
+    // reward_type === 'damage' (o ausente/desconocido -- compat con datos
+    // viejos): boss_damage sigue siendo la autoridad, nunca se calcula.
+    return '⚔ −' + fmtNum(m.boss_damage) + ' HP A MORVANNA';
+  }
+
+  function missionRewardClass(m) {
+    if (m.reward_type === 'heal') return 'hwc-reward-heal';
+    if (m.reward_type === 'effect') return 'hwc-reward-effect';
+    return 'hwc-reward-damage';
+  }
+
+  // Penalización visible -- solo si el backend manda failure_geoarmy_damage
+  // > 0. Nunca hardcodea un valor: si no viene o es 0, no se muestra nada.
+  function missionFailurePenaltyHtml(m) {
+    var dmg = Number(m.failure_geoarmy_damage);
+    if (!isFinite(dmg) || dmg <= 0) return '';
+    return '<div class="hwc-failure-penalty">☠ SI FALLAS: −' + fmtNum(dmg) + ' HP GEO ARMY</div>';
+  }
+
   // Mensaje visible (éxito/error) de un intento de tomar contrato. Se
   // oculta solo (5s) -- no bloquea nada, es puramente informativo.
   function showMissionClaimMessage(msg, isError) {
@@ -1228,6 +1323,28 @@
         extra: '<button type="button" class="hwc-claim-btn" disabled>YA TIENES UN CONTRATO</button>'
       };
     }
+
+    // NUEVO (2026-10-21, punto 9 del pedido "contratos por rol"): llegamos
+    // acá solo con participationStatus === 'ok' && lastParticipation &&
+    // lastParticipation.has_role === true (confirmado arriba), así que
+    // lastParticipation.role es un dato autoritativo real, no una
+    // suposición. Si el contrato pide un rol (m.required_role) y no
+    // coincide con el mío, NO se muestra botón reclamable -- solo UX, el
+    // backend (halloween_2026_claim_mission) ya rechaza esto igual. Si
+    // required_role es null (contrato sin esta mecánica) este bloque no
+    // aplica y se sigue directo al TOMAR CONTRATO de siempre.
+    if (m.required_role && lastParticipation.role !== m.required_role) {
+      var onlyLabel = CONTRACT_ROLE_ONLY_LABEL[m.required_role] || 'ROL INCORRECTO';
+      var myRoleMeta = CONTRACT_ROLE_CHIP[lastParticipation.role];
+      var myRoleLine = myRoleMeta
+        ? '<div class="hwc-claim-line hwc-claim-line-sub">Tu rol: ' + esc(myRoleMeta.label) + '</div>'
+        : '';
+      return {
+        badgeCls: 'active', badgeText: MISSION_STATUS_LABEL.active,
+        extra: '<button type="button" class="hwc-claim-btn" disabled>' + esc(onlyLabel) + '</button>' + myRoleLine
+      };
+    }
+
     return {
       badgeCls: 'active', badgeText: MISSION_STATUS_LABEL.active,
       extra: '<button type="button" class="hwc-claim-btn" data-action="claim" data-mission-id="' + esc(m.mission_id) + '">TOMAR CONTRATO</button>'
@@ -1242,18 +1359,26 @@
     var catLabel = MISSION_CATEGORY_LABEL[m.category] || String(m.category || '').toUpperCase();
     var badgeCls = body.badgeCls ? (' ' + body.badgeCls) : '';
 
+    // Recompensa tipada (damage/heal/effect) + penalización -- SOLO para
+    // contratos individuales. missionCardHtml()/missionDamageText() (uso
+    // community) no se tocan y siguen devolviendo "−X HP A LA HERALDO"
+    // igual que siempre.
+    var rewardCls = missionRewardClass(m);
+
     return '<div class="hw26-mission-card' + (isFinal ? ' hw26-mission-card-final' : '') + '" data-status="' + esc(m.availability) + '" data-category="' + esc(m.category || '') + '">' +
       (isFinal ? '<div class="hw26-mission-final-tag">⚔ CONTRATO FINAL</div>' : '') +
       '<div class="hw26-mission-cat">' + esc(catLabel) + '</div>' +
+      missionRoleChipHtml(m) +
       '<div class="hw26-mission-top">' +
         '<div class="hw26-mission-title">' + esc(m.title) + '</div>' +
         '<span class="hw26-mission-badge' + badgeCls + '">' + esc(body.badgeText) + '</span>' +
       '</div>' +
       '<div class="hw26-mission-desc">' + esc(m.description || '') + '</div>' +
       '<div class="hw26-mission-meta">' +
-        '<span class="hw26-mission-dmg">' + missionDamageText(m.boss_damage) + '</span>' +
+        '<span class="hwc-reward ' + rewardCls + '">' + missionRewardText(m) + '</span>' +
         '<span class="hw26-mission-window">' + esc(missionWindowText(m)) + '</span>' +
       '</div>' +
+      missionFailurePenaltyHtml(m) +
       body.extra +
     '</div>';
   }
