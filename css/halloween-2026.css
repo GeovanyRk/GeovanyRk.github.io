@@ -1164,8 +1164,223 @@ body[data-halloween-page="battle"] .hw26-page-head { margin-bottom: 20px; }
 }
 .hw26-mission-card-final .hw26-mission-dmg { color: #ff8a8a; }
 
+/* ---------------------------------------------------------------------
+   4b) Contratos por rol (2026-10-21) -- clases nuevas y SCOPED, solo
+   usadas por missionCardHtmlIndividual()/individualMissionBodyHtml() en
+   js/halloween-2026.js. No tocan ni redefinen ninguna regla de arriba
+   (.hw26-mission-dmg sigue siendo solo para community/missionCardHtml);
+   mantienen el mismo lenguaje visual gótico/cinematográfico (Orbitron,
+   mayúsculas, letter-spacing amplio, chips redondeados) en vez de
+   repintar la tarjeta con colores fuertes nuevos.
+--------------------------------------------------------------------- */
+.hwc-role-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-bottom: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--hw26-text-dim);
+  white-space: nowrap;
+}
+.hwc-role-attacker { color: #ff9b9b; border-color: rgba(220, 38, 38, 0.4); background: rgba(220, 38, 38, 0.12); }
+.hwc-role-support { color: #7de8b0; border-color: rgba(46, 204, 113, 0.4); background: rgba(46, 204, 113, 0.12); }
+.hwc-role-defender { color: #9fd0ff; border-color: rgba(79, 158, 255, 0.4); background: rgba(79, 158, 255, 0.12); }
+
+/* Reemplaza .hw26-mission-dmg SOLO en la fila de recompensa de contratos
+   individuales -- mismo tamaño/posición que la meta-row original, el
+   color cambia según reward_type en vez de ser siempre rojo-daño. */
+.hwc-reward { font-weight: 700; letter-spacing: 0.02em; } /* sin nowrap: "🛡 65% MENOS DAÑO · PRÓXIMOS 2 ATAQUES" es largo y desbordaría la card en mobile */
+.hwc-reward-damage { color: var(--hw26-red); }
+.hwc-reward-heal { color: #7de8b0; }
+.hwc-reward-effect { color: #9fd0ff; }
+
+.hwc-failure-penalty {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--hw26-text-dim);
+  margin-top: 2px;
+}
+
+/* ---------------------------------------------------------------------
+   4c) Contratos individuales: claims (2026-10-22) -- completa los estilos
+   de lo que js/halloween-2026.js ya renderizaba (individualMissionBodyHtml,
+   showMissionClaimMessage, renderMissionDropNote) y no tenía CSS.
+   Solo clases hwc-* y variantes .hw26-mission-badge.is-*; no redefine
+   ninguna regla anterior.
+--------------------------------------------------------------------- */
+
+/* Botón de acción dentro de la card (TOMAR CONTRATO / INICIAR SESIÓN /
+   estados deshabilitados). También se aplica al <a> de "ELIGE TU ROL". */
+.hwc-claim-btn {
+  box-sizing: border-box; /* el <a> (hwc-claim-link) es content-box por defecto y desbordaba la card */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 38px;
+  margin-top: 12px;
+  padding: 9px 14px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-align: center;
+  text-transform: uppercase;
+  color: #fff;
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.92), rgba(190, 40, 70, 0.82));
+  border: 1px solid var(--hw26-violet-line);
+  border-radius: 10px;
+  box-shadow: 0 0 16px -8px rgba(124, 58, 237, 0.8);
+  cursor: pointer;
+  transition: filter 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+.hwc-claim-btn:hover:not(:disabled) {
+  filter: brightness(1.15);
+  box-shadow: 0 0 22px -6px rgba(168, 110, 255, 0.9);
+}
+.hwc-claim-btn:active:not(:disabled) { transform: translateY(1px); }
+.hwc-claim-btn:focus-visible { outline: 2px solid var(--hw26-gold); outline-offset: 2px; }
+.hwc-claim-btn:disabled {
+  color: var(--hw26-text-faint);
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+/* "ELIGE TU ROL PRIMERO": enlace, no acción de claim -- contorno dorado
+   para distinguirlo del botón principal sin gritar. */
+.hwc-claim-link {
+  text-decoration: none;
+  color: var(--hw26-gold);
+  background: rgba(212, 175, 55, 0.08);
+  border-color: rgba(212, 175, 55, 0.5);
+  box-shadow: none;
+}
+.hwc-claim-link:hover { color: #f3d375; background: rgba(212, 175, 55, 0.16); filter: none; }
+
+/* Líneas de estado dentro de la card (EN MISIÓN, tomado por X, fallido...) */
+.hwc-claim-line {
+  margin-top: 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--hw26-text-dim);
+}
+.hwc-claim-line-mine {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #c9b3ff;
+  text-shadow: 0 0 12px rgba(148, 92, 255, 0.55);
+}
+.hwc-claim-line-sub {
+  margin-top: 3px;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--hw26-text-faint);
+  text-shadow: none;
+}
+.hwc-claim-line-failed { color: #ff9b9b; }
+.hwc-claim-btn + .hwc-claim-line-sub { margin-top: 6px; text-align: center; }
+
+/* Badges de estado de claim (conviven con .hw26-mission-badge) */
+.hw26-mission-badge.is-claimed-mine {
+  background: linear-gradient(135deg, #7c3aed, #a78bfa);
+  color: #fff;
+  box-shadow: 0 0 12px -2px rgba(148, 92, 255, 0.7);
+}
+.hw26-mission-badge.is-claimed-other {
+  background: rgba(224, 153, 61, 0.16);
+  color: #f0b86a;
+  border: 1px solid rgba(224, 153, 61, 0.4);
+}
+.hw26-mission-badge.is-completed {
+  background: rgba(46, 204, 113, 0.16);
+  color: #7de8b0;
+  border: 1px solid rgba(46, 204, 113, 0.4);
+}
+.hw26-mission-badge.is-failed {
+  background: rgba(220, 38, 38, 0.16);
+  color: #ff9b9b;
+  border: 1px solid rgba(220, 38, 38, 0.4);
+}
+
+/* Mensaje de éxito/error del claim (#hw26MissionClaimMsg): toast fijo
+   para que se vea sin importar cuánto se haya scrolleado la lista. El JS
+   lo oculta solo a los 5s. */
+.hwc-claim-msg {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: max-content;
+  max-width: min(92vw, 440px);
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-align: center;
+  background: var(--hw26-panel-solid);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
+}
+.hwc-claim-msg[hidden] { display: none; }
+.hwc-claim-msg.is-ok { color: #c8f5dc; border: 1px solid rgba(46, 204, 113, 0.5); }
+.hwc-claim-msg.is-error { color: #ffd0d0; border: 1px solid rgba(220, 38, 38, 0.5); }
+
+/* PRÓXIMA OLEADA (#hw26MissionDropNote) -- solo fecha, sin spoilers. */
+.hwc-drop-note {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding: 12px 16px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 12px;
+  background:
+    radial-gradient(120% 160% at 0% 0%, rgba(124, 58, 237, 0.16), transparent 60%),
+    rgba(255, 255, 255, 0.025);
+}
+.hwc-drop-note[hidden] { display: none; }
+.hwc-drop-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  filter: drop-shadow(0 0 10px rgba(148, 92, 255, 0.6));
+}
+.hwc-drop-body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.hwc-drop-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--hw26-gold);
+}
+.hwc-drop-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--hw26-text);
+}
+.hwc-drop-sub { font-size: 0.7rem; color: var(--hw26-text-faint); }
+
 @media (max-width: 759px) {
   .hw26-mission-day-grid { grid-template-columns: 1fr; }
+  .hwc-role-chip { font-size: 0.56rem; }
+  .hwc-claim-btn { min-height: 42px; }
+  .hwc-claim-msg { bottom: 14px; }
+  .hwc-drop-note { padding: 10px 12px; gap: 10px; }
 }
 
 /* ---------------------------------------------------------------------
