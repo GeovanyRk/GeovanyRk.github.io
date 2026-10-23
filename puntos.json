@@ -41,12 +41,17 @@
   "kittykitty_katt": {
     "usuario": "kittykitty_katt",
     "ganado": 23940,
-    "gastado": 20000,
+    "gastado": 22000,
     "operaciones": {
       "ea7c98d70e322e94ca4cfadf43c25c82a9edb08d56ad7f1faa3940365eb7692e": {
         "puntos": 5000,
         "saldoRestante": 3940,
         "en": "2026-10-23T22:21:08.415Z"
+      },
+      "0ba4eb1e68c126f4cc7aa153dc723a2d02bc073f42d552b5ce97d1fe2cbb952a": {
+        "puntos": 2000,
+        "saldoRestante": 1940,
+        "en": "2026-10-23T22:21:14.330Z"
       }
     }
   },
