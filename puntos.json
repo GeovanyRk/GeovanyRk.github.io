@@ -41,7 +41,14 @@
   "kittykitty_katt": {
     "usuario": "kittykitty_katt",
     "ganado": 23940,
-    "gastado": 15000
+    "gastado": 20000,
+    "operaciones": {
+      "ea7c98d70e322e94ca4cfadf43c25c82a9edb08d56ad7f1faa3940365eb7692e": {
+        "puntos": 5000,
+        "saldoRestante": 3940,
+        "en": "2026-10-23T22:21:08.415Z"
+      }
+    }
   },
   "fedriquechumpi": {
     "usuario": "fedriquechumpi",
