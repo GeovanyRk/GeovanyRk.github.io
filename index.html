@@ -71,6 +71,26 @@
       body.hw-halloween .ga-dropdown{ right:auto; left:0; max-width:min(260px, calc(100vw - 32px)); }
     }
 
+    /* ---- Pin de Streamer vs Viewer (reemplaza al de Alcancía) ----
+       Sin círculo: solo el VS (imagen aportada por el organizador). Ocupa el
+       mismo espacio que el resto de pines (.v3-marker-icon: 46px, 36px en
+       móvil) para que la posición y la alineación del label no cambien.
+       Todo va bajo .svv-pin, no afecta a ningún otro pin. */
+    .v3-planet-nav a.svv-pin .svv-pin-icon,
+    .v3-planet-nav a.svv-pin:hover .svv-pin-icon,
+    .v3-planet-nav a.svv-pin:focus-visible .svv-pin-icon{
+      background:none; border:0; box-shadow:none; border-radius:0;
+    }
+    .v3-planet-nav a.svv-pin:hover .svv-pin-icon,
+    .v3-planet-nav a.svv-pin:focus-visible .svv-pin-icon{ transform:scale(1.18); }
+    .v3-planet-nav a.svv-pin .v3-marker-label{
+      color:#fff1d6; border-color:rgba(255,122,26,.65);
+      background:linear-gradient(90deg, rgba(40,12,4,.94), rgba(20,8,34,.94));
+    }
+    .svv-pin-vs{ width:54px; max-width:none; height:auto; display:block; flex:none;
+      filter:drop-shadow(0 0 5px rgba(255,90,0,.75)) drop-shadow(0 2px 4px rgba(0,0,0,.6)); }
+    @media (max-width:560px){ .svv-pin-vs{ width:44px; } }
+
     /* ---- Decoraciones flotantes (puramente visuales) ---- */
     .hw-decor{ position:fixed; inset:0; pointer-events:none; z-index:2; overflow:hidden; }
     .hw-decor span{ position:absolute; opacity:.5; filter:drop-shadow(0 0 6px rgba(255,140,0,.35)); }
@@ -151,7 +171,7 @@
       <a href="tienda.html">Tienda</a>
       <a href="ganadores.html">Ganadores</a>
       <a href="puntos.html">Puntos</a>
-      <a href="#alcancia-proximamente" aria-disabled="true">Alcancía (Próximamente)</a>
+      <a href="/streamer-vs-viewer/">Streamer vs Viewer</a>
     </div>
 
     <!-- Tabs de navegación para móvil -->
@@ -206,18 +226,17 @@
             <span class="v3-marker-stem"></span>
             <span class="v3-marker-ring"></span>
           </a>
-          <!-- Alcancía: función pospuesta para más adelante. El pin se
-               conserva visible, en su misma posición/icono, pero queda
-               bloqueado (aria-disabled + preventDefault en el script de más
-               abajo, sin popup/alert) y muestra "Próximamente" bajo el
-               nombre. No se toca alcancia.html ni su backend, solo deja de
-               ser accesible desde la navegación. -->
-          <a href="#alcancia-proximamente" style="--mx:34.5%; --my:76.7%;" aria-disabled="true">
-            <span class="v3-marker-label v3-marker-label-soon">
-              <span class="v3-marker-soon-name">Alcancía</span>
-              <span class="v3-marker-soon-tag">Próximamente</span>
+          <!-- Streamer vs Viewer (La Arena): ocupa el lugar del antiguo pin de
+               Alcancía (proyecto cancelado), misma posición --mx/--my y mismo
+               tamaño que el resto de pines. El VS es la imagen aportada por el
+               organizador (assets/streamer-vs-viewer/vs-pin.webp), estilizada en el bloque <style> de arriba
+               (.svv-pin). Navega a /streamer-vs-viewer/. alcancia.html y su
+               backend no se tocan, solo deja de estar enlazada desde aquí. -->
+          <a href="/streamer-vs-viewer/" class="svv-pin" style="--mx:34.5%; --my:76.7%;" aria-label="Streamer vs Viewer">
+            <span class="v3-marker-label">Streamer vs Viewer</span>
+            <span class="v3-marker-icon svv-pin-icon">
+              <img class="svv-pin-vs" src="assets/streamer-vs-viewer/vs-pin.webp" alt="" width="280" height="240" decoding="async"/>
             </span>
-            <span class="v3-marker-icon v3-marker-icon-soon">🐷</span>
             <span class="v3-marker-stem"></span>
             <span class="v3-marker-ring"></span>
           </a>
@@ -580,23 +599,6 @@
         });
       });
     } catch (e) { console.warn('[v3-planet-nav]', e); }
-  })();
-  </script>
-  <script>
-  // ===== V3: Alcancía pospuesta -- pin/enlace visible pero no navegable =====
-  // Cubre el pin del planeta Y el link oculto de .nav-links (y su clon en la
-  // tira de tabs de móvil, que hereda aria-disabled al clonarse). Sin popup,
-  // sin alert: simplemente no navega. No toca alcancia.html ni su backend.
-  (function () {
-    try {
-      var soonLinks = document.querySelectorAll('a[aria-disabled="true"]');
-      soonLinks.forEach(function (a) {
-        a.addEventListener('click', function (e) { e.preventDefault(); });
-        a.addEventListener('keydown', function (e) {
-          if (e.key === 'Enter' || e.key === ' ') e.preventDefault();
-        });
-      });
-    } catch (e) { console.warn('[v3-soon-links]', e); }
   })();
   </script>
 </body>

@@ -275,6 +275,46 @@
       <!-- ============ G · HISTORIAL · BATALLAS ANTERIORES ============ -->
       <section class="svv-history" id="svv-historial" aria-labelledby="svv-history-h">
         <h2 class="svv-h2" id="svv-history-h">Batallas anteriores <small>Ediciones pasadas</small></h2>
+
+        <!-- Historial previo: resultado agregado confirmado por el organizador.
+             Contenido fijo (no viene de Supabase ni de svv_get_history): estas 4 ediciones
+             se jugaron antes del sistema V2, así que no hay registro por edición. -->
+        <div class="svv-prev" role="group" aria-labelledby="svv-prev-h">
+          <div class="svv-prev__head">
+            <h3 class="svv-prev__title" id="svv-prev-h">Historial previo</h3>
+            <span class="svv-prev__badge">Confirmado por el organizador</span>
+          </div>
+
+          <div class="svv-prev__versus">
+            <div class="svv-prev__side svv-prev__side--geo" role="group" aria-label="Geo: 1 victoria">
+              <p class="svv-prev__tag">GEO</p>
+              <p class="svv-prev__num" aria-hidden="true">1</p>
+              <p class="svv-prev__sub" aria-hidden="true">victoria</p>
+            </div>
+
+            <div class="svv-prev__core" aria-hidden="true">
+              <span class="svv-prev__vs">VS</span>
+              <span class="svv-prev__total"><b>4</b> ediciones</span>
+            </div>
+
+            <div class="svv-prev__side svv-prev__side--viewer" role="group" aria-label="Viewers: 3 victorias">
+              <p class="svv-prev__tag">VIEWERS</p>
+              <p class="svv-prev__num" aria-hidden="true">3</p>
+              <p class="svv-prev__sub" aria-hidden="true">victorias</p>
+            </div>
+          </div>
+
+          <div class="svv-prev__tally" role="img" aria-label="De 4 ediciones anteriores: Geo ganó 1 y los viewers ganaron 3">
+            <i class="svv-prev__pip svv-prev__pip--geo"></i>
+            <i class="svv-prev__pip svv-prev__pip--viewer"></i>
+            <i class="svv-prev__pip svv-prev__pip--viewer"></i>
+            <i class="svv-prev__pip svv-prev__pip--viewer"></i>
+          </div>
+
+          <p class="svv-prev__note">Resultado total de las 4 ediciones jugadas antes del sistema V2. No hay detalle por edición.</p>
+        </div>
+
+        <h3 class="svv-h3 svv-history__digital">Ediciones digitales V2</h3>
         <ol class="svv-timeline" id="svv-history-list" aria-live="polite"></ol>
         <p class="svv-muted" id="svv-history-note">Cargando historial…</p>
         <button type="button" class="svv-btn svv-btn--ghost" id="svv-history-more" hidden>Ver más ediciones</button>
