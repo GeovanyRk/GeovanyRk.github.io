@@ -21,61 +21,15 @@
   <!-- Tema V3 (espacial/holográfico) — antes vivía inline aquí, ahora es un archivo
        compartido para poder reusarlo en mi-geoarmy.html y páginas nuevas -->
   <link rel="stylesheet" href="css/v3-theme.css"/>
-  <!-- ===== HALLOWEEN 2026 — Mundo 02, producción (PASADA FINAL TEST ->
-       PRODUCCIÓN, 2026-09-26). Solo estiliza los 3 pins circulares sobre
-       el planeta (Batalla/Rol/Contratos) -- este archivo NO carga
-       js/halloween-2026.js: los pins son <a href> simples, el
-       bloqueado/desbloqueado se resuelve en puro CSS reutilizando la
-       misma clase "is-unlocked" que ya agrega el countdown real de más
-       abajo. Ver css/halloween-2026.css. ===== -->
-  <link rel="stylesheet" href="css/halloween-2026.css"/>
 
-  <!-- ================================================================
-       Tematica de Halloween GENERAL de la página — distinta del archivo
-       de arriba (css/halloween-2026.css), que SOLO estiliza los 3 pins
-       del planeta "Mundo 02" y no se toca. Esto de acá es decoración
-       adicional para el resto de index.html (nav, hero, fondo), scopeada
-       bajo "body.hw-halloween" (clase agregada únicamente al <body> de
-       este archivo) para no tocar v3-theme.css, style.css ni ninguna otra
-       página. No cambia ningún ID, ninguna estructura, ningún script, ni
-       la lógica de mundos/pins/countdown. -->
   <style>
-    body.hw-halloween{
-      background:
-        radial-gradient(ellipse 70% 45% at 15% 0%, rgba(255,122,26,.14), transparent 60%),
-        radial-gradient(ellipse 60% 40% at 88% 12%, rgba(151,71,255,.15), transparent 60%);
-      background-color:#0a0612;
-    }
-    body.hw-halloween .v3-stars{ opacity:.5; filter:hue-rotate(15deg) saturate(1.2); }
-    body.hw-halloween .v3-nebula{ opacity:.5; filter:hue-rotate(20deg); }
-    body.hw-halloween .v3-nav{
-      background:linear-gradient(180deg, rgba(20,10,26,.92), rgba(12,7,16,.88));
-      border-bottom:1px solid rgba(255,122,26,.28);
-    }
-    body.hw-halloween .v3-wordmark{ color:#ffb347; text-shadow:0 0 10px rgba(255,140,0,.55); }
-    body.hw-halloween .v3-logo-mark{ box-shadow:0 0 26px rgba(255,140,0,.55); }
-    body.hw-halloween .v3-join-btn{ background:linear-gradient(135deg,#ff7a1a,#b043ff); border:none; }
-    body.hw-halloween .v3-world-header{ color:#ff9d3d; }
-    body.hw-halloween .footer{ border-top:1px solid rgba(255,140,0,.18); }
-
-    /* ---- Correcciones móviles del inicio (solo esta página) ----
-       1) La tira .panel-tabs (clon de .nav-links que arma js/premium.js) duplicaba la
-          navegación en móvil: los destinos ya están en los pines del planeta. Se oculta
-          aunque premium.js active html.panels-ready. No se toca el JS ni style.css.
-       2) El menú de usuario (#gaDropdown) está anclado a la derecha del botón; en móvil el
-          botón queda a la izquierda (el header se parte en dos líneas) y el menú se salía
-          por la izquierda. Se ancla al borde izquierdo del botón y se limita al ancho de
-          pantalla. Solo en <=760px: escritorio queda exactamente igual. */
-    html.panels-ready body.hw-halloween .panel-tabs{ display:none !important; }
+    /* Correcciones móviles del inicio */
+    html.panels-ready .panel-tabs{ display:none !important; }
     @media (max-width:760px){
-      body.hw-halloween .ga-dropdown{ right:auto; left:0; max-width:min(260px, calc(100vw - 32px)); }
+      .ga-dropdown{ right:auto; left:0; max-width:min(260px, calc(100vw - 32px)); }
     }
 
-    /* ---- Pin de Streamer vs Viewer (reemplaza al de Alcancía) ----
-       Sin círculo: solo el VS (imagen aportada por el organizador). Ocupa el
-       mismo espacio que el resto de pines (.v3-marker-icon: 46px, 36px en
-       móvil) para que la posición y la alineación del label no cambien.
-       Todo va bajo .svv-pin, no afecta a ningún otro pin. */
+    /* Pin de Streamer vs Viewer */
     .v3-planet-nav a.svv-pin .svv-pin-icon,
     .v3-planet-nav a.svv-pin:hover .svv-pin-icon,
     .v3-planet-nav a.svv-pin:focus-visible .svv-pin-icon{
@@ -91,31 +45,25 @@
       width:72px; height:63px; flex:none; margin-bottom:-8px;
       overflow:visible; padding:0;
     }
-    /* La caja del pin mide lo mismo que la imagen: nada se desborda, así que
-       ningún recorte (overflow/clip) de un contenedor puede cortar el VS. */
-    .v3-planet-nav a.svv-pin .svv-pin-vs{ display:block; width:100%; height:100%; max-width:none; object-fit:contain; }
-    @media (max-width:560px){ .v3-planet-nav a.svv-pin .svv-pin-icon{ width:58px; height:51px; margin-bottom:-6px; } }
+    .v3-planet-nav a.svv-pin .svv-pin-vs{
+      display:block; width:100%; height:100%; max-width:none; object-fit:contain;
+    }
+    @media (max-width:560px){
+      .v3-planet-nav a.svv-pin .svv-pin-icon{
+        width:58px; height:51px; margin-bottom:-6px;
+      }
+    }
 
-    /* ---- Decoraciones flotantes (puramente visuales) ---- */
-    .hw-decor{ position:fixed; inset:0; pointer-events:none; z-index:2; overflow:hidden; }
-    .hw-decor span{ position:absolute; opacity:.5; filter:drop-shadow(0 0 6px rgba(255,140,0,.35)); }
-    .hw-decor .hw-bat{ font-size:22px; animation:hwFly 16s linear infinite; }
-    .hw-decor .hw-bat2{ font-size:16px; animation:hwFly 22s linear infinite reverse; opacity:.4; }
-    .hw-decor .hw-pumpkin{ font-size:26px; opacity:.5; animation:hwBob 6s ease-in-out infinite; }
-    .hw-decor .hw-ghost{ font-size:20px; opacity:.35; animation:hwBob 8s ease-in-out infinite; }
-    .hw-decor .hw-web{ font-size:34px; opacity:.28; }
-    @keyframes hwFly{
-      0%{ transform:translate(-10vw,10vh) rotate(0deg); }
-      50%{ transform:translate(55vw,4vh) rotate(6deg); }
-      100%{ transform:translate(110vw,14vh) rotate(-4deg); }
+    /* Mundo 02: teaser bloqueado. La imagen ya contiene el lock y el texto. */
+    .v3-world-slide-02 .world-02-coming-soon{
+      position:relative;
+      overflow:hidden;
     }
-    @keyframes hwBob{
-      0%,100%{ transform:translateY(0); }
-      50%{ transform:translateY(-10px); }
-    }
-    @media (max-width:700px){
-      .hw-decor .hw-pumpkin, .hw-decor .hw-ghost{ font-size:18px; }
-      .hw-decor .hw-web{ font-size:24px; }
+    .v3-world-slide-02 .world-02-coming-soon img{
+      display:block;
+      width:100%;
+      height:auto;
+      filter:brightness(.78) saturate(.88);
     }
   </style>
 
@@ -130,21 +78,8 @@
   betterstack('init', { environment: 'production' });
 </script>
 </head>
-<body class="hw-halloween">
-
-  <div class="hw-decor" aria-hidden="true">
-    <span class="hw-bat" style="top:8%;">🦇</span>
-    <span class="hw-bat2" style="top:22%;">🦇</span>
-    <span class="hw-bat" style="top:40%; animation-delay:-6s;">🦇</span>
-    <span class="hw-pumpkin" style="left:3%; top:14%;">🎃</span>
-    <span class="hw-pumpkin" style="right:4%; top:60%; animation-delay:-3s;">🎃</span>
-    <span class="hw-ghost" style="left:8%; top:78%; animation-delay:-2s;">👻</span>
-    <span class="hw-ghost" style="right:10%; top:30%; animation-delay:-5s;">👻</span>
-    <span class="hw-web" style="left:-4px; top:-4px;">🕸️</span>
-    <span class="hw-web" style="right:-4px; top:-4px; transform:scaleX(-1);">🕸️</span>
-  </div>
-
-  <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
+<body>
+<div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
 
   <!-- Tema V3: ver css/v3-theme.css (antes este bloque estaba embebido aquí) -->
 
@@ -159,7 +94,7 @@
     <nav class="v3-nav">
       <div class="v3-nav-inner">
         <a href="#inicio" class="v3-logo nav-logo">
-          <span class="v3-logo-mark"><img src="logo-halloween.png" alt="GeoArmy"/></span>
+          <span class="v3-logo-mark"><img src="logo.png" alt="GeoArmy"/></span>
           <span class="v3-wordmark">GEO ARMY</span>
         </a>
         <div class="v3-auth">
@@ -284,101 +219,16 @@
         </div>
         </div>
 
-        <!-- Mundo 02: Halloween, bloqueado hasta el 1 de octubre 2026, 7:00
-             PM ET (America/New_York) -- coincide con el inicio real de la
-             batalla. Overlay/candado/texto/countdown son HTML+CSS reales
-             (no quemados en la imagen) -- ver css/v3-theme.css (clases
-             v3-wl-*) y el script "v3-wl-countdown" al final del body. No
-             se tocó Mundo 01, Mundo 03, pines, fondo ni backend.
-
-             PASADA FINAL TEST -> PRODUCCIÓN (2026-09-26): se promovieron
-             ÚNICAMENTE los 3 pins de Mundo 02 (Batalla/Rol/Contratos)
-             desde index-halloween-test.html, y data-unlock-iso pasó de
-             00:00:00 a 19:00:00 para coincidir con la hora real de inicio
-             de la batalla. Sin pins de Efectos/Crónicas, sin
-             ?hw_unlock=1 ni ninguna otra lógica que fuerce el desbloqueo
-             visual -- el planeta SOLO se desbloquea cuando esta fecha
-             real ya pasó. -->
+        <!-- Mundo 02: próximo mundo. Bloqueado hasta su lanzamiento. -->
         <div class="v3-world-slide v3-world-slide-02">
-        <div class="v3-world-locked v3-wl-halloween" data-reveal data-unlock-iso="2026-10-01T19:00:00-04:00" id="wlHalloween">
-          <div class="v3-wl-orb">
-            <img src="world-02-halloween-v2.png" alt="Mundo 02 — Halloween" class="v3-world-planet-img v3-wl-img" loading="lazy"/>
-            <span class="v3-wl-tint" aria-hidden="true"></span>
-            <span class="v3-wl-lockbadge" aria-hidden="true">🔒</span>
-
-            <!-- 4 pins de producción sobre el planeta -- mismo lenguaje
-                 visual que .v3-planet-nav/.v3-marker-* de Mundo 01 (círculo
-                 + glow + icono + tooltip en hover + posición absoluta en %),
-                 en paleta violeta/roja. <a href> simples a las páginas
-                 dedicadas halloween/*.html -- NO cargan js/halloween-2026.js
-                 aquí, el índice no muestra datos dinámicos de la RPC, solo
-                 navega. El bloqueo/atenuado de Rol/Contratos/Registro de
-                 Puntos antes del 1 de octubre es puro CSS: reutiliza la
-                 misma clase ".is-unlocked" que el countdown de abajo ya
-                 agrega a #wlHalloween -- ver css/halloween-2026.css.
-                 BATALLA se deja siempre clickeable (para mostrar el estado
-                 "scheduled" de la página), con una insignia "Programada"
-                 que desaparece sola al desbloquear.
-
-                 RECOMPOSICIÓN (pedido explícito): antes eran 3 pines --
-                 Batalla arriba/centro, Rol y Contratos a los lados, ambos a
-                 --my:44%, dejando el tercio inferior del planeta vacío.
-                 Ahora Rol se renombra a "Elige tu Rol" (misma página,
-                 halloween/rol.html, mismo ícono ⚔) y baja a --my:56%, junto
-                 con Contratos (mismo --mx, también a --my:56%), para abrir
-                 espacio a un 4to pin nuevo -- Registro de Puntos -- en la
-                 zona inferior-central (--mx:50%; --my:79%), que en la
-                 imagen real (world-02-halloween-v2.png, verificada antes de
-                 elegir estas coordenadas) es roca oscura despejada, sin
-                 tapar el castillo ni el cementerio. Los 3 secundarios
-                 (Rol/Contratos/Registro de Puntos) quedan bloqueados con el
-                 mismo candadito hasta el desbloqueo; Batalla no cambia de
-                 posición ni de comportamiento. Sin pines de Efectos/
-                 Crónicas: ese producto quedó reducido a Batalla/Rol/
-                 Contratos/Registro de Puntos. -->
-            <div class="hw26-planet-pins" id="hw26PlanetPins">
-              <a href="halloween/batalla.html" class="hw26-planet-pin hw26-pin-batalla" style="--mx:50%; --my:16%;">
-                <span class="hw26-pin-badge">Programada</span>
-                <span class="hw26-pin-label">Batalla</span>
-                <span class="hw26-pin-icon"><img src="assets/halloween/pin-batalla.webp" alt="" class="hw26-pin-icon-img"/></span>
-              </a>
-              <a href="halloween/rol.html" class="hw26-planet-pin hw26-pin-locked" style="--mx:22%; --my:56%;">
-                <span class="hw26-pin-label">Elige tu Rol</span>
-                <span class="hw26-pin-icon">⚔<span class="hw26-pin-lock" aria-hidden="true">🔒</span></span>
-              </a>
-              <a href="halloween/contratos.html" class="hw26-planet-pin hw26-pin-locked" style="--mx:78%; --my:56%;">
-                <span class="hw26-pin-label">Contratos</span>
-                <span class="hw26-pin-icon">📜<span class="hw26-pin-lock" aria-hidden="true">🔒</span></span>
-              </a>
-              <!-- NUEVO -- Registro de Puntos. halloween/registro-puntos.html
-                   es un placeholder estático (sin RPC, sin
-                   js/halloween-2026.js): título, "PRÓXIMAMENTE" y una vista
-                   previa marcada como ejemplo, nada de datos reales. Cuando
-                   exista la lógica real de puntos gastados, esa página se
-                   actualiza aparte; este pin no cambia. Bloqueado igual que
-                   Rol/Contratos: mismo candadito, mismo desbloqueo por
-                   .is-unlocked, ninguna lógica de datos nueva acá. -->
-              <a href="halloween/registro-puntos.html" class="hw26-planet-pin hw26-pin-locked" style="--mx:50%; --my:79%;">
-                <span class="hw26-pin-label">Registro de Puntos</span>
-                <span class="hw26-pin-icon">📖<span class="hw26-pin-lock" aria-hidden="true">🔒</span></span>
-              </a>
-            </div>
-            <!-- ===== fin pins Halloween 2026 ===== -->
-          </div>
-          <div class="v3-wl-eyebrow">Mundo 02</div>
-          <div class="v3-wl-title">Halloween</div>
-          <div class="v3-wl-sub">Disponible ahora</div>
-          <div class="v3-wl-countdown" id="wlHalloweenCountdown" aria-live="polite">
-            <span class="v3-wl-seg"><b id="wlD">--</b><i>D</i></span>
-            <span class="v3-wl-colon">:</span>
-            <span class="v3-wl-seg"><b id="wlH">--</b><i>H</i></span>
-            <span class="v3-wl-colon">:</span>
-            <span class="v3-wl-seg"><b id="wlM">--</b><i>M</i></span>
-            <span class="v3-wl-colon">:</span>
-            <span class="v3-wl-seg"><b id="wlS">--</b><i>S</i></span>
+          <div class="v3-world-locked world-02-coming-soon" data-reveal aria-label="Mundo 02 — Próximamente">
+            <img src="world-02-proximamente.png"
+                 alt="Mundo 02 — Próximamente · Transmisión bloqueada"
+                 class="v3-world-planet-img"
+                 loading="lazy"/>
           </div>
         </div>
-        </div>
+
 
         <!-- Mundo 03: bloqueado, próximo evento (decorativo por ahora) -->
         <div class="v3-world-slide v3-world-slide-03">
@@ -524,7 +374,7 @@
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-logo">
-        <img src="logo-halloween.png" alt="GeoArmy" class="footer-logo-img"/>
+        <img src="logo.png" alt="GeoArmy" class="footer-logo-img"/>
         GeoArmy
       </div>
       <div class="footer-text">Comunidad de Geovannyrk · Twitch Affiliate</div>
@@ -536,54 +386,7 @@
   <script src="js/geoarmy-config.js"></script>
   <script src="js/geoarmy-ranks.js"></script>
   <script src="js/geoarmy-account.js"></script>
-  <script>
-  // ===== V3: countdown real de Mundo 02 (Halloween) hasta el 1 de octubre,
-  // calculado en el navegador contra la fecha ISO en data-unlock-iso (ya
-  // trae el offset -04:00 de America/New_York, así que Date.now() -- que es
-  // UTC -- se compara correctamente sin importar la zona horaria del
-  // visitante). Envuelto en try/catch, no toca nada más de la página. =====
-  (function () {
-    try {
-      var wrap = document.getElementById('wlHalloween');
-      if (!wrap) return;
-      var unlockAt = new Date(wrap.getAttribute('data-unlock-iso')).getTime();
-      if (isNaN(unlockAt)) return;
-
-      var box = document.getElementById('wlHalloweenCountdown');
-      var dEl = document.getElementById('wlD');
-      var hEl = document.getElementById('wlH');
-      var mEl = document.getElementById('wlM');
-      var sEl = document.getElementById('wlS');
-
-      function pad(n) { return n < 10 ? '0' + n : '' + n; }
-
-      var timer = null;
-      function tick() {
-        var diff = unlockAt - Date.now();
-        if (diff <= 0) {
-          if (box) box.innerHTML = '<span class="v3-wl-available">¡Disponible!</span>';
-          // Preparado: agregar esta clase es lo único que hace falta para
-          // que el CSS (ver .v3-wl-halloween.is-unlocked en v3-theme.css)
-          // quite visualmente el tinte oscuro y el candado.
-          wrap.classList.add('is-unlocked');
-          if (timer) clearInterval(timer);
-          return;
-        }
-        var s = Math.floor(diff / 1000);
-        var d = Math.floor(s / 86400); s -= d * 86400;
-        var h = Math.floor(s / 3600); s -= h * 3600;
-        var m = Math.floor(s / 60); s -= m * 60;
-        if (dEl) dEl.textContent = pad(d);
-        if (hEl) hEl.textContent = pad(h);
-        if (mEl) mEl.textContent = pad(m);
-        if (sEl) sEl.textContent = pad(s);
-      }
-      tick();
-      timer = setInterval(tick, 1000);
-    } catch (e) { console.warn('[v3-wl-countdown]', e); }
-  })();
-  </script>
-  <script>
+<script>
   // ===== V3: conecta los marcadores del planeta con el sistema de paneles =====
   // (el nav real .nav-links está oculto y sigue funcionando para móvil/JS;
   // este bloque solo replica "activar panel" para los marcadores visibles)
