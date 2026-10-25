@@ -21,6 +21,7 @@
   <!-- Tema V3 (espacial/holográfico) — antes vivía inline aquí, ahora es un archivo
        compartido para poder reusarlo en mi-geoarmy.html y páginas nuevas -->
   <link rel="stylesheet" href="css/v3-theme.css"/>
+  <link rel="stylesheet" href="css/geoarmy-guide.css?v=2"/>
 
   <style>
     /* Correcciones móviles del inicio */
@@ -460,6 +461,33 @@
     </div>
   </dialog>
 
+
+  <!-- GEO ARMY Assistant: chatbot de IA conectado al VPS mediante HTTPS. -->
+  <button type="button" id="ga-guide-launcher" aria-controls="ga-guide-panel" aria-expanded="false" aria-label="Abrir asistente de Geo Army">
+    <span class="ga-guide-launcher-icon" aria-hidden="true">💬</span>
+    <span><span class="ga-guide-launcher-caption">¿Tienes preguntas?</span><span class="ga-guide-launcher-title">Habla con la Army</span></span>
+  </button>
+  <section id="ga-guide-panel" role="dialog" aria-modal="false" aria-labelledby="ga-guide-title" aria-describedby="ga-guide-subtitle" hidden>
+    <header class="ga-guide-head">
+      <span class="ga-guide-avatar" aria-hidden="true">♛</span>
+      <span class="ga-guide-head-title"><strong id="ga-guide-title">Asistente Geo Army</strong><small id="ga-guide-subtitle"><span class="ga-guide-dot" aria-hidden="true"></span> Asistente con inteligencia artificial</small></span>
+      <button class="ga-guide-close" id="ga-guide-close" type="button" aria-label="Cerrar asistente">×</button>
+    </header>
+    <div id="ga-guide-feed" class="ga-guide-feed" aria-live="polite" aria-relevant="additions text" aria-label="Conversación"></div>
+    <div class="ga-guide-quick" aria-label="Preguntas frecuentes">
+      <button type="button" data-ga-guide-topic="horario">📺 Horarios</button>
+      <button type="button" data-ga-guide-topic="misiones">🎯 Misiones</button>
+      <button type="button" data-ga-guide-topic="puntos">⭐ Rangos</button>
+      <button type="button" data-ga-guide-topic="tienda">🎁 Recompensas</button>
+      <button type="button" data-ga-guide-topic="comunidad">👥 Unirme</button>
+    </div>
+    <form id="ga-guide-form" class="ga-guide-compose">
+      <input id="ga-guide-input" class="ga-guide-input" maxlength="280" autocomplete="off" placeholder="Escribe tu pregunta..." aria-label="Escribe tu pregunta" />
+      <button class="ga-guide-send" type="submit" aria-label="Enviar pregunta"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></button>
+    </form>
+    <small class="ga-guide-disclaimer">Respuestas generadas por IA. No compartas contraseñas ni datos privados.</small>
+  </section>
+
   <script src="js/premium.js"></script>
   <script src="js/geoarmy-config.js"></script>
   <script src="js/geoarmy-ranks.js"></script>
@@ -538,5 +566,6 @@
   })();
   </script>
 
+  <script src="js/geoarmy-guide.js?v=2"></script>
 </body>
 </html>
