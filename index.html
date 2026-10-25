@@ -65,6 +65,65 @@
       height:auto;
       filter:brightness(.78) saturate(.88);
     }
+
+
+    /* GEO ARMY: pin de Comunidad sin flecha, tallo ni aviso antiguo. */
+    .v3-planet-nav a.ga-welcome-pin .ga-welcome-pin__label {
+      color:#f9dba0; background:rgba(18,13,23,.93);
+      border:1px solid rgba(235,179,91,.65); font-weight:800;
+      box-shadow:0 4px 14px rgba(0,0,0,.3);
+    }
+    .v3-planet-nav a.ga-welcome-pin .ga-welcome-pin__label::before,
+    .v3-planet-nav a.ga-welcome-pin .ga-welcome-pin__label::after {
+      display:none!important; content:none!important;
+    }
+    .v3-planet-nav a.ga-welcome-pin .ga-welcome-pin__symbol {
+      background:linear-gradient(150deg,#4c3119,#1c1426)!important;
+      border:1px solid #d8a657!important; color:#ffe4ac;
+      box-shadow:0 0 0 3px rgba(226,166,71,.13),0 7px 25px rgba(0,0,0,.35);
+      font-size:22px; line-height:1;
+    }
+    .v3-planet-nav a.ga-welcome-pin:hover .ga-welcome-pin__symbol,
+    .v3-planet-nav a.ga-welcome-pin:focus-visible .ga-welcome-pin__symbol{
+      box-shadow:0 0 0 4px rgba(255,193,101,.26),0 8px 28px rgba(0,0,0,.4);
+    }
+
+    /* Invitación para visitantes nuevos. No altera el CSS global. */
+    .ga-welcome-dialog {width:min(440px,calc(100vw - 28px));max-width:none;max-height:min(92dvh,760px);
+      margin:auto;padding:0;border:1px solid rgba(239,190,109,.65);border-radius:22px;
+      background:#120d18;color:#fff;overflow:auto;
+      box-shadow:0 32px 110px rgba(0,0,0,.72);font-family:Inter,system-ui,sans-serif;}
+    .ga-welcome-dialog::backdrop {background:rgba(3,4,14,.78);backdrop-filter:blur(9px);}
+    .ga-welcome-dialog *{box-sizing:border-box;}
+    .ga-welcome-top {position:relative;text-align:center;padding:29px 29px 32px;
+      background:radial-gradient(ellipse at 50% 5%,rgba(240,176,81,.32),transparent 64%),
+       linear-gradient(160deg,#3d271c 0%,#1b1423 56%,#110e19 100%);}
+    .ga-welcome-close{position:absolute;right:13px;top:13px;width:33px;height:33px;border-radius:50%;
+      background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.17);color:#fff;
+      font-size:23px;cursor:pointer;display:grid;place-items:center;line-height:1;}
+    .ga-welcome-close:hover{background:rgba(255,255,255,.22)}
+    .ga-welcome-crown{display:block;font-size:37px;color:#f6c777;filter:drop-shadow(0 5px 14px #efac5c80);}
+    .ga-welcome-eyebrow{display:inline-block;margin:12px auto 15px;padding:6px 13px;
+      font-weight:900;font-size:10px;letter-spacing:.16em;color:#f7d28e;
+      border:1px dashed rgba(244,194,110,.6);border-radius:50px;}
+    .ga-welcome-title{font-family:'Space Grotesk',Inter,sans-serif;font-size:clamp(28px,6vw,38px);
+      line-height:1.04;letter-spacing:-.045em;text-transform:uppercase;color:#fff;margin:0 0 13px;}
+    .ga-welcome-title em{color:#f5c174;font-style:normal;}
+    .ga-welcome-top p{margin:0 auto;max-width:320px;line-height:1.55;font-size:13px;color:#ddd0de;}
+    .ga-welcome-bottom{padding:25px 26px 20px;text-align:center;background:#130e1b;}
+    .ga-welcome-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:25px;}
+    .ga-welcome-step{min-width:0;font-weight:800;font-size:11px;color:#eadfea;}
+    .ga-welcome-step span{display:block;font-size:25px;margin-bottom:8px;}
+    .ga-welcome-cta{display:flex;align-items:center;justify-content:center;gap:12px;min-height:53px;
+      border-radius:12px;padding:10px 14px;text-decoration:none!important;
+      background:linear-gradient(110deg,#ffdc92,#e8ad53);color:#25131c!important;
+      font-weight:900;font-size:13px;letter-spacing:.01em;
+      box-shadow:0 6px 24px rgba(218,149,57,.29);}
+    .ga-welcome-cta:hover{filter:brightness(1.08);transform:translateY(-1px)}
+    .ga-welcome-later{margin:16px auto 0;border:0;background:none;color:#bbaebd;
+      text-decoration:underline;text-underline-offset:4px;font-size:12px;cursor:pointer;padding:8px;}
+    .ga-welcome-dialog :focus-visible{outline:3px solid #ffdb91;outline-offset:3px;}
+    @media(prefers-reduced-motion:reduce){.ga-welcome-cta{transition:none!important}}
   </style>
 
   <script>
@@ -172,7 +231,7 @@
                organizador (assets/streamer-vs-viewer/vs-pin.webp), estilizada en el bloque <style> de arriba
                (.svv-pin). Navega a /streamer-vs-viewer/. alcancia.html y su
                backend no se tocan, solo deja de estar enlazada desde aquí. -->
-          <a href="/streamer-vs-viewer/" class="svv-pin" style="--mx:34.5%; --my:76.7%;" aria-label="Streamer vs Viewer">
+          <a href="/streamer-vs-viewer/" class="svv-pin" style="--mx:34.5%; --my:67.0%;" aria-label="Streamer vs Viewer">
             <span class="v3-marker-label">Streamer vs Viewer</span>
             <span class="v3-marker-icon svv-pin-icon">
               <img class="svv-pin-vs" src="assets/streamer-vs-viewer/vs-pin.webp" alt="" width="340" height="300" decoding="async"/>
@@ -202,11 +261,9 @@
                imagen (zona de tierra, sin overlap con el texto "GEO ARMY" ni
                con los demás pins). No se tocó la posición al hacer la
                separación. -->
-          <a href="comunidad.html" style="--mx:75.0%; --my:45.5%;">
-            <span class="v3-marker-label v3-marker-label-community"><span>¿Eres nuevo?</span><strong>Entra acá</strong></span>
-            <span class="v3-marker-icon">💬</span>
-            <span class="v3-marker-stem"></span>
-            <span class="v3-marker-ring"></span>
+          <a href="comunidad.html" class="ga-welcome-pin" id="gaWelcomePin" style="--mx:75.0%; --my:45.5%;" aria-label="Conoce la comunidad Geo Army">
+            <span class="v3-marker-label ga-welcome-pin__label">Comunidad</span>
+            <span class="v3-marker-icon ga-welcome-pin__symbol" aria-hidden="true">✦</span>
           </a>
         </div>
         </div>
@@ -382,6 +439,27 @@
     </div>
   </footer>
 
+
+  <!-- Invitación de bienvenida: solo visitante nuevo y solo una vez por navegador. -->
+  <dialog class="ga-welcome-dialog" id="gaWelcomeDialog" aria-labelledby="gaWelcomeTitle" aria-describedby="gaWelcomeDesc">
+    <div class="ga-welcome-top">
+      <button type="button" class="ga-welcome-close" id="gaWelcomeClose" aria-label="Cerrar invitación">×</button>
+      <span class="ga-welcome-crown" aria-hidden="true">♛</span>
+      <span class="ga-welcome-eyebrow">✦ INVITACIÓN ESPECIAL ✦</span>
+      <h2 class="ga-welcome-title" id="gaWelcomeTitle">¡BIENVENIDO A <em>GEO ARMY!</em></h2>
+      <p id="gaWelcomeDesc">Fortnite, Overwatch y una comunidad donde no solo miras: participas.</p>
+    </div>
+    <div class="ga-welcome-bottom">
+      <div class="ga-welcome-steps" aria-label="Descubre Geo Army">
+        <div class="ga-welcome-step"><span aria-hidden="true">🎮</span>Juega</div>
+        <div class="ga-welcome-step"><span aria-hidden="true">💬</span>Participa</div>
+        <div class="ga-welcome-step"><span aria-hidden="true">🏆</span>Progresa</div>
+      </div>
+      <a href="comunidad.html" class="ga-welcome-cta" id="gaWelcomeExplore">DESCUBRIR GEO ARMY <span aria-hidden="true">➜</span></a>
+      <button type="button" class="ga-welcome-later" id="gaWelcomeLater">Ahora no, gracias</button>
+    </div>
+  </dialog>
+
   <script src="js/premium.js"></script>
   <script src="js/geoarmy-config.js"></script>
   <script src="js/geoarmy-ranks.js"></script>
@@ -409,5 +487,56 @@
     } catch (e) { console.warn('[v3-planet-nav]', e); }
   })();
   </script>
+
+  <script>
+  /* Invitación local al primer visitante: sin consultas ni escrituras a Supabase. */
+  (function(){
+    'use strict';
+    var pin = document.getElementById('gaWelcomePin');
+    var dialog = document.getElementById('gaWelcomeDialog');
+    var closeBtn = document.getElementById('gaWelcomeClose');
+    var laterBtn = document.getElementById('gaWelcomeLater');
+    var explore = document.getElementById('gaWelcomeExplore');
+    var key = 'geoarmy:welcome-v1-seen';
+    if (!pin || !dialog || !dialog.showModal) return;
+
+    function markSeen(){
+      try { localStorage.setItem(key,'1'); } catch(e) { /* navegación normal */ }
+    }
+    function dismiss(){markSeen();if(dialog.open) dialog.close();}
+    function open(){if(!dialog.open)dialog.showModal();}
+    pin.addEventListener('click',function(e){e.preventDefault();open();});
+    closeBtn.addEventListener('click',dismiss);
+    laterBtn.addEventListener('click',dismiss);
+    explore.addEventListener('click',markSeen);
+    dialog.addEventListener('cancel',markSeen);
+    dialog.addEventListener('click',function(e){if(e.target===dialog)dismiss();});
+
+    function shouldInvite(){
+      try {
+        if (localStorage.getItem(key)) return false;
+        // Cuentas Twitch/Supabase existentes: evita mostrar publicidad a veteranos.
+        // No se leen valores de sesión ni se contacta al servidor.
+        for (var i=0;i<localStorage.length;i++) {
+          var k = localStorage.key(i) || '';
+          if (/^sb-.+-auth-token$/.test(k)) return false;
+        }
+        var widget = document.getElementById('geoAccountWidget');
+        if (widget && (
+          widget.querySelector('[data-authenticated="true"], [data-logged-in="true"], .ga-user-avatar, .ga-account-avatar') ||
+          /cerrar sesi[oó]n|desconectar|logout/i.test(widget.textContent || '')
+        )) return false;
+        return true;
+      } catch(e) {
+        // Si la memoria del navegador está bloqueada, no mostramos automáticamente.
+        return false;
+      }
+    }
+    window.setTimeout(function(){
+      if (document.visibilityState==='visible' && shouldInvite()) open();
+    },5000);
+  })();
+  </script>
+
 </body>
 </html>
