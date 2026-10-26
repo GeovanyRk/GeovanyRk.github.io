@@ -11,13 +11,18 @@
   const input = document.getElementById('ga-guide-input');
   const sendButton = form?.querySelector('button[type="submit"]');
   const status = document.getElementById('ga-guide-subtitle');
+  const nudge = document.getElementById('ga-guide-nudge');
+  const nudgeOpen = document.getElementById('ga-guide-nudge-open');
+  const nudgeDismiss = document.getElementById('ga-guide-nudge-dismiss');
+  const nudgeMessage = document.getElementById('ga-guide-nudge-message');
   if (!launcher || !panel || !feed || !close || !form || !input || !sendButton) return;
 
   const quick = {
     horario: '¿A qué hora transmite Geovannyrk?',
     misiones: '¿Cómo funcionan las misiones de GEO ARMY?',
     puntos: '¿Cómo subo de rango y gano XP?',
-    tienda: '¿Cómo puedo conseguir y usar G-Coins?',
+    tienda: '¿Qué son los G-Coins y cómo se usan en la Tienda de GEO ARMY?',
+    pavos: '¿Cómo puedo conseguir PaVos de Fortnite mediante las recompensas de la Tienda GEO ARMY?',
     comunidad: 'Soy nuevo, ¿cómo puedo unirme a GEO ARMY?'
   };
   const hints = {
@@ -25,6 +30,7 @@
     misiones: ['Ver Misiones', 'misiones.html'],
     puntos: ['Ver rangos', 'puntos.html'],
     tienda: ['Ir a Tienda', 'tienda.html'],
+    pavos: ['Explorar la Tienda', 'tienda.html'],
     comunidad: ['Conocer la comunidad', 'comunidad.html']
   };
   const defaultReply = 'El asistente no pudo responder ahora. Puedes consultar Misiones, Puntos, Tienda o Comunidad desde esta página.';
@@ -32,7 +38,41 @@
   let initialized = false;
   let busy = false;
   let lastSent = 0;
-  let cooldownTimer = null;
+  const NUDGE_LAST_KEY = 'geoarmy:geovany-nudge-last-v1';
+  const NUDGE_OPENED_KEY = 'geoarmy:geovany-chat-opened-v1';
+  const NUDGE_DELAY_MS = 12000;
+  const NUDGE_COOLDOWN_MS = 24 * 60 * 60 * 1000;
+  const nudgeLines = [
+    '¿Sabes cómo conseguir PaVos de Fortnite?',
+    '¿No sabes para qué sirven los G-Coins?',
+    '¿Necesitas ayuda con la Tienda de GEO ARMY?'
+  ];
+  let nudgeWasAttempted = false;
+
+  function hideNudge() {
+    if (nudge) nudge.hidden = true;
+  }
+  function storeValue(key, value) {
+    try { localStorage.setItem(key, String(value)); } catch (_) { /* sin almacenamiento */ }
+  }
+  function maybeShowNudge() {
+    if (nudgeWasAttempted || !nudge || !panel.hidden || document.visibilityState !== 'visible') return;
+    // No competir con el popup de reclutamiento que aparece a los 5 segundos.
+    const welcome = document.getElementById('gaWelcomeDialog');
+    if (welcome?.open) return;
+    nudgeWasAttempted = true;
+    try {
+      if (localStorage.getItem(NUDGE_OPENED_KEY) === '1') return;
+      const last = Number(localStorage.getItem(NUDGE_LAST_KEY) || 0);
+      if (last && Date.now() - last < NUDGE_COOLDOWN_MS) return;
+      if (nudgeMessage) {
+        const day = Math.floor(Date.now() / NUDGE_COOLDOWN_MS);
+        nudgeMessage.textContent = nudgeLines[day % nudgeLines.length];
+      }
+      localStorage.setItem(NUDGE_LAST_KEY, String(Date.now()));
+      nudge.hidden = false;
+    } catch (_) { /* Si localStorage no está disponible, no mostramos avisos */ }
+  }
 
   // Vuelve enlaces https en texto clicable sin interpretar HTML del modelo.
   function appendSafeText(target, value) {
@@ -77,13 +117,16 @@
     sendButton.setAttribute('aria-busy', String(state));
   }
   function openPanel() {
+    hideNudge();
+    storeValue(NUDGE_OPENED_KEY, '1');
     launcher.hidden = true;
     panel.hidden = false;
     launcher.setAttribute('aria-expanded','true');
     if (!initialized) {
       initialized = true;
-      bubble('¡Qué onda! 👋 Soy GEO ARMY Assistant, tu asistente con IA.', false);
-      bubble('Pregúntame por misiones, G-Coins, rangos, recompensas o cómo unirte a la Army. 🎮', false);
+      bubble('¡Qué onda! 👋 Soy el asistente con IA de Geovany, tu streamer. Estoy aquí para ayudarte con GEO ARMY.', false);
+      bubble('🪙 Los G-Coins son la moneda del canal. Con ellos puedes conseguir recompensas en la Tienda, según los artículos y requisitos disponibles.', false);
+      bubble('🎮 ¿Quieres saber cómo ganar G-Coins, conseguir PaVos de Fortnite o completar misiones? ¡Pregúntame!', false);
     }
     input.focus({preventScroll:true});
   }
@@ -143,6 +186,9 @@
     }
   }
   launcher.addEventListener('click',openPanel);
+  if (nudgeOpen) nudgeOpen.addEventListener('click', openPanel);
+  if (nudgeDismiss) nudgeDismiss.addEventListener('click', hideNudge);
+  window.setTimeout(maybeShowNudge, NUDGE_DELAY_MS);
   close.addEventListener('click',closePanel);
   panel.addEventListener('keydown',e=>{ if(e.key==='Escape'){e.preventDefault();closePanel();} });
   document.querySelectorAll('[data-ga-guide-topic]').forEach(b => b.addEventListener('click', () => {
@@ -150,5 +196,5 @@
     ask(quick[k] || b.textContent.trim(), k);
   }));
   form.addEventListener('submit', e => {e.preventDefault();ask(input.value);});
-  if (status) status.innerHTML = '<span class="ga-guide-dot" aria-hidden="true"></span> Asistente con inteligencia artificial';
+  if (status) status.innerHTML = '<span class="ga-guide-dot" aria-hidden="true"></span> Asistente virtual con IA';
 })();
