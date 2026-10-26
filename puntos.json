@@ -2,12 +2,17 @@
   "mufasa1912": {
     "usuario": "mufasa1912",
     "ganado": 20785,
-    "gastado": 10000,
+    "gastado": 20000,
     "operaciones": {
       "220ef20d438caf37d442d20e46c5e25d97969679a312cc4ea771c464188ca680": {
         "puntos": 10000,
         "saldoRestante": 10785,
         "en": "2026-10-26T00:00:45.342Z"
+      },
+      "99531176c4713f901e1bbce9572de2dec4f097021be3a7410a6ae5bbb631a661": {
+        "puntos": 10000,
+        "saldoRestante": 785,
+        "en": "2026-10-26T00:00:57.630Z"
       }
     }
   },
