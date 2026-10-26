@@ -2,7 +2,14 @@
   "mufasa1912": {
     "usuario": "mufasa1912",
     "ganado": 20785,
-    "gastado": 0
+    "gastado": 10000,
+    "operaciones": {
+      "220ef20d438caf37d442d20e46c5e25d97969679a312cc4ea771c464188ca680": {
+        "puntos": 10000,
+        "saldoRestante": 10785,
+        "en": "2026-10-26T00:00:45.342Z"
+      }
+    }
   },
   "kirbyx01": {
     "usuario": "kirbyx01",
@@ -23,7 +30,7 @@
   },
   "matidk_0": {
     "usuario": "matidk_0",
-    "ganado": 123645,
+    "ganado": 123695,
     "gastado": 118750,
     "operaciones": {
       "4d24a288dbabe0afe605280e2532581e4c81569dc5699b0bb7b77f4e61ac8ea2": {
@@ -186,7 +193,7 @@
   },
   "elkid_rd36": {
     "usuario": "elkid_rd36",
-    "ganado": 10640,
+    "ganado": 10690,
     "gastado": 0
   },
   "toji_fushijiro": {
