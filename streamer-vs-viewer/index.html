@@ -313,13 +313,39 @@
       <!-- ============ F · COMODINES / ARSENAL ============ -->
       <section class="svv-arsenal" id="svv-arsenal" aria-labelledby="svv-arsenal-h">
         <h2 class="svv-h2" id="svv-arsenal-h">Arsenal</h2>
-        <p class="svv-arsenal__lede">Los comodines ya están definidos, pero todavía no están disponibles. No hay compras activas.</p>
-        <ul class="svv-rack" aria-label="Comodines definidos, todavía no disponibles">
-          <li><span class="svv-rack__slot" aria-hidden="true"></span><b>Escudo</b><small>3,000 G-Coins · Aún no disponible</small></li>
-          <li><span class="svv-rack__slot" aria-hidden="true"></span><b>Salto de fila</b><small>500 G-Coins · Aún no disponible</small></li>
-          <li><span class="svv-rack__slot" aria-hidden="true"></span><b>Revancha</b><small>1,500 G-Coins · Aún no disponible</small></li>
+        <p class="svv-arsenal__lede">Tres comodines para jugar con ventaja. Así funciona cada uno.</p>
+        <ul class="svv-rack">
+          <li class="svv-pw svv-pw--shield">
+            <div class="svv-pw__top">
+              <span class="svv-pw__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M12 2.5 4.5 5.5v6c0 4.6 3.1 8.2 7.5 10 4.4-1.8 7.5-5.4 7.5-10v-6L12 2.5Z"/><path d="m8.8 12 2.2 2.2 4.2-4.4"/></svg></span>
+              <span class="svv-pw__soon">Próximamente</span>
+            </div>
+            <h3 class="svv-pw__name">Escudo</h3>
+            <p class="svv-pw__desc">Si Geo gana, te protege de perder 1,000 V-Bucks de tu billetera interna. Si ganan los Viewers, recibes tu premio normalmente.</p>
+            <p class="svv-pw__note">Se compra antes de tu primera partida.</p>
+            <p class="svv-pw__price"><b>3,000</b> G-Coins</p>
+          </li>
+          <li class="svv-pw svv-pw--jump">
+            <div class="svv-pw__top">
+              <span class="svv-pw__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="m6 11 6-6 6 6"/><path d="m6 19 6-6 6 6"/></svg></span>
+              <span class="svv-pw__soon">Próximamente</span>
+            </div>
+            <h3 class="svv-pw__name">Salto de fila</h3>
+            <p class="svv-pw__desc">Obtienes prioridad para jugar antes que otros participantes, sin interrumpir partidas ni quitar el turno a alguien que ya fue llamado.</p>
+            <p class="svv-pw__note">Debes estar esperando en la fila.</p>
+            <p class="svv-pw__price"><b>500</b> G-Coins</p>
+          </li>
+          <li class="svv-pw svv-pw--rematch">
+            <div class="svv-pw__top">
+              <span class="svv-pw__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M4 12a8 8 0 1 0 2.6-5.9"/><path d="M4 4v4.5h4.5"/></svg></span>
+              <span class="svv-pw__soon">Próximamente</span>
+            </div>
+            <h3 class="svv-pw__name">Revancha</h3>
+            <p class="svv-pw__desc">¿Ya utilizaste tus dos partidas? Compra una tercera oportunidad para volver a jugar contra Geo.</p>
+            <p class="svv-pw__note">Disponible únicamente si la fila está vacía y hay cupo.</p>
+            <p class="svv-pw__price"><b>1,500</b> G-Coins</p>
+          </li>
         </ul>
-        <p class="svv-soon"><span class="svv-lock" aria-hidden="true"></span>Definidos, pero todavía no disponibles: no hay compras ni botones activos.</p>
       </section>
 
       <!-- ============ G · HISTORIAL · BATALLAS ANTERIORES ============ -->
@@ -328,6 +354,16 @@
         <ol class="svv-timeline" id="svv-history-list" aria-live="polite"></ol>
         <p class="svv-muted" id="svv-history-note">Cargando historial…</p>
         <button type="button" class="svv-btn svv-btn--ghost" id="svv-history-more" hidden>Ver más ediciones</button>
+        <!-- Marcador histórico fijo (4 ediciones anteriores a V2). Es texto estático: no depende de Supabase ni de svv_get_history. -->
+        <div class="svv-legacy" id="svv-legacy" role="group" aria-labelledby="svv-legacy-h">
+          <h3 class="svv-legacy__title" id="svv-legacy-h">Antes de V2 <small>4 ediciones históricas</small></h3>
+          <div class="svv-legacy__score">
+            <div class="svv-legacy__side" data-side="viewer"><span class="svv-legacy__num">3</span><span class="svv-legacy__tag">Viewers</span><span class="svv-legacy__lbl">victorias</span></div>
+            <span class="svv-legacy__vs" aria-hidden="true">VS</span>
+            <div class="svv-legacy__side" data-side="geo"><span class="svv-legacy__num">1</span><span class="svv-legacy__tag">Geo</span><span class="svv-legacy__lbl">victoria</span></div>
+          </div>
+          <p class="svv-legacy__meta">Marcador histórico de las ediciones anteriores a Streamer vs Viewer V2.</p>
+        </div>
       </section>
 
       <footer class="svv-foot">
