@@ -204,7 +204,14 @@
   "toji_fushijiro": {
     "usuario": "toji_fushijiro",
     "ganado": 5330,
-    "gastado": 0
+    "gastado": 5000,
+    "operaciones": {
+      "441cb8643eab31a4d21d55b3be87be03507a22d93af128b94d546fcb6e61ca7e": {
+        "puntos": 5000,
+        "saldoRestante": 330,
+        "en": "2026-10-28T01:03:29.806Z"
+      }
+    }
   },
   "https_karla_": {
     "usuario": "https_karla_",
