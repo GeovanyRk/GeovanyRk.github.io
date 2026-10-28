@@ -552,7 +552,7 @@
       S.histTotal = (d && d.total) || 0;
       eds.forEach(function (e) { list.appendChild(renderEdition(e)); });
       S.histShown += eds.length;
-      if (!S.histShown) note.textContent = 'Aún no hay ediciones finalizadas.';
+      if (!S.histShown) note.textContent = 'Aún no hay ediciones oficiales de V2 finalizadas.';
       else note.textContent = S.histShown < S.histTotal ? 'Mostrando ' + S.histShown + ' de ' + S.histTotal + ' ediciones.' : '';
       if (S.histShown < S.histTotal) { more.textContent = 'Ver más ediciones'; more.setAttribute('data-mode', 'more'); show(more, true); }
     });
