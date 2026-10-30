@@ -107,12 +107,17 @@
   "forsaken453": {
     "usuario": "forsaken453",
     "ganado": 26330,
-    "gastado": 11000,
+    "gastado": 21000,
     "operaciones": {
       "971091bdb4b4b20ddd5c1cdbaeafc518ba66b504faad376140135f0f6ca6f8aa": {
         "puntos": 10000,
         "saldoRestante": 15330,
         "en": "2026-10-30T03:29:18.377Z"
+      },
+      "6678a6ffa4185b8f6faaca6b47b5ee3af85d8fa220843509c6363c675ab3c395": {
+        "puntos": 10000,
+        "saldoRestante": 5330,
+        "en": "2026-10-30T03:29:27.460Z"
       }
     }
   },
