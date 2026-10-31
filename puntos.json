@@ -216,7 +216,14 @@
   "elkid_rd36": {
     "usuario": "elkid_rd36",
     "ganado": 11510,
-    "gastado": 0
+    "gastado": 10000,
+    "operaciones": {
+      "eb12c7ff61699360fd67d679e9e32b609c1db9606633268abfd2a757779a579b": {
+        "puntos": 10000,
+        "saldoRestante": 1510,
+        "en": "2026-10-31T01:01:10.860Z"
+      }
+    }
   },
   "toji_fushijiro": {
     "usuario": "toji_fushijiro",
