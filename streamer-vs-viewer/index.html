@@ -313,8 +313,8 @@
       <!-- ============ F · COMODINES / ARSENAL ============ -->
       <section class="svv-arsenal" id="svv-arsenal" aria-labelledby="svv-arsenal-h">
         <h2 class="svv-h2" id="svv-arsenal-h">Arsenal</h2>
-        <p class="svv-arsenal__lede">Tres comodines para jugar con ventaja. Así funciona cada uno.</p>
-        <ul class="svv-rack">
+        <p class="svv-arsenal__lede">Un solo comodín para jugar con ventaja. Así funciona.</p>
+        <ul class="svv-rack svv-rack--one">
           <li class="svv-pw svv-pw--shield" id="svv-shield" data-state="soon">
             <div class="svv-pw__top">
               <span class="svv-pw__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M12 2.5 4.5 5.5v6c0 4.6 3.1 8.2 7.5 10 4.4-1.8 7.5-5.4 7.5-10v-6L12 2.5Z"/><path d="m8.8 12 2.2 2.2 4.2-4.4"/></svg></span>
@@ -328,27 +328,19 @@
               <button type="button" class="svv-btn svv-btn--join" id="svv-btn-shield">Comprar Escudo</button>
             </div>
           </li>
-          <li class="svv-pw svv-pw--jump">
-            <div class="svv-pw__top">
-              <span class="svv-pw__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="m6 11 6-6 6 6"/><path d="m6 19 6-6 6 6"/></svg></span>
-              <span class="svv-pw__soon">Próximamente</span>
-            </div>
-            <h3 class="svv-pw__name">Salto de fila</h3>
-            <p class="svv-pw__desc">Obtienes prioridad para jugar antes que otros participantes, sin interrumpir partidas ni quitar el turno a alguien que ya fue llamado.</p>
-            <p class="svv-pw__note">Debes estar esperando en la fila.</p>
-            <p class="svv-pw__price"><b>250</b> G-Coins</p>
-          </li>
-          <li class="svv-pw svv-pw--rematch">
-            <div class="svv-pw__top">
-              <span class="svv-pw__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M4 12a8 8 0 1 0 2.6-5.9"/><path d="M4 4v4.5h4.5"/></svg></span>
-              <span class="svv-pw__soon">Próximamente</span>
-            </div>
-            <h3 class="svv-pw__name">Revancha</h3>
-            <p class="svv-pw__desc">¿Ya utilizaste tus dos partidas? Compra una tercera oportunidad para volver a jugar contra Geo.</p>
-            <p class="svv-pw__note">Disponible únicamente si la fila está vacía y hay cupo.</p>
-            <p class="svv-pw__price"><b>1,000</b> G-Coins</p>
-          </li>
         </ul>
+      </section>
+
+      <!-- ============ G · PREMIOS Y DEUDAS (solo texto: lo decide y lo aplica el servidor) ============ -->
+      <section class="svv-stakes" id="svv-stakes" aria-labelledby="svv-stakes-h">
+        <h2 class="svv-h2" id="svv-stakes-h">Qué se juega cada participante</h2>
+        <ul class="svv-stakes__list">
+          <li class="svv-stakes__row" data-kind="win"><b>Victoria de los Viewers</b><span>+1,000 V-Bucks para cada participante oficial.</span></li>
+          <li class="svv-stakes__row" data-kind="loss"><b>Victoria de Geo</b><span>−1,000 V-Bucks para cada participante oficial sin Escudo.</span></li>
+          <li class="svv-stakes__row" data-kind="shield"><b>Con Escudo válido</b><span>No se aplica la penalización.</span></li>
+          <li class="svv-stakes__row" data-kind="debt"><b>Si quedas con deuda</b><span>Persiste entre ediciones y se compensa con tus próximas recompensas de V-Bucks. La ves en <a href="../mi-geoarmy.html#mgWalletGrid">Mi Geo Army → Mis recompensas</a>.</span></li>
+        </ul>
+        <p class="svv-stakes__note" id="svv-stakes-note" role="status" aria-live="polite">Los montos los confirma y aplica el servidor cuando Geo cierra el resultado y los pagos de la edición están habilitados; esta página no descuenta nada.</p>
       </section>
 
       <!-- ============ G · HISTORIAL · BATALLAS ANTERIORES ============ -->
