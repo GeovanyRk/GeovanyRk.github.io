@@ -136,6 +136,17 @@
       .mg-hw-decor .mg-hw-pumpkin, .mg-hw-decor .mg-hw-ghost{ font-size:18px; }
       .mg-hw-decor .mg-hw-web{ font-size:24px; }
     }
+  
+    /* Integración de deudas (6B-2C): saldo neto, deuda y estado negativo en Mis recompensas */
+    .mg-debt-badge { margin-left: 8px; padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; border: 1px solid; vertical-align: middle; }
+    .mg-debt-badge[data-kind="neg"] { color: #ff6b81; border-color: rgba(255, 107, 129, .6); background: rgba(255, 107, 129, .1); }
+    .mg-debt-badge[data-kind="debt"] { color: #ffc247; border-color: rgba(255, 194, 71, .6); background: rgba(255, 194, 71, .1); }
+    .mg-wallet-neg { box-shadow: inset 0 0 0 1px rgba(255, 107, 129, .45); }
+    .mg-debt-rows { margin: 10px 0 0; display: grid; gap: 4px; }
+    .mg-debt-row { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; color: #aeb9d4; }
+    .mg-debt-row b { font-weight: 700; color: #e9eefc; }
+    .mg-debt-row.is-neg b { color: #ff6b81; }
+    .mg-debt-note { margin-top: 10px; font-size: 12px; line-height: 1.45; color: #8a9bbd; }
   </style>
 </head>
 <body>
@@ -784,10 +795,116 @@
       } catch (e) { return iso; }
     }
 
+    // ===== Posición por moneda con deuda (Fase 6B-2C) =====
+    // VBUCKS / OWCOINS / PAYPAL_USD se muestran con get_my_wallet_positions() (campos que devuelve debt_position_json: currency, decimals, balance, reserved, debt,
+    // pending_penalty, net, available_to_redeem, can_redeem, debt_applicable, debt_policy_enabled, blocked_reason). TODAS las cifras vienen del servidor: aquí no se calcula
+    // ninguna deuda ni se descuenta nada. Si la lectura falla NO se muestra ningún saldo de esas monedas (nunca un saldo falso).
+    // TWITCH_SUB queda con su lectura de siempre (wallet_balances) y GCOIN no se toca (tarjeta G-Coins de arriba, tienda-server).
+    var DEBT_CURRENCIES = ['VBUCKS', 'OWCOINS', 'PAYPAL_USD'];
+    var walletSeq = 0;
+
+    function numOrNull(v) {
+      if (typeof v === 'string' && v.trim() !== '') v = Number(v);
+      return (typeof v === 'number' && isFinite(v)) ? v : null;
+    }
+
+    // Valida una fila de la RPC; null si falta o es inválido algún campo numérico (entonces esa moneda se trata como error, no como cero).
+    function normalizarPosicion(raw) {
+      if (!raw || typeof raw !== 'object' || typeof raw.currency !== 'string') return null;
+      var fields = ['balance', 'reserved', 'debt', 'pending_penalty', 'net', 'available_to_redeem'], o = { currency: raw.currency }, i, n;
+      for (i = 0; i < fields.length; i++) {
+        n = numOrNull(raw[fields[i]]);
+        if (n === null) return null;
+        o[fields[i]] = n;
+      }
+      if (o.reserved < 0 || o.debt < 0 || o.pending_penalty < 0 || o.available_to_redeem < 0) return null;
+      o.can_redeem = raw.can_redeem === true;
+      o.debt_applicable = raw.debt_applicable === true;
+      o.debt_policy_enabled = raw.debt_policy_enabled === true;
+      o.blocked_reason = typeof raw.blocked_reason === 'string' ? raw.blocked_reason : null;
+      return o;
+    }
+
+    function formatWalletSigned(cur, valor) {
+      var n = Number(valor || 0);
+      return (n < 0 ? '−' : '') + formatWalletAmount(cur, Math.abs(n));
+    }
+
+    // Modelo de presentación de una moneda (sin DOM). Solo reformatea lo que dijo el servidor.
+    function vistaPosicion(cur, pos) {
+      var tieneDeuda = pos.debt > 0 || pos.pending_penalty > 0;
+      var negativo = pos.net < 0;
+      var rows = [];
+      if (pos.debt_applicable) {
+        rows.push({ kind: 'net', label: 'Saldo neto', text: formatWalletSigned(cur, pos.net), neg: negativo });
+        if (pos.debt > 0) rows.push({ kind: 'debt', label: 'Deuda pendiente', text: formatWalletAmount(cur, pos.debt), neg: true });
+        if (pos.pending_penalty > 0) rows.push({ kind: 'pending', label: 'Penalización por aplicar', text: formatWalletAmount(cur, pos.pending_penalty), neg: true });
+      }
+      var note = null;
+      if (tieneDeuda) {
+        note = 'Tus próximas recompensas de esta moneda se aplican primero a esta deuda.';
+        if (!pos.debt_policy_enabled) note += ' La compensación automática aún no está activa: la deuda se conserva.';
+        if (!pos.can_redeem) note += ' Los canjes de esta moneda están bloqueados mientras exista deuda.';
+      }
+      return {
+        big: formatWalletAmount(cur, pos.available_to_redeem),
+        sub: 'Disponible para canjear' + (pos.reserved > 0 ? ' · ' + formatWalletAmount(cur, pos.reserved) + ' reservado' : ''),
+        rows: rows,
+        badge: negativo ? { kind: 'neg', text: 'Saldo negativo' } : (tieneDeuda ? { kind: 'debt', text: 'Con deuda' } : null),
+        note: note,
+        negative: negativo,
+        canRedeem: pos.can_redeem === true && puedeSolicitarMoneda(cur, pos.available_to_redeem),
+        disponible: pos.available_to_redeem
+      };
+    }
+
+    function cardPosicion(cur, v) {
+      var rowsHtml = v.rows.length ? '<div class="mg-debt-rows">' + v.rows.map(function (r) {
+        return '<div class="mg-debt-row' + (r.neg ? ' is-neg' : '') + '" data-row="' + r.kind + '"><span>' + esc(r.label) + '</span><b>' + esc(r.text) + '</b></div>';
+      }).join('') + '</div>' : '';
+      return (
+        '<div class="v3-now-card ' + cur.accent + (v.negative ? ' mg-wallet-neg' : '') + '" data-currency="' + cur.code + '">' +
+          '<div class="v3-now-head"><span class="v3-now-ic">' + cur.icon + '</span>' + esc(cur.label) +
+            (v.badge ? '<span class="mg-debt-badge" data-kind="' + v.badge.kind + '">' + esc(v.badge.text) + '</span>' : '') + '</div>' +
+          '<div class="v3-now-big">' + esc(v.big) + '</div>' +
+          '<div class="v3-now-sub">' + esc(v.sub) + '</div>' +
+          rowsHtml +
+          (v.note ? '<div class="mg-debt-note">' + esc(v.note) + '</div>' : '') +
+          (v.canRedeem
+            ? '<button type="button" class="v3-now-btn mg-redeem-btn" data-currency="' + cur.code + '" data-disponible="' + v.disponible + '" style="border:none; cursor:pointer; font-family:\'Orbitron\',sans-serif;">Solicitar recompensa</button>'
+            : '')
+        + '</div>'
+      );
+    }
+
+    // Tarjeta sin cifras: carga fallida, sesión caducada o moneda sin posición. Nunca muestra un saldo.
+    function cardSinPosicion(cur, kind) {
+      var msg = kind === 'auth' ? 'Tu sesión caducó. Inicia sesión de nuevo para ver tu saldo.'
+              : kind === 'missing' ? 'Esta moneda no está disponible por ahora.'
+              : 'No pudimos cargar tu saldo de esta moneda.';
+      return (
+        '<div class="v3-now-card ' + cur.accent + '" data-currency="' + cur.code + '" data-error="' + kind + '">' +
+          '<div class="v3-now-head"><span class="v3-now-ic">' + cur.icon + '</span>' + esc(cur.label) + '</div>' +
+          '<div class="v3-now-big">—</div>' +
+          '<div class="v3-now-sub">' + esc(msg) + '</div>' +
+          (kind === 'error' ? '<button type="button" class="v3-now-btn mg-wallet-retry" style="border:none; cursor:pointer; font-family:\'Orbitron\',sans-serif;">Reintentar</button>' : '') +
+        '</div>'
+      );
+    }
+
+    function esErrorDeSesion(err, status) {
+      if (status === 401 || status === 403) return true;
+      var code = err && err.code ? String(err.code) : '';
+      var msg = err && err.message ? String(err.message) : '';
+      return code === '28000' || code === '42501' || /jwt|no autenticado|not authenticated/i.test(msg);
+    }
+
     async function loadWallets(sb, userId) {
       var grid = document.getElementById('mgWalletGrid');
       if (!grid) return;
+      var seq = ++walletSeq;
       var res = await sb.from('wallet_balances').select('currency_code, balance, reserved').eq('profile_id', userId);
+      if (seq !== walletSeq) return;
       if (res.error) {
         console.warn('[mi-geoarmy] no se pudieron leer los saldos de wallet', res.error);
         grid.innerHTML = '<div class="v3-table-empty">No se pudieron cargar tus recompensas.</div>';
@@ -796,7 +913,32 @@
       var byCurrency = {};
       (res.data || []).forEach(function (row) { byCurrency[row.currency_code] = row; });
 
+      // Posición firmada (saldo neto, deuda, disponible) de las monedas con reglas de deuda: SOLO del servidor.
+      var posState = 'ok', posByCode = {};
+      var pr = await sb.rpc('get_my_wallet_positions');
+      if (seq !== walletSeq) return;
+      if (pr.error) {
+        console.warn('[mi-geoarmy] no se pudo leer la posición de billetera', pr.error);
+        posState = esErrorDeSesion(pr.error, pr.status) ? 'auth' : 'error';
+      } else {
+        var data = pr.data;
+        if (typeof data === 'string') { try { data = JSON.parse(data); } catch (e) { data = null; } }
+        if (!Array.isArray(data)) posState = 'error';
+        else data.forEach(function (raw) {
+          var p = normalizarPosicion(raw);
+          if (p) posByCode[p.currency] = p; else if (raw && typeof raw.currency === 'string') posByCode[raw.currency] = 'invalid';
+        });
+      }
+
       grid.innerHTML = WALLET_CURRENCIES.map(function (cur) {
+        if (DEBT_CURRENCIES.indexOf(cur.code) !== -1) {
+          if (posState !== 'ok') return cardSinPosicion(cur, posState);
+          var pos = posByCode[cur.code];
+          if (pos === 'invalid') return cardSinPosicion(cur, 'error');
+          if (!pos) return cardSinPosicion(cur, 'missing');
+          return cardPosicion(cur, vistaPosicion(cur, pos));
+        }
+        // TWITCH_SUB: lectura y tarjeta de siempre
         var row = byCurrency[cur.code];
         var balance = row ? Number(row.balance) : 0;
         var reserved = row ? Number(row.reserved) : 0;
@@ -822,6 +964,9 @@
           var disponible = Number(btn.getAttribute('data-disponible'));
           openRedeemModal(sb, findCurrency(code), disponible, userId);
         });
+      });
+      Array.prototype.forEach.call(grid.querySelectorAll('.mg-wallet-retry'), function (btn) {
+        btn.addEventListener('click', function () { btn.disabled = true; loadWallets(sb, userId); });
       });
     }
 
