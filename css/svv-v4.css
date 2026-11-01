@@ -606,3 +606,12 @@ body.svv-page :focus-visible { outline: 2px solid var(--svv-gold); outline-offse
 @media (prefers-reduced-motion: reduce) {
   body.svv-page *, body.svv-page *::before, body.svv-page *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* ===== Fase 6C-1 · Escudo: estado y botón de compra ===== */
+.svv-pw__act { margin: 14px 0 0; }
+.svv-pw__act .svv-btn { width: 100%; }
+.svv-pw--shield[data-state="buy"] .svv-pw__soon { color: var(--svv-live); border-color: rgba(39, 240, 154, .55); background: rgba(39, 240, 154, .08); }
+.svv-pw--shield[data-state="active"] .svv-pw__soon { color: var(--svv-gold); border-color: rgba(255, 194, 71, .6); background: rgba(255, 194, 71, .1); }
+.svv-pw--shield[data-state="used"] .svv-pw__soon, .svv-pw--shield[data-state="refunded"] .svv-pw__soon, .svv-pw--shield[data-state="refund"] .svv-pw__soon { color: var(--svv-violet-soft); border-color: rgba(195, 160, 255, .5); }
+.svv-pw--shield[data-state="locked"] .svv-pw__soon { color: var(--svv-text-2); }
+.svv-pw--shield[data-state="active"], .svv-pw--shield[data-state="used"] { --pw-accent: var(--svv-gold); }
