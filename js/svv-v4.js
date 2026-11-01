@@ -9,7 +9,9 @@
      svv_confirm_call(p_event_key, p_request)
    - Supabase es la autoridad de estados y plazos; la página solo refleja lo que devuelve y pregunta de nuevo
      tras cada acción. Cada acción usa una clave de operación (uuid) idempotente y un candado anti doble clic.
-   - No hay compras, premios, penalizaciones ni economía.
+   - Fase 6C-1 · Escudo: svv_get_my_shield(p_event_key) (lectura) y la compra por la Edge Function `svv-shield-buy` (el navegador NO mueve G-Coins:
+     solo envía el event_key y una clave de operación; el servidor valida la sesión, cobra y registra en una sola transacción).
+   - No hay premios ni penalizaciones aquí: la página solo refleja lo que Supabase decide. Salto de fila y Revancha siguen «Próximamente».
    - Todo texto que viene del servidor se inserta con textContent (nunca innerHTML).
    - Si las RPC todavía no están instaladas, la página lo dice (no inventa cifras).
    ========================================================================= */
@@ -48,6 +50,9 @@
     fb: {},              // mensajes de resultado por área ('rules' | 'queue')
     needLogin: false,    // una acción devolvió «sesión no válida»
     leaveArmed: false,   // el usuario pulsó «Salir de la fila» y falta confirmar
+    shield: null,        // última respuesta de svv_get_my_shield (6C-1)
+    shieldState: 'idle', // idle | ok | locked | error | unavailable
+    shieldReq: 0, shieldArmed: false, shieldTimer: null, shieldAt: 0,
     zeroFired: {}        // refrescos ya disparados al llegar a 0 un plazo
   };
 
@@ -630,6 +635,7 @@
     S.myReq++;          // y cualquier solicitud de ficha en vuelo queda obsoleta
     S.userId = newId;
     S.my = null; S.myState = newId ? 'loading' : 'locked'; S.pending = {}; S.fb = {}; S.needLogin = false; S.leaveArmed = false;
+    S.shieldReq++; S.shield = null; S.shieldState = 'idle'; S.shieldArmed = false; S.shieldAt = 0;
     clearFighter();
     renderParticipation();
   }
@@ -662,6 +668,7 @@
         renderFighter(d);
         renderParticipation();
         schedulePoll(); // con participación activa el sondeo pasa al ritmo rápido
+        return loadShield();
       });
     }, function () {
       if (seq !== S.myReq) return;
@@ -805,6 +812,7 @@
     [/la edici[oó]n no existe|no est[aá] disponible/i, 'La edición ya no está disponible.']
   ];
   function describeError(r) {
+    if (r.friendly) return r.friendly;
     switch (r.kind) {
       case 'network': return 'No pudimos confirmar si la operación se completó (problema de conexión). Puedes reintentar: no se duplicará.';
       case 'auth': return 'Tu sesión no es válida o expiró. Vuelve a iniciar sesión con Twitch.';
@@ -835,7 +843,7 @@
     if (S.busy) return;
     var client = getClient();
     if (!client || !client.auth) return;
-    S.busy = action; S.leaveArmed = false; delete S.fb[area];
+    S.busy = action; S.leaveArmed = false; S.shieldArmed = false; delete S.fb[area];
     var uid = S.userId, epoch = S.epoch;
     renderParticipation();
     client.auth.getSession().then(function (res) {
@@ -864,6 +872,7 @@
     }).catch(function () {
       fbSet(area, 'error', 'Ocurrió un error inesperado. Inténtalo de nuevo en unos segundos.');
     }).then(function () {
+      S.shieldAt = 0;                                  // tras cualquier acción se vuelve a leer el Escudo
       return refreshAll();
     }).then(function () { S.busy = null; renderParticipation(); }, function () { S.busy = null; renderParticipation(); });
   }
@@ -908,6 +917,132 @@
     runAction('confirm', 'queue', function () {
       return rpcWrite('svv_confirm_call', { p_event_key: key, p_request: requestId('confirm', sig) });
     }, function () { return '¡Llamado confirmado! Prepárate: Geo abrirá tu partida.'; });
+  }
+
+  /* ------------------------------ Escudo (6C-1) ------------------------------ */
+  var SHIELD_BASE = 'Se compra antes de tu primera partida. Máximo 1 por edición, no se transfiere y solo vale en esa edición.';
+  var SHIELD_REASON = {
+    event_unavailable: 'La edición ya no admite la compra de Escudos.',
+    not_money_edition: 'Esta edición no tiene premio ni penalización: el Escudo no se vende.',
+    payments_off: 'La venta del Escudo está en pausa: los pagos de esta edición aún no están habilitados.',
+    gcoin_unavailable: 'No pudimos cobrar los G-Coins ahora mismo. No se te descontó nada; inténtalo más tarde.',
+    protections_off: 'La venta del Escudo está en pausa: faltan protecciones económicas por habilitar.',
+    result_exists: 'El resultado de la edición ya está calculado: el Escudo ya no se puede comprar.',
+    rules_not_accepted: 'Acepta el reglamento de esta edición para poder comprar el Escudo.',
+    not_in_queue: 'Debes estar inscrito en la fila de esta edición para comprar el Escudo.',
+    already_bought: 'Ya compraste el Escudo de esta edición.',
+    match_started: 'Tu primera partida válida ya empezó: el Escudo solo se compra antes del Battle Bus.',
+    insufficient_funds: 'No tienes G-Coins suficientes (el Escudo cuesta 2,000).',
+    disabled: 'La venta de Escudos todavía no está disponible.'
+  };
+  function loadShield() {
+    if (!S.eventKey || !logged()) { S.shield = null; S.shieldState = logged() ? 'idle' : 'locked'; renderShield(); return Promise.resolve(); }
+    if (S.shieldState === 'ok' && S.shieldAt && performance.now() - S.shieldAt < 8000) { renderShield(); return Promise.resolve(); }   // no repetir la lectura en cada sondeo
+    var seq = ++S.shieldReq, epoch = S.epoch;
+    return rpc('svv_get_my_shield', { p_event_key: S.eventKey }).then(function (r) {
+      if (seq !== S.shieldReq || epoch !== S.epoch) return;
+      if (!r.ok) {
+        S.shield = null;
+        S.shieldState = r.kind === 'missing' ? 'unavailable' : r.kind === 'auth' ? 'locked' : 'error';
+        renderShield(); return;
+      }
+      var d = r.data; if (typeof d === 'string') { try { d = JSON.parse(d); } catch (e) { d = null; } }
+      S.shield = d && typeof d === 'object' ? d : null; S.shieldState = S.shield ? 'ok' : 'error'; S.shieldAt = performance.now();
+      renderShield();
+    });
+  }
+  // La compra NO es una RPC del navegador: es la Edge Function (service_role en el servidor). Devuelve {ok,data} o {ok:false,kind,friendly}.
+  function shieldFail(body, status) {
+    var reason = body && body.reason, code = body && body.code;
+    if (status === 401 || status === 403) return { ok: false, kind: 'auth', message: 'sesión' };
+    if (status === 404) return { ok: false, kind: 'missing', message: 'no instalada' };
+    if (code === 'SV005') return { ok: false, kind: 'conflict', message: 'clave' };
+    if (reason && SHIELD_REASON[reason]) return { ok: false, kind: 'business', message: reason, friendly: SHIELD_REASON[reason] };
+    if (status && status >= 500) return { ok: false, kind: 'network', message: 'servidor' };   // incierto: se conserva la clave; el reintento devuelve lo mismo (replayed)
+    return { ok: false, kind: 'other', message: 'respuesta inesperada' };
+  }
+  function invokeShield(key, reqId) {
+    var client = getClient();
+    if (!client || !client.functions || typeof client.functions.invoke !== 'function') return Promise.resolve({ ok: false, kind: 'missing', message: 'sin cliente' });
+    if (!online()) return Promise.resolve({ ok: false, kind: 'network', message: 'sin conexión' });
+    var call;
+    try { call = client.functions.invoke('svv-shield-buy', { body: { event_key: key, request_id: reqId } }); }
+    catch (e) { return Promise.resolve({ ok: false, kind: 'other', message: String(e && e.message || e) }); }
+    var timeout = new Promise(function (resolve) { setTimeout(function () { resolve({ __timeout: true }); }, RPC_TIMEOUT_MS * 2); });
+    return Promise.race([Promise.resolve(call), timeout]).then(function (res) {
+      if (!res || res.__timeout) return { ok: false, kind: 'network', message: 'tiempo de espera' };
+      if (!res.error) {
+        var d = res.data; if (typeof d === 'string') { try { d = JSON.parse(d); } catch (e) { d = null; } }
+        if (d && d.ok === true) return { ok: true, data: d.data || {} };
+        return shieldFail(d, 0);
+      }
+      var ctx = res.error.context;                                   // FunctionsHttpError: la respuesta HTTP viene en context
+      if (ctx && typeof ctx.json === 'function') {
+        return ctx.json().then(function (b) { return shieldFail(b, ctx.status); }, function () { return shieldFail(null, ctx.status || 500); });
+      }
+      return { ok: false, kind: 'network', message: String(res.error.message || 'red') };
+    }, function (e) { return { ok: false, kind: 'network', message: String(e && e.message || e) }; });
+  }
+  function doBuyShield() {
+    if (S.busy || !myReady() || !online()) return;
+    var sh = S.shield;
+    if (!sh || !sh.can_buy || !S.eventKey) return;
+    var key = S.eventKey, sig = [S.userId, key].join('|');
+    runAction('shield', 'shield', function () {
+      return invokeShield(key, requestId('shield', sig));
+    }, function () { return 'Escudo comprado: quedó activo para esta edición.'; });
+  }
+  function renderShield() {
+    var card = $('svv-shield'); if (!card) return;
+    var badge = $('svv-shield-badge'), note = $('svv-shield-note'), act = $('svv-shield-act'), btn = $('svv-btn-shield');
+    var state = 'soon', label = 'Próximamente', msg = SHIELD_BASE, canBuy = false;
+    var sh = S.shield, f = fbGet('shield');
+    if (!logged()) { msg = SHIELD_BASE + ' Inicia sesión con Twitch para comprarlo.'; }
+    else if (S.shieldState === 'error') { label = 'Sin datos'; msg = 'No pudimos cargar el estado de tu Escudo. Se reintenta al actualizar.'; }
+    else if (S.shieldState !== 'ok' || !sh) { /* cargando / no instalado: se queda «Próximamente» */ }
+    else {
+      var p = sh.purchase;
+      if (p && p.status === 'active') {
+        state = 'active'; label = 'Activo';
+        msg = 'Tienes el Escudo de esta edición. Si Geo gana, no se te descuentan los 1,000 V-Bucks.';
+        if (p.refund_state === 'wait_result') msg += ' Su destino se decide cuando se confirma el resultado (si ganan los Viewers o se cancela, se reembolsa solo).';
+      } else if (p && p.status === 'refund_pending') {
+        state = 'refund'; label = 'Reembolso en proceso';
+        msg = p.refund_reason === 'viewers_win' ? 'Ganaron los Viewers: tu Escudo se reembolsa automáticamente (2,000 G-Coins).'
+            : p.refund_reason === 'event_cancelled' ? 'La edición se canceló: tu Escudo se reembolsa automáticamente (2,000 G-Coins).'
+            : 'Tu Escudo no se usó en esta edición: se reembolsa automáticamente (2,000 G-Coins).';
+        if (p.refund_retrying) msg += ' El abono se está reintentando; no tienes que hacer nada.';
+      } else if (p && p.status === 'used') {
+        state = 'used'; label = 'Usado';
+        msg = p.used_reason === 'protected' ? 'Tu Escudo te protegió: no se te descontó la penalización.'
+                                           : 'Tu Escudo se consideró utilizado en esta edición (participaste de forma oficial). No es reembolsable.';
+      } else if (p && p.status === 'refunded') {
+        state = 'refunded'; label = 'Reembolsado'; msg = 'Tu Escudo fue reembolsado: se te devolvieron 2,000 G-Coins.';
+      } else if (!sh.available) { /* venta apagada: «Próximamente» */ }
+      else if (sh.can_buy) { state = 'buy'; label = 'Disponible'; canBuy = true; }
+      else { state = 'locked'; label = 'No disponible'; msg = SHIELD_REASON[sh.block_reason] || 'El Escudo no está disponible ahora.'; }
+    }
+    if (f) msg = f.text;
+    card.setAttribute('data-state', state);
+    if (badge) badge.textContent = label;
+    if (note) note.textContent = msg;
+    show(act, canBuy);
+    if (!canBuy) S.shieldArmed = false;
+    if (btn) {
+      btn.textContent = S.shieldArmed ? 'Confirmar compra · 2,000 G-Coins' : 'Comprar Escudo';
+      btn.disabled = !canBuy || !!S.busy || !online(); btn.setAttribute('aria-disabled', btn.disabled ? 'true' : 'false');
+      if (S.busy === 'shield') btn.setAttribute('aria-busy', 'true'); else btn.removeAttribute('aria-busy');
+    }
+  }
+  function onShieldClick() {
+    if (S.busy || !S.shield || !S.shield.can_buy) return;
+    if (!S.shieldArmed) {                    // primer clic: pide confirmar (se desarma solo a los 8 s)
+      S.shieldArmed = true; renderShield();
+      clearTimeout(S.shieldTimer); S.shieldTimer = setTimeout(function () { S.shieldArmed = false; renderShield(); }, 8000);
+      return;
+    }
+    clearTimeout(S.shieldTimer); S.shieldArmed = false;
+    doBuyShield();
   }
   function openLogin() {
     if (window.GeoArmyAccount && window.GeoArmyAccount.openLogin) window.GeoArmyAccount.openLogin();
@@ -976,6 +1111,7 @@
     setBtn('svv-btn-join', joinDis, joinLabel);
     setNote('svv-join-note-box', 'svv-join-note', fq ? fq.kind : jkind, fq ? fq.text : jmsg);
 
+    renderShield();
     renderMe({ hasEvent: hasEvent, ready: ready, isLogged: isLogged, my: my, ev: ev, q: q, opp: opp, cm: cm, activeQ: activeQ, busy: busy, onl: onl, fq: fq });
     tickParticipation();
   }
@@ -1116,6 +1252,7 @@
     on('svv-btn-accept', function () { doDecide('accepted'); });
     on('svv-btn-reject', function () { doDecide('rejected'); });
     on('svv-btn-join', function () { doJoin(); });
+    on('svv-btn-shield', function () { onShieldClick(); });
     on('svv-btn-confirm', function () { doConfirm(); });
     on('svv-btn-confirm2', function () { doConfirm(); });
     on('svv-btn-leave', function () { if (S.busy) return; S.leaveArmed = true; renderParticipation(); var y = $('svv-btn-leave-no'); if (y) y.focus(); });
