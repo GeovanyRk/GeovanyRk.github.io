@@ -11,7 +11,7 @@
      tras cada acción. Cada acción usa una clave de operación (uuid) idempotente y un candado anti doble clic.
    - Fase 6C-1 · Escudo: svv_get_my_shield(p_event_key) (lectura) y la compra por la Edge Function `svv-shield-buy` (el navegador NO mueve G-Coins:
      solo envía el event_key y una clave de operación; el servidor valida la sesión, cobra y registra en una sola transacción).
-   - No hay premios ni penalizaciones aquí: la página solo refleja lo que Supabase decide. Salto de fila y Revancha siguen «Próximamente».
+   - No hay premios ni penalizaciones aquí: la página solo refleja lo que Supabase decide. El Escudo es el ÚNICO comodín del evento (Salto de fila y Revancha se retiraron).
    - Todo texto que viene del servidor se inserta con textContent (nunca innerHTML).
    - Si las RPC todavía no están instaladas, la página lo dice (no inventa cifras).
    ========================================================================= */
@@ -321,8 +321,19 @@
            : pub.result.outcome === 'community_win' ? 'Resultado final: ganó la comunidad' : 'Resultado final: empate';
     }
     setText('svv-score-note', note);
+    renderStakesNote(pub.result && pub.result.outcome);
     var bar = $('svv-bar');
     if (bar) bar.setAttribute('aria-label', 'Geo ' + gp + ' puntos, comunidad ' + vp + ' puntos. ' + note);
+  }
+
+  // Aviso del resultado CONFIRMADO por el servidor (pub.result). No calcula ni descuenta nada: solo explica qué regla aplica; la posición real vive en Mi Geo Army.
+  var STAKES_BASE = 'Los montos los confirma y aplica el servidor cuando Geo cierra el resultado y los pagos de la edición están habilitados; esta página no descuenta nada.';
+  function renderStakesNote(outcome) {
+    var msg = STAKES_BASE;
+    if (outcome === 'community_win') msg = 'Resultado confirmado: ganaron los Viewers. Los participantes oficiales reciben +1,000 V-Bucks cuando los pagos de la edición están habilitados. Tu saldo real está en Mi Geo Army.';
+    else if (outcome === 'geo_win') msg = 'Resultado confirmado: ganó Geo. A los participantes oficiales sin Escudo se les aplica −1,000 V-Bucks cuando los pagos de la edición están habilitados (con Escudo válido, no). Tu saldo real y tu deuda, si existe, están en Mi Geo Army.';
+    else if (outcome === 'tie') msg = 'Resultado confirmado: empate. Revisa tu posición real en Mi Geo Army.';
+    setText('svv-stakes-note', msg);
   }
 
   function renderMatch(pub) {
