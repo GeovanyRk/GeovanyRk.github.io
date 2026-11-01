@@ -19,6 +19,11 @@
      svv_admin_restore_void(…, p_match, p_profile)   svv_admin_finish_event(p_event, p_request)   svv_admin_cancel_event(…, p_reason)
      svv_admin_compute_result(p_event, p_request)   svv_admin_confirm_result(…, p_note)   svv_admin_discard_result(…, p_reason)
 
+   Liquidación económica (Fase 6B-2C, ya instalada; este panel NO crea ninguna operación económica nueva):
+     lectura  svv_admin_get_settlement(p_event_key text)
+     escribe  svv_admin_settlement_prepare(p_event, p_request)  ·  svv_admin_settlement_finalize(p_event, p_request)      (request_id UUID reutilizable: reintentos idempotentes)
+     aplicar  Edge Function `svv-apply-payouts` (JWT de usuario + rol admin comprobado en servidor -> RPC de servicio svv_service_apply_payouts con la clave de servicio del servidor). El navegador NUNCA tiene la clave de servicio.
+
    Principios: Supabase es la única autoridad (estados, plazos, permisos, pesos ×2/×1); este código solo muestra lo que devuelve y pide acciones.
    El acceso lo decide el servidor (SV004 = sin sesión o sin rol admin); nunca se confía en el navegador. Ninguna clave privada: solo la anon pública.
    Un solo envío a la vez (S.busy) + una clave de operación por intención (reutilizada solo si el resultado es incierto): sin dobles acciones.
@@ -36,7 +41,7 @@
     busy: false, coolUntil: 0, pending: {}, nonce: 0, modalOpen: false,
     sel: {}, entered: {}, rsig: {}, cd: { q: {}, lobby: null, live: null },
     rulesBase: null, rulesRev: null,
-    hist: null, mk: {}, restored: {}
+    hist: null, mk: {}, restored: {}, settle: null, settleReq: 0, settleLoading: false
   };
 
   /* ------------------------------ utilidades ------------------------------ */
@@ -47,6 +52,7 @@
   function setText(id, v) { var n = $(id); if (n) n.textContent = v; }
   function num(v) { return (typeof v === 'number' && isFinite(v)) ? v : 0; }
   function fmtInt(v) { try { return new Intl.NumberFormat('es').format(v); } catch (e) { return String(v); } }
+  function fmtMoney(v) { try { return new Intl.NumberFormat('en-US').format(v); } catch (e) { return String(v); } }   // 1,000 como en el resto del sitio
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   function mmss(sec) { var s = Math.max(0, Math.floor(sec)); return Math.floor(s / 60) + ':' + pad(s % 60); }
   function fmtClock(sec) { var s = Math.max(0, Math.floor(sec)), h = Math.floor(s / 3600); s -= h * 3600; var m = Math.floor(s / 60); return h + ':' + pad(m) + ':' + pad(s - m * 60); }
@@ -80,7 +86,8 @@
     record_lobby_entries: 'Entradas al lobby', start_bus: 'Battle Bus iniciado', record_kill: 'Kills registradas', reverse_kill: 'Kill corregida',
     record_disconnect: 'Desconexión', confirm_reconnect: 'Reconexión confirmada', close_match: 'Partida cerrada', void_match: 'Partida anulada',
     finish_turn: 'Turno terminado', release_turn: 'Turno liberado', restore_void: 'Oportunidad restaurada', finish_event: 'Edición finalizada',
-    cancel_event: 'Edición cancelada', compute_result: 'Resultado calculado', confirm_result: 'Resultado confirmado', discard_result: 'Resultado descartado'
+    cancel_event: 'Edición cancelada', compute_result: 'Resultado calculado', confirm_result: 'Resultado confirmado', discard_result: 'Resultado descartado',
+    settlement_prepare: 'Liquidación preparada', settlement_finalize: 'Liquidación finalizada'
   };
 
   /* ------------------------------ avisos ------------------------------ */
@@ -196,7 +203,7 @@
         var ev = pe(); S.shownKey = ev ? ev.event_key : null;
         if (!S.eventKey && S.shownKey) S.eventKey = S.shownKey;   // la edición mostrada queda fija: el panel no salta de edición mientras trabajas
         if (S.gate !== 'ready') setGate('ready');
-        setConn('ok'); renderAll();
+        setConn('ok'); renderAll(); maybeLoadSettle();
         var hd = $('sva-hist'); if (hd && hd.open && S.hist && !S.hist.loaded && !S.hist.loading && !S.hist.err) loadHist(true);   // se abrió antes de conocer la edición
       } else if (r.kind === 'auth' || r.kind === 'denied') {
         S.panel = null; setGate('denied'); S.rsig = {};
@@ -343,7 +350,7 @@
     S.cd.live = ev ? num(ev.live_seconds_remaining) : null; S.cd.liveOn = !!(ev && typeof ev.live_seconds_remaining === 'number');
     S.cd.q = {}; (p.queue || []).forEach(function (q) { if (q.status === 'called') S.cd.q[q.entry_id] = { s: num(q.response_seconds_left), x: !!q.response_expired }; });
     var cm = p.current_match; S.cd.lobby = cm && cm.phase === 'lobby' ? { s: num(cm.lobby_seconds_left), x: !!cm.lobby_expired } : null;
-    renderSelect(); renderBoard(); renderEventCard(); renderMatch(); renderQueue(); renderTurns(); renderRecent(); renderHistory(); renderResult(); renderAudit(); renderSetup();
+    renderSelect(); renderBoard(); renderEventCard(); renderMatch(); renderQueue(); renderTurns(); renderRecent(); renderHistory(); renderResult(); renderSettle(); renderAudit(); renderSetup();
     tick();
   }
 
@@ -850,6 +857,202 @@
     });
   }
 
+  /* ---- liquidación económica (Fase 6B-2C instalada; el panel solo muestra lo que devuelve Supabase y pide las acciones existentes) ---- */
+  var PAY_ES = { applied: 'Aplicado', protected: 'Protegido', pending: 'Pendiente', error: 'Error' };
+  var PAY_KIND_ES = { award: 'Premio', penalty: 'Penalización' };
+  function settleEligible() {
+    var ev = pe(), r = S.panel && S.panel.result;
+    return !!(ev && r && r.resolution_status === 'confirmed' && (ev.status === 'finished' || ev.status === 'settled'));
+  }
+  function maybeLoadSettle() {
+    if (!settleEligible()) { if (S.settle) { S.settle = null; S.settleReq++; renderAll(); } return; }
+    var ev = pe(), d = S.settle && S.settle.key === ev.event_key && !S.settle.err ? S.settle.data : null;
+    if (d && d.settlement && d.settlement.status === 'settled') return;   // cerrada: ya no cambia
+    loadSettle();
+  }
+  function loadSettle() {
+    var ev = pe();
+    if (!ev || !S.client || !S.userId || S.settleLoading) return Promise.resolve();
+    var key = ev.event_key, seq = ++S.settleReq, uid = S.userId;
+    S.settleLoading = true;
+    return rpcRaw('svv_admin_get_settlement', { p_event_key: key }).then(function (r) {
+      S.settleLoading = false;
+      var cur = pe();
+      if (seq !== S.settleReq || uid !== S.userId || !cur || cur.event_key !== key) { if (uid === S.userId) maybeLoadSettle(); return; }   // llegó tarde: se vuelve a pedir la edición actual
+      var prev = S.settle && S.settle.key === key ? S.settle.data : null;
+      S.settle = r.ok ? { key: key, data: r.data, err: null } : { key: key, data: prev, err: r.kind };   // si falla se conserva lo último visto, pero NO se permite actuar con él
+      renderAll();
+    });
+  }
+  function payLine(p) {
+    var amt = num(p.amount), parts = [];
+    if (p.status === 'applied') {
+      if (p.kind === 'award') {
+        parts.push('Acreditado ' + fmtMoney(num(p.credited)) + ' V-Bucks');
+        if (num(p.offset) > 0) parts.push(fmtMoney(num(p.offset)) + ' compensados contra deuda');
+      } else {
+        parts.push('Cobrado ' + fmtMoney(num(p.collected)) + ' de ' + fmtMoney(amt));
+        if (num(p.debt) > 0) parts.push('deuda pendiente ' + fmtMoney(typeof p.debt_outstanding === 'number' ? p.debt_outstanding : num(p.debt)));
+      }
+    } else if (p.status === 'protected') parts.push('Escudo válido: no se cobra');
+    else if (p.status === 'error') { parts.push(p.last_error ? String(p.last_error).replace(/^SV\d+:\s*svv:\s*/i, '').slice(0, 160) : 'Falló al aplicar'); parts.push('intentos ' + num(p.attempts)); }
+    else parts.push('Esperando aplicarse');
+    return parts.join(' · ');
+  }
+  function stat(label, value, sub) {
+    var d = el('div', 'sva-stat'); d.appendChild(el('span', 'sva-stat__l', label)); d.appendChild(el('b', 'sva-stat__v', value));
+    if (sub) d.appendChild(el('span', 'sva-stat__s', sub)); return d;
+  }
+  function applyBody(pays) {
+    var todo = pays.filter(function (p) { return p.status === 'pending' || p.status === 'error'; });
+    var aw = todo.filter(function (p) { return p.kind === 'award'; }), pn = todo.filter(function (p) { return p.kind === 'penalty'; });
+    var wrap = el('div');
+    wrap.appendChild(el('p', null, 'Vas a aplicar ' + todo.length + ' pago(s) en V-Bucks REALES: ' + aw.length + ' premio(s)' + (aw.length ? ' de +' + fmtMoney(num(aw[0].amount)) : '') +
+      ' y ' + pn.length + ' penalización(es)' + (pn.length ? ' de −' + fmtMoney(num(pn[0].amount)) : '') + '.'));
+    wrap.appendChild(el('p', 'sva-hint', 'Cada pago aplicado es definitivo. Los participantes con Escudo válido no se cobran y las deudas se registran y se compensan con futuras recompensas. Si algo falla, queda marcado y puedes reintentar: nunca se aplica dos veces el mismo premio.'));
+    return wrap;
+  }
+  function invokeApply(key) {
+    var client = S.client;
+    if (!client || !client.functions || typeof client.functions.invoke !== 'function') return Promise.resolve({ ok: false, kind: 'missing', message: 'sin cliente' });
+    if (!online()) return Promise.resolve({ ok: false, kind: 'network', message: 'sin conexión' });
+    var call;
+    try { call = client.functions.invoke('svv-apply-payouts', { body: { event_key: key } }); }   // solo la clave pública de la edición: el servidor decide identidad, rol y UUID
+    catch (e) { return Promise.resolve({ ok: false, kind: 'other', message: String(e && e.message || e) }); }
+    var timeout = new Promise(function (resolve) { setTimeout(function () { resolve({ __timeout: true }); }, RPC_TIMEOUT_MS * 5); });
+    function fail(b, status) {
+      if (status === 401 || status === 403) return { ok: false, kind: 'auth' };
+      if (status === 404) return { ok: false, kind: 'missing', message: b && b.code === 'event' ? 'edición' : 'función' };
+      if (status === 409 && b && b.message) return { ok: false, kind: 'business', message: String(b.message) };
+      if (status === 400) return { ok: false, kind: 'other' };
+      if (status >= 500) return { ok: false, kind: 'network', message: 'servidor' };
+      return { ok: false, kind: 'other' };
+    }
+    return Promise.race([Promise.resolve(call), timeout]).then(function (res) {
+      if (!res || res.__timeout) return { ok: false, kind: 'network', message: 'tiempo de espera' };
+      if (!res.error) {
+        var d = res.data; if (typeof d === 'string') { try { d = JSON.parse(d); } catch (e) { d = null; } }
+        if (d && d.ok === true && d.data && typeof d.data === 'object') return { ok: true, data: d.data };
+        return fail(d, 0);
+      }
+      var ctx = res.error.context;                                  // FunctionsHttpError: la respuesta HTTP viene en context
+      if (ctx && typeof ctx.json === 'function') return ctx.json().then(function (b) { return fail(b, ctx.status); }, function () { return fail(null, ctx.status || 500); });
+      return { ok: false, kind: 'network', message: String(res.error.message || 'red') };
+    }, function (e) { return { ok: false, kind: 'network', message: String(e && e.message || e) }; });
+  }
+  function runApply(key) {
+    if (S.busy || S.gate !== 'ready') return;
+    S.busy = true; renderAll();
+    invokeApply(key).then(function (res) {
+      S.busy = false; S.coolUntil = performance.now() + COOLDOWN_MS;
+      setTimeout(function () { renderAll(); }, COOLDOWN_MS + 30);
+      if (res.ok) {
+        var d = res.data, left = num(d.pending_left), bad = num(d.in_error);
+        toast(bad || left ? 'err' : 'ok', 'Pagos aplicados: ' + num(d.applied) + (left ? ' · quedan ' + left + ' pendiente(s)' : '') + (bad ? ' · ' + bad + ' con error (revísalos y reintenta)' : '') + '.');
+      } else if (res.kind === 'missing') toast('err', res.message === 'edición' ? 'Edición no encontrada en el servidor.' : 'La Edge Function «svv-apply-payouts» no está desplegada.');
+      else toast('err', describe(res));
+      loadSettle(); loadPanel();
+    });
+  }
+  function doApply() {
+    if (!canAct()) return;
+    var ev = pe(), d = S.settle && !S.settle.err ? S.settle.data : null; if (!ev || !d) return;
+    var key = ev.event_key;
+    confirmDialog({ title: 'Aplicar pagos', body: applyBody(d.payouts || []), ok: 'Sí, aplicar pagos', danger: true,
+      reason: { label: 'Para confirmar escribe APLICAR', min: 0, max: 20 },
+      collect: function () { return $('sva-modal-reason').value.trim().toUpperCase(); },
+      validate: function (v) { return v === 'APLICAR' ? null : 'Escribe APLICAR (en mayúsculas o minúsculas) para confirmar.'; }
+    }).then(function (r) { if (r) runApply(key); else renderAll(); });
+  }
+  function renderSettle() {
+    var card = $('sva-settle-card'); if (!card) return;
+    var on = settleEligible(); show(card, on);
+    if (!on) return;
+    var ev = pe(), res = S.panel.result, st = S.settle && S.settle.key === ev.event_key ? S.settle : null;
+    region('settle', { s: st, k: ev.event_key, o: res.outcome, n: res.official_participants }, '', function () {
+      var root = $('sva-settle'); clear(root);
+      if (!st) { root.appendChild(el('p', 'sva-hint', 'Leyendo el estado de la liquidación en Supabase…')); return; }
+      var d = st.data;
+      if (!d) {
+        root.appendChild(el('p', 'sva-form__msg', st.err === 'missing' ? 'La lectura de liquidación no está disponible en Supabase.' : 'No pudimos leer el estado de la liquidación. Se reintenta solo; no se muestra ninguna cifra mientras tanto.'));
+        root.lastChild.setAttribute('data-kind', 'err'); return;
+      }
+      var fresh = !st.err, set = d.settings || {}, sm = d.summary || {}, sl = d.settlement, pays = d.payouts || [];
+      var pend = num(sm.pending), errn = num(sm.error);
+      if (!fresh) { var w = el('p', 'sva-form__msg', 'No pudimos actualizar esta sección: mostramos lo último leído y las acciones están bloqueadas hasta recuperar la conexión.'); w.setAttribute('data-kind', 'err'); root.appendChild(w); }
+
+      var head = el('div', 'sva-setl__head');
+      var pill = el('span', 'sva-pill', !sl ? 'Sin preparar' : (sl.status === 'settled' ? 'Liquidada' : 'Preparada'));
+      pill.setAttribute('data-kind', !sl ? 'draft' : (sl.status === 'settled' ? 'live' : 'scheduled'));
+      head.appendChild(pill);
+      var rule = d.result && d.result.outcome === 'community_win' ? 'Ganó la comunidad: +' + fmtMoney(num(set.award_amount)) + ' V-Bucks a cada participante oficial.'
+               : d.result && d.result.outcome === 'geo_win' ? 'Ganó Geo: −' + fmtMoney(num(set.penalty_amount)) + ' V-Bucks a cada participante oficial sin Escudo válido.'
+               : 'Empate: no hay premios ni penalizaciones.';
+      head.appendChild(el('span', 'sva-setl__rule', rule));
+      root.appendChild(head);
+
+      if (set.enabled === false) {
+        var sw = el('p', 'sva-hint sva-hint--warn', 'El interruptor de pagos en V-Bucks está APAGADO: el servidor no permite preparar ni aplicar pagos. Este panel no lo activa.');
+        root.appendChild(sw);
+      } else if (set.readiness_missing && set.readiness_missing.length) {
+        root.appendChild(el('p', 'sva-hint sva-hint--warn', 'Faltan protecciones económicas: ' + set.readiness_missing.join('; ') + '.'));
+      }
+
+      if (!sl) {   // ----- aún no preparada
+        root.appendChild(el('p', 'sva-hint', 'Preparar congela la lista de pagos desde el resultado confirmado y las protecciones guardadas al confirmarlo. NO mueve dinero.'));
+        if (d.blocker) root.appendChild(el('p', 'sva-hint sva-hint--warn', 'No se puede preparar todavía: ' + String(d.blocker)));
+        var a0 = el('div', 'sva-actions');
+        a0.appendChild(btn('Preparar liquidación…', 'sva-btn--primary sva-btn--lg', function () {
+          act({ key: 'settle_prepare', rpc: 'svv_admin_settlement_prepare', ok: 'Liquidación preparada: la lista de pagos quedó congelada. Todavía no se movió dinero.',
+            after: function () { loadSettle(); },
+            confirm: { title: 'Preparar la liquidación', body: 'Se congela la lista de pagos de esta edición. No se mueve dinero hasta que pulses «Aplicar pagos».', ok: 'Preparar' } });
+        }, !fresh || !d.can_prepare));
+        root.appendChild(a0);
+        return;
+      }
+
+      // ----- resumen
+      var awards = pays.filter(function (p) { return p.kind === 'award'; }), pens = pays.filter(function (p) { return p.kind === 'penalty' && p.status !== 'protected'; });
+      var grid = el('div', 'sva-stats');
+      grid.appendChild(stat('Participantes oficiales', fmtMoney(num(res.official_participants))));
+      grid.appendChild(stat('Premios', fmtMoney(awards.length), awards.length ? 'Acreditado ' + fmtMoney(num(sm.awards_credited)) + (num(sm.awards_offset_to_debts) ? ' · ' + fmtMoney(num(sm.awards_offset_to_debts)) + ' a deudas' : '') : null));
+      grid.appendChild(stat('Penalizaciones', fmtMoney(pens.length), pens.length ? 'Cobrado ' + fmtMoney(num(sm.penalties_collected)) : null));
+      grid.appendChild(stat('Escudos aplicados', fmtMoney(num(sm.protected))));
+      grid.appendChild(stat('Deudas', fmtMoney(num(sm.debt_created)), 'Abiertas SvV: ' + fmtMoney(num(sm.debt_open_total_svv_vbucks)) + ' V-Bucks'));
+      root.appendChild(grid);
+
+      var counts = el('p', 'sva-hint', 'Pagos: ' + num(sm.applied) + ' aplicados · ' + num(sm.protected) + ' protegidos · ' + pend + ' pendientes · ' + errn + ' con error.');
+      root.appendChild(counts);
+
+      // ----- estado individual de cada pago
+      var ul = el('ul', 'sva-pays');
+      if (!pays.length) ul.appendChild(el('li', 'sva-empty', 'Esta edición no genera pagos.'));
+      pays.forEach(function (p) {
+        var li = el('li', 'sva-pay'); li.setAttribute('data-status', p.status);
+        li.appendChild(el('b', 'sva-pay__n', p.name || '—'));
+        li.appendChild(el('span', 'sva-pay__k', (PAY_KIND_ES[p.kind] || p.kind) + ' ' + (p.kind === 'award' ? '+' : '−') + fmtMoney(num(p.amount))));
+        var ps = el('span', 'sva-pill sva-pay__s', PAY_ES[p.status] || p.status); ps.setAttribute('data-pay', p.status);
+        li.appendChild(ps);
+        li.appendChild(el('span', 'sva-pay__d', payLine(p)));
+        ul.appendChild(li);
+      });
+      root.appendChild(ul);
+      if (num(sl.payouts_total) > pays.length) root.appendChild(el('p', 'sva-hint', 'Se muestran los primeros ' + pays.length + ' de ' + fmtMoney(num(sl.payouts_total)) + ' pagos.'));
+
+      if (sl.status === 'settled') { root.appendChild(el('p', 'sva-hint', 'Liquidación cerrada' + (sl.settled_at ? ' el ' + fmtDateTime(sl.settled_at) : '') + '. No admite más cambios.')); return; }
+
+      // ----- acciones
+      var todo = pend + errn, a = el('div', 'sva-actions');
+      a.appendChild(btn('Aplicar pagos…', 'sva-btn--primary sva-btn--lg', doApply, !fresh || todo === 0 || set.enabled !== true));
+      a.appendChild(btn('Finalizar liquidación…', 'sva-btn--lg', function () {
+        act({ key: 'settle_finalize', rpc: 'svv_admin_settlement_finalize', ok: 'Liquidación finalizada: la edición quedó liquidada.', after: function () { loadSettle(); },
+          confirm: { title: 'Finalizar la liquidación', body: 'No quedan pagos pendientes ni con error. La liquidación y la edición pasan a «Liquidada» y ya no admiten cambios.', ok: 'Finalizar', danger: true } });
+      }, !fresh || todo !== 0));
+      root.appendChild(a);
+      root.appendChild(el('p', 'sva-hint', todo ? 'Finalizar se habilita cuando no queden pagos pendientes ni con error (' + pend + ' pendientes, ' + errn + ' con error).' : 'Todo aplicado: ya puedes finalizar.'));
+    });
+  }
+
   /* ---- registro de acciones ---- */
   function renderAudit() {
     var au = (S.panel && S.panel.audit) || [];
@@ -957,7 +1160,7 @@
   function onSession(session) {
     var uid = session && session.user ? session.user.id : null;
     if (uid === S.userId && (uid || S.gate === 'login')) return;
-    S.userId = uid; S.panel = null; S.rsig = {}; S.sel = {}; S.pending = {}; S.fails = 0; S.eventKey = null; S.shownKey = null; S.rulesBase = null; S.req++; resetHistory(true);
+    S.userId = uid; S.panel = null; S.settle = null; S.settleReq++; S.rsig = {}; S.sel = {}; S.pending = {}; S.fails = 0; S.eventKey = null; S.shownKey = null; S.rulesBase = null; S.req++; resetHistory(true);
     if (S.pollTimer) { clearTimeout(S.pollTimer); S.pollTimer = null; }
     if (!uid) { setGate('login'); return; }
     setGate('loading'); loadPanel();
@@ -982,7 +1185,7 @@
     $('sva-refresh').addEventListener('click', function () { if (S.gate === 'ready' && !S.busy) loadPanel(); });
     $('sva-ed-select').addEventListener('change', function () {
       if (S.busy || S.modalOpen) { this.value = S.shownKey || ''; return; }
-      S.eventKey = this.value || null; S.sel = {}; S.rsig = {}; S.pending = {}; resetHistory(false); loadPanel();
+      S.eventKey = this.value || null; S.sel = {}; S.rsig = {}; S.pending = {}; S.settle = null; S.settleReq++; resetHistory(false); loadPanel();
       var hd = $('sva-hist'); if (hd && hd.open) loadHist(true);
     });
     // setTimeout para no llamar a Supabase dentro del propio callback de auth
