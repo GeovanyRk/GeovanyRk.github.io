@@ -259,3 +259,27 @@ body.sva-page ul, body.sva-page ol { list-style: none; }
   .sva-modal__act .sva-btn { flex: 1; }
 }
 @media (prefers-reduced-motion: reduce) { .sva-btn { transition: none; } }
+
+/* ---- Liquidación económica (6B-2C) ---- */
+.sva-hint--warn { color: var(--gold); }
+.sva-setl__head { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 10px; }
+.sva-setl__rule { color: var(--text-2); font-size: .92rem; }
+.sva-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 6px 0 12px; }
+.sva-stat { display: grid; gap: 2px; padding: 10px 12px; border-radius: 12px; background: rgba(255, 255, 255, .05); }
+.sva-stat__l { font-size: .74rem; letter-spacing: .06em; text-transform: uppercase; color: var(--text-2); }
+.sva-stat__v { font-size: 1.5rem; line-height: 1.1; }
+.sva-stat__s { font-size: .8rem; color: var(--text-2); }
+.sva-pays { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 6px; }
+.sva-pay { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) auto; gap: 4px 10px; align-items: center; padding: 8px 12px; border-radius: 10px; background: rgba(255, 255, 255, .04); border-left: 3px solid transparent; }
+.sva-pay[data-status="applied"] { border-left-color: var(--live); }
+.sva-pay[data-status="protected"] { border-left-color: var(--violet-soft); }
+.sva-pay[data-status="pending"] { border-left-color: var(--gold); }
+.sva-pay[data-status="error"] { border-left-color: var(--danger); background: rgba(255, 107, 122, .08); }
+.sva-pay__n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sva-pay__k { color: var(--text-2); font-size: .9rem; }
+.sva-pay__d { grid-column: 1 / -1; color: var(--text-2); font-size: .82rem; overflow-wrap: anywhere; }
+.sva-pay .sva-pill[data-pay="applied"] { background: rgba(39, 240, 154, .16); color: var(--live); }
+.sva-pay .sva-pill[data-pay="protected"] { background: rgba(138, 61, 255, .22); color: var(--violet-soft); }
+.sva-pay .sva-pill[data-pay="pending"] { background: rgba(255, 194, 71, .18); color: var(--gold); }
+.sva-pay .sva-pill[data-pay="error"] { background: rgba(255, 107, 122, .2); color: #ffb3bb; }
+@media (max-width: 640px) { .sva-pay { grid-template-columns: minmax(0, 1fr) auto; } .sva-pay__k { grid-column: 1 / 2; } }
