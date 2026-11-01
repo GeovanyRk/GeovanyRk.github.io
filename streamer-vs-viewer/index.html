@@ -315,15 +315,18 @@
         <h2 class="svv-h2" id="svv-arsenal-h">Arsenal</h2>
         <p class="svv-arsenal__lede">Tres comodines para jugar con ventaja. Así funciona cada uno.</p>
         <ul class="svv-rack">
-          <li class="svv-pw svv-pw--shield">
+          <li class="svv-pw svv-pw--shield" id="svv-shield" data-state="soon">
             <div class="svv-pw__top">
               <span class="svv-pw__icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M12 2.5 4.5 5.5v6c0 4.6 3.1 8.2 7.5 10 4.4-1.8 7.5-5.4 7.5-10v-6L12 2.5Z"/><path d="m8.8 12 2.2 2.2 4.2-4.4"/></svg></span>
-              <span class="svv-pw__soon">Próximamente</span>
+              <span class="svv-pw__soon" id="svv-shield-badge">Próximamente</span>
             </div>
             <h3 class="svv-pw__name">Escudo</h3>
             <p class="svv-pw__desc">Si Geo gana, te protege de perder 1,000 V-Bucks de tu billetera interna. Si ganan los Viewers, recibes tu premio normalmente.</p>
-            <p class="svv-pw__note">Se compra antes de tu primera partida.</p>
+            <p class="svv-pw__note" id="svv-shield-note" role="status" aria-live="polite">Se compra antes de tu primera partida. Máximo 1 por edición, no se transfiere y solo vale en esa edición.</p>
             <p class="svv-pw__price"><b>2,000</b> G-Coins</p>
+            <div class="svv-pw__act" id="svv-shield-act" hidden>
+              <button type="button" class="svv-btn svv-btn--join" id="svv-btn-shield">Comprar Escudo</button>
+            </div>
           </li>
           <li class="svv-pw svv-pw--jump">
             <div class="svv-pw__top">
