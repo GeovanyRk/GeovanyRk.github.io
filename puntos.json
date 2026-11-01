@@ -41,7 +41,7 @@
   "matidk_0": {
     "usuario": "matidk_0",
     "ganado": 129635,
-    "gastado": 118750,
+    "gastado": 128750,
     "operaciones": {
       "4d24a288dbabe0afe605280e2532581e4c81569dc5699b0bb7b77f4e61ac8ea2": {
         "puntos": 10000,
@@ -52,6 +52,11 @@
         "puntos": 10000,
         "saldoRestante": 2145,
         "en": "2026-10-22T00:26:17.182Z"
+      },
+      "2653c34c8e47bdd408b9878cbb85bef8ba49b8cedd7799ea10892a829b49bd7a": {
+        "puntos": 10000,
+        "saldoRestante": 885,
+        "en": "2026-11-01T23:55:18.499Z"
       }
     }
   },
