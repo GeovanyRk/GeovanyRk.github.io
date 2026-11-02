@@ -265,12 +265,13 @@
     ]);
   }
 
-  // glifos del Poneglyph (formas propias, lista blanca g1..g12)
+  // glifos del Poneglyph (formas propias, lista blanca g1..g13)
   var GLYPHS = {
     g1: 'M20 6 L34 32 H6 Z', g2: 'M20 20 m-12 0 a12 12 0 1 0 24 0 a12 12 0 1 0 -24 0 M20 6 V34', g3: 'M10 6 V34 H30',
     g4: 'M20 5 L34 20 L20 35 L6 20 Z', g5: 'M20 20 m-12 0 a12 12 0 1 0 24 0 a12 12 0 1 0 -24 0 M20 20 m-3 0 a3 3 0 1 0 6 0 a3 3 0 1 0 -6 0',
     g6: 'M27 6 A14 14 0 1 0 27 34 A10 10 0 1 1 27 6 Z', g7: 'M6 10 L15 30 L23 10 L32 30', g8: 'M6 10 H34 M20 10 V34',
-    g9: 'M8 8 H32 V32 H8 Z', g10: 'M4 22 Q12 8 20 22 T36 22', g11: 'M13 6 V34 M27 6 V34', g12: 'M20 5 V35 M5 20 H35 M10 10 L30 30'
+    g9: 'M8 8 H32 V32 H8 Z', g10: 'M4 22 Q12 8 20 22 T36 22', g11: 'M13 6 V34 M27 6 V34', g12: 'M20 5 V35 M5 20 H35 M10 10 L30 30',
+    g13: 'M7 9 H33 V22 L20 35 L7 22 Z M20 13 V23 M20 28 H20.1'
   };
   function glyph(id, cls) {
     var p = GLYPHS[id];
@@ -478,7 +479,13 @@
     return { mission_id: view.id, step_number: step, answer: text };   // exactamente estas 3 claves: nunca profile_id
   }
   function functionUrl() {
+    // Usa la configuración pública existente; fallback al origen del mismo cliente Supabase Auth.
+    // No incluye llaves ni acepta dominios arbitrarios.
+    var client = getClient();
     var b = window.GEOARMY_SUPABASE_URL;
+    if (typeof b !== 'string' || !/^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(b)) {
+      b = client && client.supabaseUrl;
+    }
     return (typeof b === 'string' && /^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(b)) ? b + '/functions/v1/' + SUBMIT_FN : null;
   }
   function say(ui, kind, text, node) {
