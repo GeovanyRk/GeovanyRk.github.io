@@ -55,16 +55,78 @@
       }
     }
 
-    /* Mundo 02: teaser bloqueado. La imagen ya contiene el lock y el texto. */
+    /* Mundo 02: el teaser solo se sustituye al llegar el 3 nov 2026, 19:00 ET.
+       La apertura económica REAL sigue controlada por Supabase. */
     .v3-world-slide-02 .world-02-coming-soon{
       position:relative;
       overflow:hidden;
     }
-    .v3-world-slide-02 .world-02-coming-soon img{
+    .v3-world-slide-02 .world-02-coming-soon > .world-02-teaser{
       display:block;
       width:100%;
       height:auto;
       filter:brightness(.78) saturate(.88);
+    }
+    .v3-world-slide-02 .world-02-coming-soon.is-unlocked > .world-02-teaser{
+      display:none;
+    }
+    .v3-world-slide-02 .world-02-coming-soon .world-02-open[hidden]{display:none!important;}
+    .v3-world-slide-02 .world-02-coming-soon .world-02-open{
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      min-height:390px;
+      width:100%;
+      padding:14px 12px 24px;
+      text-align:center;
+      text-decoration:none;
+      color:#fbe8b7;
+      border:1px solid rgba(242,185,83,.7);
+      border-radius:20px;
+      background:radial-gradient(ellipse at 50% 35%, rgba(66,160,188,.26),transparent 70%),
+        linear-gradient(155deg,#0b1628,#0c1017 78%);
+      box-shadow:inset 0 0 45px rgba(12,39,70,.6),0 12px 35px rgba(0,0,0,.35);
+      transition:box-shadow .2s ease,transform .2s ease;
+    }
+    .v3-world-slide-02 .world-02-coming-soon .world-02-open:hover,
+    .v3-world-slide-02 .world-02-coming-soon .world-02-open:focus-visible{
+      box-shadow:inset 0 0 45px rgba(12,39,70,.6),0 0 30px rgba(242,185,83,.25);
+    }
+    .v3-world-slide-02 .world-02-coming-soon .world-02-open:focus-visible{
+      outline:3px solid #fbd285;
+      outline-offset:-3px;
+    }
+    .v3-world-slide-02 .world-02-coming-soon .world-02-open > img{
+      display:block;
+      width:100%;
+      height:auto;
+      max-width:480px;
+      max-height:340px;
+      object-fit:contain;
+      filter:none;
+    }
+    .world-02-open-title{
+      display:block;
+      margin-top:2px;
+      font-family:'Space Grotesk',Inter,sans-serif;
+      font-weight:700;
+      font-size:clamp(19px,2.4vw,27px);
+      letter-spacing:.075em;
+      color:#ffdc8b;
+    }
+    .world-02-open-sub{
+      display:block;
+      font-family:Inter,system-ui,sans-serif;
+      font-size:13px;
+      font-weight:600;
+      margin-top:7px;
+      color:#f7eddd;
+    }
+    @media (max-width:560px){
+      .v3-world-slide-02 .world-02-coming-soon .world-02-open{min-height:310px;}
+      .v3-world-slide-02 .world-02-coming-soon .world-02-open > img{max-height:260px;}
     }
 
 
@@ -277,13 +339,24 @@
         </div>
         </div>
 
-        <!-- Mundo 02: próximo mundo. Bloqueado hasta su lanzamiento. -->
+        <!-- Mundo 02: se abre visualmente el 3 de noviembre de 2026 a las 7 PM ET
+             (después del cambio a horario estándar, UTC-05:00). El servidor
+             mantiene independiente el control de compras, misiones y premios. -->
         <div class="v3-world-slide v3-world-slide-02">
-          <div class="v3-world-locked world-02-coming-soon" data-reveal aria-label="Mundo 02 — Próximamente">
+          <div class="v3-world-locked world-02-coming-soon" data-reveal
+               data-unlock-iso="2026-11-03T19:00:00-05:00"
+               id="wlOnePieceWorld" aria-label="Mundo 02 — Próximamente">
             <img src="world-02-proximamente.png"
                  alt="Mundo 02 — Próximamente · Transmisión bloqueada"
-                 class="v3-world-planet-img"
+                 class="v3-world-planet-img world-02-teaser"
                  loading="lazy"/>
+            <a id="wlOnePieceOpen" class="world-02-open" href="onepiece.html"
+               aria-label="Entrar al Mundo 02 de One Piece" tabindex="-1" hidden>
+              <img src="assets/onepiece/planeta-diez-islas-720.webp"
+                   alt="Mapa del mundo One Piece con las diez islas" loading="lazy"/>
+              <span class="world-02-open-title">MUNDO 02 · ONE PIECE</span>
+              <span class="world-02-open-sub">Explorar el mundo pirata →</span>
+            </a>
           </div>
         </div>
 
@@ -498,6 +571,35 @@
     </form>
     <small class="ga-guide-disclaimer">Respuestas generadas por IA. No compartas contraseñas ni datos privados.</small>
   </section>
+
+  <script>
+  /* Mundo 02: cambio visual automático y seguro; sin escrituras ni premios.
+     Date.parse con UTC-05:00 evita el error por cambio de horario de EE. UU. */
+  (function () {
+    'use strict';
+    var world = document.getElementById('wlOnePieceWorld');
+    var link = document.getElementById('wlOnePieceOpen');
+    if (!world || !link) return;
+    var unlockAt = Date.parse(world.getAttribute('data-unlock-iso'));
+    if (!Number.isFinite(unlockAt)) return;
+    var timer = null;
+    function update() {
+      var opened = Date.now() >= unlockAt;
+      world.classList.toggle('is-unlocked', opened);
+      world.classList.toggle('v3-world-locked', !opened);
+      world.setAttribute('aria-label', opened ? 'Mundo 02 — One Piece disponible' : 'Mundo 02 — Próximamente');
+      link.hidden = !opened;
+      link.tabIndex = opened ? 0 : -1;
+      if (opened && timer !== null) {
+        clearInterval(timer);
+        timer = null;
+      }
+    }
+    update();
+    if (!world.classList.contains('is-unlocked')) timer = setInterval(update, 1000);
+    document.addEventListener('visibilitychange', update);
+  })();
+  </script>
 
   <script src="js/premium.js"></script>
   <script src="js/geoarmy-config.js"></script>
