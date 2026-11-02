@@ -430,3 +430,18 @@ body .op-compass[style] { background-image: none; }
   .op-rules ul { padding-left: 40px; padding-right: 14px; }
 }
 @media (prefers-reduced-motion: reduce) { .op-node[data-state="current"] { animation: none; } .op-bar-fill { transition: none; } }
+
+/* ---- Fase 7C: navegación capítulo → misión ---- */
+.op-chapter > strong.op-cn { position: static; }
+.op-chapter-link { color: inherit; text-decoration: none; }
+.op-chapter-link::after { content: ''; position: absolute; inset: 0; z-index: 2; border-radius: inherit; }
+.op-chapter:hover { transform: translateY(-2px); }
+.op-chapter-link:focus-visible { outline: none; }
+.op-chapter:focus-within { outline: 2px solid var(--gold-2); outline-offset: 3px; }
+a.op-mission { color: inherit; text-decoration: none; cursor: pointer; transition: transform .15s, box-shadow .15s; }
+a.op-mission:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(245, 196, 81, .6), 0 8px 18px rgba(0, 0, 0, .5); }
+a.op-mission:focus-visible { outline: 2px solid var(--gold-2); outline-offset: 3px; }
+.op-go { margin-top: auto; font: 800 12.5px 'Space Grotesk', sans-serif; color: var(--gold-2); }
+.op-go::after { content: ' →'; }
+@media (max-width: 640px) { a.op-mission .op-go { display: block; font-size: 11.5px; } }
+@media (prefers-reduced-motion: reduce) { .op-chapter:hover, a.op-mission:hover { transform: none; } }
