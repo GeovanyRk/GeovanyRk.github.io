@@ -174,6 +174,58 @@
     .ti-comprar-avisos { max-width: 640px; margin: 1.6rem auto 0; text-align: center; }
     .ti-comprar-aviso { color: var(--text2); font-size: .85rem; line-height: 1.6; margin: 0 0 6px; }
     .ti-comprar-seguro { color: var(--text3); font-size: .78rem; margin: 0; }
+
+    /* Estado temporal de compra de G-Coins.
+       Los links originales se conservan en data-payment-url y solo se
+       restauran cuando GCOIN_PAYMENT_LINKS_ENABLED = true. */
+    .ti-comprar-lock-banner {
+      max-width: 720px;
+      margin: 0 auto 1.35rem;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 11px;
+      text-align: left;
+      border: 1px solid rgba(255,180,84,.34);
+      background: rgba(255,180,84,.07);
+      border-radius: 14px;
+      color: #ffd8a6;
+    }
+    .ti-comprar-lock-banner strong {
+      display: block;
+      color: #fff;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .95rem;
+      margin-bottom: 2px;
+    }
+    .ti-comprar-lock-banner span:last-child {
+      display: block;
+      color: var(--text2);
+      font-size: .82rem;
+      line-height: 1.45;
+    }
+    .ti-comprar-lock-icon { font-size: 1.25rem; flex-shrink: 0; }
+
+    .ti-comprar[data-payments-enabled="false"] .ti-comprar-card {
+      opacity: .72;
+      filter: saturate(.48);
+      border-color: rgba(255,255,255,.10);
+      box-shadow: none;
+    }
+    .ti-comprar[data-payments-enabled="false"] .ti-comprar-card:hover {
+      transform: none;
+    }
+    .ti-comprar .ti-comprar-btn.is-disabled {
+      pointer-events: none;
+      cursor: not-allowed;
+      background: rgba(255,255,255,.09);
+      color: rgba(255,255,255,.68);
+      box-shadow: none;
+      opacity: 1;
+    }
+    .ti-comprar .ti-comprar-btn.is-disabled::before { display: none; }
+    .ti-comprar .ti-comprar-btn.is-disabled:hover { transform: none; }
     @media (max-width: 560px) {
       .ti-comprar-grid { grid-template-columns: 1fr 1fr; }
     }
@@ -613,54 +665,59 @@
   </section>
   </div>
 
-  <!-- COMPRAR G-COINS: compra manual vía Square Payment Links. Sección
-       estática, sin selector de cantidad ni precio personalizado -- 5
-       paquetes fijos, cada botón abre en pestaña nueva el Payment Link
-       público correspondiente. Square procesa el checkout completo; aquí
-       no hay formulario de tarjeta, API, SDK, clave ni token de Square, ni
-       ningún fetch. La acreditación de G-Coins es MANUAL (no instantánea)
-       -- ver aviso debajo de los paquetes. No modifica saldo/tiSaldoValor,
-       no llama a /api/*, no toca el catálogo ni el sistema de canjes. -->
-  <section class="ti-comprar">
+  <!-- COMPRAR G-COINS: temporalmente pausado.
+       Los enlaces de Square se conservan en data-payment-url, pero NO son
+       navegables mientras GCOIN_PAYMENT_LINKS_ENABLED = false. Esto no toca
+       el saldo GCOIN, /api/canjear, Supabase ni el resto de la tienda. -->
+  <section class="ti-comprar" id="tiComprarGcoins" data-payments-enabled="false">
     <div class="ti-section-title"><span class="ti-line"></span>Comprar G-Coins<span class="ti-line"></span></div>
-    <p class="ti-comprar-sub">Compra G-Coins directamente con tarjeta. El pago se procesa fuera de Geo Army, en Square.</p>
+
+    <div id="tiComprarLockBanner" class="ti-comprar-lock-banner">
+      <span class="ti-comprar-lock-icon" aria-hidden="true">🔒</span>
+      <div>
+        <strong>Compras de G-Coins temporalmente bloqueadas</strong>
+        <span>Solo está pausada la compra de nuevos G-Coins. Puedes seguir usando tu saldo actual en la tienda.</span>
+      </div>
+    </div>
+
+    <p id="tiComprarSub" class="ti-comprar-sub">Estamos restaurando el método de pago. Los paquetes volverán a estar disponibles en cuanto se reactive.</p>
 
     <div class="ti-comprar-grid">
       <div class="ti-comprar-card">
         <img src="gcoin-icon.png" class="ti-comprar-coin" alt="G-coin"/>
         <div class="ti-comprar-cantidad">1,800 <span>G-Coins</span></div>
         <div class="ti-comprar-precio">$5</div>
-        <a class="ti-comprar-btn" href="https://square.link/u/JFqxuMiT" target="_blank" rel="noopener noreferrer">Comprar</a>
+        <a class="ti-comprar-btn is-disabled" data-payment-url="https://square.link/u/JFqxuMiT" aria-disabled="true" tabindex="-1">🔒 Bloqueado</a>
       </div>
       <div class="ti-comprar-card">
         <img src="gcoin-icon.png" class="ti-comprar-coin" alt="G-coin"/>
         <div class="ti-comprar-cantidad">3,750 <span>G-Coins</span></div>
         <div class="ti-comprar-precio">$10</div>
-        <a class="ti-comprar-btn" href="https://square.link/u/0SlHiuHd" target="_blank" rel="noopener noreferrer">Comprar</a>
+        <a class="ti-comprar-btn is-disabled" data-payment-url="https://square.link/u/0SlHiuHd" aria-disabled="true" tabindex="-1">🔒 Bloqueado</a>
       </div>
       <div class="ti-comprar-card">
         <img src="gcoin-icon.png" class="ti-comprar-coin" alt="G-coin"/>
         <div class="ti-comprar-cantidad">7,500 <span>G-Coins</span></div>
         <div class="ti-comprar-precio">$20</div>
-        <a class="ti-comprar-btn" href="https://square.link/u/sASLLECJ" target="_blank" rel="noopener noreferrer">Comprar</a>
+        <a class="ti-comprar-btn is-disabled" data-payment-url="https://square.link/u/sASLLECJ" aria-disabled="true" tabindex="-1">🔒 Bloqueado</a>
       </div>
       <div class="ti-comprar-card">
         <img src="gcoin-icon.png" class="ti-comprar-coin" alt="G-coin"/>
         <div class="ti-comprar-cantidad">18,750 <span>G-Coins</span></div>
         <div class="ti-comprar-precio">$50</div>
-        <a class="ti-comprar-btn" href="https://square.link/u/Oou5LtP1" target="_blank" rel="noopener noreferrer">Comprar</a>
+        <a class="ti-comprar-btn is-disabled" data-payment-url="https://square.link/u/Oou5LtP1" aria-disabled="true" tabindex="-1">🔒 Bloqueado</a>
       </div>
       <div class="ti-comprar-card">
         <img src="gcoin-icon.png" class="ti-comprar-coin" alt="G-coin"/>
         <div class="ti-comprar-cantidad">37,500 <span>G-Coins</span></div>
         <div class="ti-comprar-precio">$100</div>
-        <a class="ti-comprar-btn" href="https://square.link/u/JBAkg248" target="_blank" rel="noopener noreferrer">Comprar</a>
+        <a class="ti-comprar-btn is-disabled" data-payment-url="https://square.link/u/JBAkg248" aria-disabled="true" tabindex="-1">🔒 Bloqueado</a>
       </div>
     </div>
 
     <div class="ti-comprar-avisos">
-      <p class="ti-comprar-aviso">⚠️ Ingresa correctamente tu Twitch username durante el pago. Los G-Coins se acreditan después de verificar el pago.</p>
-      <p class="ti-comprar-seguro">🔒 Pago seguro procesado por Square.</p>
+      <p id="tiComprarAviso" class="ti-comprar-aviso">⚠️ No realices pagos mediante enlaces anteriores mientras aparezca este aviso.</p>
+      <p id="tiComprarSeguro" class="ti-comprar-seguro">Los paquetes y precios se mantienen visibles solo como referencia.</p>
     </div>
   </section>
 
@@ -716,6 +773,11 @@
     // Debe coincidir exactamente con un Redirect URI registrado en tu app de Twitch
     const TWITCH_CLIENT_ID = "3spb0xbi38qc8ng1zwcoz5081lp524";
     const REDIRECT_URI = window.location.origin + window.location.pathname;
+
+    // INTERRUPTOR TEMPORAL — compra de G-Coins por links externos.
+    // false = paquetes visibles pero bloqueados / sin enlace navegable.
+    // true  = restaura automáticamente los links y botones "Comprar".
+    const GCOIN_PAYMENT_LINKS_ENABLED = false;
     // ================================
 
     const $ = (id) => document.getElementById(id);
@@ -739,6 +801,61 @@
       clashroyale:  { label: 'Clash Royale',  accent: '#ffd23f' },
       brawlstars:   { label: 'Brawl Stars',   accent: '#9147ff' },
     };
+
+    function aplicarEstadoCompraGcoins() {
+      const section = $('tiComprarGcoins');
+      if (!section) return;
+
+      const habilitado = GCOIN_PAYMENT_LINKS_ENABLED === true;
+      section.dataset.paymentsEnabled = habilitado ? 'true' : 'false';
+
+      const banner = $('tiComprarLockBanner');
+      const sub = $('tiComprarSub');
+      const aviso = $('tiComprarAviso');
+      const seguro = $('tiComprarSeguro');
+
+      if (banner) banner.hidden = habilitado;
+
+      if (sub) {
+        sub.textContent = habilitado
+          ? 'Compra G-Coins directamente con tarjeta. El pago se procesa fuera de Geo Army, en Square.'
+          : 'Estamos restaurando el método de pago. Los paquetes volverán a estar disponibles en cuanto se reactive.';
+      }
+
+      if (aviso) {
+        aviso.textContent = habilitado
+          ? '⚠️ Ingresa correctamente tu Twitch username durante el pago. Los G-Coins se acreditan después de verificar el pago.'
+          : '⚠️ No realices pagos mediante enlaces anteriores mientras aparezca este aviso.';
+      }
+
+      if (seguro) {
+        seguro.textContent = habilitado
+          ? '🔒 Pago seguro procesado por Square.'
+          : 'Los paquetes y precios se mantienen visibles solo como referencia.';
+      }
+
+      section.querySelectorAll('.ti-comprar-btn[data-payment-url]').forEach((btn) => {
+        const url = btn.dataset.paymentUrl;
+
+        if (habilitado) {
+          btn.href = url;
+          btn.target = '_blank';
+          btn.rel = 'noopener noreferrer';
+          btn.textContent = 'Comprar';
+          btn.classList.remove('is-disabled');
+          btn.removeAttribute('aria-disabled');
+          btn.removeAttribute('tabindex');
+        } else {
+          btn.removeAttribute('href');
+          btn.removeAttribute('target');
+          btn.removeAttribute('rel');
+          btn.textContent = '🔒 Bloqueado';
+          btn.classList.add('is-disabled');
+          btn.setAttribute('aria-disabled', 'true');
+          btn.setAttribute('tabindex', '-1');
+        }
+      });
+    }
 
     function authHeaders() {
       return { Authorization: `Bearer ${twitchAccessToken}` };
@@ -1132,6 +1249,7 @@
     });
 
     async function init() {
+      aplicarEstadoCompraGcoins();
       loginBtn.addEventListener('click', pedirLogin);
 
       // Revisar si venimos de regreso del login (token en el hash de la URL)
