@@ -1,21 +1,21 @@
-// onepiece-mision.js — Página dinámica de misiones del Mini Pase Pirata (One Piece 2026) · FASE 7C.
+// onepiece-mision.js — Página dinámica de misiones del Mini Pase Pirata (One Piece 2026) · FASE ÚNICA DE LANZAMIENTO.
 //
-// UNA sola página para las 20 misiones: onepiece-mision.html?m=<id|code>  (o ?demo=<tipo> para la demo visual).
+// UNA sola página para las 20 misiones: onepiece-mision.html?m=<id|code>. El modo demo está desactivado.
 //
 // Qué hace:
 //   - Reutiliza el cliente de Supabase Auth del sitio (window.GeoArmyAccount.client). NO crea otro cliente.
 //   - Modo real: lee SOLO la RPC ya instalada onepiece_2026_get_mission_catalog() (solo lectura) para saber si la misión
 //     existe, su capítulo y si el servidor la marca como disponible/completada. No calcula fechas ni desbloquea nada.
-//   - Pinta el desafío a partir de `public_payload` si el catálogo lo trae (hoy NO lo trae: los 28 están vacíos). Cada tipo
+//   - Pinta el desafío a partir del `public_payload` del catálogo protegido (28 etapas cargadas en Supabase). Cada tipo
 //     tiene su validador; un payload inválido o ausente muestra un estado seguro, nunca rompe la página.
 //   - Modo demo (?demo=1): SOLO si DEMO_ENABLED=true y existe js/onepiece-mision-fixtures.js (datos FICTICIOS, no se publica).
 //     No hay sesión, ni RPC, ni envío: la demo nunca evalúa respuestas ni otorga XP.
-//   - Fase 7D: circuito de envío PREPARADO pero APAGADO (ANSWERS_ENABLED=false). Cuando se autorice, POST a la Edge Function
+//   - Fase final: circuito de envío listo. Se usa POST cuando la misión esté publicada y abierta por Supabase
 //     onepiece-submit-answer con { mission_id, step_number, answer } y el access_token de la sesión; tras cada resultado
 //     se vuelve a leer el catálogo (el servidor decide cuál es la etapa siguiente).
 //
 // Qué NO hace (a propósito):
-//   - Con ANSWERS_ENABLED=false NO llama a ninguna Edge Function. Nunca llama a onepiece-purchase. No envía profile_id.
+//   - Sin misión activa del servidor no hay respuestas enviables. Nunca llama a onepiece-purchase. No envía profile_id.
 //   - No contiene respuestas correctas ni verificadores: JavaScript no decide si una respuesta es buena ni acredita XP;
 //     solo muestra lo que devuelve el servidor.
 //   - Todo texto que viene de datos entra por textContent; las imágenes salen de un catálogo local (art_key en lista blanca),
@@ -23,7 +23,7 @@
 (function () {
   'use strict';
 
-  var ANSWERS_ENABLED = false;   // Fase 7D: el circuito existe pero está APAGADO hasta autorizar las pruebas finales
+  var ANSWERS_ENABLED = true;    // envío preparado; SQL decide si capítulo, misión, etapa y recompensas están activos
   var DEMO_ENABLED = false;      // producción: sin demo (y sin js/onepiece-mision-fixtures.js en el servidor)
   var SUBMIT_FN = 'onepiece-submit-answer';
   var SUBMIT_TIMEOUT_MS = 12000;
@@ -605,7 +605,7 @@
       top.appendChild(h('p', { class: 'op-plank' }, [h('span', { text: (isInt(chap) ? 'Capítulo ' + chap + ' · ' : '') + cname })]));
       top.appendChild(h('h1', { class: 'om-title', text: view.title }));
       var meta = h('ul', { class: 'om-meta' });
-      meta.appendChild(h('li', { class: 'om-xp' }, [use('i-vcoin', 'op-ic'), h('span', {}, [h('b', { text: '+' + (isInt(view.xp_reward) ? view.xp_reward : 75) + ' XP' }), h('small', { text: 'al completarla' })])]));
+      meta.appendChild(h('li', { class: 'om-xp' }, [use('i-vcoin', 'op-ic'), h('span', {}, [h('b', { text: 'Hasta +' + (isInt(view.xp_reward) ? view.xp_reward : 75) + ' XP' }), h('small', { text: 'según límite de temporada' })])]));
       var stTxt = { available: 'Pendiente', completed: 'Completada', pending: 'Pendiente' }[view.status] || 'Pendiente';
       meta.appendChild(h('li', { class: 'om-status', 'data-status': view.status }, [use(view.status === 'completed' ? 'i-check' : 'i-anchor', 'op-ic'), h('span', { text: stTxt })]));
       if (TYPE_LABEL[view.type]) meta.appendChild(h('li', { class: 'om-type' }, [use('i-map', 'op-ic'), h('span', { text: TYPE_LABEL[view.type] })]));

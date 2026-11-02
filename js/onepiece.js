@@ -1,21 +1,15 @@
-// onepiece.js — Mini Pase Pirata (One Piece 2026) · FASE 2C (solo lectura).
+// onepiece.js — Mini Pase Pirata (One Piece 2026) · FASE FINAL (un solo despliegue, control servidor).
 //
-// Qué hace:
-//   - Reutiliza el cliente de Supabase Auth del sitio (window.GeoArmyAccount.client). NO crea otro cliente.
-//   - Lee SOLO tres RPC ya instaladas:  onepiece_2026_my_access(), onepiece_2026_get_my_progress(),
-//     onepiece_2026_get_mission_catalog().
-//   - Pinta lo que esas RPC devuelven. No reconstruye misiones, no calcula fechas ni estados de capítulo.
-//
-// Qué NO hace (a propósito):
-//   - No existe aquí ninguna llamada a las Edge Functions `onepiece-purchase` ni `onepiece-submit-answer`,
-//     ni ninguna escritura a billetera / XP / recompensas. Compra y envío de respuestas están
-//     desactivados por construcción: no hay código que los ejecute.
-//   - No guarda nada en el almacenamiento del navegador y no imprime tokens ni ids.
+// Funciones: autenticación existente, lecturas de acceso/progreso/catálogo y, con
+// PURCHASE_ENABLED=true, oferta de precio por RPC autenticada y POST a onepiece-purchase.
+// El precio y las recompensas se verifican en Supabase; el navegador nunca envía profile_id.
+// Seguridad: interfaz preparada; el servidor Supabase mantiene el producto cerrado hasta aprobar el lanzamiento.
+// sessionStorage guarda únicamente el UUID de solicitud para reintentos seguros, nunca tokens.
 (function () {
   'use strict';
 
-  var PURCHASE_ENABLED = false;   // documental: no hay código de compra en este archivo
-  var ANSWERS_ENABLED = false;    // documental: no hay código de envío de respuestas
+  var PURCHASE_ENABLED = true;    // LA VENTA SOLO SE HABILITA CUANDO LA RPC DE OFERTA SERVIDOR LA AUTORIZA
+  var ANSWERS_ENABLED = true;     // misiones solo pasan a disponibles cuando el servidor las publica
 
   var RPC_TIMEOUT_MS = 8000;
   var MAX_XP = 900;
@@ -104,6 +98,13 @@
   var loadSeq = 0;
   var currentUid;
   var routeLens = null;
+  var purchaseOffer = null;
+  var purchaseBusy = false;
+  var purchaseMessage = '';
+  var PURCHASE_FN = 'onepiece-purchase';
+  var PURCHASE_TIMEOUT_MS = 12000;
+  var PURCHASE_PRICE = 3750;
+  var UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
   function root() { return $('opRoot'); }
   function setPhase(p) { S.phase = p; var r = root(); if (r) r.setAttribute('data-op-state', p + (S.hasPass ? ' pass' : '')); }
@@ -169,7 +170,7 @@
 
     var session = sessionRes && sessionRes.data && sessionRes.data.session;
     var uid = session && session.user ? session.user.id : null;
-    if (uid !== currentUid) S.selected = null;
+    if (uid !== currentUid) { S.selected = null; purchaseOffer = null; purchaseMessage = ''; }
     currentUid = uid;
 
     if (!session) {
@@ -194,6 +195,18 @@
       S.access = access;
       S.progress = S.hasPass ? progress : null;
       S.catalog = catalog;
+      purchaseOffer = null;
+      if (PURCHASE_ENABLED && !S.hasPass) {
+        try {
+          var priceRes = await withTimeout(client.rpc('onepiece_2026_get_purchase_offer'), RPC_TIMEOUT_MS);
+          if (seq !== loadSeq) return;
+          var o = priceRes && !priceRes.error ? priceRes.data : null;
+          if (o && o.available === true && o.currency_code === 'GCOIN' &&
+              o.expected_amount_minor === PURCHASE_PRICE && UUID_RE.test(String(o.expected_price_id))) {
+            purchaseOffer = { id: o.expected_price_id, amount: PURCHASE_PRICE };
+          }
+        } catch (e) { purchaseOffer = null; }
+      }
       setPhase('ready');
     } catch (e) {
       if (seq !== loadSeq) return;
@@ -466,7 +479,7 @@
     var when = (!completed && !available) ? fmtUnlock(m && m.unlocks_at) : null;
     if (when) label = 'Abre ' + when;
     var card = h(linkable ? 'a' : 'article', { class: 'op-mission', 'data-state': state, href: linkable ? 'onepiece-mision.html?m=' + encodeURIComponent(key) : null }, [
-      h('div', { class: 'op-mission-top' }, [h('span', { class: 'op-mission-badge', text: label }), xp !== null ? h('span', { class: 'op-mission-xp', text: '+' + xp + ' XP' }) : null]),
+      h('div', { class: 'op-mission-top' }, [h('span', { class: 'op-mission-badge', text: label }), xp !== null ? h('span', { class: 'op-mission-xp', text: 'Hasta +' + xp + ' XP' }) : null]),
       h('h3', { text: title }),
       desc ? h('p', { text: desc }) : null
     ]);
@@ -493,7 +506,86 @@
     hashDone = true; setTimeout(function () { openChapter(parseInt(m[1], 10), false); }, 0);
   }
 
-  // ---------- compra (UI preparada, confirmación DESHABILITADA) ----------
+  // ---------- compra: bloqueada mientras Supabase no publica la oferta ----------
+  // Precio consultado de la base mediante RPC autenticada de solo lectura.
+  // La Edge Function comprueba el precio y la identidad de nuevo en el servidor.
+  function purchaseUrl() {
+    var c = getClient(), u = window.GEOARMY_SUPABASE_URL;
+    if (typeof u !== 'string' || !/^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(u)) u = c && c.supabaseUrl;
+    return (typeof u === 'string' && /^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(u))
+      ? u + '/functions/v1/' + PURCHASE_FN : null;
+  }
+  function pendingRequestKey() { return 'op26_purchase_request_' + String(currentUid); }
+  function getPurchaseRequestId() {
+    if (!currentUid || !UUID_RE.test(currentUid)) return null;
+    var k = pendingRequestKey(), id = null;
+    try { id = sessionStorage.getItem(k); } catch (e) {}
+    if (id && UUID_RE.test(id)) return id;
+    if (!window.crypto || typeof window.crypto.randomUUID !== 'function') return null;
+    id = window.crypto.randomUUID();
+    try { sessionStorage.setItem(k, id); } catch (e) {}
+    return id;
+  }
+  function clearPurchaseRequestId() {
+    try { sessionStorage.removeItem(pendingRequestKey()); } catch (e) {}
+  }
+  async function buyPass(confirm, checkbox) {
+    if (!PURCHASE_ENABLED || purchaseBusy || S.phase !== 'ready' || S.hasPass || !purchaseOffer ||
+        !checkbox.checked || !currentUid) return;
+    var c = getClient(), url = purchaseUrl(), rid = getPurchaseRequestId();
+    if (!c || !url || !rid) { purchaseMessage = 'No se pudo preparar la compra. Recarga la página.'; renderBuy(); return; }
+    purchaseBusy = true;
+    confirm.disabled = true;
+    purchaseMessage = 'Procesando compra…';
+    var statusEl = $('opBuyFeedback'); if (statusEl) statusEl.textContent = purchaseMessage;
+    var token = null;
+    try {
+      var sess = await withTimeout(c.auth.getSession(), RPC_TIMEOUT_MS);
+      var ss = sess && sess.data && sess.data.session;
+      if (ss && ss.user && ss.user.id !== currentUid) throw new Error('account_changed');
+      token = ss && ss.access_token;
+    } catch (e) { token = null; }
+    if (!token) { purchaseBusy = false; purchaseMessage = 'Sesión vencida. Inicia sesión de nuevo.'; renderBuy(); return; }
+    var ctl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var timeout = setTimeout(function () { if (ctl) ctl.abort(); }, PURCHASE_TIMEOUT_MS);
+    var data = null, response = null;
+    try {
+      response = await fetch(url, {
+        method: 'POST', cache: 'no-store', credentials: 'omit', signal: ctl ? ctl.signal : undefined,
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({ client_request_id: rid, expected_price_id: purchaseOffer.id, expected_amount_minor: PURCHASE_PRICE })
+      });
+      try { data = await response.json(); } catch (e) { data = null; }
+    } catch (e) {
+      purchaseBusy = false;
+      clearTimeout(timeout);
+      purchaseMessage = 'No se pudo confirmar la respuesta. Reintenta: se conservará el mismo identificador de compra.';
+      renderBuy(); return;
+    }
+    clearTimeout(timeout);
+    purchaseBusy = false;
+    if (data && data.ok === true && (data.status === 'purchased' || data.status === 'already_processed')) {
+      purchaseMessage = '';
+      await load();
+      if (S.hasPass) clearPurchaseRequestId();
+      else { purchaseMessage = 'Pedido procesado, pero aún no se refleja el pase. Si reintentas, se usará la misma solicitud.'; renderBuy(); }
+      return;
+    }
+    var code = data && typeof data.error === 'string' ? data.error : '';
+    if (code === 'already_owned') { clearPurchaseRequestId(); await load(); return; }
+    var errors = {
+      insufficient_funds: 'No tienes suficientes G-Coins para comprar el pase.',
+      price_changed: 'El precio cambió. Actualiza antes de volver a intentar.',
+      not_available: 'El pase aún no está disponible para comprar.',
+      unauthorized: 'Tu sesión venció. Inicia sesión de nuevo.',
+      rate_limited: 'Demasiados intentos. Vuelve a intentarlo más tarde.',
+      request_conflict: 'Esta solicitud ya fue utilizada con otros datos. Contacta a soporte.',
+      service_unavailable: 'Servicio temporalmente no disponible. Reintenta sin cambiar de sesión.'
+    };
+    purchaseMessage = errors[code] || 'No se pudo confirmar la compra. No vuelvas a intentarlo con otra cuenta.';
+    // No borrar rid ante error ambiguo: evita un segundo cobro tras timeout/reintento.
+    renderBuy();
+  }
   function renderBuy() {
     var box = $('opBuy'); if (!box) return;
     clear(box);
@@ -514,8 +606,15 @@
     ]);
     var chest = h('i', { class: 'op-buy-chest', 'aria-hidden': 'true' }, [art(ART.chestBuy.src, ART.chestBuy.w, ART.chestBuy.h)]);
 
-    var chk = h('input', { type: 'checkbox', id: 'opAck', disabled: true });
-    var confirm = h('button', { type: 'button', class: 'op-btn op-btn-gold', id: 'opConfirm', disabled: true, 'aria-disabled': 'true', text: 'Confirmar compra' });
+    var canBuy = PURCHASE_ENABLED && S.phase === 'ready' && !S.hasPass && !!purchaseOffer &&
+      !purchaseBusy && !!currentUid;
+    var chk = h('input', { type: 'checkbox', id: 'opAck', disabled: !canBuy });
+    var confirm = h('button', { type: 'button', class: 'op-btn op-btn-gold', id: 'opConfirm', disabled: true, 'aria-disabled': 'true', text: purchaseBusy ? 'Procesando…' : 'Confirmar compra' });
+    chk.addEventListener('change', function () {
+      confirm.disabled = !(canBuy && chk.checked);
+      confirm.setAttribute('aria-disabled', confirm.disabled ? 'true' : 'false');
+    });
+    confirm.addEventListener('click', function () { buyPass(confirm, chk); });
     var right = h('div', { class: 'op-buy-right' }, [
       h('ul', { class: 'op-buy-chips' }, [
         chip('i-wheel', ['10 niveles']), chip('i-map', ['20 misiones']), chip('i-vcoin', ['1,500 VBUCKS']), chip('i-crown', ['Pase de Batalla'])
@@ -524,7 +623,8 @@
       h('div', { class: 'op-buy-confirm' }, [
         h('div', {}, [
           h('label', { class: 'op-ack', for: 'opAck' }, [chk, h('span', { text: 'Entiendo que no hay reembolso.' })]),
-          h('p', { class: 'op-tiny', text: PURCHASE_ENABLED ? '' : 'Se habilita en el lanzamiento · 3 nov 2026.' })
+          h('p', { class: 'op-tiny', text: !PURCHASE_ENABLED ? 'Se habilita en el lanzamiento · 3 nov 2026.' : (canBuy ? 'Precio validado por Supabase. Marca la casilla para confirmar.' : 'Compra no disponible por ahora.') }),
+          h('p', { class: 'op-tiny', id: 'opBuyFeedback', role: 'status', text: purchaseMessage })
         ]),
         confirm
       ])
