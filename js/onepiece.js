@@ -373,7 +373,7 @@
       ol.appendChild(h('li', { class: 'op-chapter', 'data-status': c.status || 'unknown', 'data-chapter': c.n }, [
         artBox,
         h('span', { class: 'op-chapter-n', text: String(c.n) }),
-        h('strong', { text: c.name }),
+        h('strong', { class: 'op-cn' }, [h('a', { class: 'op-chapter-link', href: '#misiones', 'data-cap': String(c.n), text: c.name })]),
         h('span', { class: 'op-chapter-date', text: c.dates || '· · ·' }),
         h('span', { class: 'op-chapter-state' }, [statusIcon(st), h('em', { text: c.status ? STATUS_TXT[st] : 'Por abrir' })])
       ]));
@@ -417,7 +417,7 @@
     var chs = chapterList(), cur = currentChapter(), anyMissions = false;
     chs.forEach(function (c) {
       var missions = (c.src && Array.isArray(c.src.missions)) ? c.src.missions : [];
-      var det = h('details', { class: 'op-mch', 'data-status': c.status });
+      var det = h('details', { class: 'op-mch', id: 'opCap' + c.n, 'data-status': c.status });
       if (cur && c.n === cur.n) det.setAttribute('open', '');
       var done = missions.filter(function (m) { return m && m.completed === true; }).length;
       det.appendChild(h('summary', {}, [
@@ -441,8 +441,16 @@
     if (!anyMissions && S.catalog && S.catalog.season_status === 'unknown') {
       box.appendChild(h('p', { class: 'op-muted', text: 'Misiones cerradas hasta confirmar el estado de la temporada.' }));
     }
+    applyHash();
   }
 
+  function fmtUnlock(iso) {
+    if (typeof iso !== 'string' || !/^\d{4}-\d{2}-\d{2}T/.test(iso)) return null;
+    try {
+      var d = new Date(iso); if (isNaN(d.getTime())) return null;
+      return d.toLocaleString('es', { timeZone: 'America/New_York', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true }) + ' NY';
+    } catch (e) { return null; }
+  }
   function missionCard(m) {
     var completed = m && m.completed === true, available = m && m.available === true;
     var state = completed ? 'done' : available ? 'available' : 'closed';
@@ -450,14 +458,39 @@
     var title = (m && typeof m.title === 'string') ? m.title : 'Misión';
     var desc = (m && typeof m.description === 'string') ? m.description : '';
     var xp = (m && isInt(m.xp_reward)) ? m.xp_reward : null;
-    var card = h('article', { class: 'op-mission', 'data-state': state }, [
+    var key = (m && typeof m.id === 'string' && /^[A-Za-z0-9_-]{1,64}$/.test(m.id)) ? m.id : null;
+    // Disponibles y completadas abren la página dinámica (onepiece-mision.html). El servidor sigue decidiendo qué se ve allí:
+    // este enlace no desbloquea nada ni envía respuestas.
+    var linkable = key && (available || completed);
+    // Fase 7D: si el servidor trae unlocks_at para una misión aún cerrada, se muestra la fecha de apertura (solo informativo; el servidor decide).
+    var when = (!completed && !available) ? fmtUnlock(m && m.unlocks_at) : null;
+    if (when) label = 'Abre ' + when;
+    var card = h(linkable ? 'a' : 'article', { class: 'op-mission', 'data-state': state, href: linkable ? 'onepiece-mision.html?m=' + encodeURIComponent(key) : null }, [
       h('div', { class: 'op-mission-top' }, [h('span', { class: 'op-mission-badge', text: label }), xp !== null ? h('span', { class: 'op-mission-xp', text: '+' + xp + ' XP' }) : null]),
       h('h3', { text: title }),
       desc ? h('p', { text: desc }) : null
     ]);
-    // Envío de respuestas desactivado: solo estado visual, sin formulario ni acción.
-    if (!completed && available) card.appendChild(h('span', { class: 'op-soon', 'aria-disabled': 'true', text: 'Responder · próximamente' }));
+    if (linkable) card.appendChild(h('span', { class: 'op-go', text: completed ? 'Ver misión' : 'Abrir misión' }));
     return card;
+  }
+
+  // abre el capítulo n en la lista de misiones y baja hasta él (los enlaces de las tarjetas de capítulo y el "volver" de la misión)
+  function openChapter(n, smooth) {
+    var d = $('opCap' + n);
+    var target = d || $('misiones');
+    if (!target) return;
+    if (d) d.setAttribute('open', '');
+    var reduce = false; try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+    try { target.scrollIntoView({ behavior: (smooth && !reduce) ? 'smooth' : 'auto', block: 'start' }); } catch (e) { target.scrollIntoView(); }
+    var sm = d && d.querySelector('summary'); if (sm && sm.focus) { try { sm.focus({ preventScroll: true }); } catch (e) {} }
+  }
+  var hashDone = false;
+  function applyHash() {
+    if (hashDone) return;
+    var m = /^#opCap([1-4])$/.exec(location.hash || '');
+    if (!m) { hashDone = true; return; }
+    if (!S.hasPass) return;   // sin pase no existe la lista; se reintenta tras la siguiente carga
+    hashDone = true; setTimeout(function () { openChapter(parseInt(m[1], 10), false); }, 0);
   }
 
   // ---------- compra (UI preparada, confirmación DESHABILITADA) ----------
@@ -519,6 +552,13 @@
     try { if (/[?&]slots=1\b/.test(location.search)) r.classList.add('op-show-slots'); } catch (e) {}
     document.addEventListener('click', function (e) { var pop = $('opPop'); if (S.selected && pop && !pop.contains(e.target)) selectLevel(null); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && S.selected) selectLevel(null); });
+    var chs = $('opChapters');
+    if (chs) chs.addEventListener('click', function (e) {
+      var a = e.target && e.target.closest ? e.target.closest('a.op-chapter-link') : null;
+      if (!a) return;
+      e.preventDefault();
+      openChapter(parseInt(a.getAttribute('data-cap'), 10), true);
+    });
     renderAll();
     waitForClient(6000).then(function (c) { if (c) wireAuth(); });
     load();
