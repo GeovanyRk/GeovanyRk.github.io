@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Comunidad — Geo Army V5</title>
+  <meta name="description" content="La comunidad gamer de GeoArmy: stream, misiones, rangos, recompensas, Discord y WhatsApp."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="preload" as="image" type="image/webp" href="assets/comunidad/foto-oficial-geo-army-v5.webp" fetchpriority="high"/>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VT78CC8X2V"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VT78CC8X2V');
+  </script>
+  <!-- Mi Geo Army: cuentas (Supabase Auth + Twitch) — igual que index.html,
+       para que el widget de cuenta funcione también en esta página. -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/geoarmy-config.js"></script>
+  <!-- Tema V3 (espacial/holográfico) — mismo archivo compartido que index.html. No se tocó. -->
+  <link rel="stylesheet" href="css/v3-theme.css"/>
+
+  <style>
+  /* Comunidad V4: todo el estilo vive en css/comunidad-v4.css. Aquí solo queda el
+     contenedor que usa la página desde la versión anterior. */
+  .hq-page-inner { position: relative; z-index: 2; }
+  </style>
+
+  <!-- Base visual aislada de Comunidad (tokens, fondo,
+       componentes base, reduced-motion). Va al final del <head> a propósito. -->
+  <link rel="stylesheet" href="css/comunidad-v4.css"/>
+  <link rel="stylesheet" href="css/comunidad-v5.css"/>
+</head>
+<body class="cg-page">
+
+  <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
+
+  <div class="v3-page">
+    <div class="v3-stars"></div>
+    <img src="nebula-tl.webp" alt="" class="v3-nebula v3-nebula-tl"/>
+    <img src="nebula-tr.webp" alt="" class="v3-nebula v3-nebula-tr"/>
+    <img src="nebula-bl.webp" alt="" class="v3-nebula v3-nebula-bl"/>
+    <img src="nebula-br.webp" alt="" class="v3-nebula v3-nebula-br"/>
+
+    <!-- NAV -->
+    <nav class="v3-nav">
+      <div class="v3-nav-inner">
+        <a href="index.html" class="v3-logo">
+          <span class="v3-logo-mark"><img src="logo.png" alt="GeoArmy"/></span>
+          <span class="v3-wordmark">GEO ARMY</span>
+        </a>
+        <div class="v3-page-links">
+          <a href="index.html#inicio">Inicio</a>
+          <a href="tienda.html">Tienda</a>
+          <a href="puntos.html">Puntos</a>
+        </div>
+        <div class="v3-auth">
+          <div id="geoAccountWidget"></div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="hq-page-inner" id="contenido">
+
+
+      <!-- GEO ARMY V5.3: hero aprobado, bienvenida aprobada, contenido compacto. -->
+      <section class="v5-hero" aria-labelledby="v5-title">
+        <div class="v5-wrap">
+          <div class="v5-top">
+            <p class="v5-eyebrow">Una comunidad. Una foto. Una Army.</p>
+            <span class="v5-top-note">Foto oficial · 33 integrantes</span>
+          </div>
+          <div class="v5-photo" id="v5-photo">
+            <img src="assets/comunidad/foto-oficial-geo-army-v5.webp" alt="Ilustración grupal estilo Minecraft cinematográfico de 33 integrantes de Geo Army, con Geovannyrk al frente, Overwatch a la izquierda y Fortnite a la derecha. Los avatares son ficticios." width="1672" height="941" fetchpriority="high" decoding="async"/>
+            <div id="v5-pins" aria-label="Personajes de la foto"></div>
+            <button type="button" class="v5-photo-toggle" id="v5-names-toggle" aria-pressed="false" aria-controls="v5-pins v5-roster">♟ Ver nombres · 32</button>
+            <div class="v5-photo-badge"><strong>33</strong> integrantes · Geo Army</div>
+          </div>
+          <div class="v5-photo-controls">
+            <span class="v5-controls-note">Pulsa «Ver nombres» sobre la foto o consulta la lista completa. Los avatares son ficticios.</span>
+            <div class="v5-controls-actions">
+              <button type="button" class="v5-chip" id="v5-list-toggle" aria-expanded="false" aria-controls="v5-roster">Ver los 33 integrantes</button>
+            </div>
+          </div>
+          <div class="v5-roster" id="v5-roster" hidden>
+            <div class="v5-roster-heading"><div><h2>Los 33 de Geo Army</h2><p>Integrantes fijos de nuestra foto grupal</p></div></div>
+            <div class="v5-roster-grid" id="v5-roster-grid"></div>
+            <p class="v5-roster-help">Selecciona un nombre para identificar su posición en la ilustración. Las skins no representan el aspecto real de nadie.</p>
+          </div>
+          <div class="v5-lead">
+            <div>
+              <p class="v5-overline">Geo Army · Comunidad de geovannyrk</p>
+              <h1 id="v5-title">Aquí no solo miras. <em>Participas.</em></h1>
+            </div>
+            <div class="v5-lead-aside">
+              <p>Fortnite, Overwatch y 33 nombres que forman parte de la Army. Aquí no eres un espectador más: eres parte de la comunidad.</p>
+              <div class="v5-cta-row">
+                <a class="v5-action v5-action--primary" id="cg-watch" href="https://www.twitch.tv/geovannyrk" target="_blank" rel="noopener noreferrer">▶ Ver stream</a>
+                <a class="v5-action v5-action--secondary" id="cg-explore" href="#como-funciona" data-cg-scroll>Conoce la Army ↓</a>
+              </div>
+            </div>
+          </div>
+          <div class="v5-meta">
+            <div class="v5-meta-group">
+              <div class="v5-live" id="live-badge" data-state="loading" role="status" aria-live="polite">
+                <span class="live-dot" aria-hidden="true"></span>
+                <span id="live-label" class="v3-sr-only" aria-hidden="true">Cargando...</span>
+                <strong id="v3LiveText">Conectando con Twitch…</strong>
+              </div>
+              <small>Lun–Vie · 7:00 PM (ET)<br>Sáb–Dom · Horario variable</small>
+            </div>
+            <div class="v5-meta-group">
+              <a class="v5-meta-link" href="https://discord.gg/3y4JmWkC7P" rel="noopener noreferrer" target="_blank">Discord ↗</a>
+              <a class="v5-meta-link" href="https://chat.whatsapp.com/Biv2cUNwewL9LtvUirQBL0" rel="noopener noreferrer" target="_blank">WhatsApp ↗</a>
+              <button type="button" class="v5-copy" onclick="copyCode()" aria-label="Copiar código de sorteos SORTEOSRK"><span>🎟</span><strong>SORTEOSRK</strong><span id="copy-arrow" aria-hidden="true">↗</span></button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- GEO ARMY V5.2 — Bienvenido a la Army. Nueva portada editorial, sin pestañas ni tarjetas repetidas.
+           Conserva #como-funciona como destino del botón «Conoce la Army». -->
+      <section class="v5-belong" id="como-funciona" aria-labelledby="v5-belong-title">
+        <div class="v5-belong__rail" aria-hidden="true">
+          <span>UNA ARMY, MUCHAS HISTORIAS</span><span class="v5-belong__star">✳</span>
+          <span>FORTNITE + OVERWATCH</span><span class="v5-belong__star">✳</span>
+          <span>EL CHAT ES PARTE DE LA PARTIDA</span>
+        </div>
+        <div class="v5-belong__inner">
+          <div class="v5-belong__story">
+            <p class="v5-belong__eyebrow"><span class="v5-belong__eyedot"></span> 01 / BIENVENIDO A GEO ARMY</p>
+            <h2 id="v5-belong-title">No es solo<br>un <span class="v5-belong__outline">stream.</span><br><em>Es tu gente.</em></h2>
+            <p class="v5-belong__lead">La foto reúne a 33 integrantes. Detrás de cada nombre hay alguien que comparte partidas, bromas y momentos con la Army. Tú también puedes venir a conocernos.</p>
+            <div class="v5-belong__signature" aria-label="33 integrantes en la foto oficial">
+              <span class="v5-belong__signature-number" aria-hidden="true">33<span class="v5-belong__signature-plus">✦</span></span>
+              <span><strong>Una foto de la Army.</strong><small>Una comunidad que va más allá de la pantalla.</small></span>
+            </div>
+          </div>
+          <div class="v5-journey" aria-label="Tres maneras de comenzar en Geo Army">
+            <div class="v5-journey__header">
+              <span>¿NUEVO POR AQUÍ?</span><span>EMPIEZA A TU RITMO ↘</span>
+            </div>
+            <ol class="v5-journey__list">
+              <li>
+                <a class="v5-journey__item" href="https://www.twitch.tv/geovannyrk" target="_blank" rel="noopener noreferrer">
+                  <span class="v5-journey__number" aria-hidden="true">01</span>
+                  <span class="v5-journey__copy"><strong>Entra al directo</strong><span>Ven a ver Fortnite, Overwatch y lo que estemos jugando. Puedes empezar simplemente mirando.</span></span>
+                  <span class="v5-journey__arrow" aria-hidden="true">↗</span>
+                </a>
+              </li>
+              <li>
+                <a class="v5-journey__item" href="#comunidad" data-cg-scroll>
+                  <span class="v5-journey__number" aria-hidden="true">02</span>
+                  <span class="v5-journey__copy"><strong>Conoce a la Army</strong><span>Encuentra a la gente del stream en Discord y WhatsApp. Elige dónde quieres participar.</span></span>
+                  <span class="v5-journey__arrow" aria-hidden="true">↘</span>
+                </a>
+              </li>
+              <li>
+                <a class="v5-journey__item" href="misiones.html">
+                  <span class="v5-journey__number" aria-hidden="true">03</span>
+                  <span class="v5-journey__copy"><strong>Haz tu camino</strong><span>Explora misiones, consigue XP y descubre los rangos. Tu progreso requiere iniciar sesión con Twitch.</span></span>
+                  <span class="v5-journey__arrow" aria-hidden="true">↗</span>
+                </a>
+              </li>
+            </ol>
+            <p class="v5-journey__footnote"><span aria-hidden="true">✦</span> Puedes explorar Geo Army sin crear una cuenta.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- GEO ARMY V5.3 — compacto: dos juegos, tres accesos, nada de vitrina ni rangos duplicados. -->
+      <section class="v5-play" id="juegos" aria-labelledby="v5-play-title">
+        <span id="descubre" class="v5-anchor" aria-hidden="true"></span>
+        <div class="v5-play__inner">
+          <div class="v5-play__intro">
+            <p class="v5-mini-kicker">02 / JUEGOS Y PROGRESO</p>
+            <h2 id="v5-play-title">DOS JUEGOS.<br><em>UNA ARMY.</em></h2>
+            <p>Ven por las partidas. Quédate por la gente. Participa en el stream y descubre todo lo que puedes hacer en Geo Army.</p>
+          </div>
+          <div class="v5-play__games" aria-label="Juegos principales">
+            <div class="v5-play__game v5-play__game--overwatch"><span class="v5-play__game-no">01 / COMPETENCIA</span><strong>OVERWATCH</strong><span>Partidas en equipo, jugadas y chat.</span></div>
+            <div class="v5-play__game v5-play__game--fortnite"><span class="v5-play__game-no">02 / DIVERSIÓN</span><strong>FORTNITE</strong><span>Partidas, momentos y comunidad.</span></div>
+          </div>
+          <nav class="v5-play__links" aria-label="Explora Geo Army">
+            <a href="misiones.html"><span>✦</span> Misiones <span aria-hidden="true">↗</span></a>
+            <a href="puntos.html"><span>◆</span> Puntos y rangos <span aria-hidden="true">↗</span></a>
+            <a href="tienda.html"><span>★</span> Recompensas <span aria-hidden="true">↗</span></a>
+          </nav>
+        </div>
+      </section>
+
+      <!-- GEO ARMY V5.3 — único cierre real; links y estado de Twitch preservados. -->
+      <section class="v5-join" id="comunidad" aria-labelledby="v5-join-title">
+        <div class="v5-join__inner" id="cg-closing">
+          <div class="v5-join__copy">
+            <p class="v5-mini-kicker">03 / NOS VEMOS EN EL DIRECTO</p>
+            <h2 id="v5-join-title">LA ARMY<br><em>TE ESPERA.</em></h2>
+            <p>Entra al stream, saluda en el chat o únete a los grupos. Tú eliges cómo empezar.</p>
+            <div class="v5-join__schedule"><span class="v5-join__pulse" aria-hidden="true"></span><span><strong>Lun–Vie · 7:00 PM (Nueva York)</strong><small>Fin de semana: horario variable · El estado real está arriba.</small></span></div>
+          </div>
+          <div class="v5-join__actions cg-closing__actions">
+            <a class="v5-join__cta v5-join__cta--twitch" id="cg-final-watch" href="https://www.twitch.tv/geovannyrk" target="_blank" rel="noopener noreferrer"><span class="v5-join__cta-prefix">EN DIRECTO Y VIDEOS</span><strong>Ver Twitch</strong><span class="v5-join__cta-arrow" aria-hidden="true">↗</span></a>
+            <a class="v5-join__cta v5-join__cta--discord" id="cg-discord" href="https://discord.gg/3y4JmWkC7P" target="_blank" rel="noopener noreferrer"><span class="v5-join__cta-prefix">HABLA CON LA ARMY</span><strong>Discord</strong><span class="v5-join__cta-arrow" aria-hidden="true">↗</span></a>
+            <a class="v5-join__cta v5-join__cta--whatsapp" href="https://chat.whatsapp.com/Biv2cUNwewL9LtvUirQBL0" target="_blank" rel="noopener noreferrer"><span class="v5-join__cta-prefix">AVISOS Y COMUNIDAD</span><strong>WhatsApp</strong><span class="v5-join__cta-arrow" aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+        <details class="v5-timedrop" id="transmisiones">
+          <summary>⌚ ¿A qué hora es en mi país? <span aria-hidden="true">+</span></summary>
+          <!-- Misma lógica Intl/DST ya probada en V4; se muestra solo al solicitarla. -->
+      <section class="cg-hub" id="v5-schedule-panel" aria-labelledby="cg-hub-title">
+        <div class="cg-container">
+          <header class="cg-sechead cg-sechead--hub">
+            <p class="cg-kicker">Horario internacional</p>
+            <h2 class="cg-sechead__title" id="cg-hub-title">Centro de transmisiones</h2>
+            <p class="cg-sechead__note">Descubre cuándo empieza el stream de geovannyrk en tu zona horaria.</p>
+          </header>
+
+          <div class="cg-console" data-cg-hub>
+            <div class="cg-console__bar">
+              <span class="cg-console__tag">Consola horaria</span>
+              <dl class="cg-ind" aria-label="Indicadores técnicos">
+                <div><dt>Zona</dt><dd id="cg-ind-tz">—</dd></div>
+                <div><dt>Offset</dt><dd id="cg-ind-off">—</dd></div>
+                <div><dt>Nueva York</dt><dd id="cg-ind-ny">—</dd></div>
+              </dl>
+            </div>
+
+            <div class="cg-console__grid">
+              <!-- Reloj y cuenta regresiva -->
+              <div class="cg-clock" id="cg-clock" hidden>
+                <p class="cg-clock__label" id="cg-cd-label">Próxima transmisión regular · faltan</p>
+                <div class="cg-cd" role="group" aria-labelledby="cg-cd-label">
+                  <div class="cg-cd__cell"><span class="cg-cd__num" id="cg-cd-d" aria-hidden="true">00</span><span class="cg-cd__unit">Días</span></div>
+                  <span class="cg-cd__sep" aria-hidden="true">:</span>
+                  <div class="cg-cd__cell"><span class="cg-cd__num" id="cg-cd-h" aria-hidden="true">00</span><span class="cg-cd__unit">Horas</span></div>
+                  <span class="cg-cd__sep" aria-hidden="true">:</span>
+                  <div class="cg-cd__cell"><span class="cg-cd__num" id="cg-cd-m" aria-hidden="true">00</span><span class="cg-cd__unit">Min</span></div>
+                  <span class="cg-cd__sep" aria-hidden="true">:</span>
+                  <div class="cg-cd__cell"><span class="cg-cd__num" id="cg-cd-s" aria-hidden="true">00</span><span class="cg-cd__unit">Seg</span></div>
+                </div>
+                <p class="cg-cd__sr cg-sr-only" id="cg-cd-sr"></p>
+
+                <div class="cg-next">
+                  <p class="cg-next__when"><span id="cg-next-date">—</span> · <strong id="cg-next-time">—</strong></p>
+                  <p class="cg-next__zone" id="cg-next-zone">—</p>
+                  <p class="cg-next__shift" id="cg-next-shift" hidden></p>
+                </div>
+                <p class="cg-hub__notice" id="cg-hub-notice" hidden></p>
+                <dl class="cg-clocks" aria-label="Relojes actuales">
+                  <div><dt>Tu zona · ahora</dt><dd id="cg-now-local">—</dd></div>
+                  <div><dt>Nueva York · ahora</dt><dd id="cg-now-ny">—</dd></div>
+                </dl>
+              </div>
+
+              <!-- Horario base + selector -->
+              <div class="cg-base">
+                <p class="cg-base__label">Horario base · Estados Unidos</p>
+                <dl class="cg-base__list">
+                  <div><dt>Lun – Vie</dt><dd>7:00 PM <small>America/New_York · hora del Este de EE. UU.</small></dd></div>
+                  <div><dt>Sáb – Dom</dt><dd>Horario variable <small>sin hora fija programada</small></dd></div>
+                </dl>
+
+                <div class="cg-tz" id="cg-tz-box" hidden>
+                  <label class="cg-tz__label" for="cg-tz">Ver la hora en</label>
+                  <div class="cg-tz__field">
+                    <select id="cg-tz" class="cg-tz__select" aria-describedby="cg-tz-note">
+                      <option value="auto">Zona detectada automáticamente</option>
+                      <optgroup label="México">
+                        <option value="America/Mexico_City">Ciudad de México</option>
+                        <option value="America/Cancun">Cancún</option>
+                        <option value="America/Mazatlan">Mazatlán</option>
+                        <option value="America/Hermosillo">Hermosillo (Sonora)</option>
+                        <option value="America/Tijuana">Tijuana</option>
+                      </optgroup>
+                      <optgroup label="Guatemala">
+                        <option value="America/Guatemala">Ciudad de Guatemala</option>
+                      </optgroup>
+                      <optgroup label="Colombia">
+                        <option value="America/Bogota">Bogotá</option>
+                      </optgroup>
+                      <optgroup label="Perú">
+                        <option value="America/Lima">Lima</option>
+                      </optgroup>
+                      <optgroup label="República Dominicana">
+                        <option value="America/Santo_Domingo">Santo Domingo</option>
+                      </optgroup>
+                      <optgroup label="Argentina">
+                        <option value="America/Argentina/Buenos_Aires">Buenos Aires</option>
+                      </optgroup>
+                      <optgroup label="España">
+                        <option value="Europe/Madrid">Península y Baleares (Madrid)</option>
+                        <option value="Atlantic/Canary">Islas Canarias</option>
+                      </optgroup>
+                      <optgroup label="Estados Unidos">
+                        <option value="America/New_York">Este (Nueva York)</option>
+                        <option value="America/Chicago">Centro (Chicago)</option>
+                        <option value="America/Denver">Montaña (Denver)</option>
+                        <option value="America/Phoenix">Arizona (Phoenix)</option>
+                        <option value="America/Los_Angeles">Pacífico (Los Ángeles)</option>
+                        <option value="America/Anchorage">Alaska (Anchorage)</option>
+                        <option value="Pacific/Honolulu">Hawái (Honolulu)</option>
+                      </optgroup>
+                    </select>
+                  </div>
+                  <p class="cg-tz__note" id="cg-tz-note" role="status"></p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sin JavaScript (o sin Intl) solo queda el horario base -->
+            <p class="cg-hub__nojs" id="cg-hub-nojs">La cuenta regresiva y la conversión a tu zona horaria necesitan JavaScript. El horario base de arriba es el oficial: lunes a viernes, 7:00 PM, hora de Nueva York.</p>
+
+            <div class="cg-compare">
+              <p class="cg-compare__row"><span class="cg-compare__k">Programado</span><span class="cg-compare__v">Horario regular. La cuenta regresiva solo mide ese horario; no confirma que haya transmisión.</span></p>
+              <p class="cg-compare__row cg-compare__row--real" id="cg-hub-real" data-state="loading" hidden><span class="cg-compare__k">Estado real</span><span class="cg-compare__v"><span class="cg-compare__dot" aria-hidden="true"></span><strong id="cg-hub-state">Conectando…</strong> <span class="cg-compare__src">según Twitch</span></span></p>
+              <a href="https://twitch.tv/geovannyrk" target="_blank" rel="noopener noreferrer" class="cg-btn cg-btn--primary cg-compare__cta" id="cg-hub-watch"><span aria-hidden="true">▶</span> Ver stream<span class="cg-sr-only"> en Twitch (se abre en una pestaña nueva)</span></a>
+            </div>
+          </div>
+        </div>
+      </section>
+        </details>
+      </section>
+
+      <!-- Aviso «¡Código copiado!» (main.js lo muestra con #toast). Dentro de <main> para que no quede
+           contenido fuera de los landmarks (Fase 5B). Posición fija: no ocupa espacio. -->
+      <div class="toast" id="toast">¡Código copiado!</div>
+
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <img src="logo.png" alt="GeoArmy" class="footer-logo-img"/>
+        GeoArmy
+      </div>
+      <div class="footer-text">Comunidad de Geovannyrk · Twitch Affiliate</div>
+      <div class="footer-code">geovanyrk.github.io</div>
+    </div>
+  </footer>
+
+  <!-- Barra móvil contextual: js/comunidad-v4.js la muestra solo en pantallas
+       estrechas y solo cuando el CTA principal ya no está a la vista. Oculta sin JavaScript. -->
+  <aside class="cg-bar" id="cg-bar" data-state="loading" aria-label="Acceso rápido a Twitch" hidden>
+    <span class="cg-bar__state"><span class="cg-bar__dot" aria-hidden="true"></span><span id="cg-bar-state">Conectando…</span></span>
+    <a href="https://twitch.tv/geovannyrk" target="_blank" rel="noopener noreferrer" class="cg-bar__btn" id="cg-bar-watch"><span aria-hidden="true">▶</span> Ver stream<span class="cg-sr-only"> en Twitch (se abre en una pestaña nueva)</span></a>
+  </aside>
+
+  <script src="js/main.js"></script>
+  <script src="js/premium.js"></script>
+  <script src="js/geoarmy-account.js"></script>
+  <!-- Cumpleaños V1 (Fase 1B): onboarding de cuentas nuevas. Después de geoarmy-account.js. -->
+  <script src="js/geoarmy-birthday.js?v=1b2"></script>
+  <script>
+  // ===== Estado del stream — presentación de Comunidad (sin tocar main.js) =====
+  // main.js escribe en #live-label (texto oculto). Aquí SOLO se traduce ese texto a
+  // data-state (loading | live | offline | unknown) y se rellenan elementos PROPIOS
+  // (#v3LiveText y #cg-card-state). No se escribe en ningún elemento que main.js use.
+  // El texto es la fuente de verdad porque main.js añade .live/.offline pero nunca
+  // las quita. Estado desconocido o error => nunca se muestra "en vivo".
+  (function () {
+    try {
+      var wrap = document.getElementById('live-badge');
+      var label = document.getElementById('live-label');
+      var out = document.getElementById('v3LiveText');
+      if (!wrap || !label || !out) return;
+      var card = document.querySelector('.cg-monitor');
+      var bar = document.getElementById('cg-bar');
+      var barOut = document.getElementById('cg-bar-state');
+      var hub = document.getElementById('cg-hub-real');
+      if (hub) hub.hidden = false; // sin JavaScript la fila «Estado real» permanece oculta (no habría quién la actualice)
+      var hubOut = document.getElementById('cg-hub-state');
+      var cardOut = document.getElementById('cg-card-state');
+      var HERO_TXT = { live: 'GEO ARMY ESTÁ EN VIVO', offline: 'FUERA DE LÍNEA', unknown: 'ESTADO NO DISPONIBLE', loading: 'CONECTANDO CON TWITCH…' };
+      var CARD_TXT = { live: 'EN VIVO AHORA', offline: 'FUERA DE LÍNEA', unknown: 'ESTADO NO DISPONIBLE', loading: 'CONECTANDO…' };
+      var timedOut = false;
+      function stateOf(txt) {
+        if (txt.indexOf('En vivo') !== -1) return 'live';
+        if (txt.indexOf('Fuera de línea') !== -1) return 'offline';
+        if (!txt || txt.indexOf('Cargando') !== -1) return timedOut ? 'unknown' : 'loading';
+        return 'unknown'; // p. ej. 'geovannyrk': main.js no pudo consultar el estado
+      }
+      function setText(el, t) { if (el && el.textContent !== t) el.textContent = t; }
+      function sync() {
+        var st = stateOf(label.textContent || '');
+        if (wrap.getAttribute('data-state') !== st) wrap.setAttribute('data-state', st);
+        wrap.classList.toggle('is-live', st === 'live');
+        setText(out, HERO_TXT[st]);
+        if (card && card.getAttribute('data-state') !== st) card.setAttribute('data-state', st);
+        setText(cardOut, CARD_TXT[st]);
+        if (hub) { if (hub.getAttribute('data-state') !== st) hub.setAttribute('data-state', st); setText(hubOut, CARD_TXT[st]); }
+        if (bar) { if (bar.getAttribute('data-state') !== st) bar.setAttribute('data-state', st); setText(barOut, CARD_TXT[st]); }
+      }
+      sync();
+      new MutationObserver(sync).observe(label, { childList: true, characterData: true, subtree: true });
+      // Si main.js no responde en 15 s, se pasa de "conectando" a "no disponible".
+      setTimeout(function () { timedOut = true; sync(); }, 15000);
+    } catch (e) { console.warn('[comunidad-v4:estado]', e); }
+  })();
+  </script>
+  <script src="js/comunidad-v4.js"></script>
+  <script src="js/comunidad-v5.js"></script>
+</body>
+</html>
