@@ -207,6 +207,14 @@
       </button>
     </div>
 
+    <!-- Cumpleaños V1 (Fase 1B): aviso fino para quien aún no registra su fecha.
+         Lo muestra/oculta js/geoarmy-birthday.js; sin ese script queda oculto. -->
+    <div id="gaBdayNotice" class="gab-notice" role="region" aria-label="Cumpleaños" hidden>
+      <span aria-hidden="true">🎂</span>
+      <span class="gab-notice-t">Registra tu cumpleaños en Geo Army. Solo necesitamos tu día y mes.</span>
+      <button type="button" class="gab-notice-btn" id="gaBdayNoticeBtn">Registrar</button>
+    </div>
+
     <!-- Dashboard -->
     <div id="mgDashboard" hidden>
       <!-- ============================================================
@@ -516,6 +524,19 @@
         </div>
       </div>
 
+      <!-- Cumpleaños V1 (Fase 1B): tarjeta permanente. La llena js/geoarmy-birthday.js
+           con las RPC get_my_birthday_status() / set_my_birthday(); oculta por defecto. -->
+      <div class="v3-now-section" id="gaBdaySection" hidden>
+        <div class="v3-now-header v3-now-header-sm"><span class="v3-now-ic">🎂</span>Mi cumpleaños</div>
+        <div class="v3-x-card">
+          <div class="v3-x-card-main">
+            <div class="v3-x-info" id="gaBdayInfo"></div>
+          </div>
+          <button type="button" class="v3-btn-secondary v3-x-connect-btn" id="gaBdayBtn" hidden>Registrar cumpleaños</button>
+        </div>
+        <p class="gab-card-gift" id="gaBdayGift"></p>
+      </div>
+
       <!-- Cuentas vinculadas: UI cableada al backend real de X (ya validado
            en producción — no se toca acá). El estado conectado/no conectado
            se lee de public.profile_x_accounts (RLS ya limita esto a la fila
@@ -580,6 +601,8 @@
        antes de que initXAccountUI() lo limpie de la URL. -->
   <script src="js/mi-geoarmy-tabs.js?v=1b1"></script>
   <script src="js/mi-geoarmy-streak.js?v=2a1"></script>
+  <!-- Cumpleaños V1 (Fase 1B). Va DESPUÉS de geoarmy-account.js (usa su sesión). -->
+  <script src="js/geoarmy-birthday.js?v=1b2"></script>
   <script>
   (function () {
     var currentCountryCode = null; // solo lectura de estado en memoria para el botón "Cambiar país"
