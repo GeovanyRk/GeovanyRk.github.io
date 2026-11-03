@@ -71,6 +71,21 @@
     signInWithTwitch: signInWithTwitch,
   };
  
+  // ===== Sincronización automática del perfil de Twitch (carga diferida) =====
+  // Apagada por defecto: solo se carga si js/geoarmy-config.js trae
+  // GEOARMY_PROFILE_SYNC_ENABLED = true. El módulo vive aparte (no toca nada de
+  // lo de arriba) y se engancha por GeoArmyAccount.client / refreshWidget.
+  (function loadProfileSyncModule() {
+    try {
+      if (window.GEOARMY_PROFILE_SYNC_ENABLED !== true || window.GeoArmyProfileSync) return;
+      var s = document.createElement('script');
+      s.src = siteBase() + 'js/geoarmy-profile-sync.js?v=1';
+      s.async = true;
+      s.onerror = function () { console.warn('[geoarmy-account] no se pudo cargar js/geoarmy-profile-sync.js'); };
+      document.head.appendChild(s);
+    } catch (e) { /* la sincronización nunca debe romper la cuenta */ }
+  })();
+
   var CACHE_KEY = 'geoarmy_gcoins_cache_v1';
  
   function cacheSaldo(valor) {
@@ -542,6 +557,13 @@
 
     // Racha del header: lectura aparte, sin bloquear nada de lo demás.
     try { ensureStreak(uid); } catch (e) {}
+
+    // Sincronización de perfil de Twitch: fire-and-forget (nunca se espera). El
+    // servidor decide si ya toca (24 h); si hay un cambio real, el módulo llama
+    // a refreshWidget() y dispara 'geoarmy:profile-synced'.
+    try {
+      if (window.GeoArmyProfileSync) window.GeoArmyProfileSync.ensure('auth', session).catch(function () {});
+    } catch (e) {}
 
     // Espera el auto-vinculado antes de leer VBUCKS/OWCOINS para que, si esta
     // sesion acaba de heredar premios pendientes, el widget muestre el saldo
