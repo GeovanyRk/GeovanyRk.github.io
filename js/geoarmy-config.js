@@ -21,3 +21,10 @@ window.GEOARMY_SUPABASE_ANON_KEY = 'sb_publishable_NOs6VaVgUOQiib5r0GJQiQ_ZoWt1_
 // producción en vez de quedarse en esta beta. Si mueves esto a otra carpeta
 // o lo promueves a producción, este es el ÚNICO lugar que hay que cambiar.
 window.GEOARMY_SITE_BASE = '/';
+
+// ===== Sincronización automática del perfil de Twitch =====
+// Interruptor de la función js/geoarmy-profile-sync.js (llama a la Edge Function
+// `sync-twitch-profile`). APAGADO por defecto: cámbialo a true SOLO cuando la
+// Edge Function y el SQL de soporte ya estén instalados en Supabase; mientras
+// sea false no se carga ni se ejecuta nada de la sincronización.
+window.GEOARMY_PROFILE_SYNC_ENABLED = false;
