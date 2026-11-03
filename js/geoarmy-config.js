@@ -27,4 +27,4 @@ window.GEOARMY_SITE_BASE = '/';
 // `sync-twitch-profile`). APAGADO por defecto: cámbialo a true SOLO cuando la
 // Edge Function y el SQL de soporte ya estén instalados en Supabase; mientras
 // sea false no se carga ni se ejecuta nada de la sincronización.
-window.GEOARMY_PROFILE_SYNC_ENABLED = false;
+window.GEOARMY_PROFILE_SYNC_ENABLED = true;
