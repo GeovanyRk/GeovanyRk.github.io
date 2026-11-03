@@ -1700,6 +1700,18 @@
         loadDashboard(sb);
       });
       loadDashboard(sb);
+      // Sincronización de perfil de Twitch: al aplicarse un cambio real, se vuelve a leer
+      // el perfil (misma lectura de siempre: avatar, nombre y espejos de la pestaña Cuenta).
+      // Solo si la cuenta con sesión AHORA es la del aviso: tras un cierre de sesión o un
+      // cambio de cuenta, el aviso de la cuenta anterior se ignora.
+      document.addEventListener('geoarmy:profile-synced', function (e) {
+        var syncedUid = e && e.detail && e.detail.uid ? String(e.detail.uid) : null;
+        if (!syncedUid) return;
+        sb.auth.getSession().then(function (r) {
+          var cur = r && r.data && r.data.session && r.data.session.user ? String(r.data.session.user.id) : null;
+          if (cur === syncedUid) loadDashboard(sb);
+        }, function () { /* sin sesión confirmada: no se recarga */ });
+      });
     });
   })();
   </script>
