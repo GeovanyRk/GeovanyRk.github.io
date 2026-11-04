@@ -77,22 +77,21 @@
       flex-direction:column;
       justify-content:center;
       align-items:center;
-      min-height:390px;
+      min-height:0;
       width:100%;
-      padding:14px 12px 24px;
+      padding:0 4px 10px;
       text-align:center;
       text-decoration:none;
       color:#fbe8b7;
-      border:1px solid rgba(242,185,83,.7);
-      border-radius:20px;
-      background:radial-gradient(ellipse at 50% 35%, rgba(66,160,188,.26),transparent 70%),
-        linear-gradient(155deg,#0b1628,#0c1017 78%);
-      box-shadow:inset 0 0 45px rgba(12,39,70,.6),0 12px 35px rgba(0,0,0,.35);
-      transition:box-shadow .2s ease,transform .2s ease;
+      border:0;
+      border-radius:0;
+      background:none;
+      box-shadow:none;
+      transition:transform .2s ease;
     }
     .v3-world-slide-02 .world-02-coming-soon .world-02-open:hover,
     .v3-world-slide-02 .world-02-coming-soon .world-02-open:focus-visible{
-      box-shadow:inset 0 0 45px rgba(12,39,70,.6),0 0 30px rgba(242,185,83,.25);
+      box-shadow:none;
     }
     .v3-world-slide-02 .world-02-coming-soon .world-02-open:focus-visible{
       outline:3px solid #fbd285;
@@ -125,7 +124,7 @@
       color:#f7eddd;
     }
     @media (max-width:560px){
-      .v3-world-slide-02 .world-02-coming-soon .world-02-open{min-height:310px;}
+      .v3-world-slide-02 .world-02-coming-soon .world-02-open{min-height:0;}
       .v3-world-slide-02 .world-02-coming-soon .world-02-open > img{max-height:260px;}
     }
 
@@ -605,8 +604,6 @@
   <script src="js/geoarmy-config.js"></script>
   <script src="js/geoarmy-ranks.js"></script>
   <script src="js/geoarmy-account.js"></script>
-  <!-- Cumpleaños V1 (Fase 1B): onboarding de cuentas nuevas. Después de geoarmy-account.js. -->
-  <script src="js/geoarmy-birthday.js?v=1b2"></script>
 <script>
   // ===== V3: conecta los marcadores del planeta con el sistema de paneles =====
   // (el nav real .nav-links está oculto y sigue funcionando para móvil/JS;
