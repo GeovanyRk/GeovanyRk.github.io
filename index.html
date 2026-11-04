@@ -70,6 +70,16 @@
     .v3-world-slide-02 .world-02-coming-soon.is-unlocked > .world-02-teaser{
       display:none;
     }
+    /* Misma flotación que Mundo 01 y Mundo 03 (v3Float del tema V3).
+       El desbloqueo quita .v3-world-locked; restauramos solo su animación. */
+    .v3-world-slide-02 .world-02-coming-soon.is-unlocked{
+      animation: v3Float 6s ease-in-out infinite;
+    }
+    @media (prefers-reduced-motion: reduce){
+      .v3-world-slide-02 .world-02-coming-soon.is-unlocked{
+        animation:none;
+      }
+    }
     .v3-world-slide-02 .world-02-coming-soon .world-02-open[hidden]{display:none!important;}
     .v3-world-slide-02 .world-02-coming-soon .world-02-open{
       box-sizing:border-box;
