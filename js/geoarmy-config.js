@@ -36,5 +36,5 @@ window.GEOARMY_PROFILE_SYNC_ENABLED = true;
 //   y el ranking de siempre (xp_leaderboard). Solo reconoce el código vip_violet_silver.
 // GEOARMY_COSMETICS_SIMULATION: SOLO PARA PRUEBAS EN UN EQUIPO LOCAL (carga js/geoarmy-cosmetics-sim.js, que inventa usuarios
 //   VIP de ejemplo y sustituye al servidor). Debe quedar en false en lo que se publica; además se ignora sola fuera de localhost.
-window.GEOARMY_COSMETICS_ENABLED = false;
+window.GEOARMY_COSMETICS_ENABLED = true;
 window.GEOARMY_COSMETICS_SIMULATION = false;
