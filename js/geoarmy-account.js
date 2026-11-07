@@ -69,6 +69,9 @@
     openLogin: openLoginModal,
     refreshWidget: render,
     signInWithTwitch: signInWithTwitch,
+    // Solo lectura: identidad confirmada ahora (undefined = aún no se sabe · null = sin sesión · uid). La usa js/geoarmy-cosmetics.js
+    // cuando se carga tarde (después de que la barra ya se dibujó) para adoptar la cuenta vigente.
+    identity: function () { return streakUid; },
   };
  
   // ===== Sincronización automática del perfil de Twitch (carga diferida) =====
@@ -84,6 +87,22 @@
       s.onerror = function () { console.warn('[geoarmy-account] no se pudo cargar js/geoarmy-profile-sync.js'); };
       document.head.appendChild(s);
     } catch (e) { /* la sincronización nunca debe romper la cuenta */ }
+  })();
+
+  // ===== Cosméticos (marco VIP) — carga diferida, apagada por defecto =====
+  // Solo se carga si js/geoarmy-config.js trae GEOARMY_COSMETICS_ENABLED = true (y si la página no lo incluyó ya con
+  // su propio <script>). El módulo es solo presentación y vive aparte; aquí solo hay 4 enganches mínimos con
+  // try/catch (confirmSessionIdentity, render, renderLoggedIn) para pintar el marco en el pill de la cuenta.
+  (function loadCosmeticsModule() {
+    try {
+      if (window.GEOARMY_COSMETICS_ENABLED !== true || window.GeoArmyCosmetics) return;
+      if (document.querySelector('script[src*="geoarmy-cosmetics.js"]')) return;
+      var s = document.createElement('script');
+      s.src = siteBase() + 'js/geoarmy-cosmetics.js?v=1';
+      s.async = true;
+      s.onerror = function () { console.warn('[geoarmy-account] no se pudo cargar js/geoarmy-cosmetics.js'); };
+      document.head.appendChild(s);
+    } catch (e) { /* los cosméticos nunca deben romper la cuenta */ }
   })();
 
   var CACHE_KEY = 'geoarmy_gcoins_cache_v1';
@@ -402,6 +421,9 @@
       try { sessionStorage.removeItem(CACHE_KEY); } catch (e) {}
       location.href = 'index.html';
     });
+
+    // Cosméticos: cada render reconstruye el botón, así que el marco se vuelve a poner aquí, siempre con el uid de ESTE render.
+    try { if (window.GeoArmyCosmetics) window.GeoArmyCosmetics.decorateBar(uid); } catch (e) {}
   }
  
   function openLoginModal() {
@@ -523,6 +545,8 @@
       var slot = document.getElementById('geoAccountWidget');
       if (slot) slot.innerHTML = '';
     }
+    // Cosméticos: la identidad vigente cambia aquí también (retira de inmediato el marco de la cuenta anterior).
+    try { if (window.GeoArmyCosmetics) window.GeoArmyCosmetics.setIdentity(uid); } catch (e) {}
   }
 
   // Un render sigue vigente solo si es el más reciente Y la identidad
@@ -584,6 +608,13 @@
     if (!renderIsCurrent(seq, uid)) return;
     var compact = await fetchCompactProfile();
     if (!renderIsCurrent(seq, uid)) return;
+    // Cosméticos: apariencia autorizada para ESTA cuenta (tope corto; si el proveedor tarda o falla, no se pinta nada).
+    try {
+      if (window.GeoArmyCosmetics) {
+        await window.GeoArmyCosmetics.resolveSession(uid);
+        if (!renderIsCurrent(seq, uid)) return;
+      }
+    } catch (e) {}
     renderLoggedIn(slot, profile, saldo, miniWallets, compact, uid);
   }
  
