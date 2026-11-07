@@ -3,11 +3,15 @@
  * Módulo independiente. Reusa la sesión/cliente de js/geoarmy-account.js
  * (window.GeoArmyAccount.client). Debe cargarse DESPUÉS de ese script.
  *
- * Solo usa las dos RPC ya instaladas en Supabase:
+ * Solo usa RPC ya instaladas en Supabase (ninguna nueva):
  *   get_my_birthday_status()  -> { registered, month, day, registered_at, is_new_account }
  *   set_my_birthday(p_month, p_day) -> { registered, month, day, registered_at }
+ *   get_my_birthday_gift_status() -> { applied, gift_year, currency, gross_amount, credited_amount,
+ *                                      offset_amount, applied_at }   (SOLO LECTURA; último regalo confirmado)
+ *   my_rank_summary() -> { xp, ... }   (SOLO LECTURA; XP real para el progreso hacia ORO I)
  * Al servidor solo viaja p_month y p_day. NUNCA escribe en tablas, ni toca
- * profiles, billeteras, XP, misiones, rangos o regalos. No acredita nada.
+ * profiles, billeteras, XP, misiones, rangos o regalos. No acredita nada: el regalo lo deposita el backend
+ * (Edge Function + motor de deudas); aquí solo se MUESTRA lo que la base de datos confirma.
  *
  * Comportamiento:
  *  - Cuenta nueva (is_new_account=true) sin cumpleaños: onboarding inicial (modal sin
@@ -17,6 +21,9 @@
  *  - Cuenta existente sin cumpleaños, SOLO en Mi Geo Army: ventana descartable +
  *    aviso fino bajo la cabecera + tarjeta permanente en la pestaña Cuenta.
  *  - Con cumpleaños registrado: todo lo anterior desaparece y la tarjeta muestra la fecha.
+ *  - Tarjeta (solo Mi Geo Army): panel "Regalos de cumpleaños activos" con estados por usuario
+ *    (A sin fecha · B registrado sin ORO I · C ORO I+ · D regalo acreditado este año · E consulta no disponible).
+ *    "Entregado" solo si get_my_birthday_gift_status() devuelve applied=true con gift_year = año actual (America/New_York).
  *  - Si la funcionalidad se desactiva en Supabase (permiso denegado / función inexistente),
  *    el módulo no muestra nada y el sitio sigue igual.
  *  - La consulta inicial que falla nunca bloquea nada: simplemente no se muestra UI.
@@ -42,6 +49,9 @@
   var KEY_SKIP = 'geoarmy_bday_skip_v1:';        // sessionStorage: salida de emergencia (por cuenta)
   var KEY_DISMISS = 'geoarmy_bday_dismiss_v1:';  // localStorage: invitación descartada (por cuenta)
 
+  var MIN_XP = 15000;              // ORO I (regla oficial aprobada: 15,000 XP)
+  var NY_TZ = 'America/New_York';
+
   var MONTHS = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto',
                 'septiembre', 'octubre', 'noviembre', 'diciembre'];
   var DAYS_IN = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];   // febrero 29 permitido
@@ -60,6 +70,8 @@
   var active = null;       // formulario abierto (uno solo a la vez)
   var sessionSeen = false;
   var mem = {};            // respaldo en memoria si el almacenamiento del navegador falla
+  var extra = null;        // { uid, gen, xp:'load'|'err'|number, gift:'load'|'err'|{...} } de la cuenta vigente (solo FULL)
+  var lastGiftHtml = null; // evita repintar el panel si no cambió
 
   // ===== Utilidades =====
   function esc(s) {
@@ -71,6 +83,27 @@
   function isMD(m, d) { return isInt(m) && isInt(d) && m >= 1 && m <= 12 && d >= 1 && d <= DAYS_IN[m - 1]; }
   function fmt(m, d) { return isMD(m, d) ? d + ' de ' + MONTHS[m - 1] : ''; }
   function $(id) { return document.getElementById(id); }
+  function num(v) {   // número finito o null (acepta números y cadenas numéricas no vacías)
+    if (typeof v === 'number') return isFinite(v) ? v : null;
+    if (typeof v === 'string' && v.trim() !== '') { var n = Number(v); return isFinite(n) ? n : null; }
+    return null;
+  }
+  function nf(n) { try { return Number(n).toLocaleString('en-US', { maximumFractionDigits: 2 }); } catch (e) { return String(n); } }
+  // Año vigente en America/New_York (la misma zona con la que se decide el cumpleaños y el regalo).
+  function nyYear() {
+    try {
+      var y = parseInt(new Intl.DateTimeFormat('en-US', { timeZone: NY_TZ, year: 'numeric' }).format(new Date()), 10);
+      if (isInt(y)) return y;
+    } catch (e) {}
+    return new Date().getUTCFullYear();
+  }
+  function fmtDay(iso) {   // "5 de noviembre de 2026" en America/New_York; '' si no se puede
+    try {
+      var d = new Date(iso);
+      if (isNaN(d.getTime())) return '';
+      return new Intl.DateTimeFormat('es', { timeZone: NY_TZ, day: 'numeric', month: 'long', year: 'numeric' }).format(d);
+    } catch (e) { return ''; }
+  }
 
   // Almacenamiento del navegador con respaldo en memoria (puede fallar o estar bloqueado).
   function storeGet(kind, key) {
@@ -148,6 +181,15 @@
   function validSet(d) {
     return !!d && typeof d === 'object' && d.registered === true && isMD(d.month, d.day);
   }
+  // Regalo: o "sin regalo confirmado" ({applied:false}) o un depósito coherente (bruto = acreditado + compensado).
+  function validGift(d) {
+    if (!d || typeof d !== 'object' || Array.isArray(d) || typeof d.applied !== 'boolean') return false;
+    if (!d.applied) return true;
+    var g = num(d.gross_amount), c = num(d.credited_amount), o = num(d.offset_amount);
+    return isInt(d.gift_year) && d.gift_year >= 2000 && d.gift_year <= 2200 &&
+      d.currency === 'VBUCKS' && g !== null && g > 0 && c !== null && o !== null && c >= 0 && o >= 0 &&
+      Math.abs(c + o - g) < 0.005;
+  }
 
   // ===== Estilos (inyectados una sola vez; usan las variables del sitio con respaldo) =====
   function injectStyle() {
@@ -185,7 +227,31 @@
       '#gaBdaySection .gab-card-gift{margin-top:10px}' +
       '#mgtPanel-cuenta .mgt-acct-grid>#gaBdaySection{grid-column:1/-1}' +
       '@container mgp (min-width:620px){#mgtPanel-cuenta #gaBdaySection .v3-x-card{flex-direction:row;align-items:center;justify-content:space-between}#mgtPanel-cuenta #gaBdaySection .v3-x-connect-btn{width:auto;min-width:180px}}' +
-      '@media (max-width:420px){.gab-modal{padding:24px 16px 18px}.gab-actions{flex-direction:column-reverse}}' +
+      '.gab-gp{margin-top:12px;padding:16px;box-sizing:border-box;min-width:0;border-radius:16px;border:1px solid rgba(255,210,63,.3);background:linear-gradient(160deg,rgba(145,71,255,.18),rgba(255,210,63,.05) 70%),rgba(19,19,22,.6);color:var(--text,#f6f6f8)}' +
+      '.gab-gp-h{margin:0 0 6px;font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold,#ffd23f);overflow-wrap:anywhere}' +
+      '.gab-gp-lead{margin:0 0 12px;font-size:14px;line-height:1.5;color:var(--text,#f6f6f8)}' +
+      '.gab-gp-req{list-style:none;margin:0 0 12px;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px}' +
+      '.gab-gp-req li{display:flex;align-items:flex-start;gap:8px;min-width:0;padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);font-size:13px;line-height:1.4;color:var(--text2,#a9a9b4);overflow-wrap:anywhere}' +
+      '.gab-gp-req li b{color:var(--text,#f6f6f8);font-weight:600;white-space:nowrap}' +
+      '.gab-gp-req li.ok{border-color:rgba(124,252,154,.4);background:rgba(124,252,154,.07)}' +
+      '.gab-gp-req .ic{flex:0 0 auto}' +
+      '.gab-gp-st{margin:0 0 12px;padding:12px;border-radius:12px;background:rgba(145,71,255,.14);border:1px solid rgba(145,71,255,.4);font-size:13.5px;line-height:1.5;overflow-wrap:anywhere}' +
+      '.gab-gp-st p{margin:0 0 6px}.gab-gp-st p:last-child{margin-bottom:0}' +
+      '.gab-gp-st strong{color:var(--gold,#ffd23f)}' +
+      '.gab-gp-st.ok{background:rgba(124,252,154,.08);border-color:rgba(124,252,154,.4)}' +
+      '.gab-gp-st.done{background:linear-gradient(160deg,rgba(255,210,63,.16),rgba(145,71,255,.14));border-color:rgba(255,210,63,.55)}' +
+      '.gab-gp-st.mute{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.14);color:var(--text2,#a9a9b4)}' +
+      '.gab-gp-st .big{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:16px;color:var(--text,#f6f6f8)}' +
+      '.gab-gp-bar{height:8px;margin:8px 0 2px;border-radius:999px;background:rgba(255,255,255,.12);overflow:hidden}' +
+      '.gab-gp-bar>i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent,#9147ff),var(--gold,#ffd23f))}' +
+      '.gab-gp-brk{margin:6px 0 0;padding:0;list-style:none;display:grid;gap:4px;font-size:13px}' +
+      '.gab-gp-brk li{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}' +
+      '.gab-gp-brk li span:last-child{font-weight:700;color:var(--text,#f6f6f8);white-space:nowrap}' +
+      '.gab-gp-more{margin:0 0 12px}.gab-gp-more>summary{cursor:pointer;font-size:13px;color:var(--accent-light,#c9a3ff);padding:4px 0}' +
+      '.gab-gp-more[open]>summary{margin-bottom:8px}.gab-gp-more .gab-gp-req{margin-bottom:0}' +
+      '.gab-gp-note{margin:0;font-size:12px;line-height:1.5;color:var(--text2,#a9a9b4)}' +
+      '.gab-leap{margin:4px 0 0;font-size:12px;line-height:1.45;color:var(--text2,#a9a9b4)}' +
+      '@media (max-width:420px){.gab-modal{padding:24px 16px 18px}.gab-actions{flex-direction:column-reverse}.gab-gp{padding:14px 12px}}' +
       '@media (prefers-reduced-motion:no-preference){.gab-modal{animation:gabIn .18s ease-out}@keyframes gabIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}}';
     var s = document.createElement('style');
     s.id = 'gabStyle';
@@ -194,17 +260,131 @@
   }
 
   // ===== Textos =====
-  var GIFT_TXT = '🎁 Regalo de cumpleaños — todavía NO está activo. Cuando se active, los miembros de rango ' +
-    'Oro I o superior podrán recibir 1,000 V-Bucks en su billetera de Geo Army una vez al año. Estará sujeto ' +
-    'a las reglas definitivas, que se anunciarán antes de comenzar. Registrar tu fecha no garantiza ningún regalo.';
+  // Texto breve y verdadero para el formulario de registro (el panel de la tarjeta tiene el detalle).
+  var GIFT_TXT = '🎁 Regalo de cumpleaños activo: los miembros de rango Oro I o superior (15,000 XP) con al menos 30 días ' +
+    'de cuenta que hayan registrado su cumpleaños con 7 días de anticipación reciben 1,000 V-Bucks en su billetera ' +
+    'una vez al año. Registrar tu fecha no garantiza el regalo si no cumples los requisitos.';
   var PRIV_TXT = '🔒 Solo guardamos tu día y mes, nunca tu año de nacimiento ni tu edad. No se muestra a otros ' +
     'miembros ni se usa para publicidad. Se almacena en nuestro proveedor de base de datos (Supabase), que lo ' +
     'procesa en nuestro nombre. Puedes pedir que lo eliminemos cuando quieras. Si eres menor de edad, te ' +
     'recomendamos hacerlo con conocimiento de tu madre, padre o tutor.';
-  var MORE_TXT = 'Lo usamos para celebrar tu cumpleaños cada año en la comunidad y, cuando esté activo, para ' +
+  var MORE_TXT = 'Lo usamos para celebrar tu cumpleaños cada año en la comunidad y para ' +
     'gestionar el regalo de cumpleaños. Lo ve el equipo de Geo Army solo para corregir errores o atender ' +
     'solicitudes. Se conserva mientras tengas cuenta; si eliminas tu cuenta, se elimina también. Para pedir su ' +
     'eliminación o corregir un error, escribe a ' + PRIVACY_CONTACT + '.';
+
+  // ===== Panel "Regalos de cumpleaños activos" (solo Mi Geo Army) =====
+  var REQ = [
+    ['🏅', 'Rango mínimo: <b>ORO I</b> — 15,000 XP', 'rank'],
+    ['📅', 'Antigüedad de cuenta: <b>30 días</b>', ''],
+    ['📝', 'Cumpleaños registrado: <b>mínimo 7 días antes</b>', ''],
+    ['🎁', 'Regalo anual: <b>1,000 V-Bucks</b>', '']
+  ];
+  function reqList(rankOk) {
+    var h = '<ul class="gab-gp-req">';
+    for (var i = 0; i < REQ.length; i++) {
+      h += '<li' + (REQ[i][2] === 'rank' && rankOk ? ' class="ok"' : '') + '><span class="ic" aria-hidden="true">' +
+        REQ[i][0] + '</span><span>' + REQ[i][1] + (REQ[i][2] === 'rank' && rankOk ? ' ✓' : '') + '</span></li>';
+    }
+    return h + '</ul>';
+  }
+
+  // Estado D: regalo CONFIRMADO por la base de datos para el año vigente. Muestra bruto, compensado y acreditado.
+  function deliveredHtml(g) {
+    var gross = num(g.gross_amount), cred = num(g.credited_amount), offs = num(g.offset_amount);
+    var when = fmtDay(g.applied_at);
+    var h = '<div class="gab-gp-st done" role="status"><p class="big">🎉 ¡Tu regalo de cumpleaños fue entregado!</p>' +
+      '<p>🎁 <strong>' + nf(gross) + ' V-Bucks de regalo</strong>' + (when ? ' · ' + esc(when) : '') + '</p>';
+    if (offs > 0) {
+      h += '<ul class="gab-gp-brk">' +
+        '<li><span>Regalo bruto</span><span>' + nf(gross) + ' V-Bucks</span></li>' +
+        '<li><span>Compensado en deudas</span><span>' + nf(offs) + '</span></li>' +
+        '<li><span>Acreditados a tu billetera</span><span>' + nf(cred) + '</span></li></ul>';
+      if (cred === 0) h += '<p>Todo el regalo se usó para compensar tu deuda de V-Bucks; no quedó saldo adicional.</p>';
+    } else {
+      h += '<p>Acreditados a tu billetera: <strong>' + nf(cred) + ' V-Bucks</strong>.</p>';
+    }
+    return h + '</div>';
+  }
+
+  function giftPanelHtml() {
+    var head = '<div class="gab-gp"><h4 class="gab-gp-h">🎁 Regalos de cumpleaños activos</h4>' +
+      '<p class="gab-gp-lead">¡Celebra con GEO ARMY! Si alcanzas el rango ORO I o superior y cumples los requisitos, ' +
+      'recibirás 1,000 V-Bucks en tu billetera una vez al año.</p>';
+    var note = '<p class="gab-gp-note">Si tienes deudas de V-Bucks, el regalo se utiliza primero para compensarlas. ' +
+      'Registrar tu cumpleaños no garantiza el premio si no cumples los requisitos.</p></div>';
+    var mid = '', rankOk = false, e = (extra && extra.uid === uid) ? extra : null;
+
+    if (st && st.registered && e) {
+      var thisYear = nyYear();
+      var xpOk = isInt(e.xp) || (typeof e.xp === 'number' && isFinite(e.xp));
+      rankOk = xpOk && e.xp >= MIN_XP;
+      var g = e.gift, delivered = g && g !== 'load' && g !== 'err' && g.applied === true && g.gift_year === thisYear;
+
+      if (delivered) {
+        mid += deliveredHtml(g);
+      } else if (g === 'err') {
+        mid += '<div class="gab-gp-st mute" role="status"><p>No pudimos consultar el estado del regalo en este momento.</p></div>';
+      }
+      if (!delivered) {
+        if (e.xp === 'load') {
+          mid += '<div class="gab-gp-st mute" role="status" aria-busy="true"><p>Consultando tu progreso…</p></div>';
+        } else if (!xpOk) {
+          mid += '<div class="gab-gp-st mute" role="status"><p>No pudimos consultar tu progreso de XP en este momento.</p></div>';
+        } else if (rankOk) {
+          mid += '<div class="gab-gp-st ok" role="status"><p class="big">🏅 Rango mínimo alcanzado</p>' +
+            '<p>Los demás requisitos (antigüedad de la cuenta, anticipación del registro y las condiciones de tu cumpleaños) ' +
+            'se confirman cuando se procesa el regalo; esta tarjeta no garantiza que lo recibas.</p></div>';
+        } else {
+          var left = MIN_XP - e.xp, pct = Math.max(0, Math.min(100, Math.floor(e.xp * 100 / MIN_XP)));
+          mid += '<div class="gab-gp-st" role="status"><p class="big">🏅 Para recibir el regalo anual necesitas alcanzar ORO I</p>' +
+            '<p>Te faltan <strong>' + nf(left) + ' XP</strong> para llegar a los ' + nf(MIN_XP) + ' XP.</p>' +
+            '<div class="gab-gp-bar" role="progressbar" aria-valuemin="0" aria-valuemax="' + MIN_XP + '" aria-valuenow="' + Math.floor(e.xp) +
+            '" aria-label="Progreso hacia ORO I"><i style="width:' + pct + '%"></i></div>' +
+            '<p class="gab-gp-note">' + nf(e.xp) + ' / ' + nf(MIN_XP) + ' XP</p></div>';
+        }
+        if (g && g !== 'load' && g !== 'err' && g.applied === true && g.gift_year < thisYear) {
+          mid += '<p class="gab-gp-note" style="margin:0 0 10px">Tu último regalo entregado fue en ' + g.gift_year + '.</p>';
+        }
+      }
+      if (delivered) {
+        return head + mid + '<details class="gab-gp-more"><summary>Ver requisitos</summary>' + reqList(rankOk) + '</details>' + note;
+      }
+    }
+    return head + reqList(rankOk) + mid + note;
+  }
+
+  function renderGiftPanel() {
+    var box = $('gaBdayGift');
+    if (!box) return;
+    var html = giftPanelHtml();
+    if (html === lastGiftHtml) return;   // sin cambios: no se toca el DOM (evita repintados y pérdida del estado de <details>)
+    lastGiftHtml = html;
+    box.innerHTML = html;
+  }
+
+  // Carga (una vez por cuenta) el XP real y el estado del regalo. Solo lectura; un fallo no bloquea nada.
+  function loadExtras(id, g) {
+    if (!FULL || off || !st || !st.registered) return;
+    if (extra && extra.uid === id && extra.gen === g) return;   // ya cargado o en curso para esta cuenta
+    var e = { uid: id, gen: g, xp: 'load', gift: 'load' };
+    extra = e;
+    renderGiftPanel();
+    function ok() { return extra === e && g === gen && id === uid; }
+    callRpc('get_my_birthday_gift_status').then(function (r) {
+      if (!ok()) return;
+      e.gift = (r && !r.error && validGift(r.data)) ? r.data : 'err';
+      if (e.gift === 'err') console.warn('[geoarmy-birthday] estado del regalo no disponible', r && r.error ? (r.error.message || r.error) : 'respuesta inesperada');
+      renderGiftPanel();
+    });
+    callRpc('my_rank_summary').then(function (r) {
+      if (!ok()) return;
+      var row = r && !r.error ? (Array.isArray(r.data) ? r.data[0] : r.data) : null;
+      var x = row ? num(row.xp) : null;
+      e.xp = (x !== null && x >= 0) ? x : 'err';
+      renderGiftPanel();
+    });
+  }
 
   // ===== Superficies permanentes (aviso fino + tarjeta en Cuenta) =====
   function renderSurfaces() {
@@ -213,22 +393,23 @@
     if (notice) notice.hidden = !(show && !st.registered);
     if (!section) return;
     section.hidden = !show;
-    if (!show) return;
+    if (!show) { var gb = $('gaBdayGift'); if (gb && lastGiftHtml !== null) { gb.innerHTML = ''; lastGiftHtml = null; } return; }
     var info = $('gaBdayInfo'), btn = $('gaBdayBtn');
     if (info) {
       if (st.registered) {
         var f = fmt(st.month, st.day);
         info.innerHTML = '<div class="v3-x-title"><span class="v3-x-check">✓</span> ' +
           (f ? 'Tu cumpleaños: ' + esc(f) : 'Tu cumpleaños ya está registrado') + '</div>' +
-          '<p class="v3-x-desc">Solo tú y el equipo de Geo Army lo ven.</p>';
+          '<p class="v3-x-desc">Solo tú y el equipo de Geo Army lo ven.</p>' +
+          (st.month === 2 && st.day === 29
+            ? '<p class="gab-leap">Naciste un 29 de febrero: en los años no bisiestos lo celebramos el 28 de febrero.</p>' : '');
       } else {
         info.innerHTML = '<div class="v3-x-title">Aún no registras tu cumpleaños</div>' +
           '<p class="v3-x-desc">Solo necesitamos tu día y mes. No se muestra a otros miembros.</p>';
       }
     }
     if (btn) btn.hidden = !!st.registered;
-    var gift = $('gaBdayGift');
-    if (gift) gift.textContent = GIFT_TXT;
+    renderGiftPanel();
   }
 
   // ===== Formulario (modal) =====
@@ -463,6 +644,7 @@
     if (!isMD(m, d)) return;   // nunca se marca "registrado" sin una fecha confirmada por el servidor
     st = { registered: true, month: m, day: d, isNew: st ? st.isNew : false };
     renderSurfaces();
+    loadExtras(uid, gen);
     try {
       document.dispatchEvent(new CustomEvent('geoarmy:birthday-registered', { detail: { uid: uid } }));
     } catch (e) {}
@@ -525,6 +707,7 @@
   // ===== Carga de estado e identidad =====
   function applyState() {
     renderSurfaces();
+    if (st && st.registered && !off) loadExtras(uid, gen);
     if (!st || st.registered || off) return;
     var g = gen;
     if (st.isNew) {
@@ -567,7 +750,7 @@
     var id = session && session.user ? session.user.id : null;
     if (id === uid) { if (session) nameHint = nameOf(session) || nameHint; return; }   // refresco de token / duplicado
     closeForm();
-    uid = id; gen++; st = null; nameHint = '';
+    uid = id; gen++; st = null; nameHint = ''; extra = null;   // cambio de cuenta: se descarta todo lo de la anterior
     renderSurfaces();
     if (!id) return;
     nameHint = nameOf(session);
