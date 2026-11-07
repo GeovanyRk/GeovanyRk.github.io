@@ -627,6 +627,8 @@
     .rk-row, .rk-row--elite, .rk-btn, .rk-missions-btn, .rk-ln-disc .rk-ladder-badge, .rk-bar-fill { transition: none; }
   }
   </style>
+  <!-- Cosméticos (marco VIP) + ajuste móvil aprobado de las filas del ranking. Después del <style> para poder afinarlo. -->
+  <link rel="stylesheet" href="css/geoarmy-cosmetics.css?v=1"/>
 </head>
 <body>
 
@@ -799,6 +801,8 @@
   <script src="js/premium.js"></script>
   <script src="js/geoarmy-ranks.js"></script>
   <script src="js/geoarmy-account.js"></script>
+  <!-- Cosméticos (marco VIP): solo presentación. Inerte mientras GEOARMY_COSMETICS_ENABLED sea false (js/geoarmy-config.js). -->
+  <script src="js/geoarmy-cosmetics.js?v=1"></script>
   <!-- Cumpleaños V1 (Fase 1B): onboarding de cuentas nuevas. Después de geoarmy-account.js. -->
   <script src="js/geoarmy-birthday.js?v=1b2"></script>
   <script>
@@ -901,8 +905,10 @@
     // ===================================================================
     function rowParts(row) {
       var ranks = window.GeoArmyRanks;
+      // Cosméticos: marcado autorizado para ESTA fila (cadenas vacías si no tiene → la fila queda exactamente como siempre).
+      var cos = window.GeoArmyCosmetics ? window.GeoArmyCosmetics.rowMarkup(row) : { cls: '', frame: '', sr: '' };
       var avatar = row.avatar_url
-        ? '<img class="rk-avatar" src="' + esc(row.avatar_url) + '" alt=""/>'
+        ? '<img class="rk-avatar" src="' + esc(row.avatar_url) + '" alt=""' + (cos.cls ? ' onerror="window.GeoArmyCosmetics.avatarFallback(this)"' : '') + '/>'
         : '<span class="rk-avatar rk-avatar-fallback">' + esc((row.display_name || '?')[0] || '?') + '</span>';
       var flag = row.country_code
         ? '<img class="rk-flag" src="' + esc(ranks ? ranks.flagImgUrl(row.country_code) : '') + '" alt="" onerror="this.remove()"/>'
@@ -911,7 +917,7 @@
         ? '<img class="rk-badge-ic" src="' + esc(ranks ? ranks.rankBadgeUrl(row.rank_code) : '') + '" alt="" onerror="this.remove()"/>'
         : '';
       var rankNameTxt = esc(row.rank_name || (ranks ? ranks.rankName(row.rank_code) : row.rank_code || ''));
-      return { avatar: avatar, flag: flag, badge: badge, rankNameTxt: rankNameTxt };
+      return { avatar: avatar, flag: flag, badge: badge, rankNameTxt: rankNameTxt, cosCls: cos.cls, cosFrame: cos.frame, cosSr: cos.sr };
     }
 
     function renderTop3(rows) {
@@ -921,14 +927,14 @@
         var p = rowParts(row);
         var pos = row.position;
         return (
-          '<div class="rk-top-card rk-top-' + esc(pos) + '" title="' + esc(row.display_name || 'Miembro') + '">' +
+          '<div class="rk-top-card rk-top-' + esc(pos) + p.cosCls + '" title="' + esc(row.display_name || 'Miembro') + '">' +
             '<div class="rk-top-fig">' +
               '<span class="rk-top-crown" aria-hidden="true"></span>' +
-              '<div class="rk-top-avawrap">' + p.avatar + p.flag + '</div>' +
+              '<div class="rk-top-avawrap">' + p.avatar + p.flag + p.cosFrame + '</div>' +
               '<div class="rk-top-medal"><span class="rk-top-hash">#</span>' + esc(pos) + '</div>' +
             '</div>' +
             p.badge +
-            '<div class="rk-top-name">' + esc(row.display_name || 'Miembro') + '</div>' +
+            '<div class="rk-top-name">' + esc(row.display_name || 'Miembro') + p.cosSr + '</div>' +
             '<div class="rk-top-rankname">' + p.rankNameTxt + '</div>' +
             '<div class="rk-top-xp">' + Number(row.xp || 0).toLocaleString() + ' XP</div>' +
             '<div class="rk-top-ped" aria-hidden="true"><span class="rk-top-pednum">' + esc(pos) + '</span></div>' +
@@ -948,11 +954,11 @@
         var n = Number(row.position);
         var tier = (n >= 4 && n <= 10) ? ' rk-plate rk-row--elite' : '';
         return (
-          '<div class="rk-row' + tier + '">' +
+          '<div class="rk-row' + tier + p.cosCls + '">' +
             '<div class="rk-row-pos">#' + esc(row.position) + '</div>' +
-            '<span class="rk-row-ava">' + p.avatar + p.flag + '</span>' + p.badge +
+            '<span class="rk-row-ava">' + p.avatar + p.flag + p.cosFrame + '</span>' + p.badge +
             '<div class="rk-row-id">' +
-              '<span class="rk-row-name">' + esc(row.display_name || 'Miembro') + '</span>' +
+              '<span class="rk-row-name">' + esc(row.display_name || 'Miembro') + p.cosSr + '</span>' +
               '<span class="rk-row-rankname">' + p.rankNameTxt + '</span>' +
             '</div>' +
             '<div class="rk-row-xp">' + Number(row.xp || 0).toLocaleString() + ' XP</div>' +
@@ -986,10 +992,17 @@
         // Ranking público: se lee igual haya o no sesión iniciada (misma
         // vista de solo lectura xp_leaderboard, sin gate de login). Timeout
         // de 8s para que la pantalla nunca se quede pegada en "Cargando…".
-        var res = await withTimeout(
-          sb.from('xp_leaderboard').select('*').order('xp', { ascending: false }).limit(50),
-          8000
-        );
+        var plainFetch = function () {
+          return withTimeout(
+            sb.from('xp_leaderboard').select('*').order('xp', { ascending: false }).limit(50),
+            8000
+          );
+        };
+        // Cosméticos (apagado por defecto): consulta enriquecida del servidor = filas + apariencia de CADA fila en una sola
+        // respuesta coherente. Si no está activa, no está conectada, falla o es inválida → null y se usa la consulta de siempre.
+        var res = null;
+        try { if (window.GeoArmyCosmetics) res = await window.GeoArmyCosmetics.fetchRanking({ client: sb, plain: plainFetch }); } catch (e) { res = null; }
+        if (!res) res = await plainFetch();
         if (res.error) {
           console.warn('[ranking] no se pudo leer xp_leaderboard', res.error);
           listEl.innerHTML = '<div class="rk-loading">No se pudo cargar el ranking.</div>';
