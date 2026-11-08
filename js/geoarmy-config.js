@@ -33,8 +33,12 @@ window.GEOARMY_PROFILE_SYNC_ENABLED = true;
 // GEOARMY_COSMETICS_ENABLED: interruptor general. false = js/geoarmy-cosmetics.js queda INERTE (no consulta nada, no pinta,
 //   no carga estilos ni scripts). true = con sesión iniciada consulta la RPC geo_vip_my_appearance_v1() (barra y Mi Geo Army)
 //   y el ranking usa la vista geo_vip_ranking_v1; si algo falla (error, tiempo, respuesta inválida) se ve el usuario normal
-//   y el ranking de siempre (xp_leaderboard). Solo reconoce el código vip_violet_silver.
+//   y el ranking de siempre (xp_leaderboard). Solo reconoce los códigos del catálogo controlado (js/geoarmy-cosmetics-catalog.js).
 // GEOARMY_COSMETICS_SIMULATION: SOLO PARA PRUEBAS EN UN EQUIPO LOCAL (carga js/geoarmy-cosmetics-sim.js, que inventa usuarios
 //   VIP de ejemplo y sustituye al servidor). Debe quedar en false en lo que se publica; además se ignora sola fuera de localhost.
 window.GEOARMY_COSMETICS_ENABLED = true;
 window.GEOARMY_COSMETICS_SIMULATION = false;
+// GEOARMY_COSMETICS_REV: revisión de los archivos de APARIENCIAS (catálogo, adaptador, hoja común dinámica y recursos de cada diseño).
+//   Es el ÚNICO número que hay que subir (+1) en cada publicación que añada o cambie una apariencia: así todos los visitantes piden
+//   archivos nuevos y coherentes entre sí. Cómo y cuándo: GUIA_ANADIR_UN_DISENO.md (sección «Versión y caché»).
+window.GEOARMY_COSMETICS_REV = 2;

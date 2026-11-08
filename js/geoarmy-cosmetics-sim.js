@@ -41,6 +41,9 @@
     var q = new URLSearchParams(location.search);
     if (q.has('cosSimVip')) cfg.vipUids = String(q.get('cosSimVip') || '').split(',').filter(Boolean);
     if (q.has('cosRank')) cfg.rankPositions = String(q.get('cosRank') || '').split(',').map(Number).filter(function (n) { return n > 0; });
+    // ?cosSimCode=<código>  (solo modo simple) código de apariencia que devuelve la simulación en lugar del VIP; solo se acepta un código con forma válida
+    // y, como siempre, el módulo solo lo pinta si ese código está en el catálogo (para una apariencia nueva: definirla en el catálogo, ver LEEME).
+    if (q.has('cosSimCode') && /^[a-z][a-z0-9_]{2,63}$/.test(String(q.get('cosSimCode')))) CODE = String(q.get('cosSimCode'));
     if (q.has('cosDelay')) cfg.delayMs = Math.max(0, Number(q.get('cosDelay')) || 0);
     if (q.has('cosRankDelay')) cfg.rankingDelayMs = Math.max(0, Number(q.get('cosRankDelay')) || 0);
   } catch (e) {}

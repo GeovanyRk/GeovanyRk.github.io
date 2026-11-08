@@ -98,7 +98,7 @@
       if (window.GEOARMY_COSMETICS_ENABLED !== true || window.GeoArmyCosmetics) return;
       if (document.querySelector('script[src*="geoarmy-cosmetics.js"]')) return;
       var s = document.createElement('script');
-      s.src = siteBase() + 'js/geoarmy-cosmetics.js?v=1';
+      s.src = siteBase() + 'js/geoarmy-cosmetics.js?v=2';
       s.async = true;
       s.onerror = function () { console.warn('[geoarmy-account] no se pudo cargar js/geoarmy-cosmetics.js'); };
       document.head.appendChild(s);
