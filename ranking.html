@@ -627,8 +627,10 @@
     .rk-row, .rk-row--elite, .rk-btn, .rk-missions-btn, .rk-ln-disc .rk-ladder-badge, .rk-bar-fill { transition: none; }
   }
   </style>
-  <!-- Cosméticos (marco VIP) + ajuste móvil aprobado de las filas del ranking. Después del <style> para poder afinarlo. -->
-  <link rel="stylesheet" href="css/geoarmy-cosmetics.css?v=1"/>
+  <!-- Cosméticos (marco VIP) + ajuste móvil aprobado de las filas del ranking. Después del <style> para poder afinarlo.
+       Se pide SIN bloquear la página (media="print" y se activa al cargar): si el servidor tarda o no responde, el ranking se dibuja igual. -->
+  <link rel="stylesheet" href="css/geoarmy-cosmetics.css?v=2" media="print" onload="this.media='all'"/>
+  <noscript><link rel="stylesheet" href="css/geoarmy-cosmetics.css?v=2"/></noscript>
 </head>
 <body>
 
@@ -802,7 +804,7 @@
   <script src="js/geoarmy-ranks.js"></script>
   <script src="js/geoarmy-account.js"></script>
   <!-- Cosméticos (marco VIP): solo presentación. Inerte mientras GEOARMY_COSMETICS_ENABLED sea false (js/geoarmy-config.js). -->
-  <script src="js/geoarmy-cosmetics.js?v=1"></script>
+  <script src="js/geoarmy-cosmetics.js?v=2"></script>
   <!-- Cumpleaños V1 (Fase 1B): onboarding de cuentas nuevas. Después de geoarmy-account.js. -->
   <script src="js/geoarmy-birthday.js?v=1b2"></script>
   <script>
