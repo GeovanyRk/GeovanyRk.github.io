@@ -365,6 +365,16 @@
       font-weight: 700;
     }
     .fn-shop-pill strong { color: #fff; }
+    .fn-vbucks-pill {
+      gap: .42rem;
+    }
+    .fn-vbucks-icon {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+      flex: 0 0 18px;
+      filter: drop-shadow(0 0 5px rgba(64,230,255,.28));
+    }
 
     .fn-creator-card {
       position: relative;
@@ -1106,7 +1116,7 @@
     </div>
 
     <div class="fn-shop-meta">
-      <span class="fn-shop-pill">🪙 <strong>100 V-Bucks = 200 G-Coins</strong></span>
+      <span class="fn-shop-pill fn-vbucks-pill"><img src="vbucks-logo.png" alt="V-Bucks" class="fn-vbucks-icon"><strong>100 V-Bucks = 200 G-Coins</strong></span>
       <span class="fn-shop-pill">🔄 Rotación automática</span>
       <span class="fn-shop-pill" id="fnOfferCount">Cargando tienda…</span>
     </div>
