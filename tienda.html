@@ -296,6 +296,48 @@
 
     /* ---------- GRID + CARDS DE PRODUCTO ---------- */
 
+    /* ===== PESTAÑAS DE TIENDA ===== */
+    .shop-tabs-shell {
+      position: relative;
+      z-index: 3;
+      max-width: 1240px;
+      margin: 1.5rem auto 0;
+      padding: 0 1.25rem;
+    }
+    .shop-tabs {
+      display: inline-flex;
+      gap: 6px;
+      padding: 5px;
+      border-radius: 15px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.035);
+      backdrop-filter: blur(12px);
+    }
+    .shop-tab-btn {
+      border: 0;
+      border-radius: 11px;
+      padding: 10px 15px;
+      background: transparent;
+      color: var(--text2);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .82rem;
+      font-weight: 900;
+      cursor: pointer;
+      transition: .18s ease;
+    }
+    .shop-tab-btn:hover {
+      color: #fff;
+      background: rgba(255,255,255,.055);
+    }
+    .shop-tab-btn.active {
+      color: #fff;
+      background: linear-gradient(135deg, #7c3aed, #22d3ee);
+      box-shadow: 0 8px 24px rgba(79,70,229,.22);
+    }
+    .shop-tab-panel[hidden] {
+      display: none !important;
+    }
+
     /* ===== FORTNITE SHOP DINÁMICA ===== */
     .fn-shop {
       position: relative;
@@ -333,16 +375,16 @@
       min-height: 42px;
       padding: 0 14px;
       border-radius: 14px;
-      border: 1px solid rgba(255,210,63,.34);
-      background: rgba(255,210,63,.06);
-      color: #ffe781;
+      border: 1px solid rgba(85,214,255,.34);
+      background: rgba(85,214,255,.07);
+      color: #dff8ff;
       font-family: 'Space Grotesk', sans-serif;
       font-size: .86rem;
       font-weight: 700;
       white-space: nowrap;
     }
     .fn-shop-countdown strong {
-      color: #ffd23f;
+      color: #7ee7ff;
       font-family: 'Orbitron', sans-serif;
       letter-spacing: .04em;
     }
@@ -378,63 +420,55 @@
 
     .fn-creator-card {
       position: relative;
-      overflow: hidden;
-      display: grid;
-      grid-template-columns: 1fr auto;
+      display: flex;
       align-items: center;
-      gap: 1.2rem;
-      margin: 1rem 0;
-      padding: clamp(18px, 3vw, 28px);
-      border-radius: 20px;
-      background: #fff;
+      gap: 14px;
+      width: fit-content;
+      max-width: 100%;
+      margin: .9rem 0;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.96);
       color: #111;
-      border: 1px solid rgba(255,255,255,.75);
-      box-shadow: 0 22px 60px rgba(0,0,0,.25);
+      border: 1px solid rgba(255,255,255,.65);
+      box-shadow: 0 12px 30px rgba(0,0,0,.20);
     }
-    .fn-creator-card::after {
-      content: "FORTNITE";
-      position: absolute;
-      right: -12px;
-      bottom: -22px;
-      font-family: 'Orbitron', sans-serif;
-      font-size: clamp(3rem, 8vw, 7rem);
-      font-weight: 900;
-      letter-spacing: -.06em;
-      color: rgba(17,17,17,.045);
-      pointer-events: none;
-    }
+    .fn-creator-card::after { display: none; }
     .fn-creator-eyebrow {
-      font-size: .72rem;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      font-weight: 900;
-      opacity: .56;
+      display: none;
     }
     .fn-creator-title {
-      margin: .3rem 0 .2rem;
+      margin: 0;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(1.25rem, 2.5vw, 1.8rem);
+      font-size: .76rem;
       font-weight: 900;
+      color: #5b5b66;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      white-space: nowrap;
     }
     .fn-creator-code {
-      margin-top: .65rem;
+      margin: 0;
       font-family: 'Orbitron', sans-serif;
-      font-size: clamp(1.25rem, 3vw, 2rem);
+      font-size: 1rem;
       font-weight: 900;
-      letter-spacing: .08em;
-      word-break: break-word;
+      letter-spacing: .06em;
+      color: #111;
+      white-space: nowrap;
     }
     .fn-copy-btn {
       position: relative;
       z-index: 1;
       border: 0;
-      border-radius: 13px;
-      padding: 12px 16px;
+      border-radius: 10px;
+      padding: 9px 12px;
       background: #111;
       color: #fff;
       font-family: 'Space Grotesk', sans-serif;
+      font-size: .72rem;
       font-weight: 800;
       cursor: pointer;
+      white-space: nowrap;
     }
     .fn-copy-btn:disabled { opacity: .45; cursor: default; }
 
@@ -614,8 +648,8 @@
       max-width: calc(100% - 20px);
       padding: 6px 9px;
       border-radius: 8px;
-      background: #ffd23f;
-      color: #111;
+      background: linear-gradient(135deg, #7c3aed, #22d3ee);
+      color: #fff;
       font-size: .65rem;
       font-weight: 1000;
       text-transform: uppercase;
@@ -657,7 +691,7 @@
       margin-top: .45rem;
     }
     .fn-price-current {
-      color: #ffd23f;
+      color: #7ee7ff;
       font-family: 'Orbitron', sans-serif;
       font-size: .95rem;
       font-weight: 900;
@@ -724,8 +758,12 @@
 
     @media (max-width: 680px) {
       .fn-shop { padding: 0 .9rem; }
-      .fn-creator-card { grid-template-columns: 1fr; }
-      .fn-copy-btn { width: 100%; }
+      .fn-creator-card {
+        width: 100%;
+        box-sizing: border-box;
+        flex-wrap: wrap;
+      }
+      .fn-copy-btn { width: auto; }
       .fn-row { grid-auto-columns: minmax(175px, 72vw); }
       .fn-card { min-height: 305px; }
       .fn-card-image { height: 205px; }
@@ -1102,6 +1140,20 @@
   </div>
 
 
+  <div class="shop-tabs-shell">
+    <div class="shop-tabs" role="tablist" aria-label="Secciones de la tienda">
+      <button type="button" class="shop-tab-btn active" id="shopTabBtnFortnite"
+              role="tab" aria-selected="true" aria-controls="shopTabFortnite">
+        Fortnite Shop
+      </button>
+      <button type="button" class="shop-tab-btn" id="shopTabBtnClassic"
+              role="tab" aria-selected="false" aria-controls="shopTabClassic">
+        Tienda clásica
+      </button>
+    </div>
+  </div>
+
+  <div id="shopTabFortnite" class="shop-tab-panel" role="tabpanel" aria-labelledby="shopTabBtnFortnite">
   <!-- ===== FORTNITE SHOP DINÁMICA ===== -->
   <section class="fn-shop" id="fnShopSection">
     <div class="fn-shop-head">
@@ -1164,6 +1216,10 @@
     </div>
   </section>
   <!-- ===== FIN FORTNITE SHOP DINÁMICA ===== -->
+  </div>
+
+  <div id="shopTabClassic" class="shop-tab-panel" role="tabpanel"
+       aria-labelledby="shopTabBtnClassic" hidden>
 
   <!-- COMPRAR G-COINS: temporalmente pausado.
        Los enlaces de Square se conservan en data-payment-url, pero NO son
@@ -1242,6 +1298,7 @@
 
   <div id="tiGrid" class="ti-grid"></div>
   <p id="tiMsg" class="ti-msg"></p>
+  </div>
 
   <!-- Modal informativo: solo muestra detalles; nunca inicia canjes ni genera clientRequestId. -->
   <div id="tiDetailsModal" class="ti-modal" hidden aria-hidden="true">
@@ -1282,7 +1339,7 @@
     // Fortnite Shop dinámica.
     // NO inventamos valores personales: completa estos datos cuando correspondan.
     const FORTNITE_CREATOR_CODE = 'SORTEOSRK';
-    const FORTNITE_GIFT_ACCOUNTS = ['geovannyrk'];
+    const FORTNITE_GIFT_ACCOUNTS = ['passesrk'];
     // ================================
 
     const $ = (id) => document.getElementById(id);
@@ -1310,6 +1367,48 @@
 
     let fortniteShopData = null;
     let fortniteCountdownTimer = null;
+
+    function activarPestanaTienda(tab) {
+      const isFortnite = tab !== 'classic';
+
+      const fnBtn = $('shopTabBtnFortnite');
+      const classicBtn = $('shopTabBtnClassic');
+      const fnPanel = $('shopTabFortnite');
+      const classicPanel = $('shopTabClassic');
+
+      fnBtn.classList.toggle('active', isFortnite);
+      classicBtn.classList.toggle('active', !isFortnite);
+
+      fnBtn.setAttribute('aria-selected', isFortnite ? 'true' : 'false');
+      classicBtn.setAttribute('aria-selected', isFortnite ? 'false' : 'true');
+
+      fnPanel.hidden = !isFortnite;
+      classicPanel.hidden = isFortnite;
+
+      try {
+        sessionStorage.setItem(
+          'geoarmy-store-tab',
+          isFortnite ? 'fortnite' : 'classic'
+        );
+      } catch {}
+    }
+
+    function configurarPestanasTienda() {
+      $('shopTabBtnFortnite').addEventListener('click', () => {
+        activarPestanaTienda('fortnite');
+      });
+
+      $('shopTabBtnClassic').addEventListener('click', () => {
+        activarPestanaTienda('classic');
+      });
+
+      let saved = 'fortnite';
+      try {
+        saved = sessionStorage.getItem('geoarmy-store-tab') || 'fortnite';
+      } catch {}
+
+      activarPestanaTienda(saved);
+    }
 
     function escaparHtml(value) {
       return String(value ?? '')
@@ -2222,6 +2321,7 @@
 
     async function init() {
       aplicarEstadoCompraGcoins();
+      configurarPestanasTienda();
       configurarFortniteIdentidad();
       cargarFortniteShop();
       loginBtn.addEventListener('click', pedirLogin);
