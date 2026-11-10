@@ -516,43 +516,6 @@
       font-size: .8rem;
       font-style: italic;
     }
-    .fn-epic-wrap {
-      margin-top: 1rem;
-      padding-top: 1rem;
-      border-top: 1px solid rgba(255,255,255,.08);
-    }
-    .fn-epic-wrap label {
-      display: block;
-      margin-bottom: .45rem;
-      color: #fff;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: .82rem;
-      font-weight: 900;
-    }
-    .fn-epic-input {
-      width: 100%;
-      min-height: 44px;
-      box-sizing: border-box;
-      border-radius: 11px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(0,0,0,.25);
-      color: #fff;
-      padding: 0 12px;
-      outline: none;
-      font: inherit;
-    }
-    .fn-epic-input:focus {
-      border-color: rgba(145,71,255,.75);
-      box-shadow: 0 0 0 3px rgba(145,71,255,.10);
-    }
-    .fn-epic-wrap small {
-      display: block;
-      margin-top: .45rem;
-      color: var(--text3);
-      font-size: .72rem;
-      line-height: 1.45;
-    }
-
     .fn-shop-status {
       display: none;
       margin: .8rem 0 1.2rem;
@@ -980,95 +943,8 @@
 
   </style>
 
-  <!-- ================================================================
-       Tematica de Halloween — SOLO colores/decoración para esta página.
-       Todo scopeado bajo "body.hw-halloween" (clase agregada únicamente
-       al <body> de ESTE archivo) para no tocar css/v3-theme.css ni
-       css/style.css ni ninguna otra página. No cambia ningún ID/clase
-       leído por el script (tiSaldoValor, tiLoginBtn, tiUsuarioTag,
-       tiUsuarioNombre, tiGrid, tiMsg, .ti-filtro-btn+data-cat, --c2-accent
-       dinámico por categoría) -- solo fondo, bordes/sombras genéricos y
-       elementos decorativos nuevos con pointer-events:none. -->
-  <style>
-    body.hw-halloween{
-      background:
-        radial-gradient(ellipse 70% 45% at 15% 0%, rgba(255,122,26,.14), transparent 60%),
-        radial-gradient(ellipse 60% 40% at 88% 12%, rgba(151,71,255,.15), transparent 60%);
-      background-color:#0a0612;
-    }
-    body.hw-halloween .v3-stars{ opacity:.5; filter:hue-rotate(15deg) saturate(1.2); }
-    body.hw-halloween .v3-nebula{ opacity:.5; filter:hue-rotate(20deg); }
-
-    body.hw-halloween .v3-nav{
-      background:linear-gradient(180deg, rgba(20,10,26,.92), rgba(12,7,16,.88));
-      border-bottom:1px solid rgba(255,122,26,.28);
-    }
-    body.hw-halloween .v3-wordmark{ color:#ffb347; text-shadow:0 0 10px rgba(255,140,0,.55); }
-    body.hw-halloween .v3-join-btn{ background:linear-gradient(135deg,#ff7a1a,#b043ff); border:none; }
-
-    body.hw-halloween .ti-eyebrow{ color:#ff9d3d; }
-    body.hw-halloween .ti-title-new{
-      background:linear-gradient(90deg,#ff8a2b,#ffb347 35%,#b784ff 70%,#7c4dff);
-      -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent;
-    }
-    body.hw-halloween .ti-sub{ color:#cbb8e6; }
-    body.hw-halloween .ti-crest{ color:#ff9d3d; }
-
-    body.hw-halloween .ti-wallet-card,
-    body.hw-halloween .ti-comprar-card,
-    body.hw-halloween .ti-feat-card{
-      background:linear-gradient(160deg, rgba(38,18,46,.55), rgba(18,10,20,.65));
-      border:1px solid rgba(255,140,0,.22);
-      box-shadow:0 8px 24px rgba(60,10,80,.25);
-    }
-    body.hw-halloween .ti-login-btn,
-    body.hw-halloween .ti-comprar-btn{
-      background:linear-gradient(135deg,#ff7a1a,#b043ff); border:none; color:#fff;
-    }
-    body.hw-halloween .ti-filtro-btn.active{
-      background:linear-gradient(135deg,#ff7a1a,#b043ff); border-color:transparent;
-    }
-    body.hw-halloween .ti-feat-price{ color:#ffb347; text-shadow:0 0 12px rgba(255,140,0,.4); }
-    body.hw-halloween .ti-section-title{ color:#ffb347; }
-    body.hw-halloween .ti-line{ background:linear-gradient(90deg,transparent,#ff7a1a,transparent); }
-
-    /* ---- Decoraciones flotantes (puramente visuales) ---- */
-    .hw-decor{ position:fixed; inset:0; pointer-events:none; z-index:2; overflow:hidden; }
-    .hw-decor span{ position:absolute; opacity:.5; filter:drop-shadow(0 0 6px rgba(255,140,0,.35)); }
-    .hw-decor .hw-bat{ font-size:22px; animation:hwFly 16s linear infinite; }
-    .hw-decor .hw-bat2{ font-size:16px; animation:hwFly 22s linear infinite reverse; opacity:.4; }
-    .hw-decor .hw-pumpkin{ font-size:26px; opacity:.5; animation:hwBob 6s ease-in-out infinite; }
-    .hw-decor .hw-ghost{ font-size:20px; opacity:.35; animation:hwBob 8s ease-in-out infinite; }
-    .hw-decor .hw-web{ font-size:34px; opacity:.28; }
-
-    @keyframes hwFly{
-      0%{ transform:translate(-10vw,10vh) rotate(0deg); }
-      50%{ transform:translate(55vw,4vh) rotate(6deg); }
-      100%{ transform:translate(110vw,14vh) rotate(-4deg); }
-    }
-    @keyframes hwBob{
-      0%,100%{ transform:translateY(0); }
-      50%{ transform:translateY(-10px); }
-    }
-    @media (max-width:700px){
-      .hw-decor .hw-pumpkin, .hw-decor .hw-ghost{ font-size:18px; }
-      .hw-decor .hw-web{ font-size:24px; }
-    }
-  </style>
 </head>
-<body class="hw-halloween">
-
-  <div class="hw-decor" aria-hidden="true">
-    <span class="hw-bat" style="top:8%;">🦇</span>
-    <span class="hw-bat2" style="top:22%;">🦇</span>
-    <span class="hw-bat" style="top:40%; animation-delay:-6s;">🦇</span>
-    <span class="hw-pumpkin" style="left:3%; top:14%;">🎃</span>
-    <span class="hw-pumpkin" style="right:4%; top:60%; animation-delay:-3s;">🎃</span>
-    <span class="hw-ghost" style="left:8%; top:78%; animation-delay:-2s;">👻</span>
-    <span class="hw-ghost" style="right:10%; top:30%; animation-delay:-5s;">👻</span>
-    <span class="hw-web" style="left:-4px; top:-4px;">🕸️</span>
-    <span class="hw-web" style="right:-4px; top:-4px; transform:scaleX(-1);">🕸️</span>
-  </div>
+<body>
 
   <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
 
@@ -1091,6 +967,7 @@
           <span class="v3-wordmark">GEO ARMY</span>
         </a>
         <div class="v3-auth">
+          <div id="geoAccountWidget"></div>
           <a href="https://twitch.tv/geovannyrk" target="_blank" class="v3-join-btn">Únete a Geo Army</a>
         </div>
       </div>
@@ -1192,18 +1069,6 @@
         <span class="fn-gift-empty">Cuentas oficiales por configurar.</span>
       </div>
 
-      <div class="fn-epic-wrap">
-        <label for="fnEpicDisplayName">Tu Epic Display Name</label>
-        <input
-          id="fnEpicDisplayName"
-          class="fn-epic-input"
-          type="text"
-          maxlength="64"
-          autocomplete="off"
-          placeholder="Escribe exactamente tu nombre de Epic"
-        />
-        <small>Lo guardamos con tu orden para saber a qué cuenta entregar el regalo.</small>
-      </div>
     </div>
 
     <div class="fn-shop-status" id="fnShopStatus">Cargando tienda de Fortnite…</div>
@@ -1479,23 +1344,6 @@
     function configurarFortniteIdentidad() {
       const codeEl = $('fnCreatorCode');
       const copyBtn = $('fnCopyCreator');
-      const epicInput = $('fnEpicDisplayName');
-
-      try {
-        const savedEpic = localStorage.getItem('geoarmy-fortnite-epic-display-name');
-        if (savedEpic) epicInput.value = savedEpic;
-      } catch {}
-
-      epicInput.addEventListener('input', () => {
-        const value = epicInput.value.trim();
-        try {
-          if (value) {
-            localStorage.setItem('geoarmy-fortnite-epic-display-name', value);
-          } else {
-            localStorage.removeItem('geoarmy-fortnite-epic-display-name');
-          }
-        } catch {}
-      });
 
       if (FORTNITE_CREATOR_CODE) {
         codeEl.textContent = FORTNITE_CREATOR_CODE;
@@ -1589,13 +1437,28 @@
         return;
       }
 
-      const epicDisplayName = $('fnEpicDisplayName').value.trim();
+      let epicDisplayName = '';
+      try {
+        epicDisplayName = (localStorage.getItem('geoarmy-fortnite-epic-display-name') || '').trim();
+      } catch {}
 
-      if (!epicDisplayName) {
-        msg.textContent = 'Escribe tu Epic Display Name antes de canjear un regalo de Fortnite.';
-        $('fnEpicDisplayName').focus();
+      epicDisplayName = window.prompt(
+        'Escribe exactamente tu Epic Display Name para recibir este regalo:',
+        epicDisplayName
+      );
+
+      if (epicDisplayName === null) return;
+
+      epicDisplayName = epicDisplayName.trim();
+
+      if (!epicDisplayName || epicDisplayName.length > 64) {
+        msg.textContent = 'Epic Display Name inválido.';
         return;
       }
+
+      try {
+        localStorage.setItem('geoarmy-fortnite-epic-display-name', epicDisplayName);
+      } catch {}
 
       const costo = Number(offer.finalPriceGcoins);
 
@@ -2349,6 +2212,10 @@
     init();
   })();
   </script>
+  <script src="lib/supabase.min.js"></script>
+  <script src="js/geoarmy-config.js"></script>
   <script src="js/premium.js"></script>
+  <script src="js/geoarmy-ranks.js"></script>
+  <script src="js/geoarmy-account.js"></script>
 </body>
 </html>
