@@ -686,37 +686,295 @@
     .fn-card.not-giftable { filter: saturate(.65); }
     .fn-card.not-giftable .fn-card-image img { opacity: .78; }
 
-    .fn-proof {
-      margin: 2rem 0 0;
+    .fn-community {
+      margin: 2.2rem 0 0;
       padding: 20px;
-      border-radius: 18px;
+      border-radius: 20px;
       border: 1px solid rgba(255,255,255,.09);
-      background: rgba(255,255,255,.025);
+      background:
+        radial-gradient(circle at top right, rgba(34,211,238,.07), transparent 34%),
+        radial-gradient(circle at bottom left, rgba(124,58,237,.09), transparent 38%),
+        rgba(255,255,255,.025);
     }
-    .fn-proof h3 {
+    .fn-community-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.4rem;
+    }
+    .fn-community-kicker {
+      color: #7ee7ff;
+      font-size: .68rem;
+      font-weight: 1000;
+      letter-spacing: .13em;
+      margin-bottom: .3rem;
+    }
+    .fn-community-head h3,
+    .fn-community-block h4,
+    .fn-review-composer h4 {
       margin: 0;
       color: #fff;
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.15rem;
       font-weight: 900;
     }
-    .fn-proof p {
+    .fn-community-head h3 { font-size: 1.25rem; }
+    .fn-community-head p,
+    .fn-review-composer p {
       margin: .35rem 0 0;
       color: var(--text2);
-      font-size: .82rem;
+      font-size: .8rem;
       line-height: 1.55;
     }
-    .fn-proof-placeholder {
-      margin-top: .9rem;
-      min-height: 85px;
+    .fn-community-block + .fn-community-block {
+      margin-top: 1.7rem;
+    }
+    .fn-community-block-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+      margin-bottom: .75rem;
+    }
+    .fn-community-block h4 { font-size: .98rem; }
+    .fn-community-note {
+      color: var(--text3);
+      font-size: .7rem;
+      font-weight: 700;
+    }
+    .fn-community-empty {
+      width: 100%;
+      min-height: 82px;
       display: grid;
       place-items: center;
-      border-radius: 12px;
-      border: 1px dashed rgba(255,255,255,.15);
-      color: var(--text3);
-      font-size: .8rem;
-      text-align: center;
       padding: 14px;
+      box-sizing: border-box;
+      border: 1px dashed rgba(255,255,255,.12);
+      border-radius: 13px;
+      color: var(--text3);
+      font-size: .78rem;
+      text-align: center;
+      background: rgba(0,0,0,.12);
+    }
+    .fn-deliveries-row {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(210px, 250px);
+      gap: .8rem;
+      overflow-x: auto;
+      padding: 2px 2px 10px;
+      scroll-snap-type: inline proximity;
+    }
+    .fn-delivery-card {
+      scroll-snap-align: start;
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      align-items: center;
+      gap: 10px;
+      min-height: 92px;
+      padding: 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.035);
+    }
+    .fn-delivery-img {
+      width: 72px;
+      height: 72px;
+      border-radius: 11px;
+      object-fit: contain;
+      background: linear-gradient(145deg, rgba(124,58,237,.23), rgba(34,211,238,.12));
+    }
+    .fn-delivery-name {
+      color: #fff;
+      font-size: .82rem;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+    .fn-delivery-user {
+      margin-top: .3rem;
+      color: var(--text2);
+      font-size: .72rem;
+    }
+    .fn-delivery-date {
+      margin-top: .35rem;
+      color: #7ee7ff;
+      font-size: .64rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .fn-review-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: .8rem;
+    }
+    .fn-review-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 180px;
+      padding: 14px;
+      border-radius: 15px;
+      border: 1px solid rgba(255,255,255,.09);
+      background: linear-gradient(150deg, rgba(124,58,237,.10), rgba(255,255,255,.025));
+    }
+    .fn-review-card-top {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+    .fn-review-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(126,231,255,.3);
+    }
+    .fn-review-user {
+      color: #fff;
+      font-size: .78rem;
+      font-weight: 900;
+    }
+    .fn-review-login {
+      color: var(--text3);
+      font-size: .66rem;
+    }
+    .fn-review-stars-display {
+      margin: .75rem 0 .5rem;
+      color: #7ee7ff;
+      letter-spacing: .08em;
+      font-size: .92rem;
+    }
+    .fn-review-copy {
+      color: #eef6ff;
+      font-size: .8rem;
+      line-height: 1.55;
+    }
+    .fn-review-product {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: .9rem;
+      padding-top: .75rem;
+      border-top: 1px solid rgba(255,255,255,.07);
+      color: var(--text2);
+      font-size: .68rem;
+    }
+    .fn-review-product img {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      object-fit: contain;
+      background: rgba(255,255,255,.04);
+    }
+    .fn-verified-chip {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(34,211,238,.10);
+      border: 1px solid rgba(34,211,238,.25);
+      color: #7ee7ff;
+      font-size: .62rem;
+      font-weight: 1000;
+      letter-spacing: .06em;
+    }
+    .fn-review-composer {
+      margin-top: 1.7rem;
+      display: grid;
+      grid-template-columns: minmax(190px,.8fr) minmax(280px,1.4fr);
+      gap: 1rem;
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(126,231,255,.16);
+      background: rgba(4,11,19,.55);
+    }
+    .fn-review-composer-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .fn-review-form label {
+      display: block;
+      margin: 0 0 .35rem;
+      color: #fff;
+      font-size: .72rem;
+      font-weight: 900;
+    }
+    .fn-review-input {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid rgba(255,255,255,.13);
+      background: rgba(0,0,0,.22);
+      color: #fff;
+      border-radius: 10px;
+      padding: 10px 11px;
+      margin-bottom: .8rem;
+      font: inherit;
+      font-size: .78rem;
+      outline: none;
+    }
+    .fn-review-input:focus {
+      border-color: rgba(126,231,255,.55);
+      box-shadow: 0 0 0 3px rgba(34,211,238,.07);
+    }
+    .fn-review-textarea {
+      min-height: 92px;
+      resize: vertical;
+    }
+    .fn-review-stars {
+      display: flex;
+      gap: 3px;
+      margin: -.1rem 0 .75rem;
+    }
+    .fn-review-stars button {
+      border: 0;
+      background: transparent;
+      color: rgba(255,255,255,.20);
+      font-size: 1.35rem;
+      line-height: 1;
+      padding: 3px;
+      cursor: pointer;
+    }
+    .fn-review-stars button.active {
+      color: #7ee7ff;
+      text-shadow: 0 0 10px rgba(126,231,255,.25);
+    }
+    .fn-review-form-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+    }
+    .fn-review-form-msg {
+      color: var(--text2);
+      font-size: .7rem;
+      line-height: 1.4;
+    }
+    .fn-review-submit {
+      flex: 0 0 auto;
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 13px;
+      background: linear-gradient(135deg, #7c3aed, #22d3ee);
+      color: #fff;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .74rem;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .fn-review-submit:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+    }
+    .fn-review-status-only {
+      margin-top: 1.3rem;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+      color: var(--text2);
+      font-size: .76rem;
     }
 
     @media (max-width: 680px) {
@@ -730,6 +988,13 @@
       .fn-row { grid-auto-columns: minmax(175px, 72vw); }
       .fn-card { min-height: 305px; }
       .fn-card-image { height: 205px; }
+      .fn-community { padding: 15px; }
+      .fn-community-block-head { align-items: flex-start; flex-direction: column; gap: .2rem; }
+      .fn-deliveries-row { grid-auto-columns: minmax(220px, 82vw); }
+      .fn-review-grid { grid-template-columns: 1fr; }
+      .fn-review-composer { grid-template-columns: 1fr; }
+      .fn-review-form-bottom { align-items: stretch; flex-direction: column; }
+      .fn-review-submit { width: 100%; }
     }
 
     .ti-grid {
@@ -1074,11 +1339,68 @@
     <div class="fn-shop-status" id="fnShopStatus">Cargando tienda de Fortnite…</div>
     <div id="fnShopSections"></div>
 
-    <div class="fn-proof">
-      <h3>Recompensas entregadas</h3>
-      <p>Aquí podremos mostrar capturas y referencias reales de miembros de Geo Army que ya recibieron sus regalos.</p>
-      <div class="fn-proof-placeholder">Galería / referencias preparada para conectar cuando tengas las capturas y nombres que quieras publicar.</div>
-    </div>
+    <section class="fn-community" aria-labelledby="fnCommunityTitle">
+      <div class="fn-community-head">
+        <div>
+          <div class="fn-community-kicker">COMUNIDAD GEO ARMY</div>
+          <h3 id="fnCommunityTitle">Entregas y reseñas verificadas</h3>
+          <p>Solo mostramos entregas reales de Fortnite y reseñas vinculadas a un canje marcado como entregado.</p>
+        </div>
+      </div>
+
+      <div class="fn-community-block">
+        <div class="fn-community-block-head">
+          <h4>🎁 Entregas recientes</h4>
+          <span class="fn-community-note">Canjes entregados por Geo Army</span>
+        </div>
+        <div id="fnRecentDeliveries" class="fn-deliveries-row">
+          <div class="fn-community-empty">Todavía no hay entregas públicas para mostrar.</div>
+        </div>
+      </div>
+
+      <div class="fn-community-block">
+        <div class="fn-community-block-head">
+          <h4>⭐ Lo que dice la Geo Army</h4>
+          <span class="fn-community-note">Reseñas con canje verificado</span>
+        </div>
+        <div id="fnVerifiedReviews" class="fn-review-grid">
+          <div class="fn-community-empty">Todavía no hay reseñas aprobadas.</div>
+        </div>
+      </div>
+
+      <div id="fnReviewComposer" class="fn-review-composer" hidden>
+        <div class="fn-review-composer-copy">
+          <span class="fn-verified-chip">✓ CANJE VERIFICADO</span>
+          <h4>¿Ya recibiste tu regalo?</h4>
+          <p>Deja una reseña sobre tu entrega. Se publicará después de ser aprobada.</p>
+        </div>
+
+        <div class="fn-review-form">
+          <label for="fnReviewFulfillment">Regalo recibido</label>
+          <select id="fnReviewFulfillment" class="fn-review-input"></select>
+
+          <label>Calificación</label>
+          <div id="fnReviewStars" class="fn-review-stars" role="radiogroup" aria-label="Calificación">
+            <button type="button" data-rating="1" aria-label="1 estrella">★</button>
+            <button type="button" data-rating="2" aria-label="2 estrellas">★</button>
+            <button type="button" data-rating="3" aria-label="3 estrellas">★</button>
+            <button type="button" data-rating="4" aria-label="4 estrellas">★</button>
+            <button type="button" data-rating="5" aria-label="5 estrellas">★</button>
+          </div>
+
+          <label for="fnReviewText">Tu reseña</label>
+          <textarea id="fnReviewText" class="fn-review-input fn-review-textarea"
+                    maxlength="500" placeholder="Cuéntanos cómo fue tu entrega..."></textarea>
+
+          <div class="fn-review-form-bottom">
+            <span id="fnReviewFormMsg" class="fn-review-form-msg"></span>
+            <button type="button" id="fnReviewSubmit" class="fn-review-submit">Enviar reseña</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="fnReviewStatusOnly" class="fn-review-status-only" hidden></div>
+    </section>
   </section>
   <!-- ===== FIN FORTNITE SHOP DINÁMICA ===== -->
   </div>
@@ -2181,6 +2503,287 @@
         renderCatalogo();
       });
     });
+
+
+    let fnReviewRating = 5;
+    let fnReviewClient = null;
+    let fnEligibleReviews = [];
+
+    function fnCommunityEsc(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function fnCommunityDate(value) {
+      if (!value) return '';
+      try {
+        return new Date(value).toLocaleDateString('es-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric'
+        });
+      } catch {
+        return '';
+      }
+    }
+
+    function renderFortniteDeliveries(rows) {
+      const root = $('fnRecentDeliveries');
+      if (!root) return;
+
+      if (!Array.isArray(rows) || !rows.length) {
+        root.innerHTML = '<div class="fn-community-empty">Todavía no hay entregas públicas para mostrar.</div>';
+        return;
+      }
+
+      root.innerHTML = rows.map((row) => {
+        const image = row.product_image
+          ? fnCommunityEsc(row.product_image)
+          : 'assets/store/fortnite-battle-pass.webp';
+
+        const user = row.display_name || row.twitch_login || 'Miembro';
+
+        return `
+          <article class="fn-delivery-card">
+            <img class="fn-delivery-img" src="${image}" alt="" loading="lazy"
+                 onerror="this.src='assets/store/fortnite-battle-pass.webp'">
+            <div>
+              <div class="fn-delivery-name">${fnCommunityEsc(row.product_name || 'Regalo Fortnite')}</div>
+              <div class="fn-delivery-user">Entregado a ${fnCommunityEsc(user)}</div>
+              <div class="fn-delivery-date">✓ Entregado · ${fnCommunityEsc(fnCommunityDate(row.delivered_at))}</div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function renderFortniteReviews(rows) {
+      const root = $('fnVerifiedReviews');
+      if (!root) return;
+
+      if (!Array.isArray(rows) || !rows.length) {
+        root.innerHTML = '<div class="fn-community-empty">Todavía no hay reseñas aprobadas.</div>';
+        return;
+      }
+
+      root.innerHTML = rows.map((row) => {
+        const rating = Math.max(1, Math.min(5, Number(row.rating) || 5));
+        const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+        const avatar = row.avatar_url
+          ? fnCommunityEsc(row.avatar_url)
+          : 'logo.png';
+        const productImage = row.product_image
+          ? fnCommunityEsc(row.product_image)
+          : 'assets/store/fortnite-battle-pass.webp';
+
+        return `
+          <article class="fn-review-card">
+            <div class="fn-review-card-top">
+              <img class="fn-review-avatar" src="${avatar}" alt="" loading="lazy"
+                   onerror="this.src='logo.png'">
+              <div>
+                <div class="fn-review-user">${fnCommunityEsc(row.display_name || row.twitch_login || 'Miembro')}</div>
+                <div class="fn-review-login">${row.twitch_login ? '@' + fnCommunityEsc(row.twitch_login) : ''}</div>
+              </div>
+            </div>
+
+            <div class="fn-review-stars-display" aria-label="${rating} de 5 estrellas">${stars}</div>
+            <div class="fn-review-copy">“${fnCommunityEsc(row.review_text || '')}”</div>
+
+            <div class="fn-review-product">
+              <img src="${productImage}" alt="" loading="lazy"
+                   onerror="this.src='assets/store/fortnite-battle-pass.webp'">
+              <div>
+                <div>${fnCommunityEsc(row.product_name || 'Regalo Fortnite')}</div>
+                <span class="fn-verified-chip" style="margin-top:5px;">✓ CANJE VERIFICADO</span>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function setFnReviewStars(rating) {
+      fnReviewRating = Math.max(1, Math.min(5, Number(rating) || 5));
+      document.querySelectorAll('#fnReviewStars button').forEach((btn) => {
+        btn.classList.toggle(
+          'active',
+          Number(btn.dataset.rating) <= fnReviewRating
+        );
+      });
+    }
+
+    function renderFnReviewEligibility(rows) {
+      fnEligibleReviews = Array.isArray(rows) ? rows : [];
+
+      const composer = $('fnReviewComposer');
+      const statusOnly = $('fnReviewStatusOnly');
+      const select = $('fnReviewFulfillment');
+
+      if (!composer || !statusOnly || !select) return;
+
+      const canSubmit = fnEligibleReviews.filter((row) =>
+        !row.existing_review_status ||
+        row.existing_review_status === 'rejected'
+      );
+
+      const pending = fnEligibleReviews.filter((row) =>
+        row.existing_review_status === 'pending'
+      );
+
+      const approved = fnEligibleReviews.filter((row) =>
+        row.existing_review_status === 'approved'
+      );
+
+      if (canSubmit.length) {
+        select.innerHTML = canSubmit.map((row) => `
+          <option value="${fnCommunityEsc(row.fulfillment_id)}">
+            ${fnCommunityEsc(row.product_name || 'Regalo Fortnite')}
+          </option>
+        `).join('');
+
+        composer.hidden = false;
+        statusOnly.hidden = true;
+        setFnReviewStars(5);
+        return;
+      }
+
+      composer.hidden = true;
+
+      if (pending.length) {
+        statusOnly.textContent = 'Tu reseña está en revisión. Cuando sea aprobada aparecerá públicamente aquí.';
+        statusOnly.hidden = false;
+        return;
+      }
+
+      if (approved.length) {
+        statusOnly.textContent = 'Gracias por tu reseña. Tu canje verificado ya forma parte de la comunidad Geo Army.';
+        statusOnly.hidden = false;
+        return;
+      }
+
+      statusOnly.hidden = true;
+    }
+
+    async function cargarComunidadFortnite() {
+      const client =
+        window.GeoArmyAccount &&
+        window.GeoArmyAccount.client
+          ? window.GeoArmyAccount.client
+          : null;
+
+      if (!client) return;
+      fnReviewClient = client;
+
+      try {
+        const [deliveriesRes, reviewsRes] = await Promise.all([
+          client.rpc('public_fortnite_deliveries_v1', { p_limit: 8 }),
+          client.rpc('public_fortnite_reviews_v1', { p_limit: 12 }),
+        ]);
+
+        if (!deliveriesRes.error) {
+          renderFortniteDeliveries(deliveriesRes.data || []);
+        }
+
+        if (!reviewsRes.error) {
+          renderFortniteReviews(reviewsRes.data || []);
+        }
+      } catch (e) {
+        console.warn('[FORTNITE COMMUNITY] No se pudo cargar contenido público', e);
+      }
+
+      try {
+        const sessionRes = await client.auth.getSession();
+        const session =
+          sessionRes &&
+          sessionRes.data &&
+          sessionRes.data.session;
+
+        if (!session) {
+          renderFnReviewEligibility([]);
+          return;
+        }
+
+        const eligibleRes = await client.rpc('my_eligible_fortnite_reviews_v1');
+
+        if (eligibleRes.error) {
+          console.warn('[FORTNITE REVIEWS] No se pudo cargar elegibilidad', eligibleRes.error);
+          return;
+        }
+
+        renderFnReviewEligibility(eligibleRes.data || []);
+      } catch (e) {
+        console.warn('[FORTNITE REVIEWS] Error cargando elegibilidad', e);
+      }
+    }
+
+    async function enviarResenaFortnite() {
+      const submit = $('fnReviewSubmit');
+      const select = $('fnReviewFulfillment');
+      const text = $('fnReviewText');
+      const formMsg = $('fnReviewFormMsg');
+
+      if (!fnReviewClient || !submit || !select || !text || !formMsg) return;
+
+      const fulfillmentId = select.value;
+      const reviewText = text.value.trim();
+
+      if (!fulfillmentId) {
+        formMsg.textContent = 'Selecciona un regalo entregado.';
+        return;
+      }
+
+      if (reviewText.length < 3 || reviewText.length > 500) {
+        formMsg.textContent = 'La reseña debe tener entre 3 y 500 caracteres.';
+        return;
+      }
+
+      submit.disabled = true;
+      formMsg.textContent = 'Enviando reseña…';
+
+      try {
+        const res = await fnReviewClient.rpc('submit_my_fortnite_review_v1', {
+          p_fulfillment_id: fulfillmentId,
+          p_rating: fnReviewRating,
+          p_review_text: reviewText,
+        });
+
+        if (res.error) {
+          console.warn('[FORTNITE REVIEWS] Error enviando reseña', res.error);
+          formMsg.textContent = 'No se pudo enviar la reseña. Intenta nuevamente.';
+          return;
+        }
+
+        text.value = '';
+        formMsg.textContent = '✓ Reseña enviada. Está pendiente de aprobación.';
+        await cargarComunidadFortnite();
+      } catch (e) {
+        console.warn('[FORTNITE REVIEWS] Excepción enviando reseña', e);
+        formMsg.textContent = 'No se pudo enviar la reseña. Intenta nuevamente.';
+      } finally {
+        submit.disabled = false;
+      }
+    }
+
+    function configurarResenasFortnite() {
+      document.querySelectorAll('#fnReviewStars button').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          setFnReviewStars(Number(btn.dataset.rating));
+        });
+      });
+
+      $('fnReviewSubmit')?.addEventListener('click', enviarResenaFortnite);
+
+      document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(cargarComunidadFortnite, 0);
+      });
+    }
+
+    configurarResenasFortnite();
 
     async function init() {
       aplicarEstadoCompraGcoins();
