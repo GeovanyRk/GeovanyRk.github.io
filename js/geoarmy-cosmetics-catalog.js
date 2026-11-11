@@ -120,6 +120,36 @@
     surfaces: { bar: true, ranking: true, card: true }
   });
 
+  // ---------- Familia Geo Army Plus (maqueta visual) ----------
+  // plus_emerald       aspecto de Geo Army Plus: marco esmeralda aprobado por Geo (imagen real, assets/cosmetics/plus-emerald/frame.png) con su placa «PLUS» incluida. Solo se muestra si el servidor devuelve este código.
+  // normal_gray_orange aspecto NORMAL con tema gris/negro/naranja (sin marco, sin distintivo). Se pinta si el servidor lo devuelve o, SI se activa
+  //                    GEOARMY_COSMETICS_DEFAULT = 'normal_gray_orange' en js/geoarmy-config.js, a quien el servidor confirma sin apariencia (código null).
+  //                    Sin esa línea los usuarios sin código siguen viéndose exactamente igual que siempre.
+  // Quién tiene Plus lo decide el sistema de membresía (suscripción activa de Twitch), NO este archivo. VIP + Plus = solo VIP (lo resuelve el servidor).
+  define({
+    id: 'plus_emerald',
+    label: 'Plus esmeralda',
+    sr: 'Plus',
+    cls: ['gcos-plus'],
+    css: 'css/cosmetics/plus-emerald.css',
+    rev: 4,
+    frame: { src: 'assets/cosmetics/plus-emerald/frame.png', scale: 1.405, anchorY: 0.701, animateInCard: false },
+    badge: null,                                  // la placa «PLUS» YA viene dentro de la imagen del marco (aprobada por Geo): no se añade otra
+    colors: { accent: '#19d98b', accent2: '#7dffc6', ink: '#04140d', text: '#e9fff6' },
+    surfaces: { bar: true, ranking: true, card: true }
+  });
+  define({
+    id: 'normal_gray_orange',
+    label: 'Normal gris y naranja',
+    sr: '',
+    cls: ['gcos-normal'],
+    css: 'css/cosmetics/normal-gray-orange.css',
+    rev: 1,
+    badge: null,
+    colors: { accent: '#ff7a2f', accent2: '#ffb84a', ink: '#14161b', text: '#e6e9f2' },
+    surfaces: { bar: true, ranking: true, card: true }
+  });
+
   // ---------- Apariencias de PRUEBA (solo equipo local) ----------
   // Si la página corre en un equipo local (archivo / localhost / 127.0.0.1 / *.local) y existe window.GEOARMY_COSMETICS_TEST_DEFS
   // (lista de definiciones), se registran marcadas como testOnly. En geoarmy.tv se ignora siempre. Ninguna página ni archivo de la web
