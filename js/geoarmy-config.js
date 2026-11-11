@@ -41,4 +41,4 @@ window.GEOARMY_COSMETICS_SIMULATION = false;
 // GEOARMY_COSMETICS_REV: revisión de los archivos de APARIENCIAS (catálogo, adaptador, hoja común dinámica y recursos de cada diseño).
 //   Es el ÚNICO número que hay que subir (+1) en cada publicación que añada o cambie una apariencia: así todos los visitantes piden
 //   archivos nuevos y coherentes entre sí. Cómo y cuándo: GUIA_ANADIR_UN_DISENO.md (sección «Versión y caché»).
-window.GEOARMY_COSMETICS_REV = 2;
+window.GEOARMY_COSMETICS_REV = 3;
