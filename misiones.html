@@ -28,6 +28,8 @@
        la correccion de [hidden] tambien estan ahi, acotadas a esta pagina.
        =================================================================== -->
   <link rel="stylesheet" href="css/misiones-v4.css?v=4a1"/>
+  <!-- Misión diaria Plus (tarjeta aparte): solo presentación, archivo propio. -->
+  <link rel="stylesheet" href="css/misiones-plus-daily.css?v=1"/>
 </head>
 <body>
 
@@ -143,6 +145,22 @@
          que la RPC ya devuelve resuelta. -->
     <div class="ms-wrap" id="missionsWrap">
       <div id="msClaimNotice" class="ms-claim-notice" role="status" aria-live="polite" hidden></div>
+      <!-- MISIÓN DIARIA PLUS (G-Coins) — tarjeta SEPARADA: NO es una misión de XP y no sale de my_missions_status().
+           Oculta mientras no haya resultado o la misión esté apagada. El estado lo decide el SERVIDOR (js/geoarmy-plus-daily.js solo lo
+           repite); aquí no se calcula ni acredita nada. Textos con textContent. -->
+      <section class="ms-plus-daily" id="msPlusDaily" data-state="idle" hidden aria-labelledby="msPlusDailyTitle">
+        <div class="ms-pd-icon" aria-hidden="true"><img src="gcoin-icon.png" alt="" width="30" height="30" onerror="this.hidden=true"/></div>
+        <div class="ms-pd-body">
+          <div class="ms-pd-top">
+            <h2 class="ms-pd-title" id="msPlusDailyTitle">Misión diaria Plus</h2>
+            <span class="ms-pd-badge">Plus</span>
+          </div>
+          <p class="ms-pd-desc">Entra a Geo Army con tu sesión iniciada y recibe 10 G-Coins una vez al día. Se reinicia a medianoche, hora de Nueva York.</p>
+          <p class="ms-pd-status" id="msPlusDailyStatus" role="status" aria-live="polite"></p>
+          <p class="ms-pd-sub" id="msPlusDailySub"></p>
+          <button type="button" class="ms-pd-btn" id="msPlusDailyRetry" hidden>Reintentar</button>
+        </div>
+      </section>
       <div id="msList" class="ms-grid">
         <div class="ms-state">Cargando…</div>
       </div>
@@ -849,6 +867,78 @@
     document.addEventListener('geoarmy:daily-visit-claimed', function () {
       loadMissions();
     });
+  })();
+  </script>
+
+  <!-- Misión diaria Plus (G-Coins): SOLO pinta el estado que publica js/geoarmy-plus-daily.js (el reclamo automático vive allí y lo carga
+       js/geoarmy-account.js cuando GEOARMY_PLUS_DAILY_ENABLED === true). Independiente de las misiones de XP: no usa my_missions_status,
+       claim_daily_visit ni su evento. Con el interruptor apagado esta tarjeta no aparece nunca. -->
+  <script>
+  (function () {
+    'use strict';
+    if (window.GEOARMY_PLUS_DAILY_ENABLED !== true) return;
+    var card = document.getElementById('msPlusDaily');
+    var statusEl = document.getElementById('msPlusDailyStatus');
+    var subEl = document.getElementById('msPlusDailySub');
+    var retryBtn = document.getElementById('msPlusDailyRetry');
+    if (!card || !statusEl || !subEl || !retryBtn) return;
+    var tick = null;
+
+    function resetText(iso) {
+      var ms = Date.parse(iso) - Date.now();
+      if (!isFinite(ms) || ms <= 0) return 'Se reinicia a medianoche (hora de Nueva York).';
+      var mins = Math.max(1, Math.ceil(ms / 60000));
+      var h = Math.floor(mins / 60), m = mins % 60;
+      return 'Vuelve mañana: se reinicia a medianoche (hora de Nueva York), en ' + (h > 0 ? h + ' h ' : '') + m + ' min.';
+    }
+    function stopTick() { if (tick) { clearInterval(tick); tick = null; } }
+
+    function render(s) {
+      s = s || {};
+      var phase = s.phase;
+      stopTick();
+      retryBtn.hidden = true; retryBtn.disabled = false;
+      if (phase === 'idle' || phase === 'hidden' || !phase) { card.hidden = true; card.dataset.state = 'idle'; return; }
+      if (phase === 'checking') {
+        // Solo se muestra «comprobando» si la tarjeta ya estaba visible (evita un parpadeo cuando la misión está apagada).
+        if (card.hidden) return;
+        statusEl.textContent = 'Comprobando tu misión diaria…'; subEl.textContent = ''; card.dataset.state = 'checking'; return;
+      }
+      card.hidden = false; card.dataset.state = phase;
+      var amount = typeof s.amount === 'number' ? s.amount : 10;
+      if (phase === 'granted') {
+        statusEl.textContent = s.fresh ? ('🎉 ¡+' + amount + ' G-Coins acreditadas!') : ('Hoy ya se acreditaron tus ' + amount + ' G-Coins.');
+        subEl.textContent = resetText(s.nextResetAt);
+        tick = setInterval(function () { subEl.textContent = resetText(s.nextResetAt); }, 60000);
+      } else if (phase === 'already_claimed') {
+        statusEl.textContent = 'Ya recibiste tus ' + amount + ' G-Coins de hoy.';
+        subEl.textContent = resetText(s.nextResetAt);
+        tick = setInterval(function () { subEl.textContent = resetText(s.nextResetAt); }, 60000);
+      } else if (phase === 'plus_required') {
+        statusEl.textContent = 'Esta misión es exclusiva para miembros Plus.';
+        subEl.textContent = 'Con una suscripción activa al canal se desbloquea automáticamente.';
+      } else if (phase === 'unconfirmed') {
+        // Resultado DESCONOCIDO: nunca se dice «no se cobró». Se comprueba de nuevo y se puede reintentar sin riesgo de pago doble.
+        statusEl.textContent = (typeof s.message === 'string' && s.message) ? s.message : 'No pudimos confirmar tu reclamo. Lo comprobaremos de nuevo; también puedes reintentar.';
+        subEl.textContent = s.autoRetry ? 'Comprobando de nuevo automáticamente…' : 'Pulsa «Reintentar» para comprobarlo ahora.';
+        retryBtn.hidden = false;
+      } else { card.hidden = true; }
+    }
+
+    retryBtn.addEventListener('click', function () {
+      var api = window.GeoArmyPlusDaily;
+      if (!api || typeof api.retry !== 'function') return;
+      retryBtn.disabled = true;
+      api.retry();
+    });
+
+    // El módulo se carga de forma diferida: se espera (hasta ~10 s) a que exista y luego se escucha SU estado (actual + cambios).
+    var tries = 0;
+    (function attach() {
+      var api = window.GeoArmyPlusDaily;
+      if (api && typeof api.subscribe === 'function' && api.isEnabled && api.isEnabled()) { api.subscribe(render); return; }
+      if (++tries < 40) setTimeout(attach, 250);
+    })();
   })();
   </script>
 </body>
