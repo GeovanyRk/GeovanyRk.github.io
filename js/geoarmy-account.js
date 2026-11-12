@@ -89,6 +89,20 @@
     } catch (e) { /* la sincronización nunca debe romper la cuenta */ }
   })();
 
+  // ===== Misión diaria Plus de G-Coins (reclamo automático) — carga diferida, apagada por defecto =====
+  // Solo se carga si js/geoarmy-config.js trae GEOARMY_PLUS_DAILY_ENABLED = true. El módulo vive aparte y NO toca nada de lo de arriba
+  // ni las misiones de XP (no usa claim_daily_visit ni my_missions_status): reclama por la Edge Function `plus-daily-gcoin-claim`.
+  (function loadPlusDailyModule() {
+    try {
+      if (window.GEOARMY_PLUS_DAILY_ENABLED !== true || window.GeoArmyPlusDaily) return;
+      var s = document.createElement('script');
+      s.src = siteBase() + 'js/geoarmy-plus-daily.js?v=1';
+      s.async = true;
+      s.onerror = function () { console.warn('[geoarmy-account] no se pudo cargar js/geoarmy-plus-daily.js'); };
+      document.head.appendChild(s);
+    } catch (e) { /* la misión diaria nunca debe romper la cuenta */ }
+  })();
+
   // ===== Cosméticos (marco VIP) — carga diferida, apagada por defecto =====
   // Solo se carga si js/geoarmy-config.js trae GEOARMY_COSMETICS_ENABLED = true (y si la página no lo incluyó ya con
   // su propio <script>). El módulo es solo presentación y vive aparte; aquí solo hay 4 enganches mínimos con

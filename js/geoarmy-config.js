@@ -42,3 +42,10 @@ window.GEOARMY_COSMETICS_SIMULATION = false;
 //   Es el ÚNICO número que hay que subir (+1) en cada publicación que añada o cambie una apariencia: así todos los visitantes piden
 //   archivos nuevos y coherentes entre sí. Cómo y cuándo: GUIA_ANADIR_UN_DISENO.md (sección «Versión y caché»).
 window.GEOARMY_COSMETICS_REV = 3;
+
+// ===== Misión diaria Plus de G-Coins (reclamo automático + tarjeta en Misiones) =====
+// APAGADA por defecto. Pásala a true SOLO cuando plus_daily_gcoin.sql esté instalado y verificado, la Edge Function
+// `plus-daily-gcoin-claim` esté desplegada y el interruptor de la base (plus_config.daily_gcoin_enabled) esté en 1.
+// Mientras no sea exactamente true no se carga js/geoarmy-plus-daily.js y la tarjeta de Misiones no aparece.
+// PRUEBA CONTROLADA: al pasarla a true, la BASE sigue filtrando (plus_config.daily_gcoin_test_only = 1): solo la cuenta de prueba cobra; los demás reciben 'disabled' y no ven nada.
+window.GEOARMY_PLUS_DAILY_ENABLED = true;
