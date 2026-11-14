@@ -208,6 +208,7 @@
   }(window,document,'betterstack','7K7evcpjhiCjpoR65gxKSPhW');
   betterstack('init', { environment: 'production' });
 </script>
+  <link rel="stylesheet" href="css/plus-pin.css"/>
 </head>
 <body>
 <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
@@ -336,6 +337,16 @@
           <a href="comunidad.html" class="ga-welcome-pin" id="gaWelcomePin" style="--mx:75.0%; --my:45.5%;" aria-label="Conoce la comunidad Geo Army">
             <span class="v3-marker-label ga-welcome-pin__label">Comunidad</span>
             <span class="v3-marker-icon ga-welcome-pin__symbol" aria-hidden="true">✦</span>
+          </a>
+          <!-- Geo Army Plus: acceso FUERA del planeta, en el espacio libre arriba-izquierda (entre One Piece y el globo). Sus --mx/--my se miden sobre
+               el mismo recuadro del globo que los demás pins, así que escala con él en escritorio y móvil. Va con `hidden` y solo se muestra con GEOARMY_PLUS_PAGE_ENABLED = true
+               (js/geoarmy-plus-pin.js). El estado (abierto / bloqueado) lo decide el servidor; este HTML no autoriza nada. -->
+          <a href="plus.html" class="ga-plus-pin" id="gaPlusPin" hidden style="--mx:7.6%; --my:18.1%;" aria-label="Geo Army Plus">
+            <span class="v3-marker-label ga-plus-pin__label">Geo Army Plus</span>
+            <span class="v3-marker-icon ga-plus-pin__gem" aria-hidden="true">
+              <svg viewBox="0 0 32 32" fill="none"><path d="M16 2.5 28 12 16 29.5 4 12Z" fill="url(#gaPlusG)" stroke="#7dffc6" stroke-width="1.4" stroke-linejoin="round"/><path d="M4 12h24M11 12 16 2.5 21 12M11 12l5 17.5L21 12" stroke="#c9ffe6" stroke-opacity=".7" stroke-width="1" stroke-linejoin="round"/><defs><linearGradient id="gaPlusG" x1="6" y1="3" x2="26" y2="29"><stop stop-color="#5cffb8"/><stop offset="1" stop-color="#0a8f5c"/></linearGradient></defs></svg>
+              <span class="ga-plus-pin__lock"><svg viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="1.6" fill="currentColor"/><path d="M5.2 7V5.2a2.8 2.8 0 0 1 5.6 0V7" stroke="currentColor" stroke-width="1.5"/></svg></span>
+            </span>
           </a>
         </div>
         </div>
@@ -614,6 +625,7 @@
   <script src="js/geoarmy-config.js"></script>
   <script src="js/geoarmy-ranks.js"></script>
   <script src="js/geoarmy-account.js"></script>
+  <script src="js/geoarmy-plus-pin.js"></script>
 <script>
   // ===== V3: conecta los marcadores del planeta con el sistema de paneles =====
   // (el nav real .nav-links está oculto y sigue funcionando para móvil/JS;

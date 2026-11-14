@@ -159,6 +159,9 @@
           <p class="ms-pd-status" id="msPlusDailyStatus" role="status" aria-live="polite"></p>
           <p class="ms-pd-sub" id="msPlusDailySub"></p>
           <button type="button" class="ms-pd-btn" id="msPlusDailyRetry" hidden>Reintentar</button>
+          <!-- Con GEOARMY_PLUS_PAGE_ENABLED = true esta tarjeta pasa a ser solo un ACCESO a plus.html (la misión diaria sigue reclamándose SOLA en todas las páginas;
+               esta tarjeta nunca fue la que la reclama). -->
+          <a class="ms-pd-btn ms-pd-link" id="msPlusDailyLink" href="plus.html" hidden>Ir a Geo Army Plus ›</a>
         </div>
       </section>
       <div id="msList" class="ms-grid">
@@ -883,6 +886,10 @@
     var retryBtn = document.getElementById('msPlusDailyRetry');
     if (!card || !statusEl || !subEl || !retryBtn) return;
     var tick = null;
+    var linkEl = document.getElementById('msPlusDailyLink');
+    var descEl = card.querySelector('.ms-pd-desc');
+    var titleEl = document.getElementById('msPlusDailyTitle');
+    var pageOn = window.GEOARMY_PLUS_PAGE_ENABLED === true && !!linkEl && !!descEl && !!titleEl;   // página Plus encendida → tarjeta compacta (solo presentación)
 
     function resetText(iso) {
       var ms = Date.parse(iso) - Date.now();
@@ -900,9 +907,21 @@
       retryBtn.hidden = true; retryBtn.disabled = false;
       if (phase === 'idle' || phase === 'hidden' || !phase) { card.hidden = true; card.dataset.state = 'idle'; return; }
       if (phase === 'checking') {
+        if (pageOn) return;   // tarjeta compacta: no hay texto de «comprobando»
         // Solo se muestra «comprobando» si la tarjeta ya estaba visible (evita un parpadeo cuando la misión está apagada).
         if (card.hidden) return;
         statusEl.textContent = 'Comprobando tu misión diaria…'; subEl.textContent = ''; card.dataset.state = 'checking'; return;
+      }
+      if (pageOn) {
+        // Compacta: el estado y el «Reintentar» viven en plus.html. NO se llama al módulo ni se cambia nada del reclamo automático.
+        if (phase !== 'granted' && phase !== 'already_claimed' && phase !== 'unconfirmed' && phase !== 'plus_required') { card.hidden = true; return; }
+        card.hidden = false; card.dataset.state = phase;
+        titleEl.textContent = 'Geo Army Plus';
+        descEl.textContent = phase === 'plus_required'
+          ? 'Misiones exclusivas para suscriptores de Twitch: diaria y semanales con G-Coins.'
+          : 'Tus misiones Plus (la diaria y las semanales) ahora viven en su propia página.';
+        statusEl.textContent = ''; subEl.textContent = ''; linkEl.hidden = false;
+        return;
       }
       card.hidden = false; card.dataset.state = phase;
       var amount = typeof s.amount === 'number' ? s.amount : 10;
