@@ -18,7 +18,7 @@
   },
   "kirbyx01": {
     "usuario": "kirbyx01",
-    "ganado": 33845,
+    "ganado": 33865,
     "gastado": 23000,
     "operaciones": {
       "aac1be8a55971a13f18bfd83cd47d5378fad27cfc96130152526f417220ad436": {
@@ -79,7 +79,7 @@
   },
   "fedriquechumpi": {
     "usuario": "fedriquechumpi",
-    "ganado": 77860,
+    "ganado": 77880,
     "gastado": 73800,
     "operaciones": {
       "2ab6a2ba52b06060273e29a519392b1fe26480d5940cc47b7d486e9495c41326": {
@@ -271,7 +271,7 @@
   },
   "joseangelyoon_rk": {
     "usuario": "JoseAngelYoon_Rk",
-    "ganado": 2220,
+    "ganado": 2240,
     "gastado": 0
   }
 }
