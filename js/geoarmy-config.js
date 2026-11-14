@@ -49,3 +49,10 @@ window.GEOARMY_COSMETICS_REV = 3;
 // Mientras no sea exactamente true no se carga js/geoarmy-plus-daily.js y la tarjeta de Misiones no aparece.
 // PRUEBA CONTROLADA: al pasarla a true, la BASE sigue filtrando (plus_config.daily_gcoin_test_only = 1): solo la cuenta de prueba cobra; los demás reciben 'disabled' y no ven nada.
 window.GEOARMY_PLUS_DAILY_ENABLED = true;
+
+// ===== Geo Army Plus: PIN del mundo + PÁGINA EXCLUSIVA (plus.html) =====
+// APAGADA por defecto. Pásala a true SOLO cuando estén instaladas y verificadas las funciones de plus_page.sql
+// (geo_plus_my_access_v1 / geo_plus_hub_v1) y publicados plus.html, css/plus-pin.css, css/plus-page.css, js/geoarmy-plus-pin.js y js/geoarmy-plus-page.js.
+// Mientras no sea exactamente true: el pin del mundo permanece oculto, plus.html muestra «Muy pronto» sin preguntar nada al servidor y la tarjeta de Misiones queda como hoy.
+// No cambia la misión diaria (GEOARMY_PLUS_DAILY_ENABLED) ni su reclamo automático.
+window.GEOARMY_PLUS_PAGE_ENABLED = false;
