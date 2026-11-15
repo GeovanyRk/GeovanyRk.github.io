@@ -124,7 +124,14 @@
   "cristiandan89": {
     "usuario": "cristiandan89",
     "ganado": 10175,
-    "gastado": 0
+    "gastado": 10000,
+    "operaciones": {
+      "50419f0708504a59beb53b735c9996074f55852b22594f47739406f84af9bf40": {
+        "puntos": 10000,
+        "saldoRestante": 175,
+        "en": "2026-11-15T23:20:59.165Z"
+      }
+    }
   },
   "forsaken453": {
     "usuario": "forsaken453",
