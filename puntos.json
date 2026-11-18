@@ -284,6 +284,13 @@
   "joseangelyoon_rk": {
     "usuario": "JoseAngelYoon_Rk",
     "ganado": 3460,
-    "gastado": 0
+    "gastado": 2000,
+    "operaciones": {
+      "b7a91461bc80444ca61cb295d0ef70ac7f5255bc4fc0b1a7df9a6c4b1b51b77a": {
+        "puntos": 2000,
+        "saldoRestante": 1460,
+        "en": "2026-11-18T23:48:16.071Z"
+      }
+    }
   }
 }
