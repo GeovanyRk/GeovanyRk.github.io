@@ -40,7 +40,7 @@
   },
   "matidk_0": {
     "usuario": "matidk_0",
-    "ganado": 139745,
+    "ganado": 139765,
     "gastado": 138750,
     "operaciones": {
       "4d24a288dbabe0afe605280e2532581e4c81569dc5699b0bb7b77f4e61ac8ea2": {
@@ -111,7 +111,7 @@
   },
   "kiro_hyer": {
     "usuario": "Kiro_Hyer",
-    "ganado": 13035,
+    "ganado": 13055,
     "gastado": 10500,
     "operaciones": {
       "b58d0b8e4907bd80d2b148f25e4f64b078764d3719e50d9ba105936523ef1667": {
@@ -283,7 +283,7 @@
   },
   "joseangelyoon_rk": {
     "usuario": "JoseAngelYoon_Rk",
-    "ganado": 3370,
+    "ganado": 3390,
     "gastado": 0
   }
 }
