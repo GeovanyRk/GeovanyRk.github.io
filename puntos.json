@@ -112,12 +112,17 @@
   "kiro_hyer": {
     "usuario": "Kiro_Hyer",
     "ganado": 13275,
-    "gastado": 10500,
+    "gastado": 12500,
     "operaciones": {
       "b58d0b8e4907bd80d2b148f25e4f64b078764d3719e50d9ba105936523ef1667": {
         "puntos": 2000,
         "saldoRestante": 495,
         "en": "2026-11-13T00:44:49.781Z"
+      },
+      "54f6fa87a09aeac7ed6aa78b8b567eeaa524036018f3775e9c42c6cafac25ec8": {
+        "puntos": 2000,
+        "saldoRestante": 775,
+        "en": "2026-11-19T00:50:46.692Z"
       }
     }
   },
