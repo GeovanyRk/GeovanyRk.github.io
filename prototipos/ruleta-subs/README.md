@@ -22,7 +22,9 @@ La muestra usa los importes observados en los archivos de las ruletas originales
 
 `redemption-policy.cjs` modela la validación de suscripción, el máximo de tres y la interpretación del día en la zona America/New_York. Si la suscripción no se puede verificar o el juego no está claro, el canje espera revisión. No reserva huecos ni reembolsa puntos: son tareas pendientes de la integración real.
 
-`node --test test-display.cjs test-game-input.cjs test-draw-model.cjs test-redemption-policy.cjs` prueba la vista, la elección de juego y la lógica aislada. No prueba el sistema de canjes, la concurrencia ni las billeteras.
+`twitch-reward.cjs` prepara la creación de una recompensa desactivada mediante la API de Twitch, con el nombre de trabajo «Ruleta de Subs». Solo reutiliza una recompensa con el mismo nombre si la aplicación puede gestionarla y su configuración es idéntica. No se ha conectado a Twitch ni se ha creado la recompensa; sus pruebas usan un cliente simulado.
+
+`node --test test-display.cjs test-game-input.cjs test-draw-model.cjs test-redemption-policy.cjs test-twitch-reward.cjs` prueba la vista, las reglas aisladas y la preparación de la recompensa con respuestas simuladas. No prueba la API real de Twitch, el sistema de canjes, la concurrencia ni las billeteras.
 
 ## Pendiente antes de usar
 
