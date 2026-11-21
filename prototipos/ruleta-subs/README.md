@@ -20,10 +20,12 @@ La muestra usa los importes observados en los archivos de las ruletas originales
 
 `draw-model.cjs` es un modelo aislado del sorteo y la racha, con aleatoriedad segura en Node y probabilidades comprobables. No es un backend terminado: no guarda estados, no serializa intentos simultáneos y no acredita billeteras.
 
-`node --test test-display.cjs test-game-input.cjs test-draw-model.cjs` prueba la vista, la elección de juego y la lógica aislada. No prueba el sistema de canjes, la concurrencia ni las billeteras.
+`redemption-policy.cjs` modela la validación de suscripción, el máximo de tres y la interpretación del día en la zona America/New_York. Si la suscripción no se puede verificar o el juego no está claro, el canje espera revisión. No reserva huecos ni reembolsa puntos: son tareas pendientes de la integración real.
+
+`node --test test-display.cjs test-game-input.cjs test-draw-model.cjs test-redemption-policy.cjs` prueba la vista, la elección de juego y la lógica aislada. No prueba el sistema de canjes, la concurrencia ni las billeteras.
 
 ## Pendiente antes de usar
 
 Crear y configurar la recompensa de Twitch, capturar su identificador y el texto elegido, validar la condición de suscriptor, integrar la acción autorizada del moderador, implementar un registro durable idempotente y la garantía bajo concurrencia, acreditar con las funciones reales de billetera y deuda en la misma transacción, conectar el resultado confirmado a OBS y presentar el historial. Definir también el tratamiento de canjes cancelados, usuarios sin perfil, texto inválido y fallos. Probar toda la cadena antes de activar.
 
-Twitch ofrece el límite de canjes por persona **por directo**, no una garantía de tres por día de calendario. La integración debe comprobar el día por su cuenta y considerar también solicitudes pendientes y cancelaciones. Si una solicitud no puede aceptarse, debe poder devolverse el canje sin dejar al usuario sin puntos; para modificar su estado mediante la API, Twitch exige que la misma aplicación haya creado la recompensa y tenga el permiso correspondiente. Verificar el mecanismo real y la zona horaria antes de habilitarlo.
+Twitch ofrece el límite de canjes por persona **por directo**, no una garantía de tres por día de calendario. La integración debe comprobar el día por su cuenta y considerar también solicitudes pendientes y cancelaciones. Si una solicitud no puede aceptarse, debe poder devolverse el canje sin dejar al usuario sin puntos; para modificar su estado mediante la API, Twitch exige que la misma aplicación haya creado la recompensa y tenga el permiso correspondiente. Verificar el mecanismo real antes de habilitarlo.
