@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Overwatch</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Boogaloo&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<script>
+var userOptions = {
+  useDefaultSounds: "yes",
+  audioVolume: 35,
+  hideTextArea: "no",
+  topTextLine: "",
+  bottomTextLine: "¡Esto es para ti!",
+  loseTextLine: "¡SIGUE INTENTANDO!",
+  verticalSpacing: 0
+};
+
+// ============================================================
+//   CONFIGURACIÓN DE PREMIOS Y PROBABILIDADES  (edita aquí)
+// ============================================================
+//  icon  = posición del símbolo en assets/icon-sheet.png contando
+//          DESDE ARRIBA empezando en 0. Tu sheet de OW: 500=0, 1500=1, 1000=2.
+//  oneIn = cada cuántas tiradas sale ese premio (1 de cada N).
+//          Número más grande = más raro.
+var PRIZES = [
+  { name: "500 OW Coins",  icon: 0, oneIn: 15   },  // el más común   (1ro de arriba)
+  { name: "1000 OW Coins", icon: 2, oneIn: 1000 },  // rarísimo       (3ro de arriba)
+  { name: "1500 OW Coins", icon: 1, oneIn: 5000 }   // casi nunca     (2do de arriba)
+];
+
+// Probabilidad (en tiradas PERDIDAS) de mostrar 2 iguales — solo emoción visual,
+// NO da premio. 0.25 = 25% de las perdidas muestran un "casi casi".
+var TEASE_CHANCE = 0.25;
+
+// ============================================================
+//   TOPE DE GANADORES POR STREAM  (edita aquí)
+// ============================================================
+//  Máximo de premios que se reparten por stream. Después de ese número,
+//  todas las tiradas pierden hasta el siguiente stream.
+//  Se reinicia SOLO cada día. Reinicio manual: tecla "R" (usando
+//  "Interactuar" en OBS).
+var MAX_WINNERS_PER_STREAM = 1;
+
+var streamWins = (function(){
+  var KEY = "geo_ow_winners";
+  function today(){ var d=new Date(); return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate(); }
+  function read(){
+    try {
+      var o = JSON.parse(localStorage.getItem(KEY));
+      if(!o || o.date !== today()) return { date: today(), count: 0 }; // reset por día/stream
+      return o;
+    } catch(e){ return { date: today(), count: 0 }; }
+  }
+  function write(o){ try { localStorage.setItem(KEY, JSON.stringify(o)); } catch(e){} }
+  return {
+    canWin: function(){ return read().count < MAX_WINNERS_PER_STREAM; },
+    add:    function(){ var o = read(); o.count++; o.date = today(); write(o); },
+    reset:  function(){ write({ date: today(), count: 0 }); console.log("[Ruleta] Ganadores reiniciados."); }
+  };
+})();
+
+// Reinicio manual con la tecla "R" (requiere "Interactuar" en OBS)
+document.addEventListener("keydown", function(e){
+  if(e.key === "r" || e.key === "R") streamWins.reset();
+});
+</script>
+
+<style type="text/css">
+* { box-sizing: border-box; }
+
+html { font-family: 'Boogaloo', sans-serif; }
+
+/* Fondo transparente (overlay de OBS) */
+body {
+  background: transparent;
+}
+
+#holder {
+  width: 100%;
+  height: 300px;
+  position: absolute;
+  left: 0;
+  top: 350px;
+  opacity: 0;
+}
+
+#reels { width: 580px; height: 260px; position: absolute; left: 50%; }
+
+/* CARRETES — fondo navy casi negro, las cartas traen su propio ambiente */
+.reel {
+  width: 180px;
+  height: 260px;
+  position: relative;
+  margin-right: 20px;
+  float: left;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #050a14;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.9);
+}
+.reel:last-child   { margin-right: 0; }
+
+@keyframes fnRainbow {
+  0%, 100% { background: #08162c; }
+}
+
+#game {
+  width: 580px;
+  height: 260px;
+  position: absolute;
+  left: 50%;
+  margin-left: -290px;
+  z-index: 100;
+}
+
+#overlays {
+  z-index: 999;
+  width: 580px;
+  height: 260px;
+  position: absolute;
+  left: 50%;
+}
+
+.overlaySection {
+  position: relative;
+  width: 180px;
+  height: 260px;
+  float: left;
+  margin-right: 20px;
+}
+.overlaySection:last-child { margin-right: 0; }
+
+/* Borde — late de oro (Sombrero de Paja) a azul mar */
+.outline {
+  width: 181px;
+  height: 262px;
+  background: none;
+  z-index: 99;
+  position: absolute;
+  top: -1px;
+  left: 0;
+  border: 2px solid #ffc233;
+  box-sizing: border-box;
+  border-radius: 8px;
+  animation: fnBorderColor 2.4s linear infinite;
+  pointer-events: none;
+}
+.overlaySection:nth-child(1) .outline { animation-delay: 0s; }
+.overlaySection:nth-child(2) .outline { animation-delay: .5s; }
+.overlaySection:nth-child(3) .outline { animation-delay: 1s; }
+
+@keyframes fnBorderColor {
+  0%   { border-color: #ffc233; box-shadow: 0 0 10px rgba(255,194,51,0.9), 0 0 26px rgba(255,194,51,0.35); }
+  50%  { border-color: #3fb6ff; box-shadow: 0 0 10px rgba(63,182,255,0.9), 0 0 26px rgba(63,182,255,0.35); }
+  100% { border-color: #ffc233; box-shadow: 0 0 10px rgba(255,194,51,0.9), 0 0 26px rgba(255,194,51,0.35); }
+}
+
+/* Esquinas — corchetes oro / azul mar */
+.outlineOutter {
+  width: 189px;
+  height: 270px;
+  background: none;
+  z-index: 90;
+  position: absolute;
+  top: -5px;
+  left: -4px;
+  border-radius: 10px;
+  pointer-events: none;
+  border: 1px solid rgba(255,194,51,0.18);
+}
+.outlineOutter::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 24px; height: 24px;
+  border-top: 3px solid #ffc233;
+  border-left: 3px solid #ffc233;
+  border-radius: 4px 0 0 0;
+  box-shadow: -1px -1px 10px rgba(255,194,51,0.9);
+}
+.outlineOutter::after {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 24px; height: 24px;
+  border-bottom: 3px solid #3fb6ff;
+  border-right: 3px solid #3fb6ff;
+  border-radius: 0 0 4px 0;
+  box-shadow: 1px 1px 10px rgba(63,182,255,0.9);
+}
+
+.shadowReel {
+  width: 180px; height: 260px;
+  position: absolute; overflow: hidden;
+  border-radius: 8px; box-sizing: border-box;
+  z-index: 2; pointer-events: none;
+}
+.shortShadow { z-index: 2; position: absolute; height: 60px;  width: 100%; }
+.longShadow  { z-index: 1; position: absolute; height: 110px; width: 100%; }
+.shortShadow.top    { border-radius: 8px 8px 0 0; top: 0;    background: linear-gradient(180deg, rgba(0,0,0,.55) 0%, transparent 100%); }
+.longShadow.top     { border-radius: 8px 8px 0 0; top: 0;    background: linear-gradient(180deg, rgba(0,0,0,.15) 0%, transparent 100%); }
+.shortShadow.bottom { border-radius: 0 0 8px 8px; bottom: 0; background: linear-gradient(0deg,   rgba(0,0,0,.55) 0%, transparent 100%); }
+.longShadow.bottom  { border-radius: 0 0 8px 8px; bottom: 0; background: linear-gradient(0deg,   rgba(0,0,0,.15) 0%, transparent 100%); }
+
+#below { position: absolute; width: 100%; height: 260px; left: 0; top: 0; }
+#above { position: absolute; width: 100%; height: 260px; left: 0; top: 0; }
+
+/* Logo arriba (imagen One Piece "OVERWATCH ¡ESTO ES PARA TI!") */
+#fnLogo {
+  position: absolute;
+  top: -270px;
+  left: 50%;
+  width: 385px;
+  height: 140px;
+}
+#fnLogoImg {
+  display: block;
+  width: 385px;
+  height: 140px;
+  animation: logoGlow 3.4s ease-in-out infinite;
+}
+/* Brillo suave que respira (oro <-> mar) */
+@keyframes logoGlow {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(255,194,51,0.55)); }
+  50%      { filter: drop-shadow(0 0 14px rgba(63,182,255,0.65)); }
+}
+
+/* Banner mensaje/ganador — navy profundo, borde y texto dorados */
+#winnerName {
+  position: absolute;
+  top: -118px;
+  left: 50%;
+  width: max-content;
+  white-space: nowrap;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  text-align: center;
+  font-size: 28px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 11px 34px;
+  background:
+    linear-gradient(180deg, rgba(8,22,44,0.96) 0%, rgba(4,12,26,0.97) 100%);
+  border: 1px solid #ffc233;
+  border-radius: 3px;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.6),
+    inset 0 0 14px rgba(255,194,51,0.12),
+    0 0 22px rgba(255,194,51,0.30),
+    0 0 40px rgba(63,182,255,0.18);
+  background-clip: padding-box;
+  color: transparent;
+  opacity: 0; /* se muestra solo al terminar el giro (revealResult) */
+}
+#winnerName span {
+  position: relative;
+  background: linear-gradient(180deg, #fff1b8 0%, #ffc233 55%, #ff9d2e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  filter: drop-shadow(0 0 6px rgba(255,194,51,0.6));
+}
+
+#amount {
+ display: none !important;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  position: absolute;
+  top: -152px;
+  left: 50%;
+  width: max-content;
+  white-space: nowrap;
+  padding: 5px 16px;
+  text-align: center;
+  font-size: 14px;
+  background: rgba(8,18,36,0.95);
+  color: #ffc233;
+  border-top: 2px solid #ffc233;
+  border-bottom: 2px solid #ffc233;
+  box-shadow: 0 0 12px rgba(255,194,51,0.5);
+  clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+}
+#amount.gold {
+  color: #fff;
+  border-color: #3fb6ff;
+  box-shadow: 0 0 14px rgba(63,182,255,0.7);
+}
+#amount span { font-size: 12px; position: relative; top: -4px; left: -3px; }
+#winnerName span { position: relative; }
+
+#message {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 22px;
+  letter-spacing: 3px;
+  text-align: center;
+  width: 500px;
+  position: absolute;
+  top: 280px;
+  color: #ffc233;
+  text-shadow: 0 0 15px rgba(255,194,51,0.8), 0 0 30px rgba(255,194,51,0.3);
+}
+
+/* RAYS — oro, azul mar y rojo del pañuelo */
+#rays {
+  opacity: 0;
+  position: absolute;
+  left: 50%; top: 0;
+  margin-left: -290px;
+  width: 580px; height: 260px;
+  animation: raySpin 40s linear infinite;
+}
+.ray {
+  width: 340px; height: 55px;
+  position: absolute; top: 50%; margin-top: -27px; left: 50%;
+  transform-origin: left 50%;
+  background: linear-gradient(to left, rgba(255,194,51,0), rgba(255,194,51,0.6));
+  filter: blur(7px);
+}
+.ray:nth-child(2)  { transform: rotate(30deg);  background: linear-gradient(to left, rgba(63,182,255,0), rgba(63,182,255,0.55)); }
+.ray:nth-child(3)  { transform: rotate(60deg);  background: linear-gradient(to left, rgba(255,194,51,0), rgba(255,194,51,0.55)); }
+.ray:nth-child(4)  { transform: rotate(90deg);  background: linear-gradient(to left, rgba(255,194,51,0), rgba(255,194,51,0.6)); }
+.ray:nth-child(5)  { transform: rotate(120deg); background: linear-gradient(to left, rgba(230,57,70,0), rgba(230,57,70,0.55)); }
+.ray:nth-child(6)  { transform: rotate(150deg); background: linear-gradient(to left, rgba(63,182,255,0), rgba(63,182,255,0.55)); }
+.ray:nth-child(7)  { transform: rotate(180deg); background: linear-gradient(to left, rgba(255,194,51,0), rgba(255,194,51,0.6)); }
+.ray:nth-child(8)  { transform: rotate(210deg); background: linear-gradient(to left, rgba(255,194,51,0), rgba(255,194,51,0.55)); }
+.ray:nth-child(9)  { transform: rotate(240deg); background: linear-gradient(to left, rgba(63,182,255,0), rgba(63,182,255,0.55)); }
+.ray:nth-child(10) { transform: rotate(270deg); background: linear-gradient(to left, rgba(255,194,51,0), rgba(255,194,51,0.6)); }
+.ray:nth-child(11) { transform: rotate(300deg); background: linear-gradient(to left, rgba(63,182,255,0), rgba(63,182,255,0.55)); }
+.ray:nth-child(12) { transform: rotate(330deg); background: linear-gradient(to left, rgba(255,194,51,0), rgba(255,194,51,0.55)); }
+
+@keyframes raySpin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+@keyframes boxGlow {
+  0%,100% { box-shadow: 0 0 0px rgba(255,194,51,.8); }
+  50%      { box-shadow: 0 0 50px rgba(255,194,51,0.9); }
+}
+
+.spinner { margin-left: 0; margin-right: 20px; }
+.spinner:nth-child(2) { margin-right: 20px; }
+.spinner:last-child   { margin-right: 0; }
+</style>
+
+<div id="holder">
+  <div id="below">
+    <div id="rays">
+      <div class="ray"></div><div class="ray"></div><div class="ray"></div>
+      <div class="ray"></div><div class="ray"></div><div class="ray"></div>
+      <div class="ray"></div><div class="ray"></div><div class="ray"></div>
+      <div class="ray"></div><div class="ray"></div><div class="ray"></div>
+    </div>
+  </div>
+
+  <div id="app">
+    <div id="overlays">
+      <div class="overlaySection">
+        <div class="outline"></div>
+        <div class="outlineOutter"></div>
+        <div class="shadowReel">
+          <div class="longShadow top"></div><div class="longShadow bottom"></div>
+          <div class="shortShadow top"></div><div class="shortShadow bottom"></div>
+        </div>
+      </div>
+      <div class="overlaySection">
+        <div class="outline"></div>
+        <div class="outlineOutter"></div>
+        <div class="shadowReel">
+          <div class="longShadow top"></div><div class="longShadow bottom"></div>
+          <div class="shortShadow top"></div><div class="shortShadow bottom"></div>
+        </div>
+      </div>
+      <div class="overlaySection">
+        <div class="outline"></div>
+        <div class="outlineOutter"></div>
+        <div class="shadowReel">
+          <div class="longShadow top"></div><div class="longShadow bottom"></div>
+          <div class="shortShadow top"></div><div class="shortShadow bottom"></div>
+        </div>
+      </div>
+    </div>
+    <div id="game"></div>
+    <div id="reels">
+      <div class="reel"></div>
+      <div class="reel"></div>
+      <div class="reel"></div>
+    </div>
+  </div>
+
+  <div id="above">
+    <div id="fnLogo">
+      <img id="fnLogoImg" src="assets/logo-ow.png" alt="Overwatch - ¡Esto es para ti!">
+    </div>
+    <div id="winnerName"></div>
+    <div id="amount"></div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script>
+userOptions.iconSheetUrl = "assets/icon-sheet.png";
+userOptions.cellW = 180;   // ancho de cada carta (= ancho del carrete)
+userOptions.cellH = 260;   // alto de cada carta (= alto del carrete)
+userOptions.showFPS = false;
+
+$("#amount").html(userOptions.topTextLine);
+$("#winnerName").html(userOptions.bottomTextLine);
+
+if(userOptions.hideTextArea == "yes"){ $("#above").remove(); }
+
+var audio;
+
+var generateResult = (function() {
+  var getNum = function(exclude, max) {
+    var num = Math.round(Math.random() * (max-1));
+    if(exclude.indexOf(num) > -1) return getNum(exclude, max);
+    return num;
+  };
+  return function(iconCount, slotCount) {
+    var arr = [];
+    var roll = Math.random();      // 0..1
+    var cumulative = 0;
+    var winningPrize = null;
+
+    // ¿Gana? ¿Qué premio? — según la tabla PRIZES (1 de cada N)
+    for(var p = 0; p < PRIZES.length; p++) {
+      cumulative += 1 / PRIZES[p].oneIn;
+      if(roll < cumulative) { winningPrize = PRIZES[p]; break; }
+    }
+
+    // TOPE: si ya se alcanzó el máximo de ganadores del stream, esta tirada pierde
+    if(winningPrize && !streamWins.canWin()) { winningPrize = null; }
+
+    if(winningPrize) {
+      // GANA: los 3 carretes caen en el mismo símbolo del premio
+      streamWins.add();
+      var ic = Math.min(winningPrize.icon, iconCount - 1);
+      for(var i = 0; i < slotCount; i++) arr.push(ic);
+      window.__GEO_RESULT = { win:true, prize:winningPrize };
+    } else {
+      // NO GANA: nunca salen 3 iguales
+      window.__GEO_RESULT = { win:false, prize:null };
+      if(iconCount > 2 && Math.random() < TEASE_CHANCE) {
+        var num = getNum([], iconCount);   // 2 iguales (casi casi)
+        arr.push(num); arr.push(num);
+        arr.push(getNum(arr, iconCount));  // el 3ro distinto
+      } else {
+        for(var i = 0; i < slotCount; i++) arr.push(getNum(arr, iconCount)); // todos distintos
+      }
+    }
+    return arr;
+  };
+})();
+
+var target = $("#winnerName");
+target.html(target.text().replace(/./g, "<span>$&</span>"));
+
+var animate = function() {
+
+var arraySwap = function(a,i,j){var t=a[i];a[i]=a[j];a[j]=t;return a;};
+
+var shuffleArrayNoAdjecents = (function(){
+  var noAdj=function(a){for(var i=0;i<a.length;i++)if(a[i]===a[i+1]||a[i]===a[i-1])return false;return true;};
+  var swap=function(a,i,d){var t=a[i];if(d==0){a[i]=a[i-1];a[i-1]=t;}else if(d==1){a[i]=a[i+1];a[i+1]=t;}else return swap(a,i,~~Math.round(Math.random()));return a;};
+  var shift=function(a){for(var i=0;i<a.length;i++){if((a[i]===a[i+1]||a[i]===a[i-1])&&i>0&&i<a.length-1)swap(a,i,2);else if(a[i]===a[i-1]&&i<a.length)swap(a,i,0);else if(a[i]===a[i+1]&&i>0)swap(a,i,1);}return a;};
+  return function(a){a=a.sort(function(){return Math.random()>.5;});if(a.length<2)return a;while(!noAdj(a))a=shift(a);return a;};
+})();
+
+class Spinner {
+  constructor(o){this.options=o;}
+  init(){
+    this.canvas=this.options.canvas; this.stage=new createjs.Stage(this.canvas);
+    this.icons=this.options.icons; this.verticalSpacing=this.options.verticalSpacing||0;
+    this.cellW=this.options.cellW; this.cellH=this.options.cellH; this.renderOffset=this.options.renderOffset||0;
+    this.onDone=function(){};
+    this.stage.canvas.height=this.options.spinnerHeight; this.stage.canvas.width=this.cellW;
+    this.iconOrder=this.icons.order; this.iconCount=this.icons.iconCount;
+    this.container=new createjs.Container();
+    this.container.cache(0,0,this.stage.canvas.width,this.stage.canvas.height);
+    this.stage.addChild(this.container);
+    this.renderSettings={renderPoint:0};
+    createjs.Ticker.addEventListener("tick",this.draw.bind(this));
+  }
+  draw(){
+    var mi=Math.floor(-this.renderSettings.renderPoint/(this.cellH+this.verticalSpacing));
+    var rp=(this.renderSettings.renderPoint%(this.cellH+this.verticalSpacing)-(this.cellH+this.verticalSpacing))-this.renderOffset;
+    var idx=[];
+    for(var i=0;i<5;i++){
+      var oi=mi+i,ii=this.iconOrder[oi]; idx.push(ii);
+      if(!this.icons.icons[ii])break;
+      var ic=this.icons.icons[ii]['img'];
+      if(idx.indexOf(ii)>-1)ic=ic.clone();
+      ic.y=rp; rp+=(this.cellH+this.verticalSpacing);
+      this.container.addChild(ic);
+    }
+    this.container.updateCache(); this.stage.update(); this.container.removeAllChildren();
+  }
+  spinTo(index,time){
+    createjs.Tween.get(this.renderSettings)
+      .to({renderPoint:-(index-1)*(this.cellH+this.verticalSpacing)},time,createjs.Ease.linear)
+      .call(function(){this.onDone();}.bind(this));
+  }
+  moveTo(index){this.renderSettings.renderPoint=-(index-1)*(this.cellH+this.verticalSpacing);}
+}
+
+class SlotMachine {
+  constructor(o){
+    this.fps=o.fps||30; this.slotCount=o.slotCount||3;
+    this.gameMount=document.getElementById(o.gameMountId||"game");
+    this.cellW=o.cellW; this.cellH=o.cellH; this.verticalSpacing=o.verticalSpacing||0;
+    this.spinnerHeight=o.spinnerHeight||260; this.iconSheet=o.iconSheet;
+    this.iconCount=this.iconSheet.height/this.cellH; this.isRandom=o.isRandom==true;
+    this.renderOffset=(this.cellH*3+this.verticalSpacing*2-this.spinnerHeight)/2;
+    createjs.Ticker.setFPS(this.fps);
+  }
+  getSpinTime(i){return this.spinTime+(i*this.spinTimeAdd);}
+  getIconCount(i){return this.spins+(this.spinsAdd*i);}
+  init(o){
+    this.from=o.from; this.to=o.to; this.spinTime=o.spinTime||4000; this.spinTimeAdd=o.spinTimeAdd||1000;
+    this.spins=o.spins; this.spinsAdd=o.spinsAdd; this.onInitDone=o.onInitDone||function(){};
+    this.spinners=[];
+    for(var i=0;i<this.slotCount;i++){
+      var canvas=document.createElement("canvas"); canvas.className="spinner";
+      this.gameMount.appendChild(canvas);
+      var icons=this.generateIcons({index:i});
+      this.spinners[i]=new Spinner({canvas:canvas,icons:icons,verticalSpacing:this.verticalSpacing,
+        cellW:this.cellW,cellH:this.cellH,renderOffset:this.renderOffset,spinnerHeight:this.spinnerHeight});
+      this.spinners[i].init();
+    }
+    this.onInitDone();
+  }
+  spin(callback){
+    var indexes=this.to;
+    var win=(function(idx){for(var i=0;i<idx.length;i++)if(idx[i]!=idx[i+1]&&idx[i+1]!=undefined)return false;return true;})(indexes);
+    this.spinners[this.spinners.length-1].onDone=(function(win){return function(){setTimeout(function(){callback(win);},100);};})(win);
+    for(var i=0;i<this.spinners.length;i++)this.spinners[i].spinTo(this.getIconCount(i)+1,this.getSpinTime(i));
+  }
+  generateIcons(o){
+    var iconSheet=this.iconSheet,isRandom=this.isRandom,index=o.index||0;
+    var from=this.from[index],to=this.to[index],count=this.getIconCount(index);
+    var iconCount=iconSheet.height/this.cellH,icons=[],copyCount=0;
+    while((copyCount++)*iconCount<count-iconCount+4){}
+    var order=[];
+    for(var i=0;i<copyCount;i++)for(var j=0;j<iconCount;j++)order.push(j);
+    order=order.slice(0,count+4);
+    if(isRandom)order=shuffleArrayNoAdjecents(order);
+    var fl=order.indexOf(from);if(fl>-1)order=arraySwap(order,fl,2);
+    var tl2=order.lastIndexOf(to);if(tl2>-1)order=arraySwap(order,tl2,order.length-2);
+    if(order[order.length-2]==order[order.length-3])order=arraySwap(order,order.length-3,order.length-4);
+    for(var k=0;k<iconCount;k++){
+      var icon=new createjs.Bitmap(iconSheet);
+      icon.sourceRect=new createjs.Rectangle(0,k*this.cellH,this.cellW,this.cellH);
+      icon.cache(0,0,this.cellW,this.cellH);
+      icons.push({img:icon});
+    }
+    return {order:order,icons:icons,iconCount:iconCount};
+  }
+}
+
+var tl=new TimelineLite, slotMachine;
+
+var animationController={
+  bringIn:function(cb){
+    tl.to("#holder",0,{opacity:1,delay:.4});
+    tl.from("#fnLogo",.5,{ease:Back.easeOut.config(2.7),scale:.4,opacity:0});
+    tl.from("#amount",.4,{ease:Back.easeOut.config(2.7),scale:.4,opacity:0},"-=.2");
+    tl.staggerFrom(".reel",.3,{ease:Back.easeOut.config(2.7),y:"-=60",opacity:0},.15,"Start");
+    tl.staggerFrom(".overlaySection",.3,{ease:Back.easeOut.config(2.7),y:"-=60",opacity:0},.15,"Start");
+    tl.staggerFrom(".spinner",.3,{ease:Back.easeOut.config(2.7),y:"-=60",opacity:0},.15,"Start");
+    tl.to("#holder",0,{onComplete:cb,delay:0});
+  },
+  jackpot:function(cb){
+    $("#amount").addClass("gold");
+    TweenMax.to("#rays",.6,{opacity:1});
+    TweenMax.staggerTo("#winnerName span",.4,{color:"#ffc233",repeat:-1,yoyo:true},.2);
+    TweenMax.to("#winnerName",.4,{borderTopColor:"#3fb6ff",repeat:-1,yoyo:true});
+    TweenMax.to("#winnerName",.4,{borderBottomColor:"#3fb6ff",repeat:-1,yoyo:true,delay:.4});
+    tl.to("#holder",0,{delay:4,onComplete:cb});
+  },
+  takeOut:function(cb){
+    tl.to("#rays",.6,{opacity:0});
+    tl.staggerTo(".spinner",.2,{ease:Back.easeOut.config(2.7),y:"-=60",opacity:0},.1,"End");
+    tl.staggerTo(".reel",.2,{ease:Back.easeOut.config(2.7),y:"-=60",opacity:0},.1,"End");
+    tl.staggerTo(".overlaySection",.2,{ease:Back.easeOut.config(2.7),y:"-=60",opacity:0},.1,"End");
+    tl.to("#winnerName",.2,{ease:Back.easeOut.config(2.7),scale:.4,opacity:0});
+    tl.to("#amount",.4,{ease:Back.easeOut.config(2.7),scale:.4,opacity:0},"-=.1");
+    tl.to("#fnLogo",.3,{ease:Back.easeOut.config(2.7),scale:.4,opacity:0},"-=.2");
+    if(cb) tl.to("#holder",0,{onComplete:cb,delay:.1});
+  }
+};
+
+var getIconSheet=function(url,cb){
+  var img=new Image();
+  img.onload=function(){
+    // Auto-detectar tamaño del símbolo: tira vertical de 1 columna => celda = ancho de la imagen
+    if(img.width > 0){ userOptions.cellW = img.width; userOptions.cellH = img.height / PRIZES.length; }
+    return cb(img);
+  };
+  img.onerror=function(){
+    document.body.innerHTML =
+      '<div style="font-family:Arial,sans-serif;color:#ff5555;background:#000;padding:18px;'
+      + 'border:2px solid #ff5555;border-radius:10px;max-width:520px;line-height:1.4">'
+      + '<b>No se encontró la imagen de los símbolos.</b><br><br>'
+      + 'Pon tu icon-sheet en:<br><code style="color:#3fb6ff">'+url+'</code><br><br>'
+      + 'Debe ser una tira vertical (1 columna) con los 3 símbolos apilados, '
+      + 'cada uno cuadrado y sin espacios entre ellos.</div>';
+    console.error("[Ruleta] No cargó:", url);
+  };
+  img.src=url;
+};
+
+// Muestra el premio (o "sigue intentando") recién cuando los 3 carretes terminan de girar.
+function revealResult(){
+  var r = window.__GEO_RESULT || {win:false};
+  var label = (r.win && r.prize) ? ("¡GANASTE " + r.prize.name + "!") : userOptions.loseTextLine;
+  var $w = $("#winnerName");
+  $w.text(label);
+  $w.html($w.text().replace(/./g, "<span>$&</span>"));
+  TweenMax.fromTo("#winnerName",.35,{opacity:0,scale:.6},{opacity:1,scale:1,ease:Back.easeOut.config(2.7)});
+  return r;
+}
+
+var slotMachineController={
+  init:function(iconSheet,cb){
+    slotMachine=new SlotMachine({fps:30,slotCount:3,gameMount:"game",isRandom:true,
+      iconSheet:iconSheet,cellW:userOptions.cellW,cellH:userOptions.cellH,verticalSpacing:userOptions.verticalSpacing,spinnerHeight:260});
+    var to=generateResult(slotMachine.iconCount,slotMachine.slotCount);
+    // El resultado ya está decidido (window.__GEO_RESULT), pero el banner se queda con
+    // el texto neutro hasta que termine el giro (ver revealResult).
+    slotMachine.init({from:[1,2,3],to:to,spinTime:3000,spinTimeAdd:1000,spins:60,spinsAdd:15,onInitDone:cb});
+  },
+  spin:function(cb){slotMachine.spin(cb);}
+};
+
+getIconSheet(userOptions.iconSheetUrl,function(iconSheet){
+  slotMachineController.init(iconSheet,function(){
+    animationController.bringIn(function(){
+      audio.volume=userOptions.audioVolume*.01; audio.play();
+      slotMachineController.spin(function(win){
+        revealResult();
+        if(win===true){ animationController.jackpot(function(){animationController.takeOut();}); }
+        else{ animationController.takeOut(); if(userOptions.useDefaultSounds=="yes") audio.pause(); }
+      });
+    });
+  });
+});
+
+};
+
+$.when(
+  $.getScript("https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.4/TweenMax.min.js"),
+  $.getScript("https://code.createjs.com/createjs-2015.11.26.min.js"),
+  $.Deferred(function(deferred){$(deferred.resolve);})
+).done(function(){
+  // Centrado: CSS "left:50%" + GSAP "xPercent:-50". El navegador recalcula solo el
+  // centro según el ancho REAL de cada elemento (incluido su padding), sin medir nada
+  // a mano. (El centrado viejo con jQuery ignoraba el padding del banner y lo dejaba
+  // corrido ~35px a la derecha del título y los carretes.)
+  TweenMax.set(["#fnLogo","#winnerName","#amount","#overlays","#reels"], {xPercent:-50});
+  audio=new Audio('assets/slot-machine.mp3');
+  animate();
+});
+</script>
+
+</body>
+</html>
