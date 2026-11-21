@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#090a0c">
-  <meta name="description" content="Puntos Geo Army está en construcción.">
-  <title>Puntos en construcción — Geo Army</title>
+  <meta name="description" content="Historial de la ruleta de suscriptores de Geo Army.">
+  <title>Ruleta de suscriptores — Geo Army</title>
   <style>
     :root { color-scheme:dark; font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
     * { box-sizing:border-box; }
@@ -18,6 +18,9 @@
     .nav-link { color:#c7c4ba; font-size:.9rem; text-decoration:none; }
     .nav-link:hover { color:#f5d27a; }
     main { position:relative; max-width:700px; min-height:calc(100vh - 76px); margin:auto; padding:72px 24px 96px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+    [hidden] { display:none !important; }
+    .historial { width:100%; padding:0; text-align:left; list-style:none; }
+    .historial li { margin-top:10px; padding:14px; border:1px solid #464034; border-radius:12px; }
     .icon { width:76px; height:76px; margin-bottom:26px; display:grid; place-items:center; color:#f5cc67; background:linear-gradient(145deg,rgba(235,183,67,.14),rgba(235,183,67,.035)); border:1px solid rgba(235,183,67,.3); border-radius:22px; box-shadow:0 0 48px rgba(231,179,54,.09); }
     .icon svg { width:35px; height:35px; }
     .eyebrow { margin:0 0 17px; color:#eacb79; font-size:.72rem; font-weight:800; letter-spacing:.16em; text-transform:uppercase; }
@@ -42,20 +45,18 @@
     </nav>
   </header>
   <main>
-    <div class="icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M14.5 5.5a4 4 0 0 0-5.1 5.1L3.6 16.4a2.1 2.1 0 0 0 3 3l5.8-5.8a4 4 0 0 0 5.1-5.1l-2.8 2.8-2.2-2.2 2.8-2.8Z"/>
-        <path d="M17 3.5v2M16 4.5h2M19 14v2M18 15h2"/>
-      </svg>
-    </div>
-    <p class="eyebrow">Geo Army · Puntos</p>
-    <h1>Página en <span>construcción</span></h1>
-    <p class="copy">Estamos preparando una nueva versión de Puntos Geo Army. Pronto podrás descubrir todo lo que viene.</p>
-    <p class="status">Trabajando en la nueva sección</p>
+    <h1>Ruleta de <span>suscriptores</span></h1>
+    <p class="copy">Canjea en Twitch por 500 puntos del canal y escribe Fortnite u Overwatch. Tienes hasta tres canjes al día, según la hora del Este de EE. UU.</p>
+    <p id="estado-ruleta" class="status" role="status">Cargando tu historial…</p>
     <div class="actions">
-      <a class="button primary" href="index.html">Volver al inicio</a>
+      <button id="iniciar-sesion-ruleta" class="button primary" hidden>Iniciar sesión con Twitch</button>
       <a class="button" href="mi-geoarmy.html">Ir a mi billetera</a>
     </div>
+    <ol id="historial-ruleta" class="historial" aria-label="Últimas tiradas"></ol>
   </main>
+  <script src="lib/supabase.min.js"></script>
+  <script src="js/geoarmy-config.js"></script>
+  <script src="js/geoarmy-account.js"></script>
+  <script src="js/ruleta-subs-historial.js"></script>
 </body>
 </html>
