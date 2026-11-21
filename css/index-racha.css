@@ -1,6 +1,6 @@
 /* Home — tarjeta "Racha diaria" (solo presentación; la lógica vive en js/index-racha.js).
  * Paleta Halloween espacial, igual que la pestaña Racha de Mi Geo Army: negro, morado, naranja y dorado. Sin azul.
- * Escritorio (>= 1180 px): flota en el espacio libre de arriba a la derecha del escenario, alineada con el botón "Únete".
+ * Escritorio (>= 1180 px): flota en el espacio libre de arriba a la derecha del escenario, a 24 px del borde derecho.
  * Por debajo: va en el flujo normal, justo debajo del header y antes de "Elige tu mundo". No es un pin del planeta. */
 
 .ga-racha {
@@ -72,10 +72,10 @@
   .ga-racha-cta { padding-inline: 20px; }
 }
 
-/* Escritorio: flota en el espacio libre de arriba a la derecha, alineada con el borde derecho del header (max 1320 px) */
+/* Escritorio: flota en el espacio libre de arriba a la derecha, a 24 px del borde derecho de la pantalla */
 @media (min-width: 1180px) {
   .ga-racha {
-    position: absolute; top: 20px; right: max(1.5rem, calc((100% - 1320px) / 2 + 1.5rem)); left: auto;
+    position: absolute; top: 20px; right: 1.5rem; left: auto;
     width: 330px; margin: 0; padding: 11px 14px; gap: 8px 12px;
   }
   .ga-racha-cta { min-height: 34px; padding: 6px 16px; }
