@@ -30,6 +30,13 @@ test('no intenta apropiarse de una recompensa creada por otra aplicación',async
   assert.equal(n,2);
 });
 
+test('no modifica una recompensa ya habilitada aunque pertenezca a la aplicación',async()=>{
+  const active={...reward,is_enabled:true};
+  const calls=[]; const fake=async (url,opts)=>{calls.push(opts.method); return ok([active]);};
+  await assert.rejects(ensureDisabledReward(args,fake),e=>e.code==='existing_reward_has_different_settings');
+  assert.deepEqual(calls,['GET','GET']);
+});
+
 test('si se pierde la respuesta del POST, consulta el estado y no vuelve a crearla',async()=>{
   const calls=[];
   const fake=async (url,opts)=>{
@@ -40,4 +47,11 @@ test('si se pierde la respuesta del POST, consulta el estado y no vuelve a crear
   };
   assert.deepEqual(await ensureDisabledReward(args,fake),{status:'existing',rewardId:'fake-reward'});
   assert.deepEqual(calls,['GET','POST','GET','GET']);
+});
+
+test('si no se puede confirmar la creación, no hace otro POST',async()=>{
+  const calls=[];
+  const fake=async (url,opts)=>{ calls.push(opts.method); if(opts.method==='POST') throw new Error('timeout'); return ok([]); };
+  await assert.rejects(ensureDisabledReward(args,fake),e=>e.code==='create_unconfirmed');
+  assert.deepEqual(calls,['GET','POST','GET']);
 });
