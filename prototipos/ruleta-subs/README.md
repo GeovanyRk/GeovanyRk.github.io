@@ -5,7 +5,7 @@ Esta rama contiene una **vista de prueba**, no una ruleta conectada ni un sistem
 ## Acuerdos del sistema
 
 - Una ruleta visual para Fortnite y Overwatch. La persona escribe el juego cuando canjea la recompensa de Twitch; el moderador la maneja en OBS. Cada canje costará 500 puntos del canal.
-- La cuenta es individual y compartida entre ambos juegos. Geo decidió subir el umbral inicial de 10 tiradas sin premio; el nuevo umbral está por definirse. Cualquier premio reinicia el contador.
+- La cuenta es individual y compartida entre ambos juegos. Después de 29 tiradas seguidas sin premio, la tirada número 30 garantiza uno. Cualquier premio reinicia el contador.
 - Guardar cada tirada y, si hay premio, acreditarlo a la billetera correspondiente. Los resultados históricos incompletos no se usan como si fueran tiradas nuevas.
 - El cliente OBS no decide el resultado ni acredita el premio. Solo muestra un resultado ya registrado por un servidor confiable.
 
