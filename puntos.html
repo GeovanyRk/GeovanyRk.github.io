@@ -28,6 +28,7 @@
     h1 span { display:block; color:#e9c36a; }
     .copy { max-width:510px; margin:22px 0 0; color:#b8b8bd; font-size:1.05rem; line-height:1.7; }
     .status { margin:29px 0 0; padding:10px 16px; border:1px solid rgba(238,194,91,.2); border-radius:999px; color:#e4c679; background:rgba(237,187,77,.055); font-size:.85rem; font-weight:600; }
+    .suscripcion-aviso { max-width:510px; margin:24px 0 0; padding:14px 18px; border:1px solid rgba(233,195,106,.35); border-radius:12px; color:#f4dfaa; background:rgba(233,195,106,.08); font-size:.9rem; line-height:1.55; }
     .actions { display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-top:34px; }
     .button { min-height:46px; display:inline-flex; align-items:center; justify-content:center; padding:0 20px; border:1px solid rgba(255,255,255,.16); border-radius:12px; color:#eeeae0; background:rgba(255,255,255,.035); text-decoration:none; font-size:.9rem; font-weight:700; }
     .button.primary { color:#171207; background:#e9c36a; border-color:#e9c36a; }
@@ -46,7 +47,8 @@
   </header>
   <main>
     <h1>Ruleta de <span>suscriptores</span></h1>
-    <p class="copy">Canjea en Twitch por 500 puntos del canal y escribe Fortnite u Overwatch. Tienes hasta tres canjes al día, según la hora del Este de EE. UU.</p>
+    <p class="copy">Exclusiva para suscriptores del canal. Canjea en Twitch por 500 puntos del canal y escribe Fortnite u Overwatch. Tienes hasta tres canjes al día, según la hora del Este de EE. UU.</p>
+    <p id="aviso-suscripcion" class="suscripcion-aviso" role="status" hidden></p>
     <p id="estado-ruleta" class="status" role="status">Cargando tu historial…</p>
     <div class="actions">
       <button id="iniciar-sesion-ruleta" class="button primary" hidden>Iniciar sesión con Twitch</button>
@@ -57,6 +59,6 @@
   <script src="lib/supabase.min.js"></script>
   <script src="js/geoarmy-config.js"></script>
   <script src="js/geoarmy-account.js"></script>
-  <script src="js/ruleta-subs-historial.js"></script>
+  <script src="js/ruleta-subs-historial.js?v=aviso-1"></script>
 </body>
 </html>
