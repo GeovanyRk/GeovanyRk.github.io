@@ -211,18 +211,20 @@
 
     async function drain() {
       if (busy) return; busy=true;
-      try { while (queue.length) { await waitForVisibility(); await render(queue.shift()); } }
+      try { while (queue.length) { await waitForVisibility(); const { event, onDone } = queue.shift();
+          try { await render(event); onDone?.(true); }
+          catch { seen.delete(event.id); onDone?.(false); } } }
       finally {
         busy=false;
         if (queue.length) void drain();
         else if (sourceVisible && !isPreview) showReady();
       }
     }
-    function showConfirmed(event) {
+    function showConfirmed(event, onDone) {
       if (!valid(event) || seen.has(event.id)) return false;
-      seen.add(event.id); queue.push({...event}); void drain(); return true;
+      seen.add(event.id); queue.push({ event: {...event}, onDone }); void drain(); return true;
     }
-    window.GeoArmyRuletaOBS=Object.freeze({showConfirmed});
+    window.GeoArmyRuletaOBS=Object.freeze({showConfirmed, isVisible: () => sourceVisible});
 
     function enqueuePreview() {
       const demoGame=params.get('juego') === 'fortnite' ? 'fortnite' : 'overwatch';
@@ -239,6 +241,6 @@
     } else if (sourceVisible) showReady();
   })();
   </script>
-<script src="js/ruleta-subs-obs.js"></script>
+<script src="js/ruleta-subs-obs.js?v=cola-1"></script>
 </body>
 </html>
