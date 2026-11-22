@@ -67,6 +67,80 @@
     const seen = new Set();
     const queue = [];
     let busy = false;
+    let sourceVisible = !document.hidden;
+    let visibilityWaiters = [];
+    const activeMotions = new Set();
+    let activeHold = null;
+    const spinAudio = new Audio('assets/ruleta-subs/slot-machine.mp3');
+    spinAudio.preload = 'auto';
+    spinAudio.volume = 0.35;
+    let soundRunning = false;
+    spinAudio.addEventListener('ended', () => { soundRunning = false; });
+
+    function playSound() {
+      const playback = spinAudio.play();
+      if (playback && typeof playback.catch === 'function') playback.catch(() => {});
+    }
+    function startSound() {
+      spinAudio.pause();
+      spinAudio.currentTime = 0;
+      soundRunning = true;
+      playSound();
+    }
+    function stopSound() {
+      soundRunning = false;
+      spinAudio.pause();
+      spinAudio.currentTime = 0;
+    }
+    async function waitForVisibility() {
+      while (!sourceVisible) await new Promise(resolve => visibilityWaiters.push(resolve));
+    }
+    function waitVisibleTime(milliseconds) {
+      return new Promise(resolve => {
+        let remaining = milliseconds, start = 0, timer = null, done = false;
+        const hold = {
+          pause() {
+            if (timer === null) return;
+            clearTimeout(timer); timer = null;
+            remaining = Math.max(0, remaining - (performance.now() - start));
+          },
+          resume() {
+            if (timer !== null || done) return;
+            start = performance.now();
+            timer = setTimeout(() => {
+              timer = null; done = true;
+              if (activeHold === hold) activeHold = null;
+              resolve();
+            }, remaining);
+          }
+        };
+        activeHold = hold;
+        if (sourceVisible) hold.resume();
+      });
+    }
+
+    function setSourceVisible(visible) {
+      if (sourceVisible === visible) return;
+      sourceVisible = visible;
+      if (!visible) {
+        for (const motion of activeMotions) motion.pause();
+        if (activeHold) activeHold.pause();
+        if (soundRunning) spinAudio.pause();
+        return;
+      }
+      for (const motion of activeMotions) motion.play();
+      if (activeHold) activeHold.resume();
+      if (soundRunning) playSound();
+      const waiters = visibilityWaiters; visibilityWaiters = [];
+      for (const resolve of waiters) resolve();
+      if (!busy && queue.length) void drain();
+      else if (!busy && isPreview) enqueuePreview();
+      else if (!busy) showReady();
+    }
+    window.addEventListener('obsSourceVisibleChanged', event => {
+      if (typeof event.detail?.visible === 'boolean') setSourceVisible(event.detail.visible);
+    });
+    document.addEventListener('visibilitychange', () => setSourceVisible(!document.hidden));
 
     function valid(x) {
       return x && typeof x.id === 'string' && x.id.length > 0 && x.id.length <= 180 &&
@@ -84,15 +158,29 @@
       el.append(mark); return el;
     }
 
+    function showReady() {
+      viewer.textContent='RULETA LISTA'; gameLabel.textContent='ESPERANDO UN CANJE';
+      resultLabel.className='result'; resultLabel.textContent='ESPERANDO TIRADA';
+      [500,1000,1200].forEach((amount,i) => {
+        const belt=reels[i].querySelector('.belt');
+        for (const motion of belt.getAnimations()) motion.cancel();
+        belt.replaceChildren(card(amount)); belt.style.transform='translateY(0)';
+      });
+      stage.classList.add('visible');
+    }
+
     async function render(event) {
       const config=games[event.game];
       viewer.textContent=event.viewer.toUpperCase(); gameLabel.textContent=config.name;
       resultLabel.className='result'; resultLabel.textContent='¡BUENA SUERTE!';
       stage.classList.add('visible');
+      startSound();
       const targetIndex=event.win ? config.amounts.indexOf(event.amount) : -1;
       const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const motions = reels.map((reel,i) => {
-        const belt=reel.querySelector('.belt'); belt.replaceChildren();
+        const belt=reel.querySelector('.belt');
+        for (const motion of belt.getAnimations()) motion.cancel();
+        belt.replaceChildren(); belt.style.transform='translateY(0)';
         const finalIndex=event.win ? targetIndex : i % config.amounts.length;
         const cycles=12+i*3;
         for (let n=0;n<cycles;n++) {
@@ -102,25 +190,33 @@
         belt.append(card(config.amounts[finalIndex],finalIndex,config.unit));
         const offset=cycles * reel.getBoundingClientRect().height;
         if (reduced) { belt.style.transform=`translateY(-${offset}px)`; return Promise.resolve(); }
-        return belt.animate([{transform:'translateY(0)'},{transform:`translateY(-${offset}px)`}],
-          {duration:1800+i*550,easing:'cubic-bezier(.16,.72,.18,1)',fill:'forwards'}).finished;
+        const motion=belt.animate([{transform:'translateY(0)'},{transform:`translateY(-${offset}px)`}],
+          {duration:1800+i*550,easing:'cubic-bezier(.16,.72,.18,1)',fill:'forwards'});
+        activeMotions.add(motion);
+        return motion.finished.finally(() => activeMotions.delete(motion));
       });
       await Promise.all(motions);
+      await waitForVisibility();
       if (event.win) {
         resultLabel.classList.add('win');
         resultLabel.textContent=`¡GANASTE ${event.amount} ${config.unit}!`;
         if (event.guaranteed) { const tag=document.createElement('small'); tag.textContent='PREMIO GARANTIZADO'; resultLabel.append(tag); }
       } else resultLabel.textContent='¡SIGUE INTENTANDO!';
       if (isPreview) return;
-      await new Promise(resolve=>setTimeout(resolve,5000));
+      await waitVisibleTime(5000);
+      stopSound();
       stage.classList.remove('visible');
-      await new Promise(resolve=>setTimeout(resolve,350));
+      await waitVisibleTime(350);
     }
 
     async function drain() {
       if (busy) return; busy=true;
-      try { while (queue.length) await render(queue.shift()); }
-      finally { busy=false; if (queue.length) void drain(); }
+      try { while (queue.length) { await waitForVisibility(); await render(queue.shift()); } }
+      finally {
+        busy=false;
+        if (queue.length) void drain();
+        else if (sourceVisible && !isPreview) showReady();
+      }
     }
     function showConfirmed(event) {
       if (!valid(event) || seen.has(event.id)) return false;
@@ -128,15 +224,19 @@
     }
     window.GeoArmyRuletaOBS=Object.freeze({showConfirmed});
 
-    if (isPreview) {
-      document.body.classList.add('preview');
+    function enqueuePreview() {
       const demoGame=params.get('juego') === 'fortnite' ? 'fortnite' : 'overwatch';
       const demoWin=params.get('resultado') !== 'perder';
       const requestedAmount=Number(params.get('cantidad'));
       const demoAmount=games[demoGame].amounts.includes(requestedAmount) ? requestedAmount : (demoGame === 'fortnite' ? 800 : 1000);
-      showConfirmed({id:'demo-1',viewer:'Participante',game:demoGame,win:demoWin,
+      showConfirmed({id:`demo-${++previewCount}`,viewer:'Participante',game:demoGame,win:demoWin,
         amount:demoWin ? demoAmount : null,guaranteed:demoWin});
     }
+    let previewCount=0;
+    if (isPreview) {
+      document.body.classList.add('preview');
+      if (sourceVisible) enqueuePreview();
+    } else if (sourceVisible) showReady();
   })();
   </script>
 <script src="js/ruleta-subs-obs.js"></script>

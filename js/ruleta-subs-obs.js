@@ -2,8 +2,12 @@
 
 if (new URLSearchParams(location.search).get('demo') !== '1') {
   const endpoint = 'https://geoarmy.duckdns.org/api/ruleta-subs/obs';
+  let timer;
+  let fetching = false;
 
   async function actualizarRuleta() {
+    if (fetching) return;
+    fetching = true;
     try {
       const response = await fetch(endpoint, { cache: 'no-store', signal: AbortSignal.timeout(8000) });
       if (response.ok) {
@@ -15,9 +19,17 @@ if (new URLSearchParams(location.search).get('demo') !== '1') {
     } catch {
       // Mantener transparente la fuente si el servicio aún no está disponible.
     } finally {
-      setTimeout(actualizarRuleta, 1500);
+      fetching = false;
+      clearTimeout(timer);
+      timer = setTimeout(actualizarRuleta, 1500);
     }
   }
 
+  window.addEventListener('obsSourceVisibleChanged', event => {
+    if (event.detail?.visible && !fetching) {
+      clearTimeout(timer);
+      void actualizarRuleta();
+    }
+  });
   actualizarRuleta();
 }
