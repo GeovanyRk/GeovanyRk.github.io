@@ -27,11 +27,8 @@
     .reel { height:var(--card-height); overflow:hidden; position:relative; border-radius:11px; border:2px solid #d4ac60; box-shadow:0 0 16px #e3aa3640,inset 0 0 16px #000; background:#0a0716; }
     .reel::after { content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(#0007,transparent 15%,transparent 85%,#0007); }
     .belt { transform:translateY(0); will-change:transform; }
-    .card { position:relative; height:var(--card-height); overflow:hidden; border-radius:7px; background:linear-gradient(155deg,var(--back1),var(--back2) 75%); }
-    .card::after { content:""; position:absolute; z-index:1; inset:0; pointer-events:none; background:linear-gradient(transparent 46%,#08071040 63%,#080710 83%); }
-    .card-art { position:absolute; inset:0 auto auto 0; width:100%; aspect-ratio:1 / 1; background-image:url('assets/ruleta-subs/simbolos.png'); background-size:200% 200%; background-position:var(--art-x) var(--art-y); background-repeat:no-repeat; }
-    .card-number { position:absolute; z-index:2; bottom:22px; left:7%; width:86%; padding:2px 4px 1px; text-align:center; color:white; font-weight:1000; font-size:clamp(25px,3vw,39px); line-height:1; font-style:italic; letter-spacing:-.04em; border:1px solid #d7a74f; border-radius:8px 8px 2px 2px; background:linear-gradient(#312639,#100c17); text-shadow:0 2px 0 #69512b,0 3px 5px #000; box-shadow:0 4px 10px #000a; }
-    .card-unit { position:absolute; z-index:2; bottom:5px; left:7%; width:86%; color:#f2d990; text-align:center; font-size:clamp(8px,.8vw,11px); font-weight:900; letter-spacing:.1em; }
+    .card { position:relative; height:var(--card-height); overflow:hidden; border-radius:7px; background:#050505; }
+    .card-art { position:absolute; top:50%; left:0; width:100%; aspect-ratio:1199 / 1312; transform:translateY(-50%); background-image:url('assets/ruleta-subs/numeros-dorados.png'); background-size:200% 200%; background-position:var(--art-x) var(--art-y); background-repeat:no-repeat; }
     .result { min-height:54px; margin-top:18px; padding:11px 20px; text-align:center; color:#fff; font-size:clamp(18px,2.4vw,30px); font-weight:900; font-style:italic; letter-spacing:.03em; text-shadow:0 3px 5px #000; }
     .result.win { color:#ffe18a; filter:drop-shadow(0 0 14px #f5ae36); }
     .result small { display:block; margin-top:4px; color:#f5e9cf; font-size:12px; font-style:normal; letter-spacing:.12em; }
@@ -55,15 +52,13 @@
     const params = new URLSearchParams(location.search);
     const isPreview = params.get('demo') === '1';
     const games = Object.freeze({
-      fortnite: { name:'FORTNITE', unit:'V-BUCKS', amounts:[500,800,1200,1500] },
-      overwatch: { name:'OVERWATCH', unit:'MONEDAS OW', amounts:[500,1000,1500] }
+      fortnite: { name:'FORTNITE', unit:'V-BUCKS', amounts:[500,800,1200] },
+      overwatch: { name:'OVERWATCH', unit:'MONEDAS OW', amounts:[500,1000] }
     });
-    const palettes = [
-      ['#291a57','#0c0722','0%','0%'],
-      ['#153a64','#080e26','100%','0%'],
-      ['#653814','#190d20','0%','100%'],
-      ['#642346','#150923','100%','100%']
-    ];
+    const artPositions = Object.freeze({
+      500: ['0%','0%'], 800: ['100%','0%'],
+      1000: ['0%','100%'], 1200: ['100%','100%']
+    });
     const stage = document.querySelector('#stage');
     const viewer = document.querySelector('#viewer');
     const gameLabel = document.querySelector('#game');
@@ -81,15 +76,12 @@
         typeof x.guaranteed === 'boolean' && (!x.guaranteed || x.win);
     }
 
-    function card(amount,index,unit) {
-      const [back1,back2,artX,artY] = palettes[index % palettes.length];
+    function card(amount) {
+      const [artX,artY] = artPositions[amount];
       const el = document.createElement('div'); el.className='card';
-      el.style.setProperty('--back1',back1); el.style.setProperty('--back2',back2);
       const mark = document.createElement('div'); mark.className='card-art';
       mark.style.setProperty('--art-x',artX); mark.style.setProperty('--art-y',artY);
-      const number = document.createElement('div'); number.className='card-number'; number.textContent=String(amount);
-      const currency = document.createElement('div'); currency.className='card-unit'; currency.textContent=unit;
-      el.append(mark,number,currency); return el;
+      el.append(mark); return el;
     }
 
     async function render(event) {
@@ -140,8 +132,10 @@
       document.body.classList.add('preview');
       const demoGame=params.get('juego') === 'fortnite' ? 'fortnite' : 'overwatch';
       const demoWin=params.get('resultado') !== 'perder';
+      const requestedAmount=Number(params.get('cantidad'));
+      const demoAmount=games[demoGame].amounts.includes(requestedAmount) ? requestedAmount : (demoGame === 'fortnite' ? 800 : 1000);
       showConfirmed({id:'demo-1',viewer:'Participante',game:demoGame,win:demoWin,
-        amount:demoWin ? (demoGame === 'fortnite' ? 800 : 1000) : null,guaranteed:demoWin});
+        amount:demoWin ? demoAmount : null,guaranteed:demoWin});
     }
   })();
   </script>
