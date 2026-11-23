@@ -94,22 +94,51 @@
     spinAudio.preload = 'auto';
     spinAudio.volume = 0.35;
     let soundRunning = false;
-    spinAudio.addEventListener('ended', () => { soundRunning = false; });
+    let soundGeneration = 0;
+    let winAudioTail = false;
+    let tailTimer = null;
+    let tailWaiters = [];
+
+    function releaseSoundTail() {
+      winAudioTail = false;
+      if (tailTimer !== null) clearTimeout(tailTimer);
+      tailTimer = null;
+      const waiters = tailWaiters; tailWaiters = [];
+      for (const resolve of waiters) resolve();
+    }
+    spinAudio.addEventListener('ended', () => {
+      soundRunning = false;
+      releaseSoundTail();
+    });
 
     function playSound() {
-      const playback = spinAudio.play();
-      if (playback && typeof playback.catch === 'function') playback.catch(() => {});
+      const generation = soundGeneration;
+      const failed = () => { if (generation === soundGeneration) stopSound(); };
+      try {
+        const playback = spinAudio.play();
+        if (playback && typeof playback.catch === 'function') playback.catch(failed);
+      } catch (_) { failed(); }
     }
     function startSound() {
-      spinAudio.pause();
-      spinAudio.currentTime = 0;
+      stopSound();
       soundRunning = true;
       playSound();
     }
     function stopSound() {
+      soundGeneration++;
       soundRunning = false;
       spinAudio.pause();
       spinAudio.currentTime = 0;
+      releaseSoundTail();
+    }
+    function continueWinSound() {
+      if (!soundRunning || spinAudio.paused) { stopSound(); return; }
+      winAudioTail = true;
+      // Si el navegador no informa de "ended", liberar la cola igualmente.
+      tailTimer = setTimeout(stopSound, 8000);
+    }
+    async function waitForSoundTail() {
+      while (winAudioTail) await new Promise(resolve => tailWaiters.push(resolve));
     }
     function canPlay() { return sourceVisible && sceneAllowed; }
     async function waitForVisibility() {
@@ -143,7 +172,7 @@
       if (!canPlay()) {
         for (const motion of activeMotions) motion.pause();
         if (activeHold) activeHold.pause();
-        if (soundRunning) spinAudio.pause();
+        if (soundRunning && !winAudioTail) spinAudio.pause();
         if (rendering && !sceneAllowed) stage.classList.remove('visible');
         return;
       }
@@ -281,10 +310,12 @@
         resultLabel.textContent='¡SIGUE INTENTANDO!';
       }
       if (isPreview && !autoEnabled) { rendered=true; return; }
-      // El sonido original dura 11,14 s. Si gana, se deja terminar; si
-      // pierde, se corta justo al detenerse el último carrete.
-      await waitVisibleTime(event.win ? 6500 : 3000);
-      stopSound();
+      // Mantener visible el resultado sin prolongar el cambio de escena.
+      // En un premio, el audio termina sobre la escena anterior; una pérdida
+      // ya detuvo el audio al parar el último carrete.
+      await waitVisibleTime(1200);
+      if (event.win) continueWinSound();
+      else stopSound();
       stage.classList.remove('visible');
       if (isPreview && autoEnabled) document.body.classList.remove('demo-presentando');
       await waitVisibleTime(350);
@@ -303,7 +334,7 @@
 
     async function drain() {
       if (busy) return; busy=true;
-      try { while (queue.length) { await waitForVisibility(); const { event, onDone } = queue.shift();
+      try { while (queue.length) { await waitForSoundTail(); await waitForVisibility(); const { event, onDone } = queue.shift();
           try { await render(event); onDone?.(true); }
           catch { seen.delete(event.id); onDone?.(false); } } }
       finally {
@@ -321,7 +352,8 @@
       el.textContent=message || '';
       el.hidden=!message;
     }
-    window.GeoArmyRuletaOBS=Object.freeze({showConfirmed, isVisible: () => sourceVisible, isValid: valid, setAutoStatus});
+    window.GeoArmyRuletaOBS=Object.freeze({showConfirmed, isVisible: () => sourceVisible, isValid: valid, setAutoStatus,
+      isWinAudioTailPlaying: () => winAudioTail});
 
     let previewLaunching=false;
     let previewStarted=false;
@@ -354,6 +386,6 @@
     } else if (sourceVisible) showReady();
   })();
   </script>
-<script src="js/ruleta-subs-obs-v2.js?v=1"></script>
+<script src="js/ruleta-subs-obs-v2.js?v=tiempo-2"></script>
 </body>
 </html>

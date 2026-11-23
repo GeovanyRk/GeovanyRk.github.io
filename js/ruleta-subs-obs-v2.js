@@ -33,6 +33,9 @@ if (new URLSearchParams(location.search).get('demo') !== '1') {
       if (response.ok || response.status === 409) active = undefined;
       return;
     }
+    // Dejar terminar el sonido de premio en la escena anterior antes de
+    // iniciar otro canje; la confirmación de la tirada ya no espera al audio.
+    if (!active && overlay.isWinAudioTailPlaying()) return;
     // En modo automático la fuente debe vigilar la cola aunque la escena
     // Sub todavía no esté activa: el resultado confirmado inicia el cambio.
     if (!active && !overlay.isVisible() && !autoRequested) return;

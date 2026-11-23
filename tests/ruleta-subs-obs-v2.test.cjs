@@ -12,7 +12,7 @@ const bridge = fs.readFileSync(path.join(root,'js/ruleta-subs-obs-v2.js'),'utf8'
 
 function fixture(options={}) {
   const timers=new Set(), listener={}, motions=[]; let closed=false;
-  const schedule=(fn,ms)=>{if(closed)return null;const delay=ms===2000?100:Math.max(1,Math.round((ms||0)/400));const id=setTimeout(()=>{timers.delete(id);if(!closed)fn()},delay);timers.add(id);return id};
+  const schedule=(fn,ms)=>{if(closed)return null;const delay=options.realTiming ? (ms||0) : ms===8000 ? (options.shortTailTimeout?8:1000) : ms===2000?100:Math.max(1,Math.round((ms||0)/400));const id=setTimeout(()=>{timers.delete(id);if(!closed)fn()},delay);timers.add(id);return id};
   const cancel=id=>{clearTimeout(id);timers.delete(id)};
   const notify=(name,detail)=>{for(const fn of listener[name]||[])fn({detail})};
   class Elem {
@@ -21,22 +21,22 @@ function fixture(options={}) {
     replaceChildren(...nodes){this.children=[...nodes]}
     getBoundingClientRect(){return {height:260}}
     getAnimations(){return this.motions.filter(x=>x.state!=='idle')}
-    animate(frames,settings){let resolve,reject;const m={duration:settings.duration,state:'running',finished:new Promise((r,j)=>{resolve=r;reject=j}),pause(){this.state='paused'},play(){this.state='running'},cancel(){this.state='idle'},finish(){if(this.state!=='finished'){this.state='finished';resolve()}},fail(){this.state='idle';reject(new Error('fallo simulado'))}};this.motions.push(m);motions.push(m);if(options.failAnimation)schedule(()=>m.fail(),400);else if(options.manualAnimations!==true)schedule(()=>m.finish(),400);return m}
+    animate(frames,settings){let resolve,reject;const m={duration:settings.duration,state:'running',finished:new Promise((r,j)=>{resolve=r;reject=j}),pause(){this.state='paused'},play(){this.state='running'},cancel(){this.state='idle'},finish(){if(this.state!=='finished'){this.state='finished';resolve()}},fail(){this.state='idle';reject(new Error('fallo simulado'))}};this.motions.push(m);motions.push(m);if(options.failAnimation)schedule(()=>m.fail(),400);else if(options.manualAnimations!==true)schedule(()=>m.finish(),options.realTiming?settings.duration:400);return m}
   }
   const stage=new Elem(),viewer=new Elem(),game=new Elem(),result=new Elem(),status=new Elem(),body=new Elem();
   const reels=Array.from({length:3},()=>{const reel=new Elem();reel.belt=new Elem();reel.querySelector=()=>reel.belt;return reel});
   const named={'#stage':stage,'#viewer':viewer,'#game':game,'#result':result,'#auto-status':status};
   const document={hidden:!!options.initiallyHidden,body,querySelector:s=>named[s],querySelectorAll:()=>reels,createElement:()=>new Elem(),addEventListener:(name,fn)=>{(listener['doc:'+name]??=[]).push(fn)}};
-  const state={scene:'Juego',scenes:options.scenes||['Juego','Sub','Charlando'],level:options.level??4,trace:[],requests:[],acknowledged:[],sounds:0,soundScenes:[]};
+  const state={scene:'Juego',scenes:options.scenes||['Juego','Sub','Charlando'],level:options.level??4,trace:[],sceneTimes:[],requests:[],acknowledged:[],sounds:0,soundScenes:[]};
   const window={addEventListener:(name,fn)=>{(listener[name]??=[]).push(fn)},matchMedia:()=>({matches:false})};
   window.obsstudio={
     getControlLevel:cb=>queueMicrotask(()=>cb(state.level)),
     getScenes:cb=>queueMicrotask(()=>cb([...state.scenes])),
     getCurrentScene:cb=>{if(options.slowReturn && state.scene==='Sub' && motions.length>0 && !stage.classList.contains('visible')) setTimeout(()=>cb({name:state.scene}),30);else queueMicrotask(()=>cb({name:state.scene}))},
-    setCurrentScene:name=>{state.trace.push(name);if(options.ignoreSwitch)return;state.scene=name;notify('obsSceneChanged',{name});if(options.targetHasSource===false || options.initiallyHidden){const visible=options.targetHasSource===false ? name!=='Sub' : name==='Sub';document.hidden=!visible;notify('obsSourceVisibleChanged',{visible});}},
+    setCurrentScene:name=>{state.trace.push(name);state.sceneTimes.push(Date.now());if(options.ignoreSwitch)return;state.scene=name;notify('obsSceneChanged',{name});if(options.targetHasSource===false || options.initiallyHidden){const visible=options.targetHasSource===false ? name!=='Sub' : name==='Sub';document.hidden=!visible;notify('obsSourceVisibleChanged',{visible});}},
   };
   if(options.noOBS)delete window.obsstudio;
-  class AudioMock {constructor(){this.currentTime=0;this.paused=true;state.audio=this}addEventListener(){}pause(){this.paused=true}play(){this.paused=false;state.sounds++;state.soundScenes.push(state.scene);return Promise.resolve()}}
+  class AudioMock {constructor(){this.currentTime=0;this.paused=true;this.handlers={};state.audio=this}addEventListener(name,handler){this.handlers[name]=handler}pause(){this.paused=true}play(){state.sounds++;state.soundScenes.push(state.scene);if(options.audioReject)return Promise.reject(new Error('audio no disponible'));this.paused=false;return Promise.resolve()}finish(){this.paused=true;this.handlers.ended?.()}}
   let queue=(options.events||[]).map(x=>({...x}));
   const fetch=async(url,opts={})=>{
     state.requests.push({url,method:opts.method||'GET',body:opts.body?JSON.parse(opts.body):null});
@@ -98,7 +98,9 @@ test('la pérdida corta el sonido justo al parar; la victoria lo mantiene',async
       await until(()=>f.result.textContent.includes(event.win?'GANASTE':'SIGUE'),'resultado visible');
       assert.equal(f.state.audio.paused,!event.win);
       await until(()=>f.state.acknowledged.includes(event.id),'resultado terminado');
-      assert.equal(f.state.audio.paused,true);
+      await until(()=>f.state.scene==='Juego','regreso a juego');
+      assert.equal(f.state.audio.paused,!event.win,'el sonido de premio continúa al volver al juego');
+      if(event.win){assert.equal(f.window.GeoArmyRuletaOBS.isWinAudioTailPlaying(),true);f.state.audio.finish();assert.equal(f.window.GeoArmyRuletaOBS.isWinAudioTailPlaying(),false)}
     } finally { f.close(); }
   }
 });
@@ -200,7 +202,35 @@ test('el modo actual sin auto sigue funcionando sin cambiar escenas',async()=>{
 });
 
 test('dos eventos se muestran y confirman en orden sin duplicarlos',async()=>{
-  const f=fixture({events:[win,loss],slowReturn:true});try{await until(()=>f.state.acknowledged.length===2,'dos confirmaciones');await until(()=>f.state.scene==='Juego','regreso final');assert.deepEqual(f.state.acknowledged,['id-demo-1','id-demo-2']);assert.deepEqual(f.state.soundScenes,['Sub','Sub']);assert.deepEqual(f.state.trace,['Sub','Juego','Sub','Juego'])}finally{f.close()}
+  const f=fixture({events:[win,loss],slowReturn:true});try{
+    await until(()=>f.state.acknowledged.length===1 && f.state.scene==='Juego','primera tirada terminada');
+    await new Promise(r=>setTimeout(r,30));
+    assert.deepEqual(f.state.acknowledged,['id-demo-1'],'el siguiente canje espera el audio de premio');
+    assert.deepEqual(f.state.trace,['Sub','Juego']);
+    f.state.audio.finish();
+    await until(()=>f.state.acknowledged.length===2,'dos confirmaciones');
+    await until(()=>f.state.scene==='Juego','regreso final');
+    assert.deepEqual(f.state.acknowledged,['id-demo-1','id-demo-2']);assert.deepEqual(f.state.soundScenes,['Sub','Sub']);assert.deepEqual(f.state.trace,['Sub','Juego','Sub','Juego'])
+  }finally{f.close()}
+});
+
+test('la cola se recupera si el sonido falla o no informa su final',async()=>{
+  for(const options of [{audioReject:true},{shortTailTimeout:true}]){
+    const f=fixture({events:[win,loss],...options});
+    try{await until(()=>f.state.acknowledged.length===2,'dos tiradas con audio defectuoso');assert.deepEqual(f.state.acknowledged,['id-demo-1','id-demo-2']);assert.deepEqual(f.state.trace,['Sub','Juego','Sub','Juego'])}finally{f.close()}
+  }
+});
+
+test('la escena dura unos 7–8 segundos sin acortar los carretes',async()=>{
+  const fixtures=[fixture({events:[loss],realTiming:true}),fixture({events:[win],realTiming:true})];
+  try {
+    await Promise.all(fixtures.map(f=>until(()=>f.state.trace.length===2,'regreso tras giro',11500)));
+    for(const f of fixtures){
+      const elapsed=f.state.sceneTimes[1]-f.state.sceneTimes[0];
+      assert.ok(elapsed>=7300 && elapsed<=8500,`la escena duró ${elapsed} ms`);
+      assert.deepEqual(f.motions.map(m=>m.duration),[3000,4000,5000]);
+    }
+  } finally {fixtures.forEach(f=>f.close())}
 });
 
 test('la demostración automática cambia y regresa sin consultar la cola',async()=>{
