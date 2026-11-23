@@ -103,6 +103,21 @@ test('la pérdida corta el sonido justo al parar; la victoria lo mantiene',async
   }
 });
 
+test('cada carrete fija su tarjeta final cuando se detiene',async()=>{
+  const f=fixture({events:[win],manualAnimations:true});
+  try {
+    await until(()=>f.motions.length===3,'tres carretes iniciados');
+    assert.ok(f.reels.every(reel=>reel.belt.children.length>1));
+    f.motions[0].finish();
+    await until(()=>f.reels[0].belt.children.length===1,'primer carrete fijado');
+    assert.ok(f.reels[1].belt.children.length>1 && f.reels[2].belt.children.length>1);
+    const first=f.reels[0].belt.children[0].children[0].style;
+    assert.equal(first['--art-x'],'100%'); assert.equal(first['--art-y'],'100%');
+    f.motions[1].finish(); f.motions[2].finish();
+    await until(()=>f.state.acknowledged.includes(win.id),'confirmación al terminar');
+  } finally { f.close(); }
+});
+
 test('las pérdidas varían sin enseñar tres iguales ni cambiar los premios ganadores',async()=>{
   const f=fixture({hash:'#cola=key-ficticia',manualAnimations:true});
   try {

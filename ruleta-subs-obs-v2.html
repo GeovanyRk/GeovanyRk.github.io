@@ -258,11 +258,17 @@
         }
         belt.append(card(finalAmounts[i]));
         const offset=cycles * reel.getBoundingClientRect().height;
-        if (reduced) { belt.style.transform=`translateY(-${offset}px)`; return Promise.resolve(); }
+        if (reduced) { belt.replaceChildren(card(finalAmounts[i])); return Promise.resolve(); }
         const motion=belt.animate([{transform:'translateY(0)'},{transform:`translateY(-${offset}px)`}],
           {duration:3000+i*1000,easing:'cubic-bezier(.16,.72,.18,1)',fill:'forwards'});
         activeMotions.add(motion);
-        return motion.finished.finally(() => activeMotions.delete(motion));
+        return motion.finished.then(() => {
+          // Al detenerse, conservar solo la tarjeta visible evita que CEF
+          // mantenga una textura desplazada de miles de píxeles.
+          belt.replaceChildren(card(finalAmounts[i]));
+          belt.style.transform='translateY(0)';
+          motion.cancel();
+        }).finally(() => activeMotions.delete(motion));
       });
       await Promise.all(motions);
       await waitForVisibility();
