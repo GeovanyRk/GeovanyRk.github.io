@@ -25,7 +25,7 @@ body.guide-page{margin:0;background:radial-gradient(ellipse at 75% 0,#262332 0,t
 .guide-page h1 em{color:var(--gold);font-style:normal;display:block}
 .hero-copy>p:not(.eyebrow){max-width:500px;color:var(--muted);margin:0 0 22px}
 .hero-art{display:grid;place-items:center;min-width:0;pointer-events:none}
-.hero-art svg{width:min(100%,260px);height:auto;filter:drop-shadow(0 0 30px #c79a4630)}
+.hero-art img{display:block;width:min(100%,360px);height:auto;aspect-ratio:1;object-fit:contain;mix-blend-mode:lighten;mask-image:radial-gradient(ellipse at center,#000 55%,transparent 74%);filter:drop-shadow(0 0 18px #c79a4638)}
 .guide-page main .cta,.guide-page #login,.guide-page #retry{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#f2d39b,#c39450);color:#18120b;border:1px solid #f4d9a4;border-radius:8px;padding:11px 20px;font:inherit;font-size:13px;font-weight:800;cursor:pointer;text-decoration:none}
 .guide-layout{display:grid;grid-template-columns:minmax(245px,300px) minmax(0,1fr);gap:28px;align-items:start;margin-top:28px}
 .route{padding:24px;border:1px solid #42404a;border-radius:14px;background:linear-gradient(150deg,#191c27,#10141d);position:sticky;top:18px}
