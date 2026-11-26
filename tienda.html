@@ -605,30 +605,26 @@
     .fn-card:hover .fn-card-image img { transform: scale(1.035); }
     /* Composición exclusiva del lote Widowmaker + Kiriko cuando falta portada. */
     .fn-card-image.fn-card-image-composite::after {
-      height: 24%;
+      height: 17%;
     }
     .fn-card-image .fn-bundle-composition {
       position: absolute;
-      inset: 38px 5px 10px;
-      display: grid;
-      grid-template-columns: 42% 58%;
-      align-items: stretch;
-      gap: 0;
+      inset: 34px 5px 5px;
+      overflow: hidden;
     }
     .fn-bundle-extras {
+      position: absolute;
+      z-index: 1;
+      inset: 6px auto 12px 0;
+      width: 34%;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       grid-template-rows: repeat(4, minmax(0, 1fr));
       gap: 2px;
-      min-width: 0;
-      min-height: 0;
     }
     .fn-bundle-characters {
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      min-width: 0;
-      min-height: 0;
+      position: absolute;
+      inset: 0;
     }
     .fn-card-image .fn-bundle-composition img {
       display: block;
@@ -640,13 +636,22 @@
       object-position: center;
       filter: drop-shadow(0 3px 4px rgba(0,0,0,.32));
     }
-    .fn-card-image .fn-bundle-characters img {
-      width: 58%;
-      height: 100%;
-      flex: 0 0 58%;
-      object-position: center bottom;
+    .fn-card-image .fn-bundle-extras img {
+      transform: scale(1.35);
     }
-    .fn-bundle-characters img + img { margin-left: -16%; }
+    .fn-card-image .fn-bundle-characters img {
+      position: absolute;
+      bottom: 0;
+      left: 8%;
+      width: 88%;
+      height: 100%;
+      object-position: center bottom;
+      transform: scale(1.08);
+      transform-origin: center bottom;
+    }
+    .fn-card-image .fn-bundle-characters img + img {
+      left: 35%;
+    }
     .fn-card-badge {
       position: absolute;
       z-index: 2;
