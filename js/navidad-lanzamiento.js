@@ -105,10 +105,7 @@
         });
       };
       // Fase 1: usar el nuevo taller cuando esté disponible; conservar el anterior como respaldo.
-      preview.onerror = function () {
-        preview.onerror = null;
-        preview.src = new URL('assets/navidad/planeta-santa-720.webp', document.baseURI).href;
-      };
+      preview.onerror = function () { setTimeout(function(){launched=false;},30000); };
       preview.src = new URL('assets/navidad/planeta-santa-fase-01.webp', document.baseURI).href;
     })();
   }
