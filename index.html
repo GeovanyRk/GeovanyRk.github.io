@@ -388,6 +388,12 @@
           <!-- Geo Army Plus: acceso FUERA del planeta, en el espacio libre arriba-izquierda (entre One Piece y el globo). Sus --mx/--my se miden sobre
                el mismo recuadro del globo que los demás pins, así que escala con él en escritorio y móvil. Va con `hidden` y solo se muestra con GEOARMY_PLUS_PAGE_ENABLED = true
                (js/geoarmy-plus-pin.js). El estado (abierto / bloqueado) lo decide el servidor; este HTML no autoriza nada. -->
+          <a href="mod-control.html" id="gaModControlPin" hidden style="--mx:63.0%; --my:76.5%;display:none" aria-label="Control Room">
+            <span class="v3-marker-label">Control Room</span>
+            <span class="v3-marker-icon" aria-hidden="true">🛡️</span>
+            <span class="v3-marker-stem"></span>
+            <span class="v3-marker-ring"></span>
+          </a>
           <a href="plus.html" class="ga-plus-pin" id="gaPlusPin" hidden style="--mx:7.6%; --my:18.1%;" aria-label="Geo Army Plus">
             <span class="v3-marker-label ga-plus-pin__label">Geo Army Plus</span>
             <span class="v3-marker-icon ga-plus-pin__gem" aria-hidden="true">
@@ -674,6 +680,7 @@
   <script src="js/geoarmy-account.js"></script>
   <script src="js/index-racha.js?v=1"></script>
   <script src="js/geoarmy-plus-pin.js"></script>
+  <script defer src="js/geoarmy-mod-pin.js?v=1"></script>
 <script>
   // ===== V3: conecta los marcadores del planeta con el sistema de paneles =====
   // (el nav real .nav-links está oculto y sigue funcionando para móvil/JS;
