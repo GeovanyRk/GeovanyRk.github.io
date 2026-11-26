@@ -14,3 +14,6 @@ Owner logs in to mod-control.html, generates private URL, adds Browser Source at
 
 ## Current scope
 22 original starter effects (16 animated emoji reactions and 6 synthesized sound effects), private library, search/filter, favorites, position/size/volume/duration/animation, serialized queue and history, suspend/restore, kill switch, URL rotation. No GIPHY, external meme media, upload approvals, or transparent video files yet. External media requires provider key, license review and safe storage/approval flow. Do not insert arbitrary URLs.
+
+## Multimedia extension
+Private bucket geoarmy-control-media; 4 MiB max, 10 proposals per user/day (application-level). Mod uploads require source and rights confirmation; owner reviews, approves, rejects or disables approved media. Uploaded SVG/HTML disallowed; built-in original SVG assets are repository-controlled. File signatures checked, not full malware scanning or codec validation. Signed links are short-lived. OBS keeps the same private URL; refresh the browser source after deployment. GIPHY API not connected yet.
