@@ -23,3 +23,6 @@ Search/trending GIFs and stickers directly from the authenticated moderator brow
 
 ## Soundboard and GIF + sound beta
 Soundboard lists approved audio, previews locally, and uses existing owner offline tests and live queue controls. Owner can import five fixed, license-reviewed recordings from Wikimedia Commons into private Storage; the import is idempotent and reports per-file failures. Source and license links appear on sound cards. GIF combo test pairs a GIPHY ID with an active audio asset, starts independent audio when the GIF renders, and stops both on expiration or emergency stop. GIPHY combos remain owner-only and offline pending provider approval. Clips API access is still pending. Refresh OBS source without rotating its URL.
+
+## Real sound catalog expansion
+The six synthetic audio assets are inactive (historical references preserved). The owner can import 56 curated Commons candidates in batches of five. Server retrieves file metadata and accepts only CC0, public domain or CC BY with an author; it verifies source host, size and signature, stores private audio, records credits and sound group, skips unsupported licenses and retired assets. Import is retryable and reports results, not all candidates are guaranteed to pass. Soundboard filters by group and displays real files only. No live launch changes.
