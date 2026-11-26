@@ -1,0 +1,98 @@
+name: Prepare Christmas release in staging
+on:
+  push:
+    branches: ['staging/navidad-2026']
+    paths: ['.github/workflows/stage-navidad-2026.yml']
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Copy approved release, preserving production
+        shell: bash
+        run: |
+          set -euo pipefail
+          src=$(mktemp -d)
+          git clone --no-checkout https://github.com/GeovanyRk/geoarmy-v2.git "$src"
+          git -C "$src" checkout --detach 3ffd3c7d871260b72a7efcdedd5e1a9451dc06cc
+          export SOURCE="$src"
+          python3 - <<'PY'
+          import os, re, shutil, pathlib, hashlib
+          src=pathlib.Path(os.environ['SOURCE'])
+          dst=pathlib.Path('.')
+          pages=['arbol','taller','cartas','lista','viaje','regalo']
+          paths=[f'navidad-{x}.html' for x in pages]+[f'css/navidad-{x}.css' for x in ['nav','perfil','regalo','viaje']]+[f'js/navidad-{x}.js' for x in ['nav','regalo','viaje','viaje-geo']]
+          paths += [str(p.relative_to(src)) for p in (src/'assets/navidad').rglob('*') if p.is_file() and 'perfiles' not in p.parts and p.name!='README.md']
+          for rel in paths:
+              p=dst/rel
+              assert not p.exists(), f'Existing production file, refusing overwrite: {rel}'
+              p.parent.mkdir(parents=True,exist_ok=True)
+              shutil.copyfile(src/rel,p)
+              assert hashlib.sha256(p.read_bytes()).digest()==hashlib.sha256((src/rel).read_bytes()).digest()
+          # Guard presentation on production. Backend already enforces dates independently.
+          guard="""<script>(function(){var u=new URL(location.href);if(u.searchParams.has('preview')){u.searchParams.delete('preview');u.searchParams.delete('resultado');u.searchParams.delete('paso');history.replaceState(null,'',u.pathname+u.search+u.hash);}if(Date.now()<Date.parse('2026-12-01T00:00:00-05:00'))location.replace('index.html');})();</script>"""
+          for name in pages:
+              p=dst/f'navidad-{name}.html'
+              html=p.read_text()
+              assert re.search(r'<head\b[^>]*>',html,re.I)
+              html=re.sub(r'(<head\b[^>]*>)',lambda m:m.group(1)+guard,html,count=1,flags=re.I)
+              p.write_text(html)
+          trial=(src/'index.html').read_text()
+          prod=(dst/'index.html').read_text()
+          css=trial[trial.index('    /* Navidad: marco proporcional'):trial.index('    .world-02-open-title{')]
+          assert prod.count('    .world-02-open-title{')==1
+          prod=prod.replace('    .world-02-open-title{',css+'    .ga-onepiece-last{display:block;max-width:100%;padding:9px 12px;margin:7px auto;border:1px solid #e6c78a;border-radius:8px;color:#fff3d5;background:#392825;font:700 12px system-ui;text-align:center;text-decoration:none;} .ga-onepiece-last[hidden]{display:none!important;}\n    .world-02-open-title{',1)
+          snippet=trial[trial.index('  <!-- Vista previa de Navidad 2026:'):trial.index('  <script src="js/premium.js">',trial.index('  <!-- Vista previa de Navidad 2026:'))]
+          js=snippet.split('<script>',1)[1].split('</script>',1)[0]
+          js=js.replace("if (!location.pathname.startsWith('/geoarmy-v2/')) return;","if (window.__gaSantaMounted) return;")
+          js=js.replace('Árbol de Navidad — vista previa','Árbol de Navidad').replace('El Taller de Santa, vista previa','El Taller de Santa').replace('Vista previa · Próximamente','Explora las seis actividades de Navidad')
+          js=js.replace("if (!preview.naturalWidth) return;","if (!preview.naturalWidth || window.__gaSantaMounted) return; window.__gaSantaMounted = true;")
+          mark="        link.style.cursor = 'default';"
+          assert mark in js
+          js=js.replace(mark,mark+"""
+                  var last = document.createElement('a');
+                  last.href = 'onepiece.html'; last.className = 'ga-onepiece-last';
+                  link.parentNode.insertBefore(last, link.nextSibling);
+                  function lastUpdate() {
+                    var left = Date.parse('2026-12-02T00:00:00-05:00') - window.gaChristmasClock();
+                    last.hidden = left <= 0;
+                    if (!last.hidden) {
+                      var sec=Math.max(0,Math.floor(left/1000));
+                      last.textContent='Últimas horas · Mini Pase One Piece · '+Math.floor(sec/3600)+'h '+String(Math.floor(sec%3600/60)).padStart(2,'0')+'m '+String(sec%60).padStart(2,'0')+'s →';
+                    }
+                  }
+                  lastUpdate();setInterval(lastUpdate,1000);
+          """)
+          # Use official server time and monotonic clock for transition.
+          js="""(function(){
+            var start=Date.parse('2026-12-01T00:00:00-05:00'), epoch=null, tick=0, busy=false, launched=false;
+            window.gaChristmasClock=function(){return epoch===null?NaN:epoch+performance.now()-tick;};
+            function launch(){if(launched||!(window.gaChristmasClock()>=start))return;launched=true;mount();}
+            async function sync(){if(busy)return;busy=true;try{
+              var res=await fetch(window.GEOARMY_SUPABASE_URL+'/rest/v1/rpc/christmas_travel_v1',{method:'POST',headers:{apikey:window.GEOARMY_SUPABASE_ANON_KEY,'Content-Type':'application/json'},body:'{}',cache:'no-store'});
+              if(!res.ok)throw Error('clock');var data=await res.json();var time=Date.parse(data.serverNow);if(!Number.isFinite(time))throw Error('clock');epoch=time;tick=performance.now();launch();
+            }catch(e){}finally{busy=false;}}
+            function mount(){""" + js + """}
+            sync();setInterval(sync,60000);setInterval(launch,1000);
+            document.addEventListener('visibilitychange',function(){if(!document.hidden)sync();});
+          })();"""
+          (dst/'js/navidad-lanzamiento.js').write_text(js)
+          anchor='<script src="js/geoarmy-config.js"></script>'
+          assert prod.count(anchor)==1
+          prod=prod.replace(anchor,anchor+'\n  <script src="js/navidad-lanzamiento.js?v=1"></script>',1)
+          (dst/'index.html').write_text(prod)
+          assert all((dst/f'navidad-{x}.html').is_file() for x in pages)
+          print('Transferred',len(paths),'files; all original bytes checked before HTML date guard.')
+          PY
+          node --check js/navidad-lanzamiento.js
+          node --check js/navidad-regalo.js
+          node --check js/navidad-viaje.js
+          node --check js/navidad-nav.js
+          git diff --check
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html navidad-*.html css/navidad-*.css js/navidad-*.js assets/navidad/
+          git commit -m "Stage complete Christmas event with date-gated transition"
+          git push origin HEAD:staging/navidad-2026
