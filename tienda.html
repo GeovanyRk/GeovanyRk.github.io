@@ -603,6 +603,50 @@
       transition: transform .22s ease;
     }
     .fn-card:hover .fn-card-image img { transform: scale(1.035); }
+    /* Composición exclusiva del lote Widowmaker + Kiriko cuando falta portada. */
+    .fn-card-image.fn-card-image-composite::after {
+      height: 24%;
+    }
+    .fn-card-image .fn-bundle-composition {
+      position: absolute;
+      inset: 38px 5px 10px;
+      display: grid;
+      grid-template-columns: 42% 58%;
+      align-items: stretch;
+      gap: 0;
+    }
+    .fn-bundle-extras {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: repeat(4, minmax(0, 1fr));
+      gap: 2px;
+      min-width: 0;
+      min-height: 0;
+    }
+    .fn-bundle-characters {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      min-width: 0;
+      min-height: 0;
+    }
+    .fn-card-image .fn-bundle-composition img {
+      display: block;
+      min-width: 0;
+      min-height: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      filter: drop-shadow(0 3px 4px rgba(0,0,0,.32));
+    }
+    .fn-card-image .fn-bundle-characters img {
+      width: 58%;
+      height: 100%;
+      flex: 0 0 58%;
+      object-position: center bottom;
+    }
+    .fn-bundle-characters img + img { margin-left: -16%; }
     .fn-card-badge {
       position: absolute;
       z-index: 2;
@@ -1913,6 +1957,26 @@
       }
     }
 
+    function renderWidowmakerBundleArt(offer) {
+      const items = Array.isArray(offer.items) ? offer.items : [];
+      if (Number(offer.itemCount) !== 9 || items.length !== 9) return '';
+      const hasItem = (item, id) =>
+        String(item.id || '').toLowerCase() === id ||
+        String(item.image || '').toLowerCase().includes('/' + id + '/');
+      const widow = items.find(item => hasItem(item, 'character_shonestays'));
+      const kiriko = items.find(item => hasItem(item, 'character_danderclay'));
+      // Si la API agrega una portada conjunta, se conserva esa portada.
+      if (!widow || !kiriko || offer.image !== items[0].image ||
+          !items.every(item => typeof item.image === 'string' && /^https:\/\//i.test(item.image))) return '';
+      const extras = items.filter(item => item !== widow && item !== kiriko);
+      const itemImage = item =>
+        `<img src="${escaparHtml(item.image)}" alt="${escaparHtml(item.name || '')}" title="${escaparHtml(item.name || '')}" loading="lazy">`;
+      return `<div class="fn-bundle-composition">
+        <div class="fn-bundle-extras">${extras.map(itemImage).join('')}</div>
+        <div class="fn-bundle-characters">${[widow, kiriko].map(itemImage).join('')}</div>
+      </div>`;
+    }
+
     function renderFortniteOfferCard(offer) {
       const card = document.createElement('article');
       card.className = `fn-card${offer.giftable ? '' : ' not-giftable'}`;
@@ -1938,6 +2002,8 @@
       const image = offer.image
         ? escaparHtml(offer.image)
         : 'assets/store/fortnite-battle-pass.webp';
+
+      const compositeArt = renderWidowmakerBundleArt(offer);
 
       const typeLabel = offer.itemCount > 1
         ? `${offer.itemCount} artículos`
@@ -1973,10 +2039,10 @@
       }
 
       card.innerHTML = `
-        <div class="fn-card-image">
+        <div class="fn-card-image${compositeArt ? ' fn-card-image-composite' : ''}">
           ${badge}
-          <img src="${image}" alt="${escaparHtml(offer.name)}" loading="lazy"
-               onerror="this.src='assets/store/fortnite-battle-pass.webp'">
+          ${compositeArt || `<img src="${image}" alt="${escaparHtml(offer.name)}" loading="lazy"
+               onerror="this.src='assets/store/fortnite-battle-pass.webp'">`}
         </div>
         <div class="fn-card-body">
           <p class="fn-card-name">${escaparHtml(offer.name)}</p>
