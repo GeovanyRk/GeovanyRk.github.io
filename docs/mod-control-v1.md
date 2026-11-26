@@ -32,3 +32,6 @@ Transparent 16:9 canvas with pen, eraser, line, arrow, rectangle, ellipse, text/
 
 ## Paint V2
 The editor now draws incrementally to a 1280x720 transparent raster canvas, using a bounded 12-action undo history. Freehand and eraser no longer have a cumulative point or stroke cap. OBS receives bounded transparent PNG snapshots (adaptive 960x540 or lower, max 240k base64) with single-flight updates every 400 ms. A separate paint poll returns only changed revisions, 350 ms interval while active and 850 ms idle, with existing access, expiry and generation guards; original effect polling is unchanged. Older vector payloads remain accepted. Refresh the existing OBS browser source and Control Room.
+
+## Control Room dashboard redesign
+Navigation uses one visible tool workspace at a time; overview metrics, quick sound actions, moderator IDs and history are populated from the authenticated hub data. No fabricated OBS connectivity status. Existing controls, access rules and overlay source remain unchanged. Desktop sidebar and mobile horizontal navigation. Emergency stop stays at the top for the owner.
