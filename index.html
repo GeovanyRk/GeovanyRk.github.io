@@ -117,6 +117,77 @@
       object-fit:contain;
       filter:none;
     }
+    /* Navidad: marco proporcional independiente para arte y futuros pines.
+       Solo se activa al cargar correctamente el planeta navideño. */
+    .v3-world-slide-02 .ga-santa-world{
+      width:min(480px, 33vw);
+      max-width:100%;
+    }
+    .ga-santa-art{
+      display:block;
+      position:relative;
+      width:min(468px, 100%);
+      aspect-ratio:720 / 600;
+      flex:none;
+    }
+    .ga-santa-art > img{
+      display:block;
+      width:100%;
+      height:100%;
+      object-fit:contain;
+    }
+    .ga-santa-tree-pin{
+      position:absolute;left:59%;top:51%;transform:translate(-50%,-50%);
+      z-index:4;display:flex;align-items:center;flex-direction:column;
+      gap:3px;text-decoration:none;color:#fff3d5;white-space:nowrap;
+      pointer-events:auto;
+    }
+    .ga-santa-tree-pin.ga-santa-workshop-pin{left:31%;top:32%;}
+    .ga-santa-tree-pin.ga-santa-post-pin{left:27%;top:70%;}
+    .ga-santa-tree-pin.ga-santa-list-pin{left:68%;top:22%;}
+    .ga-santa-tree-pin.ga-santa-travel-pin{left:78%;top:72%;}
+    .ga-santa-tree-pin.ga-santa-regalo-pin{left:51%;top:83%;}
+    .ga-santa-regalo-pin .ga-santa-pin-icon{background:linear-gradient(150deg,#722f2e,#221a28);width:49px;height:49px;border:1.5px solid #e6c78a;box-shadow:0 3px 0 #080c14,0 5px 12px #000c,0 0 0 2px #0b111d;}
+    @media(max-width:560px){.ga-santa-regalo-pin .ga-santa-pin-icon{width:40px;height:40px;}.ga-santa-regalo-pin .ga-santa-pin-label{font-size:8px;}}
+
+    .ga-santa-travel-pin .ga-santa-pin-icon{background:linear-gradient(150deg,#65332c,#172337);width:49px;height:49px;border:1.5px solid #e6c78a;box-shadow:0 3px 0 #080c14,0 5px 12px #000c,0 0 0 2px #0b111d;}
+    @media(max-width:560px){.ga-santa-travel-pin .ga-santa-pin-icon{width:40px;height:40px;}.ga-santa-travel-pin .ga-santa-pin-label{font-size:8px;}}
+
+    .ga-santa-list-pin .ga-santa-pin-icon{background:linear-gradient(150deg,#71522c,#211c22);width:49px;height:49px;border:1.5px solid #e6c78a;box-shadow:0 3px 0 #080c14,0 5px 12px #000c,0 0 0 2px #0b111d;}
+    @media(max-width:560px){.ga-santa-list-pin .ga-santa-pin-icon{width:40px;height:40px;}.ga-santa-list-pin .ga-santa-pin-label{font-size:8px;}}
+
+    .ga-santa-post-pin .ga-santa-pin-icon{background:linear-gradient(150deg,#682e2b,#24171f);width:49px;height:49px;border:1.5px solid #e6c78a;box-shadow:0 3px 0 #080c14,0 5px 12px #000c,0 0 0 2px #0b111d;}
+    @media(max-width:560px){.ga-santa-post-pin .ga-santa-pin-icon{width:40px;height:40px;}.ga-santa-post-pin .ga-santa-pin-label{font-size:8px;}}
+
+    .ga-santa-workshop-pin .ga-santa-pin-icon{background:linear-gradient(150deg,#4f3024,#1b1820);width:49px;height:49px;border:1.5px solid #e6c78a;box-shadow:0 3px 0 #080c14,0 5px 12px #000c,0 0 0 2px #0b111d;}
+    @media(max-width:560px){.ga-santa-workshop-pin .ga-santa-pin-icon{width:40px;height:40px;}}
+    .ga-santa-pin-icon{
+      display:grid;place-items:center;width:39px;height:39px;font-size:22px;
+      border:1px solid #e6c78a;border-radius:50%;background:#153d36;
+      box-shadow:0 3px 12px #0009,0 0 14px #e6c78a44;
+    }
+    .ga-santa-pin-art{box-sizing:border-box;display:block;width:52px;height:52px;padding:5px;object-fit:contain;background:linear-gradient(150deg,#19283a,#0b111d);border:1.5px solid #e6c78a;border-radius:50%;box-shadow:0 3px 0 #080c14,0 5px 12px #000c,0 0 0 2px #0b111d;transition:transform .2s ease;}
+    .ga-santa-tree-pin:hover .ga-santa-pin-art,.ga-santa-tree-pin:focus-visible .ga-santa-pin-art{transform:scale(1.1);}
+    @media(max-width:560px){.ga-santa-pin-art{width:42px;height:42px;padding:4px}}
+    .ga-santa-pin-label{
+      padding:4px 8px;border:1px solid #e6c78a;border-radius:5px;
+      background:#0d1724;color:#fff3d5;box-shadow:0 2px 7px #000b;font:700 10px Inter,system-ui,sans-serif;
+      letter-spacing:.05em;
+    }
+    .ga-santa-tree-pin:hover .ga-santa-pin-icon,
+    .ga-santa-tree-pin:focus-visible .ga-santa-pin-icon{
+      background:#296b56;outline:2px solid #fff1c4;outline-offset:2px;
+    }
+    @media(max-width:560px){.ga-santa-pin-icon{width:34px;height:34px;font-size:18px}.ga-santa-pin-label{font-size:8px}}
+    /* Los futuros pines usarán coordenadas porcentuales sobre este marco,
+       no sobre el título ni sobre la ventana del navegador. */
+    @media (max-width:1300px){
+      .v3-world-slide-02 .ga-santa-world{width:min(480px, 88vw);}
+    }
+    @media (max-width:560px){
+      .ga-santa-art{width:min(336px, 100%);}
+    }
+    .ga-onepiece-last{display:block;max-width:100%;padding:9px 12px;margin:7px auto;border:1px solid #e6c78a;border-radius:8px;color:#fff3d5;background:#392825;font:700 12px system-ui;text-align:center;text-decoration:none;} .ga-onepiece-last[hidden]{display:none!important;}
     .world-02-open-title{
       display:block;
       margin-top:2px;
@@ -676,6 +747,7 @@
 
   <script src="js/premium.js"></script>
   <script src="js/geoarmy-config.js"></script>
+  <script src="js/navidad-lanzamiento.js?v=1"></script>
   <script src="js/geoarmy-ranks.js"></script>
   <script src="js/geoarmy-account.js"></script>
   <script src="js/index-racha.js?v=1"></script>
