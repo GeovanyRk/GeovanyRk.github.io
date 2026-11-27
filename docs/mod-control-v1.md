@@ -41,3 +41,6 @@ Independent multi-layer workspace for approved PNG/JPEG/WebP/GIF and trusted bui
 
 ## Trusted direct uploads
 Authorized moderators and owner upload supported media directly to the shared library without approval. A service-only transaction records uploader and creates the active asset atomically, with a concurrency-safe 30 uploads/24h limit and existing 4 MiB cap. Moderators can retire their own uploads; owner can retire any. Old review path remains for historical pending rows (none present at rollout). Files remain in private storage; retirement disables the catalog entry and preserves history. No public upload access, no automatic content moderation, no change to launch permissions.
+
+## GIPHY live authorized media
+Normal GIF and sticker launch is available to verified moderators during an enabled live session, only for content the sender is authorized to retransmit. Owner offline testing remains. GIFs reserve the effect lane for ten seconds; regular launches queue after them, and GIPHY launches reject while the lane is busy. Emergency stop invalidates the generation. Beta quota and GIPHY rights terms remain applicable. No Clips access or blanket content license is implied.
