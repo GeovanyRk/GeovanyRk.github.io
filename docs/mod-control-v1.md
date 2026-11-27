@@ -35,3 +35,6 @@ The editor now draws incrementally to a 1280x720 transparent raster canvas, usin
 
 ## Control Room dashboard redesign
 Navigation uses one visible tool workspace at a time; overview metrics, quick sound actions, moderator IDs and history are populated from the authenticated hub data. No fabricated OBS connectivity status. Existing controls, access rules and overlay source remain unchanged. Desktop sidebar and mobile horizontal navigation. Emergency stop stays at the top for the owner.
+
+## Sticker Studio V1
+Independent multi-layer workspace for approved PNG/JPEG/WebP/GIF and trusted built-in SVGs. Up to 16 layers, positions, width, rotation, opacity, horizontal flip and stacking order. Drag/resize, duplicate/remove, undo, three patterns, local browser presets (asset IDs only). Exclusive prepared or remote-edit session, 5–60 seconds, owner-only offline test, separate live permission disabled by default. Server validates every layer and approved asset on write/read. Uses the existing paint polling request with change-only revisions and signed media URLs; OBS retains DOM nodes to avoid restarting animated GIFs on position updates. Emergency stop generation invalidates compositions. No GIPHY search assets in board until provider approval, no gameplay preview. Upload own images via existing proposals and owner review. Refresh existing OBS source.
